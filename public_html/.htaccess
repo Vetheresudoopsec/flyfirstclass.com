@@ -1,0 +1,29 @@
+# Fly First Class International: send /api/... to api.php, keep private files private.
+Options -Indexes
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^api/requests/([A-Za-z0-9-]+)/?$ api.php?route=requests&_ref=$1 [QSA,L]
+RewriteRule ^api/([A-Za-z-]+)/?$ api.php?route=$1 [QSA,L]
+</IfModule>
+
+# Never serve hidden files (.env, .git and so on) or leftovers
+<FilesMatch "^\.(?!well-known)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+<FilesMatch "\.(env|log|lock|tmp|bak|md)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>

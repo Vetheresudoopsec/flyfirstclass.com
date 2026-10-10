@@ -1,0 +1,90 @@
+<?php
+// quotes.php: quote requests with reference IDs (kept 6 months), input cleaning, and rate limits.
+if (!defined('FFC_PRIVATE')) { exit; }
+
+const QTTL = 183 * 86400000;                          // about 6 months, counted from the last change
+const QALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';     // no I, O, 0 or 1, so IDs are easy to read out
+const QREF = '/^FFC-[A-HJ-NP-Z2-9]{8}$/';
+
+// ---------- Input cleaning (same rules as the Node server) ----------
+function qs($v, $n = 200) { return is_string($v) ? mb_substr(trim(preg_replace('/[\x00-\x1f\x7f]/', ' ', $v)), 0, $n) : ''; }
+function qm2($v, $n = 3000) {          // keeps line breaks
+    if (!is_string($v)) return '';
+    $v = preg_replace('/\r\n?/', "\n", $v);
+    return mb_substr(trim(preg_replace('/[\x00-\x09\x0b-\x1f\x7f]/', ' ', $v)), 0, $n);
+}
+function qd($v) { return is_string($v) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $v) ? $v : ''; }
+function qn($v, $lo, $hi) { return min($hi, max($lo, (int)$v)); }
+function qTrip($t) {
+    $t = is_array($t) ? $t : [];
+    $via = []; foreach (array_slice(is_array($t['via'] ?? null) ? $t['via'] : [], 0, 4) as $x) { $x = qs($x); if ($x !== '') $via[] = $x; }
+    return ['from' => qs($t['from'] ?? null), 'to' => qs($t['to'] ?? null), 'via' => $via, 'cabin' => qs($t['cabin'] ?? null, 40), 'type' => qs($t['type'] ?? null, 40),
+        'adults' => qn($t['adults'] ?? 0, 0, 9), 'children' => qn($t['children'] ?? 0, 0, 9), 'dep' => qd($t['dep'] ?? null), 'dep2' => qd($t['dep2'] ?? null), 'ret' => qd($t['ret'] ?? null), 'ret2' => qd($t['ret2'] ?? null), 'flex' => !empty($t['flex'])];
+}
+function qWho($c) {
+    $c = is_array($c) ? $c : [];
+    return ['first' => qs($c['first'] ?? null, 80), 'middle' => qs($c['middle'] ?? null, 80), 'last' => qs($c['last'] ?? null, 80), 'email' => qs($c['email'] ?? null, 254), 'phone' => qs($c['phone'] ?? null, 32)];
+}
+function qOut($r) { return ['ref' => $r['ref'], 'created' => $r['created'], 'updated' => $r['updated'], 'expires' => $r['exp'], 'exp' => $r['exp'], 'trip' => $r['trip'], 'contact' => $r['contact'], 'message' => $r['message']]; }
+function body_json() {                 // the JSON body of a request (up to 30,000 bytes)
+    $s = file_get_contents('php://input', false, null, 0, 30001);
+    if ($s !== false && strlen($s) > 30000) throw fail('Request too large', 413);
+    if ($s === false || trim($s) === '') return [];
+    $j = json_decode($s, true);
+    if (!is_array($j)) throw fail('Invalid JSON', 400);
+    return $j;
+}
+
+// ---------- Rate limits (shared by all requests through limits.json) ----------
+function limit_hit($key, $max, $win) {         // counts one use; false once more than $max in $win ms
+    return cupdate('limits.json', [], function (&$L) use ($key, $max, $win) {
+        $n = now_ms();
+        if (mt_rand(1, 20) === 1) foreach ($L as $k => $e) if ($n - $e['t'] > 86400000 * 2) unset($L[$k]);   // tidy up now and then
+        if (!isset($L[$key]) || $n - $L[$key]['t'] > $win) { $L[$key] = ['n' => 1, 't' => $n]; return true; }
+        $L[$key]['n']++;
+        return $L[$key]['n'] <= $max;
+    });
+}
+function limit_take($ip, $kind, $want, $max, $win) {   // takes up to $want uses; returns how many were allowed
+    return cupdate('limits.json', [], function (&$L) use ($ip, $kind, $want, $max, $win) {
+        $key = $ip . ':' . $kind; $n = now_ms();
+        if (!isset($L[$key]) || $n - $L[$key]['t'] > $win) $L[$key] = ['n' => 0, 't' => $n];
+        $ok = max(0, min($want, $max - $L[$key]['n']));
+        $L[$key]['n'] += $ok;
+        return $ok;
+    });
+}
+function miss_ok($ip) { $L = cload('limits.json', []); $e = $L[$ip . ':miss'] ?? null; return !$e || now_ms() - $e['t'] > 600000 || $e['n'] < 20; }   // 20 failed lookups per 10 minutes
+function miss_add($ip) { limit_hit($ip . ':miss', 1000000000, 600000); }
+
+// ---------- Requests ----------
+function qpurge() {
+    return cupdate('requests.json', [], function (&$QR) { $n = now_ms(); $c = 0; foreach ($QR as $k => $r) if (!$r || ($r['exp'] ?? 0) <= $n) { unset($QR[$k]); $c++; } return $c; });
+}
+function qnew($QR) { for (;;) { $r = 'FFC-'; for ($i = 0; $i < 8; $i++) $r .= QALPHA[random_int(0, 31)]; if (!isset($QR[$r])) return $r; } }
+function q_find($ref) {                // the stored request, or null if unknown or expired
+    if (!preg_match(QREF, $ref)) return null;
+    $QR = cload('requests.json', []); $r = $QR[$ref] ?? null;
+    return ($r && $r['exp'] > now_ms()) ? $r : null;
+}
+function q_create($b) {
+    return cupdate('requests.json', [], function (&$QR) use ($b) {
+        $n = now_ms(); $want = strtoupper(qs($b['ref'] ?? null, 20));
+        $r = ($want !== '' && preg_match(QREF, $want) && !isset($QR[$want])) ? $want : qnew($QR);
+        $QR[$r] = ['ref' => $r, 'created' => $n, 'updated' => $n, 'exp' => $n + QTTL, 'trip' => qTrip($b['trip'] ?? null), 'contact' => qWho($b['contact'] ?? null), 'message' => qm2($b['message'] ?? null), 'newsletter' => !empty($b['newsletter'])];
+        foreach ($QR as $k => $x) if (($x['exp'] ?? 0) <= $n) unset($QR[$k]);        // expired ones are dropped as new ones arrive
+        return qOut($QR[$r]);
+    });
+}
+function q_update($ref, $b) {
+    return cupdate('requests.json', [], function (&$QR) use ($ref, $b) {
+        if (!isset($QR[$ref])) return null;
+        $r = $QR[$ref];
+        if (!empty($b['trip'])) $r['trip'] = qTrip($b['trip']);
+        if (!empty($b['contact'])) $r['contact'] = qWho($b['contact']);
+        if (isset($b['message']) && is_string($b['message'])) $r['message'] = qm2($b['message']);
+        $r['updated'] = now_ms(); $r['exp'] = $r['updated'] + QTTL;
+        $QR[$ref] = $r;
+        return qOut($r);
+    });
+}

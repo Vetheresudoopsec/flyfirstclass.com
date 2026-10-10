@@ -1,0 +1,8 @@
+# Secrets and live data stay on the server only
+.env
+ffc-private/.env
+ffc-private/cache/
+cache/
+*.log
+*.tmp
+.DS_Store

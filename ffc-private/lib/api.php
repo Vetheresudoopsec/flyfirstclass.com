@@ -1,0 +1,133 @@
+<?php
+// api.php: the endpoints. Same addresses and replies as server.js:
+//   /api/geo   /api/routes   /api/top   /api/photos   /api/places   /api/requests   /api/send
+// Diagnostics (/api/status, /api/duffel-check, /api/mail-check, /api/photo-test, /api/cron) need ?key=ADMIN_KEY from .env.
+if (!defined('FFC_PRIVATE')) { exit; }
+
+function cron_run($budget) {         // used by cron.php and /api/cron
+    $out = [];
+    if (!claim('cron', 'cron', max(300, (int)$budget + 120))) return ['skipped' => 'another run is still working'];
+    try {
+        $t0 = microtime(true);
+        $out['purged'] = qpurge();
+        try { air(); } catch (Throwable $e) { $out['airports'] = $e->getMessage(); }
+        try { $out['refresh'] = refresh_step($budget); } catch (Throwable $e) { $out['refresh'] = 'error: ' . $e->getMessage(); logm('cron refresh: ' . $e->getMessage()); }
+        $left = $budget - (microtime(true) - $t0);
+        if ($left > 30) { try { $out['photos'] = prefetch_photos($left); } catch (Throwable $e) { $out['photos'] = 'error: ' . $e->getMessage(); logm('cron photos: ' . $e->getMessage()); } }
+        cupdate('meta.json', ['lastRefresh' => 0], function (&$m) { $m['cronLast'] = now_ms(); });
+    } finally { unclaim('cron'); }
+    logm('cron: ' . json_encode($out));
+    return $out;
+}
+
+function status_full() {
+    $s = cload('stats.json', []); $m = META(); $t = cload('throttle.json', []); $u = ust(); $IMG = img_all(true); $mode = C('mode');
+    $routes = 0; foreach (array_keys(cload('routes.json', [])) as $k) if (starts($k, $mode . ':')) $routes++;
+    $off = doff();
+    return ['build' => BUILD, 'mode' => $mode, 'host' => 'php',
+        'duffel' => ['mode' => $mode, 'token' => !C('token') ? 'not set' : ($off ? 'rejected' : (($s['token'] ?? '') === 'rejected' ? 'not checked yet' : ($s['token'] ?? 'not checked yet'))), 'requestsOk' => $s['ok'] ?? 0, 'requestsFailed' => $s['fail'] ?? 0, 'rateLimited' => $s['limited'] ?? 0,
+            'pausedForSeconds' => max(0, (int)ceil(($t['pause'] ?? 0) - microtime(true))), 'searchesToday' => (($t['d'] ?? '') === day_et()) ? ($t['n'] ?? 0) : 0, 'dailyCap' => C('dcap') ?: 'off', 'requestsPerMinute' => C('drpm'),
+            'lastError' => !empty($s['lastErr']) ? ['msg' => $s['lastErr']['msg'], 'when' => et_text($s['lastErr']['t'])] : null],
+        'airports' => count(air()), 'routesDocumented' => $routes, 'fetching' => claims_count(),
+        'unsplash' => !C('ukey') ? 'no key' : (!empty($u['off']) ? 'key rejected (401)' : (!empty($u['pause']) && now_ms() < $u['pause'] ? 'paused (hourly limit)' : 'on')),
+        'photosSaved' => count(array_filter($IMG)), 'photoRequestsLeft' => $u['left'] ?? null,
+        'lastRefresh' => !empty($m['lastRefresh']) ? et_text($m['lastRefresh']) : 'never', 'nextRefresh' => et_text(next_noon()),
+        'refreshInProgress' => isset($m['refresh']) ? count($m['refresh']['done'] ?? []) . ' routes done' : null,
+        'cronLastRun' => !empty($m['cronLast']) ? et_text($m['cronLast']) : 'never (add the cron job, see the setup guide)',
+        'recentLog' => log_tail(15)];
+}
+
+function dispatch() {
+    $route = $_GET['route'] ?? ''; $ref = $_GET['_ref'] ?? '';
+    if ($route === '') {                               // reached without the rewrite rule (api.php/routes or /api/routes)
+        $p = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
+        if (preg_match('~/(?:api|api\.php)/([A-Za-z-]+)(?:/([A-Za-z0-9-]+))?/?$~', $p, $m)) { $route = $m[1]; $ref = $m[2] ?? ''; }
+    }
+    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    set_exception_handler(function ($e) {
+        $st = $e instanceof ApiError ? $e->status : 500;
+        logm(get_class($e) . ': ' . $e->getMessage() . ' @' . basename($e->getFile()) . ':' . $e->getLine());
+        json_out($st, ['error' => $e instanceof ApiError ? $e->getMessage() : 'Server error. Details are in cache/log.txt']);
+    });
+    register_shutdown_function(function () {
+        $e = error_get_last();
+        if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+            logm('FATAL ' . $e['message'] . ' @' . basename($e['file']) . ':' . $e['line']);
+            if (!headers_sent()) { http_response_code(500); header('Content-Type: application/json'); echo '{"error":"Server error. Details are in cache/log.txt"}'; }
+        }
+    });
+    set_time_limit(120);
+    $q = $_GET;
+
+    switch ($route) {
+        case 'geo': json_out(200, geo());
+        case 'routes':
+            $o = strtoupper((string)($q['origin'] ?? '')); $d = strtoupper((string)($q['dest'] ?? ''));
+            if (!preg_match('/^[A-Z]{3}$/', $o) || ($d !== '' && !preg_match('/^[A-Z]{3}$/', $d))) json_out(400, ['error' => 'origin and dest must be 3-letter IATA codes']);
+            json_out(200, routes($o, $d ?: null));
+        case 'top':
+            $o = strtoupper((string)($q['origin'] ?? ''));
+            if (!preg_match('/^[A-Z]{3}$/', $o)) json_out(400, ['error' => 'origin must be a 3-letter IATA code']);
+            json_out(200, top_list($o));
+        case 'photos':
+            $codes = array_values(array_filter(explode(',', strtoupper((string)($q['codes'] ?? ''))), function ($c) { return preg_match('/^[A-Z]{3}$/', $c); }));
+            json_out(200, photos_for($codes));
+        case 'places':
+            $s = mb_substr((string)($q['q'] ?? ''), 0, 40);
+            json_out(200, mb_strlen($s) < 2 ? [] : places($s));
+        case 'status':
+            if (!admin_ok()) json_out(200, ['build' => BUILD]);
+            json_out(200, status_full());
+        case 'duffel-check':
+            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            json_out(200, check_duffel(($q['search'] ?? '') === '1'));
+        case 'photo-test':
+            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            json_out(200, photo_test(substr(strtoupper((string)($q['code'] ?? '')), 0, 3)));
+        case 'cron':
+            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            json_out(200, cron_run(min(110, max(60, (int)($q['budget'] ?? 100)))));   // web version: about 100 seconds per call (the command-line cron uses CRON_BUDGET)
+        case 'mail-check':
+            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            $cfg = mail_cfg(); $sm = $cfg['smtp'];
+            $out = ['configured' => (bool)($sm || function_exists('mail')), 'method' => $sm ? 'smtp' : 'mail()', 'host' => $sm['host'] ?? null, 'port' => $sm['port'] ?? null, 'secure' => $sm['secure'] ?? null, 'user' => env('SMTP_USER') ?: null,
+                'password' => env('SMTP_PASS') ? 'set' : ($sm && $sm['user'] ? 'missing' : 'not needed'), 'from' => $cfg['from'], 'to' => $cfg['to'], 'intendedFor' => MAIL_INTENDED];
+            if (($q['send'] ?? '') === '1') {
+                try { $out['via'] = send_mail(['subject' => 'Test email from your Fly First Class site', 'text' => 'This is a test. If you can read it, quote requests will arrive here.', 'html' => '<p>This is a test. If you can read it, quote requests will arrive here.</p>', 'replyTo' => '']); $out['sent'] = true; }
+                catch (Throwable $e) { $out['sent'] = false; $out['error'] = $e->getMessage(); }
+            }
+            json_out(200, $out);
+        case 'send':
+            if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
+            $ip = client_ip();
+            if (!limit_hit($ip . ':mail', 10, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
+            $b = body_json(); $ref = strtoupper(qs($b['ref'] ?? null, 20));
+            if (!q_find($ref)) json_out(400, ['error' => 'Unknown reference ID.']);
+            $c = qWho($b['contact'] ?? null);
+            if (!preg_match('/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/', $c['email'])) json_out(400, ['error' => 'A valid email address is required.']);
+            $sk = 'send:' . $ref . ':' . gmdate('Y-m-d'); $L = cload('limits.json', []);
+            if (($L[$sk]['n'] ?? 0) >= 10 && now_ms() - $L[$sk]['t'] <= 86400000) json_out(429, ['error' => "This reference ID has reached today's limit. Please call us."]);
+            $loc = ($b['consent'] ?? null) === true ? ip_location() : null;
+            $via = send_mail(quote_mail($b, $ref, $loc));
+            limit_hit($sk, 1000000000, 86400000);
+            logm('[mail] ' . $ref . ' sent (' . $via . ')');
+            json_out(200, ['sent' => true, 'ref' => $ref]);
+        case 'requests':
+            $ip = client_ip(); $ref = strtoupper($ref);
+            if ($ref === '' && $method === 'POST') {
+                if (!limit_hit($ip . ':new', 30, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
+                json_out(200, q_create(body_json()));
+            }
+            if ($ref !== '' && in_array($method, ['GET', 'PUT', 'POST'], true)) {      // POST is accepted for changes too (some hosting firewalls refuse PUT)
+                if (!miss_ok($ip)) json_out(429, ['error' => 'Too many attempts. Please try again in a few minutes.']);
+                if (!q_find($ref)) { miss_add($ip); json_out(404, ['error' => 'No request found for that reference ID.']); }
+                if ($method === 'GET') { $r = q_find($ref); json_out(200, qOut($r)); }
+                $r = q_update($ref, body_json());
+                if (!$r) { miss_add($ip); json_out(404, ['error' => 'No request found for that reference ID.']); }
+                json_out(200, $r);
+            }
+            json_out(405, ['error' => 'Method not allowed']);
+        default:
+            json_out(404, ['error' => 'Not found']);
+    }
+}

@@ -1,0 +1,12 @@
+---
+# cPanel > Git Version Control > "Deploy HEAD Commit" runs these steps.
+# Before the first deploy, replace USERNAME on the first task line with your cPanel username (the name in /home/USERNAME).
+# public_html/ goes to the website folder; ffc-private/ goes beside it (outside the web folder). The .env file and the cache/ folder
+# on the server are never in this repository, so deploying never touches them.
+deployment:
+  tasks:
+    - export HOMEDIR=/home/USERNAME
+    - /bin/mkdir -p $HOMEDIR/public_html $HOMEDIR/ffc-private
+    - /bin/cp -R public_html/. $HOMEDIR/public_html/
+    - /bin/cp -R ffc-private/. $HOMEDIR/ffc-private/
+    - /bin/chmod 755 $HOMEDIR/ffc-private $HOMEDIR/ffc-private/lib
