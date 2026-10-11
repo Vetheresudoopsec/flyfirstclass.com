@@ -64,7 +64,19 @@ function smtp_send($c, $from, $to, $msg) {
         try { smtp_cmd($s, 'QUIT', ['221']); } catch (Throwable $e) { /* already closed */ }
     } finally { @fclose($s); }
 }
+// Every send attempt is remembered (last 20) so you can see in /api/status or /api/mail-check what the server did, and why a send failed.
+function mail_note($ok, $info) {
+    try { cupdate('mail.json', [], function (&$L) use ($ok, $info) { array_unshift($L, ['t' => now_ms(), 'ok' => $ok] + $info); $L = array_slice($L, 0, 20); }); } catch (Throwable $e) { /* the log must never stop an email */ }
+}
+function mail_recent($n = 5) {
+    return array_map(function ($x) { return ['when' => et_text($x['t'] ?? 0), 'ok' => !empty($x['ok']), 'via' => $x['via'] ?? null, 'to' => $x['to'] ?? null, 'from' => $x['from'] ?? null, 'subject' => $x['subject'] ?? null, 'error' => $x['error'] ?? null]; }, array_slice(cload('mail.json', []), 0, $n));
+}
 function send_mail($m) {
+    $cfg = mail_cfg(); $info = ['to' => $cfg['to'], 'from' => $cfg['from'], 'subject' => mb_substr((string)($m['subject'] ?? ''), 0, 120)];
+    try { $via = send_mail_now($m); mail_note(true, ['via' => $via] + $info); return $via; }
+    catch (Throwable $e) { mail_note(false, ['via' => $cfg['smtp'] ? 'smtp' : 'mail()', 'error' => mb_substr($e->getMessage(), 0, 300)] + $info); throw $e; }
+}
+function send_mail_now($m) {
     $cfg = mail_cfg(); $from = $cfg['from']; $to = $cfg['to'];
     $bnd = 'ffc_' . bin2hex(random_bytes(12)); $body = m_body($bnd, $m['text'], $m['html']);
     $ct = 'multipart/alternative; boundary="' . $bnd . '"';

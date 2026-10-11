@@ -83,10 +83,22 @@ If something is wrong, `ffc-private/cache/log.txt` has the details.
 | Whole site shows a "500" | Wrong PHP version (need 7.4+), or `ffc-private` is not beside `public_html`. Check cPanel > *Errors* and `cache/log.txt` |
 | The site loads but fares never appear and `/api/status` says 404 | `.htaccess` did not upload (it is a hidden file). Turn on *Show Hidden Files* and check it is in `public_html` |
 | `/api/...` returns 403 or 406 from the host | The host's firewall (ModSecurity) blocked a request. Contact HostGator support with the time and the address, or whitelist the rule |
-| Emails do not arrive | Run `/api/mail-check?key=...&send=1`. Check the spam folder. Create the mailbox, or use Gmail by filling the `SMTP_*` lines in `.env` |
+| Emails do not arrive | See "If emails do not arrive" below |
 | `Too many new route lookups` | A visitor (often a crawler) hit `NEW_ROUTES_PER_IP_HOUR`. Raise it or wait an hour |
 | You use Cloudflare | Add `TRUST_PROXY=on` to `.env` so each visitor's real address is used for limits and for the location in quote emails |
 
 ## 8. Moving to the real address
 
 When you are ready for quote requests to go to `hello@flyfirstclass.com`, change `MAIL_TO` in `.env` to that address (and keep `MAIL_FROM` the same mailbox).
+
+## 9. If emails do not arrive
+
+The site remembers the last 20 send attempts. Open `/api/mail-check?key=YOUR_KEY&send=1` (sends a test) and read `recent`: each line says when, whether the server accepted it, and the reason if not. `/api/status?key=YOUR_KEY` shows the same list as `recentEmails`.
+
+- **`ok: false`** with an error: the message says what to fix (for example the mailbox is missing, or the SMTP login is wrong).
+- **`ok: true` but nothing in the inbox:** the server handed the email to HostGator's mail system, which then did not deliver it, usually because Gmail marked or refused it. Check, in this order:
+  1. The spam folder of the receiving inbox.
+  2. cPanel > *Email* > **Track Delivery**: search for the receiving address. It shows Delivered, Deferred or Failed, with the reason.
+  3. cPanel > *Email* > **Email Deliverability**: if the domain shows a problem with SPF or DKIM, press **Repair**. If your domain's DNS is managed somewhere else (for example Cloudflare), add the records it lists there.
+  4. The mailbox named in `MAIL_FROM` (default `hello@flyfirstclass.com`) must exist in cPanel > *Email Accounts*.
+- **Most reliable fix when the inbox is Gmail:** send through Gmail itself. In your Google account turn on 2-step verification, create an *App password*, then add to `.env`: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=you@gmail.com`, `SMTP_PASS=` (the app password, never share it) and `MAIL_FROM=you@gmail.com`. Run the mail-check link again.

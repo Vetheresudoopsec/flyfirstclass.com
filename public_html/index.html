@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-10m">
+<meta name="build" content="2026-10-10n">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -194,9 +194,10 @@ img{-webkit-user-drag:none;user-drag:none}
 .tc{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--j);border-radius:8px;padding:22px 24px;margin-bottom:28px;max-width:560px}
 .tt{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--mute)}
 .tc h3{font-size:1.5rem;font-weight:400;margin:8px 0 18px}
-.td{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px 20px;margin:0}
+.td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 20px;margin:0}.td .cp{grid-column:1}.td .ce{grid-column:span 2}
+@media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.td .ce{grid-column:1/-1}}
 .td dt{font-size:.8rem;color:var(--mute)}
-.td dd{margin:0;font-weight:600}
+.td dd{margin:0;font-weight:600;overflow-wrap:anywhere}.tc[hidden]{display:none}
 .tf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.85rem;color:var(--mute)}
 #rcx{border:0;background:none;color:var(--j);font:inherit;text-decoration:underline;padding:0}
 .pn{display:flex;gap:10px}
@@ -861,8 +862,8 @@ const tripOf=b=>({from:b.from,to:b.to,via:b.via||[],cabin:b.cabin,type:b.trip,ad
 const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;return{from:t.from,to:t.to,via:t.via||[],cabin:t.cabin||"First class",trip:t.type||"One way",pax:paxText(a,k),a,k,dep:t.dep||"",dep2:t.dep2||"",ret:t.ret||"",ret2:t.ret2||"",flex:!!t.flex,ref:r.ref,at:new Date(r.created).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}};
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
-function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v)=>v?`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
- return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${esc([t.from,t.to,...(t.via||[])].filter(Boolean).join(" \u2192 ")||"Trip details to be confirmed")}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Email",c.email)+it("Phone",phShow(c.phone))+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
+function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
+ return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${esc([t.from,t.to,...(t.via||[])].filter(Boolean).join(" \u2192 ")||"Trip details to be confirmed")}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
 function renderAll(note){for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
   box.innerHTML=sumCard(REQ)+(k==1?`<div class="lkx">${note?`<p class="note ok2" role="status">${esc(note)}</p>`:""}<button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button>${note?'<a class="btn go" href="#contact" data-act="chg">Send this change to your advisor</a>':""}</div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
@@ -892,8 +893,8 @@ function openEd(){if(!REQ)return;const old=$("edf");if(old)old.remove();$("lkr1"
  ["efa","efb"].forEach(i=>ac($(i)));ED=DL($("edl"),$("eda"),$("edn"),"ec");(t.via||[]).forEach(x=>ED.put(x));
  $("ety").value=["One way","Multi-city","Round-trip"].includes(t.type)?t.type:(t.type=="Return"?"Round-trip":"One way");if([...$("ecb").options].some(o=>o.value==t.cabin))$("ecb").value=t.cabin;
  const tg=()=>{const m=$("ety").value=="Multi-city";$("edx").hidden=!m;if(m&&!ED.n())ED.put("");$("erd").disabled=$("ety").value=="One way"};$("ety").onchange=tg;tg();
- $("edb").setAttribute("aria-expanded","true");$("edf").scrollIntoView({block:"nearest"});$("efa").focus()}
-function closeEd(){const f=$("edf");if(f)f.remove();const b=$("edb");if(b){b.setAttribute("aria-expanded","false");b.focus()}}
+ const tc=$("lkr1").querySelector(".tc");if(tc)tc.hidden=true;$("edb").setAttribute("aria-expanded","true");$("edf").scrollIntoView({block:"nearest"});$("efa").focus()}
+function closeEd(){const f=$("edf");if(f)f.remove();const tc=$("lkr1").querySelector(".tc");if(tc)tc.hidden=false;const b=$("edb");if(b){b.setAttribute("aria-expanded","false");b.focus()}}
 async function saveEd(e){e.preventDefault();const E=$("ede"),err=m=>{E.textContent=m;E.hidden=false},old=REQ.trip||{};E.hidden=true;
  const fa=okPlace($("efa").value),fb=okPlace($("efb").value);if(!fa||!fb)return err("Please choose the departure and destination from the list.");
  const ty2=$("ety").value,xs=ty2=="Multi-city"?ED.get():[],xc=xs.map(i=>okPlace(i.value));if(xc.some(c=>!c))return err("Please choose each extra destination from the list, or remove it.");

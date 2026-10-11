@@ -34,6 +34,7 @@ function status_full() {
         'lastRefresh' => !empty($m['lastRefresh']) ? et_text($m['lastRefresh']) : 'never', 'nextRefresh' => et_text(next_noon()),
         'refreshInProgress' => isset($m['refresh']) ? count($m['refresh']['done'] ?? []) . ' routes done' : null,
         'cronLastRun' => !empty($m['cronLast']) ? et_text($m['cronLast']) : 'never (add the cron job, see the setup guide)',
+        'recentEmails' => mail_recent(5),
         'recentLog' => log_tail(15)];
 }
 
@@ -96,6 +97,8 @@ function dispatch() {
                 try { $out['via'] = send_mail(['subject' => 'Test email from your Fly First Class site', 'text' => 'This is a test. If you can read it, quote requests will arrive here.', 'html' => '<p>This is a test. If you can read it, quote requests will arrive here.</p>', 'replyTo' => '']); $out['sent'] = true; }
                 catch (Throwable $e) { $out['sent'] = false; $out['error'] = $e->getMessage(); }
             }
+            $out['recent'] = mail_recent(8);
+            $out['note'] = $sm ? 'Sent through your SMTP account.' : "Sent through the server's own mail system. \"sent\" only means the server accepted the message for delivery. If it never arrives, check the spam folder, then cPanel > Email > Track Delivery (search for the recipient) and cPanel > Email > Email Deliverability.";
             json_out(200, $out);
         case 'send':
             if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
