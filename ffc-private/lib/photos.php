@@ -122,6 +122,12 @@ function top_list($o) {
 }
 // Photos for a list of destinations (Listings rows and carousel cards). Saved ones come back at once; a few new ones are looked up
 // per request and the rest are reported as pending so the page can ask again shortly.
+function photo_any() {            // one saved photo, any city: for pages that want a picture before a destination is known
+    $IMG = img_all(true); $ks = array_values(array_filter(array_keys($IMG), function ($k) use ($IMG) { return !empty($IMG[$k]) && !empty($IMG[$k]['url']); }));
+    if (!$ks) return ['any' => null];
+    $k = $ks[random_int(0, count($ks) - 1)];
+    return ['any' => pub($IMG[$k]) + ['iata' => $k]];
+}
 function photos_for($codes) {
     $codes = array_slice(array_values(array_unique($codes)), 0, 24);
     $IMG = img_all(true); $out = []; $todo = [];

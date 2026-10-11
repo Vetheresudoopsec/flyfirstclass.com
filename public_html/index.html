@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-11a">
+<meta name="build" content="2026-10-11b">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -132,7 +132,7 @@ footer ul{list-style:none;padding:0}
 .ind .d.on{width:80px;background:var(--j);background-clip:content-box}
 .pz{border:0;background:none;color:var(--j);font-size:1rem;cursor:pointer;padding:6px}
 .bk{padding:12px 22px 72px}
-.t4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.t4{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .t4 button{display:flex;align-items:center;gap:12px;padding:20px 22px;border:0;background:var(--soft);color:var(--ink);font:500 1.05rem Manrope,sans-serif;cursor:pointer;text-align:left}
 .t4 button[aria-selected=true]{background:var(--j);color:var(--jt)}
 .wd{border:1px solid var(--line);background:var(--card)}
@@ -181,7 +181,8 @@ footer ul{list-style:none;padding:0}
 .rl .rn span{display:block;font-size:.85rem;color:var(--mute)}
 .note{font-size:.85rem;margin-top:14px}
 .tp.x{padding:32px 28px}.tp.x p{margin:8px 0 22px;max-width:60ch}
-@media(max-width:800px){.sl{grid-template-columns:1fr}.st{padding:48px 22px}.si{border-bottom-left-radius:48px}.t4{grid-template-columns:1fr 1fr}.t4 button{padding:14px;font-size:.95rem}}
+@media(max-width:800px){.sl{grid-template-columns:1fr}.st{padding:48px 22px}.si{border-bottom-left-radius:48px}.t4 button{padding:16px 18px;font-size:.98rem}}
+@media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.act.bk2 #sr{margin:16px 12px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}.rr{padding:20px 18px}}
 .err{color:#b3261e;font-size:.85rem;margin-top:6px}
 :root[data-theme=dark] .err{color:#ff9a90}
@@ -228,7 +229,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .dl li span{color:var(--mute);font-size:.85rem;font-weight:500}
 .c input:focus-visible,.c .db:focus-visible{outline:none}
 .nm3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.nm3 label span{font-weight:400;color:var(--mute)}
+.nm3 label span,.f>label span{font-weight:400;color:var(--mute)}
 .f .ck{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin:20px 0 0;cursor:pointer}
 .f .ck input{width:18px;height:18px;padding:0;flex:none;margin-top:3px;accent-color:var(--j);cursor:pointer}
 .f button[type=submit]{display:block;width:100%;padding:18px 24px;border-radius:12px;background:var(--au);color:#14181f;text-decoration:none;text-align:center;font-size:1.05rem;margin-top:22px}
@@ -244,7 +245,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .tp.x input,.tp.x select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
 .tp.x input:focus-visible,.tp.x select:focus-visible{outline:3px solid var(--j);outline-offset:1px}
 .lk .btn{margin-bottom:4px}
-.lkr{margin-top:20px}.lkr .tc{margin-bottom:14px;max-width:none}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.lkr{margin-top:20px}.mgl>.mpr{flex:0 0 100%;margin-top:16px}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}.lkr .tc{margin-bottom:14px;max-width:none}
 .tp.mg{padding:40px 44px 44px}
 .mgw{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:56px;align-items:start}
 .tp.mg:has(#edf) .mgw{grid-template-columns:minmax(0,1fr)}.tp.mg:has(#edf) .adv{display:none}
@@ -260,7 +261,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .advp{position:relative;height:150px;background:var(--soft);overflow:hidden}
 .advp .sky{position:absolute;inset:0;width:100%;height:100%}
 .advp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.advp .cr{opacity:1;transform:none;pointer-events:auto;left:14px;bottom:8px;font-size:.7rem}
+.advp .cr{left:14px;bottom:8px;font-size:.7rem}.advp:hover .cr,.advp:focus-within .cr{opacity:1;transform:none;pointer-events:auto}@media(hover:none){.advp .cr{opacity:1;transform:none;pointer-events:auto}}
 .adv .ah{padding:22px 26px 8px}
 .adv .ahd{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
 .ti{display:grid;grid-template-columns:88px minmax(0,1fr);gap:20px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -319,17 +320,17 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .fa:disabled,.tw:hover .fa:disabled,.tw:focus-within .fa:disabled{opacity:0;pointer-events:none}
 .tw .fa,.hero .fa{top:50%;transform:translateY(-50%)}
 .fa.fl{left:12px}.fa.fr{right:12px}
-/* .fo is an invisible box exactly as tall as one photo (4:5 of a card's width, less the 18px gold line and its gap) and sits where the photos sit, so the arrows
+/* .fo is an invisible box exactly as tall as one photo (4:5 of a card's width) and sits where the photos sit, so the arrows
    centre on the images at any window size without any measuring script. */
-.fo{position:absolute;left:0;right:0;top:6px;padding-top:calc(((100% - 44px)/3 - 18px)*1.25);pointer-events:none;z-index:5}
-@media(max-width:900px){.fo{padding-top:calc(((100% - 24px)/2 - 18px)*1.25)}}
-@media(max-width:700px){.fo{padding-top:calc(((100% - 4px)*.82 - 18px)*1.25)}}
+.fo{position:absolute;left:0;right:0;top:6px;padding-top:calc((100% - 44px)/3*1.25);pointer-events:none;z-index:5}
+@media(max-width:900px){.fo{padding-top:calc((100% - 24px)/2*1.25)}}
+@media(max-width:700px){.fo{padding-top:calc((100% - 4px)*.82*1.25)}}
 .hero .fa.fl{left:calc(50% + 16px)}.hero .fa.fr{right:16px}
 @media(max-width:800px){.hero .fa{top:auto;bottom:128px;transform:none}.hero .fa:active{transform:scale(.94)}.hero .fa.fl{left:14px}.hero .fa.fr{right:14px}}
 @media(hover:none){.fa{opacity:1;pointer-events:auto;width:42px;height:42px}.fa:disabled{opacity:0;pointer-events:none}}
 @media(prefers-reduced-motion:reduce){.fa,.cr{transition:none}}
 .tcar{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;scrollbar-width:thin}
-.dcard{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start;border-left:4px solid var(--au);padding-left:14px}
+.dcard{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start}
 .dim{position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:var(--soft);display:grid;place-items:center;margin-bottom:14px}
 .dim::after{content:attr(data-c);color:var(--mute);font-size:1.6rem;font-weight:300}
 .dim img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -545,7 +546,8 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 <div class="nm3"><div><label for="fn">First name</label><input id="fn" name="fn" autocomplete="given-name" required></div><div><label for="mn">Middle name <span>(optional)</span></label><input id="mn" name="mn" autocomplete="additional-name"></div><div><label for="ln">Last name</label><input id="ln" name="ln" autocomplete="family-name" required></div></div>
 <label for="e">Email</label><input id="e" name="e" type="email" autocomplete="email" required>
 <label for="p">Phone</label><div class="pn"><select id="cs" aria-label="Country calling code"></select><input id="p" name="p" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number (optional)"></div><p class="err" id="pe" role="alert" hidden></p>
-<label for="m">Message</label><textarea id="m" name="m" rows="5" placeholder="Anything else we should know? If you have not picked a trip, tell us your route and dates."></textarea>
+<div class="hp" aria-hidden="true"><label for="hpw">Website</label><input id="hpw" name="website" tabindex="-1" autocomplete="off"></div>
+<label for="m">Message <span>(optional)</span></label><textarea id="m" name="m" rows="5" placeholder="Anything else we should know? If you have not picked a trip, tell us your route and dates."></textarea>
 <label class="ck"><input type="checkbox" id="nl" name="nl"><span>Subscribe me to the newsletter for route and fare updates.</span></label>
 <button class="btn" type="submit">Send my request</button>
 <p class="agree">By sending your request you agree to our <a href="#privacy">Privacy Policy</a>.</p>
@@ -560,7 +562,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 
 <section class="pg" id="p-privacy" hidden>
 <div class="ph"><div class="w"><h1>Privacy Policy</h1><p>What we collect, why we collect it, and the terms that apply when you send us a quote request.</p></div></div>
-<div class="s"><div class="w tp2"><p>By sending your request you agree to this Privacy Policy.</p><h2>1. Nature of the quote request</h2><p>Submitting a request is not an offer, does not oblige Fly First Class International to provide any service, and does not create a binding contract. You agree to provide accurate, complete and current information, including names as they appear on travel documents, routes, dates and passenger numbers. Any quote or estimate based on inaccurate or incomplete information is void.</p><h2>2. Validity and expiration</h2><p>A quote is valid for 14 days from the date it is issued, subject to fare availability, unless it states otherwise. We may amend, withdraw or cancel a quote at any time before you formally accept it.</p><h2>3. Pricing and scope adjustments</h2><p>A quote is an estimate based on the information you provide and current fares, not a fixed price. Fares are not guaranteed until tickets are issued. Any change to your itinerary, dates, cabin, passengers or other requirements after your request will result in a revised quote. We are not bound by obvious pricing errors, typographical mistakes or technical glitches on this website or in any quote, and may correct them before acceptance.</p><h2>4. Intellectual property and confidentiality</h2><p>Information and documents you submit with your request are licensed to us solely to review your request and prepare your quote. Our quote documentation, including fare construction and routing strategies, is confidential and must not be shared with competitors or other third parties without our written consent.</p><h2>5. Communication and marketing consent</h2><p>By submitting a request you agree that we may contact you by email, phone or message about your quote. You can opt out of these messages at any time. If you tick the newsletter box we will also send you marketing emails, and you can unsubscribe at any time using the link in each email. We handle personal information as described in this Privacy Policy and comply with applicable anti-spam and data protection laws, including CAN-SPAM and the GDPR.</p><p>Each request is given a reference ID. We keep the request, your name, email and phone number with that ID for up to six months from its last change so you can look it up, change it and reuse your details. Anyone who has the ID can view and change the request, so keep it private.</p><h2>6. Data we collect, cookies and your consent</h2><p>This section lists everything this site collects and why.</p><p><b>Details you give us.</b> When you send a request we collect what you type into the form: your name, email, phone number, trip details, message and newsletter choice. We email it to our team and keep it under your reference ID for up to six months from its last change, so you can look it up, change it and reuse your details. We also record the time you sent it.</p><p><b>Cookies and similar browser storage (essential, always on).</b> This site collects cookies and similar browser storage (such as local and session storage) that it needs to work: your light or dark mode choice, your cookie consent choice, the trip summary you are building during your visit, and, only if our server cannot be reached, requests saved in your browser. These stay on your device and are not sent to us. The site also looks up your approximate area from your IP address, using a location service, to suggest nearby airports. We do not store that result.</p><p><b>Optional data, only if you press Accept in the Consent to Cookies box.</b> When you send a request, we add the following to the email our team receives:</p><ul><li>your approximate location (city, region and country) worked out from your IP address, and the IP address itself;</li><li>your browser and its version, operating system, language and time zone;</li><li>your device hardware: number of processor cores, approximate memory, screen size and pixel density, window size and touch support;</li><li>your browser's user agent text.</li></ul><p>These details are used only to help our team verify and serve your request and to protect against misuse. They are not stored on the site, not used for advertising and not sold. If you press Decline, none of these details are collected. The time the request was sent is always included.</p><p><b>Third parties.</b> Photos, fonts and airline logos are loaded from other services (for example Unsplash, Google Fonts and airline logo providers), which receive your IP address and browser details when your browser fetches them. Our email provider delivers requests to us.</p><p><b>Changing your mind.</b> Use Cookie settings at the bottom of any page to reopen the Consent to Cookies box and change your choice at any time. To have a request deleted before six months, email us with your reference ID.</p><p><a href="#contact">Back to your quote request</a></p></div></div>
+<div class="s"><div class="w tp2"><p>By sending your request you agree to this Privacy Policy.</p><h2>1. Nature of the quote request</h2><p>Submitting a request is not an offer, does not oblige Fly First Class International to provide any service, and does not create a binding contract. You agree to provide accurate, complete and current information, including names as they appear on travel documents, routes, dates and passenger numbers. Any quote or estimate based on inaccurate or incomplete information is void.</p><h2>2. Validity and expiration</h2><p>A quote is valid for 14 days from the date it is issued, subject to fare availability, unless it states otherwise. We may amend, withdraw or cancel a quote at any time before you formally accept it.</p><h2>3. Pricing and scope adjustments</h2><p>A quote is an estimate based on the information you provide and current fares, not a fixed price. Fares are not guaranteed until tickets are issued. Any change to your itinerary, dates, cabin, passengers or other requirements after your request will result in a revised quote. We are not bound by obvious pricing errors, typographical mistakes or technical glitches on this website or in any quote, and may correct them before acceptance.</p><h2>4. Intellectual property and confidentiality</h2><p>Information and documents you submit with your request are licensed to us solely to review your request and prepare your quote. Our quote documentation, including fare construction and routing strategies, is confidential and must not be shared with competitors or other third parties without our written consent.</p><h2>5. Communication and marketing consent</h2><p>By submitting a request you agree that we may contact you by email, phone or message about your quote. You can opt out of these messages at any time. If you tick the newsletter box we will also send you marketing emails, and you can unsubscribe at any time using the link in each email. We handle personal information as described in this Privacy Policy and comply with applicable anti-spam and data protection laws, including CAN-SPAM and the GDPR.</p><p>Each request is given a reference ID. We keep the request, your name, email and phone number with that ID for up to six months from its last change so you can look it up, change it and reuse your details. Anyone who has the ID can view and change the request, so keep it private.</p><h2>6. Data we collect, cookies and your consent</h2><p>This section lists everything this site collects and why.</p><p><b>Details you give us.</b> When you send a request we collect what you type into the form: your name, email, phone number, trip details, message and newsletter choice. We email it to our team and keep it under your reference ID for up to six months from its last change, so you can look it up, change it and reuse your details. We also record the time you sent it.</p><p><b>Cookies and similar browser storage (essential, always on).</b> This site collects cookies and similar browser storage (such as local and session storage) that it needs to work: your light or dark mode choice, your cookie consent choice, the trip summary you are building during your visit, and, only if our server cannot be reached, requests saved in your browser. These stay on your device and are not sent to us. The site also looks up your approximate area from your IP address, using a location service, to suggest nearby airports. We do not store that result.</p><p><b>Optional data, only if you press Accept in the Consent to Cookies box.</b> When you send a request, we add the following to the email our team receives:</p><ul><li>your approximate location (city, region and country) worked out from your IP address, and the IP address itself;</li><li>your browser and its version, operating system, language and time zone;</li><li>your device hardware: number of processor cores, approximate memory, screen size and pixel density, window size and touch support;</li><li>your browser's user agent text.</li></ul><p>These details are used only to help our team verify and serve your request and to protect against misuse. They are not stored on the site, not used for advertising and not sold. If you press Decline, none of these details are collected. The time the request was sent is always included.</p><p><b>Third parties.</b> Photos, fonts and airline logos are loaded from other services (for example Unsplash, Google Fonts and airline logo providers), which receive your IP address and browser details when your browser fetches them. Our email provider delivers requests to us.</p><p><b>Automated-traffic checks (essential).</b> To keep bots away from route searches and quote requests, the page asks our server for a short-lived pass just before it looks up routes, finds or changes a request, or sends a message. The server looks at basic browser details (such as the browser name and language settings), whether the page has been used by a person, a hidden form field, how fast a form was filled in and which website the request came from. Your pass is kept in your browser's session storage for up to 30 minutes. If we switch on Cloudflare Turnstile, an invisible check from Cloudflare also runs at those moments: your browser loads a script from Cloudflare, and Cloudflare receives your IP address and browser details. You are never asked to select pictures or type text. If a visit looks automated, the request is not processed and we show our email address and phone number instead.</p><p><b>Changing your mind.</b> Use Cookie settings at the bottom of any page to reopen the Consent to Cookies box and change your choice at any time. To have a request deleted before six months, email us with your reference ID.</p><p><a href="#contact">Back to your quote request</a></p></div></div>
 </section>
 
 </main>
@@ -584,7 +586,7 @@ let t0="light";try{t0=localStorage.getItem("ffc-mode")||"light"}catch(e){}
 th(t0);
 $("tg").onclick=()=>th(R.dataset.theme=="dark"?"light":"dark",1);
 const P={privacy:["Privacy Policy | Fly First Class International","How Fly First Class International collects and uses your information, including cookies, and the terms that apply to quote requests."],home:["Fly First Class International | First Class Airline Tickets & Business Class Fares","Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote."],about:["About Us | Fly First Class International","Meet the team behind Fly First Class International: consolidated first and business class fares with a dedicated advisor."],services:["First Class Travel Services | Fly First Class International","Explore first class airline tickets, business class fares, multi-city trips and executive travel, plus how it works and FAQs."],listings:["First & Business Class Routes | Fly First Class International","Explore first and business class routes, cabins and airlines from your nearest airport, then request a private quote."],contact:["Contact Us | Fly First Class International","Request a private quote for first class travel. Share your route and dates and an advisor will reply with your best fares."]};
-function go(){let h=(location.hash||"#home").slice(1);if(h=="terms"){h="privacy";history.replaceState(null,"","#privacy")}if(!P[h])h="home";document.querySelectorAll(".pg").forEach(s=>s.hidden=s.id!=="p-"+h);document.querySelectorAll("[data-n]").forEach(a=>a.classList.toggle("on",a.dataset.n===h));document.title=P[h][0];document.querySelector("meta[name=description]").content=P[h][1];$("nav").classList.remove("open");$("mb").setAttribute("aria-expanded","false");scrollTo(0,0);if(h=="listings"&&window.__rd)initL()}
+function go(){let h=(location.hash||"#home").slice(1);if(h=="terms"){h="privacy";history.replaceState(null,"","#privacy")}if(!P[h])h="home";document.querySelectorAll(".pg").forEach(s=>s.hidden=s.id!=="p-"+h);document.querySelectorAll("[data-n]").forEach(a=>a.classList.toggle("on",a.dataset.n===h));document.title=P[h][0];document.querySelector("meta[name=description]").content=P[h][1];$("nav").classList.remove("open");$("mb").setAttribute("aria-expanded","false");scrollTo(0,0);if(h=="contact")window.__ft0=Date.now();if(h=="listings"&&window.__rd)initL()}
 addEventListener("hashchange",go);go();
 $("mb").onclick=()=>{const o=$("nav").classList.toggle("open");$("mb").setAttribute("aria-expanded",o)};
 
@@ -597,8 +599,8 @@ function man(i){ss(i);arm()}
 DS.forEach((b,k)=>b.onclick=()=>man(k));$("pz").onclick=()=>{pl=!pl;pz()};pz();
 $("hprev").onclick=()=>man(si-1);$("hnext").onclick=()=>man(si+1);arm();
 // ---- Booking tabs ----
-const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h16"/>','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="m8 11 3 3 5-6"/>','<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'];
-const TN=["Book a trip","Manage booking","Check in","Check flight status"];
+const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h16"/>','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="m8 11 3 3 5-6"/>'];
+const TN=["Book a trip","Manage booking","Check in"];
 $("t4").innerHTML=TN.map((n,i)=>`<button role="tab" type="button" aria-selected="${i==0}" data-i="${i}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[i]}</svg>${n}</button>`).join("");
 const TK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 0 0 6v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a2 2 0 0 1 0-6V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg>';
 const TV=b=>`<svg viewBox="0 0 88 88" aria-hidden="true"><rect class="bg" x=".5" y=".5" width="87" height="87" rx="18"/>${b}</svg>`;
@@ -613,13 +615,70 @@ const TI={
 // Sky strip behind the destination photo: it is what shows until a photo has loaded (or if none is available).
 const SKY=(n,sx,px,py)=>`<svg class="sky" viewBox="0 0 398 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="adk${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f7aa5"/><stop offset=".6" stop-color="#cdb7a6"/><stop offset="1" stop-color="#f3cfa4"/></linearGradient><radialGradient id="adn${n}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe6b0" stop-opacity=".95"/><stop offset="1" stop-color="#ffe6b0" stop-opacity="0"/></radialGradient></defs><rect width="398" height="150" fill="url(#adk${n})"/><circle cx="${sx}" cy="150" r="150" fill="url(#adn${n})"/><path d="M0 118C60 100 120 128 190 112S320 98 398 116V150H0Z" fill="#fff" opacity=".22"/><path d="M0 134C80 120 150 142 230 130S340 122 398 134V150H0Z" fill="#fff" opacity=".38"/><g transform="translate(${px} ${py}) rotate(-6) scale(.8)" fill="#fff" opacity=".92"><path d="M0 14Q6 6 22 6L70 6Q88 6 92 14Q88 22 70 22L22 22Q6 22 0 14Z"/><path d="M12 6L4-8L14-8L28 6Z"/><path d="M38 12L58-12L67-12L56 12Z"/><path d="M38 16L58 40L67 40L56 16Z"/></g></svg>`;
 const TPM=[
- {t:"Manage booking",a:"adv",l:"Message your advisor",h:"What you can do",c:"MLE",n:"Maldives",sx:300,px:236,py:40,f:"Your advisor handles every change with the airline.",s:[["ch","Change","Update your route, dates or passengers."],["up","Upgrade","Ask about moving up a cabin."],["ca","Cancel","Ask about cancelling a ticket."]]},
- {t:"Check in",a:"chk",l:"Ask for my check-in details",h:"How check-in works",c:"BKK",n:"Bangkok",sx:90,px:200,py:34,f:"Your advisor can also watch for delays and rebook you if plans change.",s:[["id","Paste your reference ID","Your saved name, email and phone are filled in for you."],["ad","Ask your advisor","Get your check-in details straight away."],["ck","Check in with your airline","Check-in is completed with your airline."]]}];
-const TP=[["Check flight status","Your airline's app shows live status. Your advisor can also watch for delays and rebook you if plans change.","Please check the status of my flight. Flight number and date: ","Ask my advisor"]];
-TPM.forEach((t,i)=>{const k=i+1,d=document.createElement("div");d.className="tp x mg";d.id="tp"+k;d.hidden=true;d.innerHTML=`<div class="mgw"><div class="mgl"><h3>${t.t}</h3><form class="lk" data-k="${k}"><div class="lf"><label for="lk${k}">Reference ID</label><div class="lfi">${TK}<input id="lk${k}" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div></div><button class="btn" type="submit">Find my request</button></form><p class="err" id="lke${k}" role="alert" hidden></p><div class="lkr" id="lkr${k}"></div><div class="lka"><a class="btn go" href="#contact" data-act="${t.a}">${t.l}</a></div></div><aside class="adv" aria-label="${t.h}"><div class="advp" data-i="${t.c}" data-c="${t.n}">${SKY(k,t.sx,t.px,t.py)}</div><div class="ah"><div class="ahd">${t.h}</div>${t.s.map(x=>`<div class="ti">${TI[x[0]]}<div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join("")}</div><p class="af">${t.f}</p></aside></div>`;$("tp0").parentNode.appendChild(d)});
-TP.forEach((t,i)=>{const d=document.createElement("div");d.className="tp x";d.id="tp"+(i+3);d.hidden=true;d.innerHTML=`<h3>${t[0]}</h3><p>${t[1]}</p><a class="btn go" href="#contact" data-m="${t[2]}">${t[3]}</a>`;$("tp0").parentNode.appendChild(d)});
-$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i);if(b.dataset.i=="1"||b.dataset.i=="2")fillPhotos()};
-document.addEventListener("click",e=>{const a=e.target.closest("[data-m]");if(a){ACTREF=null;ACTKIND="";$("m").value=a.dataset.m}});
+ {t:"Manage booking",a:"adv",l:"Message your advisor",h:"What you can do",sx:300,px:236,py:40,f:"Your advisor handles every change with the airline.",s:[["ch","Change","Update your route, dates or passengers."],["up","Upgrade","Ask about moving up a cabin."],["ca","Cancel","Ask about cancelling a ticket."]]},
+ {t:"Check in",a:"chk",l:"Ask for my check-in details",h:"How check-in works",sx:90,px:200,py:34,f:"Your advisor can also watch for delays and rebook you if plans change.",s:[["id","Paste your reference ID","Your saved name, email and phone are filled in for you."],["ad","Ask your advisor","Get your check-in details straight away."],["ck","Check in with your airline","Check-in is completed with your airline."]]}];
+TPM.forEach((t,i)=>{const k=i+1,d=document.createElement("div");d.className="tp x mg";d.id="tp"+k;d.hidden=true;d.innerHTML=`<div class="mgw"><div class="mgl"><h3>${t.t}</h3><form class="lk" data-k="${k}"><div class="lf"><label for="lk${k}">Reference ID</label><div class="lfi">${TK}<input id="lk${k}" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div></div><button class="btn" type="submit">Find my request</button></form><p class="err" id="lke${k}" role="alert" hidden></p><div class="lkr" id="lkr${k}"></div><div class="lka"><a class="btn go" href="#contact" data-act="${t.a}">${t.l}</a></div></div><aside class="adv" aria-label="${t.h}"><div class="advp" data-k="${k}">${SKY(k,t.sx,t.px,t.py)}</div><div class="ah"><div class="ahd">${t.h}</div>${t.s.map(x=>`<div class="ti">${TI[x[0]]}<div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join("")}</div><p class="af">${t.f}</p></aside></div>`;$("tp0").parentNode.appendChild(d)});
+$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i);if(b.dataset.i=="1"||b.dataset.i=="2")advRefresh()};
+// ---- Bot checks: quiet and automatic, never a puzzle ----
+// Before routes, photos or requests are looked up, or a quote is sent, the page gets a short-lived signed pass from the server (POST /api/guard).
+// The server weighs a few signals: is this a normal browser, has anyone used the page, is the hidden field empty and, if you set it up, an invisible
+// Cloudflare Turnstile check. A visitor who looks automated just gets a plain message with an email address and phone number. Nobody is asked to
+// pick pictures or type distorted text.
+const GD={cfg:null,cfgP:null,tok:"",lv:0,exp:0,ev:0,t0:Date.now(),busy:null,badAt:0,badEv:-1};
+const GMSG="We couldn't confirm that this request came from a person, so it wasn't processed. Please email hello@flyfirstclass.com or call +1 (555) 010-0199 and we'll help right away.";
+["pointerdown","pointermove","keydown","touchstart","wheel","click"].forEach(v=>addEventListener(v,e=>{if(e.isTrusted&&GD.ev<60)GD.ev++},{passive:true,capture:true}));
+function gSig(){const n=navigator,u=n.userAgent||"";let h=0;
+ try{if(/HeadlessChrome|PhantomJS/i.test(u))h+=2;const mob=/Mobi|Android|iPhone|iPad/.test(u);
+  if(/Chrome\//.test(u)&&!/Edg\/|OPR\/|CriOS|FxiOS/.test(u)&&!window.chrome&&!mob)h++;
+  if(!(n.languages&&n.languages.length))h++;
+  if(!mob&&/Chrome\//.test(u)&&n.plugins&&n.plugins.length===0)h++;
+  if(!(screen.width&&screen.height))h++;
+  if(window.outerWidth===0&&window.outerHeight===0)h++}catch(e){h++}
+ return{wd:n.webdriver===true,ev:GD.ev,h,age:Date.now()-GD.t0}}
+function cfToken(site){return new Promise(res=>{let done=false,w=null;const fin=v=>{if(!done){done=true;res(v)}};setTimeout(()=>fin(""),8000);
+ const go=()=>{try{const box=document.createElement("div");box.setAttribute("aria-hidden","true");box.style.cssText="position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden";document.body.appendChild(box);
+  w=turnstile.render(box,{sitekey:site,callback:t=>fin(t),"error-callback":()=>fin(""),"timeout-callback":()=>fin(""),"unsupported-callback":()=>fin(""),"before-interactive-callback":()=>{fin("!");try{turnstile.remove(w)}catch(e){}}})}catch(e){fin("")}};
+ if(window.turnstile)go();else{const sc=document.createElement("script");sc.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";sc.async=true;sc.onload=go;sc.onerror=()=>fin("");document.head.appendChild(sc)}})}
+function gHave(need){if(GD.tok&&Date.now()<GD.exp-30000&&GD.lv>=need)return GD.tok;try{const o=JSON.parse(sessionStorage.getItem("ffc-g")||"null");if(o&&o.exp>Date.now()+30000&&o.lv>=need){Object.assign(GD,{tok:o.t,lv:o.lv,exp:o.exp});return GD.tok}}catch(e){}return""}
+async function gToken(need,quiet){
+ if(quiet)return gHave(need);
+ if(GD.cfg===null){GD.cfgP=GD.cfgP||(async()=>{try{const r=await fetch("/api/guard"),j=r.ok&&(r.headers.get("content-type")||"").includes("json")?await r.json():null;GD.cfg=j||{on:false}}catch(e){GD.cfg={on:false}}})();await GD.cfgP}
+ if(!GD.cfg.on)return"";
+ if(GD.tok&&Date.now()<GD.exp-30000&&GD.lv>=need)return GD.tok;
+ try{const o=JSON.parse(sessionStorage.getItem("ffc-g")||"null");if(o&&o.exp>Date.now()+30000&&o.lv>=need){Object.assign(GD,{tok:o.t,lv:o.lv,exp:o.exp});return GD.tok}}catch(e){}
+ if(GD.badAt&&Date.now()-GD.badAt<60000&&GD.ev<=GD.badEv)return null;
+ if(GD.busy)return GD.busy;
+ return GD.busy=(async()=>{try{
+  const cf=GD.cfg.site?await cfToken(GD.cfg.site):"";
+  const r=await fetch("/api/guard",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cf,s:gSig()})});
+  if(r.status==403){GD.badAt=Date.now();GD.badEv=GD.ev;return null}
+  if(!r.ok)return"";
+  const j=await r.json();if(!j.g)return"";
+  GD.tok=j.g;GD.lv=j.lv||0;GD.exp=Date.now()+(j.ttl||1800)*1000;GD.badAt=0;try{sessionStorage.setItem("ffc-g",JSON.stringify({t:GD.tok,lv:GD.lv,exp:GD.exp}))}catch(e){}
+  return GD.tok}catch(e){return""}finally{GD.busy=null}})()}
+// gf() = fetch with the pass. quiet=true (page-load calls such as the home carousel and its photos) never starts a check.
+async function gf(u,o,need,quiet,again){o=o||{};let t="";try{t=await gToken(need||0,quiet)}catch(e){}
+ if(t===null)return new Response(JSON.stringify({bot:true,error:GMSG}),{status:403,headers:{"Content-Type":"application/json"}});
+ const h={...(o.headers||{})};if(t)h["X-FFC-Guard"]=t;
+ const r=await fetch(u,{...o,headers:h});
+ if(r.status==403&&!again){let j=null;try{j=await r.clone().json()}catch(e){}if(j&&j.stale){GD.tok="";GD.exp=0;try{sessionStorage.removeItem("ffc-g")}catch(e){}return gf(u,o,need,quiet,true)}}
+ return r}
+// ---- Manage booking / Check in side panel photo: the destination of the request that was found; until then (or if that city has no photo) any photo already saved on the server ----
+let ANYP=null,ADVSEQ=0;
+const advPic=c=>PIC[c]?{url:"https://images.unsplash.com/photo-"+PIC[c]+"?auto=format&fit=crop&w=1400&q=75"}:null;
+async function advAny(){if(ANYP)return ANYP;let p=null;try{const r=await gf("/api/photos?any=1",{},0,true);if(r.ok){const j=await r.json();if(j&&j.any&&j.any.url)p=j.any}}catch(e){}
+ if(!p){const ks=Object.keys(PIC);if(ks.length)p=advPic(ks[Math.floor(Math.random()*ks.length)])}
+ return ANYP=p}
+async function advFor(code){if(!code)return null;if(PIC[code])return advPic(code);
+ for(let n=0;n<6;n++){try{const r=await gf("/api/photos?codes="+code,{},0,true);if(!r.ok)return null;const j=await r.json(),p=(j.photos||{})[code];if(p&&p.url)return p;if(!(j.pending||[]).includes(code))return null}catch(e){return null}await new Promise(t=>setTimeout(t,2500))}
+ return null}
+function advPut(el,p,label){el.querySelectorAll("img,.cr").forEach(x=>x.remove());if(!p)return;const im=new Image();im.alt=label||"Destination photo";im.onload=()=>{el.querySelectorAll("img,.cr").forEach(x=>x.remove());el.insertAdjacentElement("afterbegin",im);if(p.credit)el.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link||"https://unsplash.com")}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url}
+async function advRefresh(){const my=++ADVSEQ,t=REQ&&REQ.trip||{},code=t.to?cd(t.to):"",nmz=t.to?String(t.to).replace(/\s*\(.*\)$/,""):"";
+ const els=[1,2].map(k=>document.querySelector("#tp"+k+" .advp")).filter(Boolean),key=code||"any";
+ if(els.every(e=>e.dataset.p===key))return;
+ let p=await advFor(code),city=nmz;if(!p){p=await advAny();city=""}
+ if(my!=ADVSEQ)return;
+ els.forEach(e=>{e.dataset.p=key;advPut(e,p,city?city+" city view":"Destination photo")})}
 // ---- Route data and search ----
 const esc=x=>String(x).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const AP={SYD:"Sydney",MEL:"Melbourne",SIN:"Singapore",HKG:"Hong Kong",TYO:"Tokyo",DXB:"Dubai",DOH:"Doha",LHR:"London",CDG:"Paris",FRA:"Frankfurt",JFK:"New York",LAX:"Los Angeles"};
@@ -635,7 +694,7 @@ function sample(o,d){return Object.keys(AP).filter(k=>k!=o&&(!d||k==d)).map(k=>{
 // Polls /api/routes: documented routes arrive instantly from the server cache, new ones fill in as they are fetched.
 // cur() says whether this search is still the one on screen; once the visitor starts another, the old polling loop stops at once.
 async function getRoutes(o,d,cb,cur){let r=null;const OLD={live:true,list:[],pending:0,error:"",stale:true};
- try{for(let i=0;i<80;i++){if(cur&&!cur())return OLD;const x=await fetch("/api/routes?origin="+o+(d?"&dest="+d:""));if(cur&&!cur())return OLD;if(!x.ok)break;const j=await x.json();if(cur&&!cur())return OLD;
+ try{for(let i=0;i<80;i++){if(cur&&!cur())return OLD;const x=await gf("/api/routes?origin="+o+(d?"&dest="+d:""));if(cur&&!cur())return OLD;if(x.status==403){const jb=await x.json().catch(()=>({}));if(jb.bot)return{live:true,list:[],pending:0,error:jb.error||GMSG,bot:true}}if(!x.ok)break;const j=await x.json();if(cur&&!cur())return OLD;
    r={live:true,list:j.routes||[],pending:j.pending||0,error:j.error||""};
    if(!r.pending)break;if(cb)cb(r);await new Promise(t=>setTimeout(t,3000))}}catch(e){r=null}
  if(r&&(r.list.length||!r.error))return r;
@@ -774,13 +833,13 @@ async function show(){
  const my=++sseq,o=cd($("fa").value),d=cd($("fb").value),R2=$("rr");R2.hidden=false;
  if(!o){R2.innerHTML='<p class="note">Choose a departure city above to see available routes.</p>';return}
  R2.innerHTML='<p class="note">Loading routes...</p>';
- const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.pending?"Checking routes...":"No route found for that pair."}</p>`)+`<p class="note">${res.live?(res.pending?(capped?"Checking where the stops are...":d?"Checking more options and where the stops are...":"Checking "+res.pending+" more..."):"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`};
+ const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.bot?esc(res.error):res.pending?"Checking routes...":"No route found for that pair."}</p>`)+(res.bot?"":`<p class="note">${res.live?(res.pending?(capped?"Checking where the stops are...":d?"Checking more options and where the stops are...":"Checking "+res.pending+" more..."):"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`)};
  draw(await getRoutes(o,d,draw,()=>my==sseq))}
 // ---- Booking request and receipt ----
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
 function book(f,t,cab,via){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
-function rc(){const E=$("rc");$("m").required=!BK;if(!BK){E.hidden=true;return}
+function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v)=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
  E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${esc(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}setTimeout(()=>$("bk").scrollIntoView(),80)}};
@@ -800,7 +859,7 @@ $("bf").onsubmit=e=>{e.preventDefault();
  if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before getting your fare.":"Please select a date to leave and a date to return before getting your fare.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
  const o=cd($("fa").value),d=cd($("fb").value);book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via)};
 // ---- Listings (routes near the visitor) ----
-let LO=null,LR=[],LV="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,ERRM="",LD="";
+let LO=null,LR=[],LV="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,ERRM="",BOTM="",LD="";
 let GEO;const geoOnce=()=>GEO||(GEO=geoOrigin());
 async function geoOrigin(){try{const r=await fetch("/api/geo");if(r.ok){const g=await r.json();if(g.airport)return{code:g.airport,city:g.airportCity||g.city}}}catch(e){}return null}
 // One wide banner (destination name + photo) above the rows when a specific destination is searched; the rows then drop their own pictures.
@@ -809,10 +868,10 @@ function banner(l){const n=N[LD]||(LR.find(x=>x.iata==LD)||{}).city||LD,pic=PIC[
 const card=x=>{const n=N[x.iata]||x.city||x.iata,fc=x.cabins.some(k=>k.c=="First");return`<article class="lr${LD?" nb":""}">${LD?"":`<div class="im" data-c="${esc(n)}" data-i="${esc(x.iata)}">${PIC[x.iata]?`<img src="https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=700&q=70" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="tags">${x.cabins.map(k=>`<span>${k.c}</span>`).join("")}</div></div>`}<div class="rb"><div><h3>${esc(LO.code)} to ${esc(x.iata)}</h3><p>${esc(LO.city)} to ${esc(n)}</p><p class="sp">${stx(x)}</p></div><div class="rcab">${x.cabins.map(k=>`<div><b>${k.c}</b><span class="lgs">${lgx(k.a)}</span></div>`).join("")}</div><button class="btn sm go" type="button" data-from="${esc(LO.city)} (${esc(LO.code)})" data-to="${esc(n)} (${esc(x.iata)})" data-cab="${fc?"First class":"Business class"}">Request this route</button></div></article>`};
 // Photos for Listings rows whose destination has no bundled picture: fetched from the server (Unsplash, cached there).
 const PHC=new Map();
-function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i],.advp[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
-async function fillPhotos(n=0){const need=[...new Set([...document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i],.tp:not([hidden]) .advp[data-i]")].map(e=>e.dataset.i))].filter(c=>!PIC[c]&&!PHC.has(c));
+function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
+async function fillPhotos(n=0){const need=[...new Set([...document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]")].map(e=>e.dataset.i))].filter(c=>!PIC[c]&&!PHC.has(c));
  if(!need.length||n>10)return;
- try{const r=await fetch("/api/photos?codes="+need.join(","));if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));paint();if(j.pending&&j.pending.length)setTimeout(()=>fillPhotos(n+1),3500)}catch(e){}}
+ try{const r=await gf("/api/photos?codes="+need.join(","),{},0,true);if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));paint();if(j.pending&&j.pending.length)setTimeout(()=>fillPhotos(n+1),3500)}catch(e){}}
 // Filters that cannot match the search are hidden: with a destination only its own region is offered, and a cabin nobody flies is dropped.
 function chipsFor(){const REG=["europe","apac","americas","me","africa"],dr=LD?(PH[LD]||[])[1]:"";
  [...$("ch").children].forEach(b=>{const f=b.dataset.f;let show=true;
@@ -824,9 +883,9 @@ function renderL(){
  chipsFor();
  const l=LR.filter(x=>LV=="all"||(LV=="first"?x.cabins.some(k=>k.c=="First"):LV=="business"?x.cabins.some(k=>k.c=="Business"):(PH[x.iata]||[])[1]==LV));
  $("ls").textContent=`${l.length} route${l.length==1?"":"s"} from ${LO.city} (${LO.code})`+(PEND?` · checking ${PEND} more`:"")+(LIVE?"":" · sample data"+(ERRM?" ("+ERRM+")":""))+(LG?"":" · location not detected")+".";
- $("lg").innerHTML=(LD?banner(l):"")+(l.length?l.map(card).join(""):`<p class="note">${PEND?"Checking routes...":(LIVE&&!LR.length)?"No first or business class routes found from this airport yet.":"No routes match this filter."}</p>`);paint();fillPhotos()}
-async function loadL(d){const my=++seq;PEND=0;ERRM="";LD=d||"";LR=[];chipsFor();$("ls").textContent="Finding routes...";$("lg").innerHTML=LD?banner([]):"";if(LD){paint();fillPhotos()}
- const up=x=>{if(my!=seq)return;LR=x.list;LIVE=x.live;PEND=x.pending||0;ERRM=x.error||"";renderL()};
+ $("lg").innerHTML=(LD?banner(l):"")+(l.length?l.map(card).join(""):`<p class="note">${BOTM?esc(BOTM):PEND?"Checking routes...":(LIVE&&!LR.length)?"No first or business class routes found from this airport yet.":"No routes match this filter."}</p>`);paint();fillPhotos()}
+async function loadL(d){const my=++seq;PEND=0;ERRM="";BOTM="";LD=d||"";LR=[];chipsFor();$("ls").textContent="Finding routes...";$("lg").innerHTML=LD?banner([]):"";if(LD){paint();fillPhotos()}
+ const up=x=>{if(my!=seq)return;LR=x.list;LIVE=x.live;PEND=x.pending||0;ERRM=x.bot?"":x.error||"";BOTM=x.bot?x.error:"";renderL()};
  up(await getRoutes(LO.code,d,up,()=>my==seq))}
 async function initL(force){if(LI&&!force)return;LI=true;$("ls").textContent="Detecting your location...";const g=await(force?geoOrigin():geoOnce());LG=!!g;LO=g||{code:"LHR",city:"London"};N[LO.code]=LO.city;$("la").value=LO.city+" ("+LO.code+")";$("lb").value="";LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL()}
 $("lu").onclick=()=>initL(true);
@@ -864,14 +923,18 @@ function pf(it){const el=$("p"),raw=el.value;if(/^(\+|00)/.test(raw.trim()))retu
  el.value=out;try{el.setSelectionRange(np,np)}catch(e){}pd=d}
 $("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=vp;cs.onchange=()=>{pf();vp()};
 // ---- Contact submit ----
+// The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
+$("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
 $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
+ if(await gToken(1)===null){$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;
  try{
   let ref=ACTREF||"";
-  if(!ref){const rec=await RQ.create({ref:BK?BK.ref:"",trip:BK?tripOf(BK):{},contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl")});ref=rec.ref;REQ=rec;if(BK&&BK.ref!=ref)setBK({...BK,ref});renderAll()}
+  if(!ref){const rec=await RQ.create({hp:d.get("website")||"",ft:window.__ft0?Date.now()-window.__ft0:null,ref:BK?BK.ref:"",trip:BK?tripOf(BK):{},contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl")});ref=rec.ref;REQ=rec;if(BK&&BK.ref!=ref)setBK({...BK,ref});renderAll()}
   const res=await sendQuote(ACTREF?(ACTKIND||"adv"):"new",ref,d,ph);
-  if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+esc(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+esc(ref)+"</b>. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
+  if(res.bot)$("ok").textContent=res.error||GMSG;
+  else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+esc(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+esc(ref)+"</b>. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
    $("ok").innerHTML="Your request is saved as <b>"+esc(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to hello@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND=""
@@ -895,29 +958,29 @@ function collectEnv(){const n=navigator,u=n.userAgent||"",ud=n.userAgentData,s=w
  let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
  return{browser:br,os:(ud&&ud.platform)||os,ua:u.slice(0,300),lang:(n.languages||[n.language]).filter(Boolean).join(", "),platform:n.platform||"",screen:s.width+"x"+s.height,viewport:innerWidth+"x"+innerHeight,dpr:String(devicePixelRatio||1),colors:String(s.colorDepth||""),cores:String(n.hardwareConcurrency||""),memory:n.deviceMemory?n.deviceMemory+" GB":"",touch:String(n.maxTouchPoints||0),tz,mobile:String(!!(ud&&ud.mobile)||/Mobi|Android|iPhone/.test(u))}}
 async function sendQuote(kind,ref,d,ph){const consent=CONSENT===true;let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
- const r=await srv("POST","/api/send",{ref,kind,trip:BK?tripOf(BK):(REQ&&REQ.ref==ref?REQ.trip:{}),contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl"),consent,env:consent?collectEnv():null,localTime:new Date().toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}),tz});
- return r&&r.s==200&&r.d.sent?{ok:true}:{ok:false,error:(r&&r.d&&r.d.error)||"our mail server could not be reached"}}
+ const r=await srv("POST","/api/send",{hp:d.get("website")||"",ft:window.__ft0?Date.now()-window.__ft0:null,ref,kind,trip:BK?tripOf(BK):(REQ&&REQ.ref==ref?REQ.trip:{}),contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl"),consent,env:consent?collectEnv():null,localTime:new Date().toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}),tz});
+ if(r&&r.s==403&&r.d&&r.d.bot)return{ok:false,bot:true,error:r.d.error};return r&&r.s==200&&r.d.sent?{ok:true}:{ok:false,error:(r&&r.d&&r.d.error)||"our mail server could not be reached"}}
 // ---- Reference IDs: a quote request is stored for 6 months under its ID; the ID looks it up, changes it and fills in the saved contact details ----
-let REQ=null,ACTREF=null,CHG="";
+let REQ=null,ACTREF=null,CHG="";const EDITED=new Set();
 const RAL="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",REFRE=/^FFC-[A-HJ-NP-Z2-9]{8}$/;
 const mkRef=()=>{const a=new Uint32Array(8);crypto.getRandomValues(a);return"FFC-"+[...a].map(x=>RAL[x%32]).join("")};
 const normRef=v=>{v=(v||"").toUpperCase().replace(/\s+/g,"").replace(/^FFC-?/,"");return v?"FFC-"+v:""};
 // The server keeps requests for everyone. If it cannot be reached (page opened as a file or preview), they are kept in this browser instead.
 let MEMQ={};const lsGet=()=>{try{const o=JSON.parse(localStorage.getItem("ffc-reqs")||"{}");MEMQ=o;return o}catch(e){return MEMQ}},lsPut=o=>{MEMQ=o;try{localStorage.setItem("ffc-reqs",JSON.stringify(o))}catch(e){}};
 const lsFind=ref=>{const o=lsGet(),r=o[ref];if(r&&r.exp>Date.now())return r;if(r){delete o[ref];lsPut(o)}return null};
-async function srv(m,u,b){try{const r=await fetch(u,{method:m,headers:b?{"Content-Type":"application/json"}:undefined,body:b?JSON.stringify(b):undefined});if(!(r.headers.get("content-type")||"").includes("json"))return null;return{s:r.status,d:await r.json()}}catch(e){return null}}
+async function srv(m,u,b){try{const r=await gf(u,{method:m,headers:b?{"Content-Type":"application/json"}:undefined,body:b?JSON.stringify(b):undefined},1);if(!(r.headers.get("content-type")||"").includes("json"))return null;return{s:r.status,d:await r.json()}}catch(e){return null}}
 const RQ={
  async create(x){const r=await srv("POST","/api/requests",x);if(r&&r.s==200&&r.d.ref)return r.d;
   const n=Date.now(),ref=x.ref&&REFRE.test(x.ref)&&!lsFind(x.ref)?x.ref:mkRef(),rec={ref,created:n,updated:n,exp:n+183*864e5,trip:x.trip||{},contact:x.contact||{},message:x.message||"",local:true},o=lsGet();o[ref]=rec;lsPut(o);return rec},
- async get(ref){const r=await srv("GET","/api/requests/"+ref);if(r&&r.s==200)return r.d;if(r&&r.s==429)return{limit:true,error:r.d.error};return lsFind(ref)},
- async put(ref,p){const r=await srv("POST","/api/requests/"+ref,p);if(r&&r.s==200)return r.d;if(r&&r.s==429)return{limit:true,error:r.d.error};const l=lsFind(ref);if(!l)return null;const o=lsGet(),n=Date.now();Object.assign(l,{trip:p.trip||l.trip,contact:p.contact||l.contact,updated:n,exp:n+183*864e5});o[ref]=l;lsPut(o);return l}};
+ async get(ref){const r=await srv("GET","/api/requests/"+ref);if(r&&r.s==200)return r.d;if(r&&(r.s==429||(r.s==403&&r.d&&r.d.bot)))return{limit:true,error:r.d.error};return lsFind(ref)},
+ async put(ref,p){const r=await srv("POST","/api/requests/"+ref,p);if(r&&r.s==200)return r.d;if(r&&(r.s==429||(r.s==403&&r.d&&r.d.bot)))return{limit:true,error:r.d.error};const l=lsFind(ref);if(!l)return null;const o=lsGet(),n=Date.now();Object.assign(l,{trip:p.trip||l.trip,contact:p.contact||l.contact,updated:n,exp:n+183*864e5});o[ref]=l;lsPut(o);return l}};
 const tripOf=b=>({from:b.from,to:b.to,via:b.via||[],cabin:b.cabin,type:b.trip,adults:b.a,children:b.k,dep:b.dep,dep2:b.dep2,ret:b.ret,ret2:b.ret2,flex:!!b.flex});
 const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;return{from:t.from,to:t.to,via:t.via||[],cabin:t.cabin||"First class",trip:t.type||"One way",pax:paxText(a,k),a,k,dep:t.dep||"",dep2:t.dep2||"",ret:t.ret||"",ret2:t.ret2||"",flex:!!t.flex,ref:r.ref,at:new Date(r.created).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}};
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
 function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
  return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
-function renderAll(note){for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
+function renderAll(note){advRefresh();modGone();for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
   box.innerHTML=sumCard(REQ)+(k==1?`<div class="lkx">${note?`<p class="note ok2" role="status">${esc(note)}</p>`:""}<button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button>${note?'<a class="btn go" href="#contact" data-act="chg">Send this change to your advisor</a>':""}</div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
  if(!REFRE.test(ref)){E.textContent="Enter your reference ID, for example FFC-AB12CD34.";E.hidden=false;REQ=null;renderAll();return}
@@ -926,10 +989,19 @@ async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value)
  REQ=r;renderAll()}
 function fillContact(c){c=c||{};$("fn").value=c.first||"";$("mn").value=c.middle||"";$("ln").value=c.last||"";$("e").value=c.email||"";$("pe").hidden=true;
  if(c.phone){$("p").value=c.phone;pd="";$("p").dispatchEvent(new Event("input"))}else $("p").value=""}
+// Pressing "Message your advisor" on a found request that has not been changed yet asks whether the visitor wants to change the booking details first.
+function modAsk(){modGone();const box=document.querySelector("#tp1 .mgl");if(!box)return;
+ box.insertAdjacentHTML("beforeend",`<div class="mpr" id="mpr" role="group" aria-labelledby="mprh" tabindex="-1"><b id="mprh">Would you like to change your booking details first?</b><p>You haven't made any changes to this request yet. If your plans have changed, update the route, dates or passengers with Modify request, or message your advisor as it is.</p><div class="mpb"><button class="btn" type="button" id="mpm">Modify request</button><button class="btn" type="button" id="mpa">No, message my advisor</button></div></div>`);
+ const m=$("mpr");m.scrollIntoView({block:"nearest"});$("mpm").focus();
+ m.onkeydown=e=>{if(e.key=="Escape"){modGone();const a=document.querySelector("#tp1 a[data-act=adv]");if(a)a.focus()}}}
+function modGone(){const m=$("mpr");if(m)m.remove()}
 document.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(a){const k=a.dataset.act;
+  if(k=="adv"&&REQ&&!EDITED.has(REQ.ref)&&!(REQ.updated-REQ.created>2000)&&!a.dataset.skip){e.preventDefault();modAsk();return}
+  a.removeAttribute("data-skip");
   if(!REQ){ACTREF=null;ACTKIND="";$("m").value=k=="chk"?"Please resend my booking reference and check-in details.":k=="adv"?"Booking change request. My booking reference: ":"";return}
-  ACTREF=REQ.ref;ACTKIND=k;setBK(bkOf(REQ));fillContact(REQ.contact);$("m").value=k=="chg"?CHG:k=="chk"?"Please resend my booking reference and check-in details. Reference: "+REQ.ref:"Booking change request. My booking reference: "+REQ.ref+"\nWhat I'd like to change: ";return}
- if(e.target.closest("#edb"))openEd();else if(e.target.closest("#edc"))closeEd()});
+  ACTREF=REQ.ref;ACTKIND=k;setBK(bkOf(REQ));fillContact(REQ.contact);$("m").value=k=="chg"?CHG:k=="chk"?"Please resend my booking reference and check-in details. Reference: "+REQ.ref:"Booking change request. My booking reference: "+REQ.ref;return}
+ if(e.target.closest("#mpm")){modGone();if(REQ)openEd()}else if(e.target.closest("#mpa")){modGone();const a=document.querySelector("#tp1 a[data-act=adv]");if(a){a.dataset.skip="1";a.click()}}
+ else if(e.target.closest("#edb"))openEd();else if(e.target.closest("#edc"))closeEd()});
 document.addEventListener("submit",e=>{const f=e.target;if(f.classList.contains("lk")){e.preventDefault();lookup(+f.dataset.k)}else if(f.id=="edf")saveEd(e)});
 // ---- Modify request ----
 let ED=null;
@@ -942,7 +1014,7 @@ const edHTML=r=>{const t=r.trip||{},c=r.contact||{},v=x=>esc(x||"");
 <div><label for="efn">First name</label><input id="efn" value="${v(c.first)}" autocomplete="off"></div><div><label for="emn">Middle name <span>(optional)</span></label><input id="emn" value="${v(c.middle)}" autocomplete="off"></div><div><label for="eln">Last name</label><input id="eln" value="${v(c.last)}" autocomplete="off"></div>
 <div class="sp2"><label for="eem">Email</label><input id="eem" type="email" value="${v(c.email)}" autocomplete="off"></div><div><label for="eph">Phone</label><input id="eph" type="tel" placeholder="+852 1234 5678" value="${v(phShow(c.phone))}" autocomplete="off"></div></div>
 <p class="err" id="ede" role="alert" hidden></p><div class="edb"><button class="btn" type="submit">Save changes</button><button class="btn o" type="button" id="edc">Cancel</button></div></form>`};
-function openEd(){if(!REQ)return;const old=$("edf");if(old)old.remove();$("lkr1").insertAdjacentHTML("beforeend",edHTML(REQ));const t=REQ.trip||{};
+function openEd(){if(!REQ)return;modGone();const old=$("edf");if(old)old.remove();$("lkr1").insertAdjacentHTML("beforeend",edHTML(REQ));const t=REQ.trip||{};
  ["efa","efb"].forEach(i=>ac($(i)));ED=DL($("edl"),$("eda"),$("edn"),"ec");(t.via||[]).forEach(x=>ED.put(x));
  $("ety").value=["One way","Multi-city","Round-trip"].includes(t.type)?t.type:(t.type=="Return"?"Round-trip":"One way");if([...$("ecb").options].some(o=>o.value==t.cabin))$("ecb").value=t.cabin;
  const tg=()=>{const m=$("ety").value=="Multi-city";$("edx").hidden=!m;if(m&&!ED.n())ED.put("");$("erd").disabled=$("ety").value=="One way"};$("ety").onchange=tg;tg();
@@ -963,7 +1035,7 @@ async function saveEd(e){e.preventDefault();const E=$("ede"),err=m=>{E.textConte
  const patch={trip:{from:nm(fa),to:nm(fb),via:xc.map(nm),cabin:$("ecb").value,type:ty2,adults:a,children:k,dep,dep2,ret,ret2,flex:!!(dep2||ret2)},contact:{first:$("efn").value.trim(),middle:$("emn").value.trim(),last:$("eln").value.trim(),email:em,phone:ph}};
  const bt=$("edf").querySelector("button[type=submit]");bt.disabled=true;const r=await RQ.put(REQ.ref,patch);bt.disabled=false;
  if(!r||r.limit)return err(r&&r.limit?r.error:"We couldn't save your changes because this request has expired. Please send a new request.");
- REQ=r;const t=r.trip;CHG="Please update my booking request "+r.ref+".\nNew details:\nRoute: "+[t.from,t.to,...(t.via||[])].join(" > ")+"\nCabin: "+t.cabin+"\nTrip type: "+t.type+"\nPassengers: "+paxText(Math.max(1,t.adults),t.children||0)+"\nDeparting: "+(t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?"\nReturning: "+(t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"");
+ EDITED.add(r.ref);REQ=r;const t=r.trip;CHG="Please update my booking request "+r.ref+".\nNew details:\nRoute: "+[t.from,t.to,...(t.via||[])].join(" > ")+"\nCabin: "+t.cabin+"\nTrip type: "+t.type+"\nPassengers: "+paxText(Math.max(1,t.adults),t.children||0)+"\nDeparting: "+(t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?"\nReturning: "+(t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"");
  renderAll("Saved. Your request has been updated. Send the change to your advisor so they can act on it.")}
 // ---- No text cursor, selection, copy or paste outside form fields ----
 const inF=t=>{t=t&&(t.nodeType==1?t:t.parentElement);return !!(t&&t.closest("input,textarea"))};
@@ -997,7 +1069,7 @@ function renderTop(l){$("tcar").innerHTML=l.slice(0,10).map(x=>{const n=N[x.iata
 async function initTop(){
  const g=await geoOnce();TO=g||{code:"LHR",city:"London"};N[TO.code]=TO.city;
  $("ttl").textContent=g?"Top destinations from "+TO.city:"Top destinations";$("tsub").textContent=g?"":"Showing popular routes. Allow location detection for destinations near you.";
- let l=null;try{const r=await fetch("/api/top?origin="+TO.code);if(r.ok)l=await r.json()}catch(e){}
+ let l=null;try{const r=await gf("/api/top?origin="+TO.code,{},0,true);if(r.ok)l=await r.json()}catch(e){}
  renderTop(l&&l.length?l:topSample(TO.code))}
 function goRoute(o,oc,d,dn){LO={code:o,city:oc};LG=true;LI=true;N[d]=N[d]||dn;$("la").value=oc+" ("+o+")";$("lb").value=dn+" ("+d+")";LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));location.hash="#listings";loadL(d)}
 $("tcar").onclick=e=>{const b=e.target.closest("button[data-to]");if(b&&TO)goRoute(TO.code,TO.city,b.dataset.to,b.dataset.tn)};

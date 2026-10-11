@@ -62,15 +62,24 @@ function dispatch() {
 
     switch ($route) {
         case 'geo': json_out(200, geo());
+        case 'guard':                                  // the page asks for a pass here just before it calls the server
+            if (!guard_on()) json_out(200, ['on' => false]);
+            if ($method !== 'POST') json_out(200, ['on' => true, 'site' => guard_site()]);
+            if (!limit_hit(client_ip() . ':guard', 120, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
+            json_out(200, guard_mint(body_json()));
         case 'routes':
+            guard_gate(0);
             $o = strtoupper((string)($q['origin'] ?? '')); $d = strtoupper((string)($q['dest'] ?? ''));
             if (!preg_match('/^[A-Z]{3}$/', $o) || ($d !== '' && !preg_match('/^[A-Z]{3}$/', $d))) json_out(400, ['error' => 'origin and dest must be 3-letter IATA codes']);
             json_out(200, routes($o, $d ?: null));
         case 'top':
+            guard_gate('soft');
             $o = strtoupper((string)($q['origin'] ?? ''));
             if (!preg_match('/^[A-Z]{3}$/', $o)) json_out(400, ['error' => 'origin must be a 3-letter IATA code']);
             json_out(200, top_list($o));
         case 'photos':
+            guard_gate('soft');
+            if (($q['any'] ?? '') === '1') json_out(200, photo_any());
             $codes = array_values(array_filter(explode(',', strtoupper((string)($q['codes'] ?? ''))), function ($c) { return preg_match('/^[A-Z]{3}$/', $c); }));
             json_out(200, photos_for($codes));
         case 'places':
@@ -102,9 +111,10 @@ function dispatch() {
             json_out(200, $out);
         case 'send':
             if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
+            guard_gate(1);
             $ip = client_ip();
             if (!limit_hit($ip . ':mail', 10, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
-            $b = body_json(); $ref = strtoupper(qs($b['ref'] ?? null, 20));
+            $b = body_json(); guard_form($b); $ref = strtoupper(qs($b['ref'] ?? null, 20));
             if (!q_find($ref)) json_out(400, ['error' => 'Unknown reference ID.']);
             $c = qWho($b['contact'] ?? null);
             if (!preg_match('/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/', $c['email'])) json_out(400, ['error' => 'A valid email address is required.']);
@@ -116,10 +126,12 @@ function dispatch() {
             logm('[mail] ' . $ref . ' sent (' . $via . ')');
             json_out(200, ['sent' => true, 'ref' => $ref]);
         case 'requests':
+            if (in_array($method, ['GET', 'PUT', 'POST'], true)) guard_gate(1);
             $ip = client_ip(); $ref = strtoupper($ref);
             if ($ref === '' && $method === 'POST') {
                 if (!limit_hit($ip . ':new', 30, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
-                json_out(200, q_create(body_json()));
+                $nb = body_json(); guard_form($nb);
+                json_out(200, q_create($nb));
             }
             if ($ref !== '' && in_array($method, ['GET', 'PUT', 'POST'], true)) {      // POST is accepted for changes too (some hosting firewalls refuse PUT)
                 if (!miss_ok($ip)) json_out(429, ['error' => 'Too many attempts. Please try again in a few minutes.']);

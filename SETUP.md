@@ -85,13 +85,24 @@ If something is wrong, `ffc-private/cache/log.txt` has the details.
 | `/api/...` returns 403 or 406 from the host | The host's firewall (ModSecurity) blocked a request. Contact HostGator support with the time and the address, or whitelist the rule |
 | Emails do not arrive | See "If emails do not arrive" below |
 | `Too many new route lookups` | A visitor (often a crawler) hit `NEW_ROUTES_PER_IP_HOUR`. Raise it or wait an hour |
+| Visitors see "We couldn't confirm that this request came from a person" | The bot check flagged them (an automation tool, a hidden form field filled in, a form sent in under a second, or a failed Turnstile check). They are shown your email and phone number instead. `cache/log.txt` has a `[guard] blocked` line with the reason. If real visitors are affected, add `BOT_GUARD=off` to `.env` while you investigate and tell me the reason in the log |
 | You use Cloudflare | Add `TRUST_PROXY=on` to `.env` so each visitor's real address is used for limits and for the location in quote emails |
 
-## 8. Moving to the real address
+## 8. Bot protection
+
+It is on by default and needs nothing from you. No one is ever asked to pick pictures or type distorted text.
+
+- **When it runs.** Only when something is about to call the server: a route search, Find my request or Modify, sending a quote, and the contact form once someone starts filling it in. The home page, the carousel and the photos never start a check.
+- **What it looks at.** Whether the visitor is a normal browser (not curl, a script, a crawler or a headless browser), whether the page was used by a person, a hidden form field that people never see, how fast the form was filled in, and that the request comes from your own site. A visitor who looks automated sees your email and phone number instead of results. The same checks run in the Node server.
+- **Optional: Cloudflare Turnstile.** Adds an invisible check from Cloudflare. In Cloudflare > Turnstile > *Add widget*, choose widget mode **Invisible**, add your domain, and put `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET` in `.env`. If Cloudflare would ever need a puzzle, the site treats that as a bot and shows the plain message instead, so nothing interactive ever appears. Turnstile loads a script from Cloudflare and Cloudflare sees the visitor's address and browser details; say so in the Privacy Policy (the draft already mentions it) and have it reviewed.
+- **Settings.** `BOT_GUARD=off` (testing only), `GUARD_TTL` (seconds a pass lasts, default 1800), `SITE_HOSTS` (extra host names, for example both `flyfirstclass.com` and `www.flyfirstclass.com` if the site answers on both through a proxy).
+- **Fine print.** The checks are not a guarantee against every bot. They stop the common ones and the rate limits (`NEW_ROUTES_PER_IP_HOUR`, quote limits per hour) still apply behind them.
+
+## 9. Moving to the real address
 
 When you are ready for quote requests to go to `hello@flyfirstclass.com`, change `MAIL_TO` in `.env` to that address (and keep `MAIL_FROM` the same mailbox).
 
-## 9. If emails do not arrive
+## 10. If emails do not arrive
 
 The site remembers the last 20 send attempts. Open `/api/mail-check?key=YOUR_KEY&send=1` (sends a test) and read `recent`: each line says when, whether the server accepted it, and the reason if not. `/api/status?key=YOUR_KEY` shows the same list as `recentEmails`.
 
