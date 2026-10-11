@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-10n">
+<meta name="build" content="2026-10-11a">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -177,7 +177,7 @@ footer ul{list-style:none;padding:0}
 .rr{padding:24px 28px;border-top:1px solid var(--line)}
 .rr h3{margin-bottom:14px}
 .rl{list-style:none;padding:0 6px 0 0;margin:0 0 8px;display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;scrollbar-width:thin}
-.rl li{display:grid;grid-template-columns:1.1fr 1.6fr auto;gap:8px 20px;align-items:center;padding:12px 36px 12px 18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.rl li{display:grid;grid-template-columns:1.1fr 1.6fr auto;gap:8px 20px;align-items:center;padding:12px 36px 12px 18px;border:1px solid var(--line);border-left:4px solid var(--au);border-radius:12px;background:var(--card)}
 .rl .rn span{display:block;font-size:.85rem;color:var(--mute)}
 .note{font-size:.85rem;margin-top:14px}
 .tp.x{padding:32px 28px}.tp.x p{margin:8px 0 22px;max-width:60ch}
@@ -191,11 +191,11 @@ body{cursor:default;-webkit-user-select:none;user-select:none;-webkit-touch-call
 a,button,summary,select,label.pill{cursor:pointer}
 input,textarea{cursor:default;-webkit-user-select:text;user-select:text}
 img{-webkit-user-drag:none;user-drag:none}
-.tc{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--j);border-radius:8px;padding:22px 24px;margin-bottom:28px;max-width:560px}
-.tt{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--mute)}
-.tc h3{font-size:1.5rem;font-weight:400;margin:8px 0 18px}
-.td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 20px;margin:0}.td .cp{grid-column:1}.td .ce{grid-column:span 2}
-@media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.td .ce{grid-column:1/-1}}
+.tc{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--au);border-radius:12px;padding:24px 28px;margin-bottom:28px;max-width:560px}
+.tt{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--mute)}.tt span:first-child{letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}
+.tc h3{font-size:1.75rem;font-weight:300;line-height:1.2;margin:10px 0 20px}.tc h3 .ar{color:var(--ac)}
+.td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 20px;margin:0}.td .cp{grid-column:1}.td .ce{grid-column:span 2}
+@media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.td .ce,.td .cp{grid-column:1/-1}.tc{padding:20px 18px}}
 .td dt{font-size:.8rem;color:var(--mute)}
 .td dd{margin:0;font-weight:600;overflow-wrap:anywhere}.tc[hidden]{display:none}
 .tf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.85rem;color:var(--mute)}
@@ -206,7 +206,7 @@ img{-webkit-user-drag:none;user-drag:none}
 .c input:not([type=date]){-webkit-appearance:none;appearance:none;background-color:transparent}
 .c input[list]::-webkit-calendar-picker-indicator{display:none!important}
 input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus{-webkit-text-fill-color:var(--ink);-webkit-box-shadow:0 0 0 1000px var(--card) inset;caret-color:var(--ink);transition:background-color 9999s}
-.lr{display:grid;grid-template-columns:230px 1fr;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lr{display:grid;grid-template-columns:230px 1fr;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--au);border-radius:12px;overflow:hidden}
 .lr .im{aspect-ratio:auto;min-height:150px}
 .rb{display:grid;grid-template-columns:1fr 1.5fr auto;gap:12px 28px;align-items:center;padding:20px 36px 20px 24px}
 .rb h3{margin-bottom:2px}.rb p{font-size:.92rem}.rb .sp{margin-top:3px;color:var(--ink);font-weight:500}
@@ -244,7 +244,46 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .tp.x input,.tp.x select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
 .tp.x input:focus-visible,.tp.x select:focus-visible{outline:3px solid var(--j);outline-offset:1px}
 .lk .btn{margin-bottom:4px}
-.lkr{margin-top:20px}.lkr .tc{margin-bottom:14px}
+.lkr{margin-top:20px}.lkr .tc{margin-bottom:14px;max-width:none}
+.tp.mg{padding:40px 44px 44px}
+.mgw{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:56px;align-items:start}
+.tp.mg:has(#edf) .mgw{grid-template-columns:minmax(0,1fr)}.tp.mg:has(#edf) .adv{display:none}
+.mgl{display:flex;flex-flow:row wrap;align-items:center;column-gap:36px;min-width:0}
+.mgl>h3,.mgl>.lk,.mgl>.err,.mgl .tc,.mgl .ed{flex:0 0 100%}
+.tp.mg .lkr{display:contents}.tp.mg .mgl .tc{margin:20px 0 14px}.tp.mg .lkx,.tp.mg .lka{margin:0}
+.tp.mg .mgl>h3{font-size:1.9rem;font-weight:600;letter-spacing:-.01em;line-height:1.2;margin:0}
+.tp.mg .lk{margin:24px 0 4px}
+.lfi{position:relative}.lfi svg{position:absolute;left:16px;top:50%;margin-top:-10px;color:var(--ac);pointer-events:none}
+.tp.mg .lk input{height:52px;padding:0 16px 0 48px;border-radius:8px;font-weight:600;letter-spacing:.06em}
+.tp.mg .lk input::placeholder{font-weight:400;letter-spacing:.02em}
+.adv{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0}
+.advp{position:relative;height:150px;background:var(--soft);overflow:hidden}
+.advp .sky{position:absolute;inset:0;width:100%;height:100%}
+.advp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.advp .cr{opacity:1;transform:none;pointer-events:auto;left:14px;bottom:8px;font-size:.7rem}
+.adv .ah{padding:22px 26px 8px}
+.adv .ahd{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
+.ti{display:grid;grid-template-columns:88px minmax(0,1fr);gap:20px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.ti:last-child{border-bottom:0;padding-bottom:16px}
+.ti svg{display:block;width:88px;height:88px}
+.ti b{display:block;font-size:1rem;font-weight:600}
+.ti span{display:block;margin-top:3px;font-size:.875rem;line-height:1.5;color:var(--mute)}
+.tp.mg .adv .af{margin:0;max-width:none;padding:0 26px 24px;font-size:.84rem;line-height:1.6;color:var(--mute)}
+.ti svg .bg{fill:var(--soft);stroke:var(--line)}
+.ti svg .ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ti svg .pa{fill:var(--card)}
+.ti svg .bd{fill:var(--line)}
+.ti svg .gl{fill:none;stroke:var(--mute);stroke-width:1.6;stroke-linecap:round;opacity:.45}
+.ti svg .gf{fill:var(--mute);opacity:.45}
+.ti svg .ky{fill:var(--ink)}
+.ti svg .au{fill:var(--au)}
+.ti svg .gd{fill:none;stroke:var(--au);stroke-width:2.4;stroke-linecap:round}
+.ti svg .as{fill:none;stroke:var(--ac);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.ti svg .bm{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:root[data-theme=dark] .ti svg .bm{stroke:#14181f}
+@media(max-width:960px){.mgw{grid-template-columns:minmax(0,1fr);gap:36px}.adv{max-width:520px}}
+@media(max-width:700px){.tp.mg{padding:28px 18px 32px}}
+@media(max-width:520px){.ti{grid-template-columns:72px minmax(0,1fr);gap:16px}.ti svg{width:72px;height:72px}.adv .ah{padding:20px 18px 6px}.tp.mg .adv .af{padding:0 18px 20px}}
 .lkx,.lka{display:flex;flex-wrap:wrap;align-items:center;gap:8px 36px}.lka{margin-top:6px}.lkx .note{flex:1 1 100%;margin:0 0 4px;color:var(--j)}
 .ed{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);max-width:760px}.ed h4{font-size:1.1rem;font-weight:600;margin:0 0 14px}
 .eg,.egd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 20px}.edx{grid-column:1/-1}
@@ -280,17 +319,17 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .fa:disabled,.tw:hover .fa:disabled,.tw:focus-within .fa:disabled{opacity:0;pointer-events:none}
 .tw .fa,.hero .fa{top:50%;transform:translateY(-50%)}
 .fa.fl{left:12px}.fa.fr{right:12px}
-/* .fo is an invisible box exactly as tall as one photo (4:5 of a card's width) and sits where the photos sit, so the arrows
+/* .fo is an invisible box exactly as tall as one photo (4:5 of a card's width, less the 18px gold line and its gap) and sits where the photos sit, so the arrows
    centre on the images at any window size without any measuring script. */
-.fo{position:absolute;left:0;right:0;top:6px;padding-top:calc((100% - 44px)/3*1.25);pointer-events:none;z-index:5}
-@media(max-width:900px){.fo{padding-top:calc((100% - 24px)/2*1.25)}}
-@media(max-width:700px){.fo{padding-top:calc((100% - 4px)*.82*1.25)}}
+.fo{position:absolute;left:0;right:0;top:6px;padding-top:calc(((100% - 44px)/3 - 18px)*1.25);pointer-events:none;z-index:5}
+@media(max-width:900px){.fo{padding-top:calc(((100% - 24px)/2 - 18px)*1.25)}}
+@media(max-width:700px){.fo{padding-top:calc(((100% - 4px)*.82 - 18px)*1.25)}}
 .hero .fa.fl{left:calc(50% + 16px)}.hero .fa.fr{right:16px}
 @media(max-width:800px){.hero .fa{top:auto;bottom:128px;transform:none}.hero .fa:active{transform:scale(.94)}.hero .fa.fl{left:14px}.hero .fa.fr{right:14px}}
 @media(hover:none){.fa{opacity:1;pointer-events:auto;width:42px;height:42px}.fa:disabled{opacity:0;pointer-events:none}}
 @media(prefers-reduced-motion:reduce){.fa,.cr{transition:none}}
 .tcar{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;scrollbar-width:thin}
-.dcard{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start}
+.dcard{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start;border-left:4px solid var(--au);padding-left:14px}
 .dim{position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:var(--soft);display:grid;place-items:center;margin-bottom:14px}
 .dim::after{content:attr(data-c);color:var(--mute);font-size:1.6rem;font-weight:300}
 .dim img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -561,11 +600,25 @@ $("hprev").onclick=()=>man(si-1);$("hnext").onclick=()=>man(si+1);arm();
 const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h16"/>','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="m8 11 3 3 5-6"/>','<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'];
 const TN=["Book a trip","Manage booking","Check in","Check flight status"];
 $("t4").innerHTML=TN.map((n,i)=>`<button role="tab" type="button" aria-selected="${i==0}" data-i="${i}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[i]}</svg>${n}</button>`).join("");
-const TPM=[["Manage booking","Need to change, upgrade or cancel a ticket? Paste the reference ID from your quote request to see it, change its details, or message your advisor. Your advisor handles every change with the airline.","adv","Message your advisor"],["Check in","Check-in is completed with your airline. Paste your reference ID and the name, email and phone you saved with your request are filled in for you, so you can ask your advisor for your check-in details straight away.","chk","Ask for my check-in details"]];
+const TK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 0 0 6v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a2 2 0 0 1 0-6V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg>';
+const TV=b=>`<svg viewBox="0 0 88 88" aria-hidden="true"><rect class="bg" x=".5" y=".5" width="87" height="87" rx="18"/>${b}</svg>`;
+// Drawn tile pictures for the Manage booking and Check in side panels (colours come from the page theme, so they follow dark mode).
+const TI={
+ ch:TV('<rect class="pa ln" x="19" y="24" width="50" height="46" rx="6"/><path class="ln" d="M19 36h50M31 19v10M57 19v10"/><g class="gf"><circle cx="30" cy="45" r="2"/><circle cx="40" cy="45" r="2"/><circle cx="50" cy="45" r="2"/><circle cx="60" cy="45" r="2"/><circle cx="40" cy="55" r="2"/><circle cx="60" cy="55" r="2"/><circle cx="30" cy="63" r="2"/><circle cx="40" cy="63" r="2"/><circle cx="50" cy="63" r="2"/></g><circle class="ln" cx="30" cy="55" r="4.5" stroke-dasharray="2 2"/><circle class="au" cx="50" cy="55" r="4.5"/><path class="as" d="M32 50.5C36 44.5 44 44.5 48 50M44.6 47.6 48.2 50.2 44.4 52"/>'),
+ up:TV('<rect class="pa ln" x="26" y="24" width="30" height="36" rx="12"/><rect class="bd ln" x="33" y="19" width="16" height="11" rx="5"/><rect class="pa ln" x="20" y="42" width="8" height="22" rx="4"/><rect class="pa ln" x="54" y="42" width="8" height="22" rx="4"/><rect class="pa ln" x="24" y="54" width="34" height="12" rx="5"/><path class="ln" d="M30 71h22"/><path class="gl" d="M33 40h16"/><circle class="au" cx="66" cy="23" r="10"/><path class="bm" d="M61.5 25.5 66 21l4.5 4.5"/>'),
+ ca:TV('<path class="pa ln" d="M18 30H64a4 4 0 0 1 4 4V41a6 6 0 0 0 0 12V60a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V53a6 6 0 0 0 0-12V34a4 4 0 0 1 4-4Z"/><path class="gl" d="M30 33v28" stroke-dasharray="3 3"/><path class="gl" d="M38 43h20M38 51h13"/><circle class="au" cx="66" cy="28" r="10"/><path class="bm" d="M62 24l8 8M70 24l-8 8"/>'),
+ id:TV('<rect class="pa ln" x="12" y="24" width="64" height="40" rx="5"/><path class="bd ln" d="M12 29a5 5 0 0 1 5-5h54a5 5 0 0 1 5 5v5H12Z"/><path class="ln" d="M19 29h14"/><path class="gd" d="M19 45h26"/><path class="gl" d="M19 53h16"/><g class="ky"><rect x="54" y="42" width="1.5" height="16"/><rect x="57.5" y="42" width="3" height="16"/><rect x="62.5" y="42" width="1.5" height="16"/><rect x="66" y="42" width="2.5" height="16"/><rect x="70.5" y="42" width="1.5" height="16"/></g>'),
+ ad:TV('<path class="pa ln" d="M18 28a5 5 0 0 1 5-5h32a5 5 0 0 1 5 5v16a5 5 0 0 1-5 5H36l-9 8v-8h-4a5 5 0 0 1-5-5Z"/><g class="ky"><circle cx="29" cy="36" r="2.2"/><circle cx="39" cy="36" r="2.2"/><circle cx="49" cy="36" r="2.2"/></g><path class="au" d="M48 54a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-1v6l-6-6h-7a4 4 0 0 1-4-4Z"/><path class="bm" d="M54 56h12M54 61h7"/>'),
+ ck:TV('<circle class="pa ln" cx="42" cy="44" r="23"/><path class="ky" d="M42 25 44.6 37 60 46v3.4L44.6 45.6 44 54l4.6 3.4V60L42 58.4 35.4 60v-2.6L40 54l-.6-8.4L24 49.4V46l15.4-9Z"/><circle class="au" cx="66" cy="64" r="10"/><path class="bm" d="M61.5 64.2 64.8 67.4 70.6 61"/>')};
+// Sky strip behind the destination photo: it is what shows until a photo has loaded (or if none is available).
+const SKY=(n,sx,px,py)=>`<svg class="sky" viewBox="0 0 398 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="adk${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f7aa5"/><stop offset=".6" stop-color="#cdb7a6"/><stop offset="1" stop-color="#f3cfa4"/></linearGradient><radialGradient id="adn${n}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe6b0" stop-opacity=".95"/><stop offset="1" stop-color="#ffe6b0" stop-opacity="0"/></radialGradient></defs><rect width="398" height="150" fill="url(#adk${n})"/><circle cx="${sx}" cy="150" r="150" fill="url(#adn${n})"/><path d="M0 118C60 100 120 128 190 112S320 98 398 116V150H0Z" fill="#fff" opacity=".22"/><path d="M0 134C80 120 150 142 230 130S340 122 398 134V150H0Z" fill="#fff" opacity=".38"/><g transform="translate(${px} ${py}) rotate(-6) scale(.8)" fill="#fff" opacity=".92"><path d="M0 14Q6 6 22 6L70 6Q88 6 92 14Q88 22 70 22L22 22Q6 22 0 14Z"/><path d="M12 6L4-8L14-8L28 6Z"/><path d="M38 12L58-12L67-12L56 12Z"/><path d="M38 16L58 40L67 40L56 16Z"/></g></svg>`;
+const TPM=[
+ {t:"Manage booking",a:"adv",l:"Message your advisor",h:"What you can do",c:"MLE",n:"Maldives",sx:300,px:236,py:40,f:"Your advisor handles every change with the airline.",s:[["ch","Change","Update your route, dates or passengers."],["up","Upgrade","Ask about moving up a cabin."],["ca","Cancel","Ask about cancelling a ticket."]]},
+ {t:"Check in",a:"chk",l:"Ask for my check-in details",h:"How check-in works",c:"BKK",n:"Bangkok",sx:90,px:200,py:34,f:"Your advisor can also watch for delays and rebook you if plans change.",s:[["id","Paste your reference ID","Your saved name, email and phone are filled in for you."],["ad","Ask your advisor","Get your check-in details straight away."],["ck","Check in with your airline","Check-in is completed with your airline."]]}];
 const TP=[["Check flight status","Your airline's app shows live status. Your advisor can also watch for delays and rebook you if plans change.","Please check the status of my flight. Flight number and date: ","Ask my advisor"]];
-TPM.forEach((t,i)=>{const k=i+1,d=document.createElement("div");d.className="tp x";d.id="tp"+k;d.hidden=true;d.innerHTML=`<h3>${t[0]}</h3><p>${t[1]}</p><form class="lk" data-k="${k}"><div class="lf"><label for="lk${k}">Reference ID</label><input id="lk${k}" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div><button class="btn" type="submit">Find my request</button></form><p class="err" id="lke${k}" role="alert" hidden></p><div class="lkr" id="lkr${k}"></div><div class="lka"><a class="btn go" href="#contact" data-act="${t[2]}">${t[3]}</a></div>`;$("tp0").parentNode.appendChild(d)});
+TPM.forEach((t,i)=>{const k=i+1,d=document.createElement("div");d.className="tp x mg";d.id="tp"+k;d.hidden=true;d.innerHTML=`<div class="mgw"><div class="mgl"><h3>${t.t}</h3><form class="lk" data-k="${k}"><div class="lf"><label for="lk${k}">Reference ID</label><div class="lfi">${TK}<input id="lk${k}" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div></div><button class="btn" type="submit">Find my request</button></form><p class="err" id="lke${k}" role="alert" hidden></p><div class="lkr" id="lkr${k}"></div><div class="lka"><a class="btn go" href="#contact" data-act="${t.a}">${t.l}</a></div></div><aside class="adv" aria-label="${t.h}"><div class="advp" data-i="${t.c}" data-c="${t.n}">${SKY(k,t.sx,t.px,t.py)}</div><div class="ah"><div class="ahd">${t.h}</div>${t.s.map(x=>`<div class="ti">${TI[x[0]]}<div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join("")}</div><p class="af">${t.f}</p></aside></div>`;$("tp0").parentNode.appendChild(d)});
 TP.forEach((t,i)=>{const d=document.createElement("div");d.className="tp x";d.id="tp"+(i+3);d.hidden=true;d.innerHTML=`<h3>${t[0]}</h3><p>${t[1]}</p><a class="btn go" href="#contact" data-m="${t[2]}">${t[3]}</a>`;$("tp0").parentNode.appendChild(d)});
-$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i)};
+$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i);if(b.dataset.i=="1"||b.dataset.i=="2")fillPhotos()};
 document.addEventListener("click",e=>{const a=e.target.closest("[data-m]");if(a){ACTREF=null;ACTKIND="";$("m").value=a.dataset.m}});
 // ---- Route data and search ----
 const esc=x=>String(x).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
@@ -729,7 +782,7 @@ function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}ca
 function book(f,t,cab,via){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
 function rc(){const E=$("rc");$("m").required=!BK;if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v)=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
- E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${esc(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(" &rarr; ")}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
+ E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${esc(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}setTimeout(()=>$("bk").scrollIntoView(),80)}};
 $("fa").onchange=$("fb").onchange=show;$("sr").onclick=show;
 $("swp").onclick=()=>{const t=$("fa").value;$("fa").value=$("fb").value;$("fb").value=t;if(cd($("fa").value))show()};
@@ -756,8 +809,8 @@ function banner(l){const n=N[LD]||(LR.find(x=>x.iata==LD)||{}).city||LD,pic=PIC[
 const card=x=>{const n=N[x.iata]||x.city||x.iata,fc=x.cabins.some(k=>k.c=="First");return`<article class="lr${LD?" nb":""}">${LD?"":`<div class="im" data-c="${esc(n)}" data-i="${esc(x.iata)}">${PIC[x.iata]?`<img src="https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=700&q=70" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="tags">${x.cabins.map(k=>`<span>${k.c}</span>`).join("")}</div></div>`}<div class="rb"><div><h3>${esc(LO.code)} to ${esc(x.iata)}</h3><p>${esc(LO.city)} to ${esc(n)}</p><p class="sp">${stx(x)}</p></div><div class="rcab">${x.cabins.map(k=>`<div><b>${k.c}</b><span class="lgs">${lgx(k.a)}</span></div>`).join("")}</div><button class="btn sm go" type="button" data-from="${esc(LO.city)} (${esc(LO.code)})" data-to="${esc(n)} (${esc(x.iata)})" data-cab="${fc?"First class":"Business class"}">Request this route</button></div></article>`};
 // Photos for Listings rows whose destination has no bundled picture: fetched from the server (Unsplash, cached there).
 const PHC=new Map();
-function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
-async function fillPhotos(n=0){const need=[...new Set([...document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]")].map(e=>e.dataset.i))].filter(c=>!PIC[c]&&!PHC.has(c));
+function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i],.advp[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
+async function fillPhotos(n=0){const need=[...new Set([...document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i],.tp:not([hidden]) .advp[data-i]")].map(e=>e.dataset.i))].filter(c=>!PIC[c]&&!PHC.has(c));
  if(!need.length||n>10)return;
  try{const r=await fetch("/api/photos?codes="+need.join(","));if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));paint();if(j.pending&&j.pending.length)setTimeout(()=>fillPhotos(n+1),3500)}catch(e){}}
 // Filters that cannot match the search are hidden: with a destination only its own region is offered, and a cabin nobody flies is dropped.
@@ -863,7 +916,7 @@ const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;retu
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
 function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
- return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${esc([t.from,t.to,...(t.via||[])].filter(Boolean).join(" \u2192 ")||"Trip details to be confirmed")}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
+ return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
 function renderAll(note){for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
   box.innerHTML=sumCard(REQ)+(k==1?`<div class="lkx">${note?`<p class="note ok2" role="status">${esc(note)}</p>`:""}<button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button>${note?'<a class="btn go" href="#contact" data-act="chg">Send this change to your advisor</a>':""}</div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
