@@ -35,18 +35,22 @@ function doff() {            // set when Duffel rejected the token (401); cleare
     $s = cload('stats.json', []); $o = $s['off'] ?? null;
     return ($o && ($o['th'] ?? '') === md5(C('token'))) ? $o['msg'] : '';
 }
-// Reserves the next start time for a Duffel search (DUFFEL_RPM a minute across all requests). null = too far ahead, 'cap' = daily cap reached.
-function duffel_slot($launchBy) {
-    return cupdate('throttle.json', [], function (&$t) use ($launchBy) {
+// Reserves start times for Duffel searches (DUFFEL_RPM a minute across all requests). All or nothing: when the queue is already too far
+// ahead nothing is reserved, so a busy moment cannot use up slots that no search will ever fill.
+// Returns a list of start times, null = too far ahead, 'cap' = daily cap reached.
+function duffel_slots($launchBy, $n = 1) {
+    return cupdate('throttle.json', [], function (&$t) use ($launchBy, $n) {
         $now = microtime(true); $d = day_et();
         if (($t['d'] ?? '') !== $d) { $t['d'] = $d; $t['n'] = 0; }
-        if (C('dcap') && $t['n'] >= C('dcap')) return 'cap';
-        $at = max($now, (float)($t['next'] ?? 0), (float)($t['pause'] ?? 0));
-        if ($at > $launchBy) return null;
-        $t['next'] = $at + 60 / C('drpm'); $t['n']++;
-        return $at;
+        if (C('dcap') && $t['n'] + $n > C('dcap')) return 'cap';
+        $gap = 60 / C('drpm'); $at = max($now, (float)($t['next'] ?? 0), (float)($t['pause'] ?? 0));
+        if ($at + ($n - 1) * $gap > $launchBy) return null;
+        $out = []; for ($i = 0; $i < $n; $i++) $out[] = $at + $i * $gap;
+        $t['next'] = $at + $n * $gap; $t['n'] += $n;
+        return $out;
     });
 }
+function duffel_slot($launchBy) { $r = duffel_slots($launchBy, 1); return is_array($r) ? $r[0] : $r; }
 function duffel_pause($ms) { cupdate('throttle.json', [], function (&$t) use ($ms) { $t['pause'] = max((float)($t['pause'] ?? 0), microtime(true) + $ms / 1000); }); }
 function reset_ms($h) {      // how long Duffel says to wait after a 429
     $v = $h['retry-after'] ?? ($h['ratelimit-reset'] ?? null);
@@ -110,12 +114,11 @@ function run_tasks(array $tasks, $launchBy) {
     if (!C('token')) { foreach ($tasks as $t) { err_set($t['key'], 'Duffel token not set'); $res[$t['key']] = 'err'; } return $res; }
     $off = doff();
     if ($off) { foreach ($tasks as $t) { err_set($t['key'], $off); $res[$t['key']] = 'err'; } return $res; }
-    $jobs = [];
+    $jobs = []; $full = false;
     foreach ($tasks as $ti => $t) {
-        $slots = []; $s = null;
-        for ($n = 0; $n < 2; $n++) { $s = duffel_slot($launchBy); if ($s === null || $s === 'cap') break; $slots[] = $s; }
-        if ($s === 'cap') { err_set($t['key'], 'Daily Duffel search limit reached (' . C('dcap') . '). Raise DUFFEL_DAILY_CAP in .env to continue.'); $res[$t['key']] = 'err'; continue; }
-        if (count($slots) < 2) { $res[$t['key']] = 'skip'; continue; }
+        $slots = $full ? null : duffel_slots($launchBy, 2);                    // both searches or neither
+        if ($slots === 'cap') { err_set($t['key'], 'Daily Duffel search limit reached (' . C('dcap') . '). Raise DUFFEL_DAILY_CAP in .env to continue.'); $res[$t['key']] = 'err'; continue; }
+        if (!is_array($slots)) { $full = true; $res[$t['key']] = 'skip'; continue; }
         foreach (['first', 'business'] as $i => $cl) {
             $jobs[$ti . ':' . $cl] = ['url' => C('duffel_base') . '/air/offer_requests?return_offers=true&supplier_timeout=12000', 'method' => 'POST', 'headers' => duffel_headers(), 'timeout' => 25, 'at' => $slots[$i],
                 'body' => json_encode(['data' => ['slices' => [['origin' => $t['o'], 'destination' => $t['c'], 'departure_date' => $t['date']]], 'passengers' => [['type' => 'adult']], 'cabin_class' => $cl]])];
@@ -158,7 +161,7 @@ function run_tasks(array $tasks, $launchBy) {
     if ($save) {
         cupdate('routes.json', [], function (&$RC) use ($save) {
             foreach ($save as $k => [$t, $raw]) {
-                if ($t['type'] === 'hubs' && isset($RC[$k])) $RC[$k] = array_merge($RC[$k], ['raw' => merge_raw($RC[$k]['raw'] ?? [], $raw), 't' => now_ms()]);
+                if ($t['type'] === 'hubs' && isset($RC[$k])) $RC[$k] = array_merge($RC[$k], ['raw' => merge_raw($RC[$k]['raw'] ?? [], $raw), 'hq' => (int)($RC[$k]['hq'] ?? 0) + 1, 't' => now_ms()]);
                 elseif ($t['type'] === 'more' && isset($RC[$k])) $RC[$k] = array_merge($RC[$k], ['raw' => merge_raw($RC[$k]['raw'] ?? [], $raw), 'tries' => $t['tries'], 't' => now_ms()]);
                 else $RC[$k] = ['s' => SCHEMA, 't' => now_ms(), 'raw' => $raw, 'tries' => 1];
             }
@@ -174,7 +177,13 @@ function travel_date($days = 45) { return gmdate('Y-m-d', time() + $days * 86400
 function aname($c) { $a = air(); return !empty($a[$c]['city']) ? $a[$c]['city'] . ' (' . $c . ')' : $c; }
 function hub_text($v) { return implode(' and ', array_map('aname', explode('>', $v))); }
 function hubs_of($e, $cl, $it) { return $e['raw']['hubs'][$cl][implode('>', $it)] ?? []; }
-function needs_hubs($e) { return fresh($e) && !isset($e['raw']['hubs']); }
+// A route saved without stop cities, or topped up with another date (new itineraries come with stop cities, older ones may not).
+// "hq" counts these look-ups (at most 2), so a connection Duffel no longer offers cannot cause endless searching.
+function hubs_missing($e) {
+    foreach (['first', 'business'] as $cl) foreach (($e['raw'][$cl] ?? []) as $it) if (count($it) > 1 && all_ok($it, $cl) && !hubs_of($e, $cl, $it)) return true;
+    return false;
+}
+function needs_hubs($e) { return fresh($e) && (!isset($e['raw']['hubs']) || (hubs_missing($e) && (int)($e['hq'] ?? 0) < 2)); }
 function all_ok($it, $cl) { foreach ($it as $k) if (!okc($k, $cl)) return false; return (bool)$it; }
 
 // Turns stored itineraries into a listing row, keeping only partner airlines (and Qatar / Air France business only).

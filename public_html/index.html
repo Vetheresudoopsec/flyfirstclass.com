@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-10l">
+<meta name="build" content="2026-10-10m">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -578,14 +578,13 @@ const FIRSTAL=new Set(["SQ","EK","CX","QF","BA","LH","JL"]);
 // Sample fallback, used when /api/routes is not available. Same shape as the live API:
 // [{iata,city,stops,cabins:[{c:"First"|"Business",a:["Airline",...]}]}]
 function sample(o,d){return Object.keys(AP).filter(k=>k!=o&&(!d||k==d)).map(k=>{const a=(RT[o]||{})[k],c=(a||["EK","QR","SQ"]).filter(x=>AL[x]),f=c.filter(x=>FIRSTAL.has(x)).map(x=>AL[x]);return c.length?{iata:k,city:AP[k],stops:a?0:1,cabins:[...(f.length?[{c:"First",a:f}]:[]),{c:"Business",a:c.map(x=>AL[x])}]}:null}).filter(Boolean)}
-const RM=new Map();
 // Polls /api/routes: documented routes arrive instantly from the server cache, new ones fill in as they are fetched.
 // cur() says whether this search is still the one on screen; once the visitor starts another, the old polling loop stops at once.
-async function getRoutes(o,d,cb,cur){const k=o+"|"+(d||"");if(RM.has(k))return RM.get(k);let r=null;const OLD={live:true,list:[],pending:0,error:"",stale:true};
+async function getRoutes(o,d,cb,cur){let r=null;const OLD={live:true,list:[],pending:0,error:"",stale:true};
  try{for(let i=0;i<80;i++){if(cur&&!cur())return OLD;const x=await fetch("/api/routes?origin="+o+(d?"&dest="+d:""));if(cur&&!cur())return OLD;if(!x.ok)break;const j=await x.json();if(cur&&!cur())return OLD;
    r={live:true,list:j.routes||[],pending:j.pending||0,error:j.error||""};
    if(!r.pending)break;if(cb)cb(r);await new Promise(t=>setTimeout(t,3000))}}catch(e){r=null}
- if(r&&(r.list.length||!r.error)){if(!r.pending)RM.set(k,r);return r}
+ if(r&&(r.list.length||!r.error))return r;
  return{live:false,list:sample(o,d),pending:0,error:r&&r.error?"live routes temporarily unavailable":""}}
 const cd=v=>{v=(v||"").trim();const m=v.match(/\(([A-Za-z]{3})\)/)||v.match(/^([A-Za-z]{3})$/);if(m)return m[1].toUpperCase();const n=v.toLowerCase();return Object.keys(N).find(k=>N[k].toLowerCase()==n)};
 const nm=c=>(N[c]||c)+" ("+c+")";
@@ -721,7 +720,7 @@ async function show(){
  const my=++sseq,o=cd($("fa").value),d=cd($("fb").value),R2=$("rr");R2.hidden=false;
  if(!o){R2.innerHTML='<p class="note">Choose a departure city above to see available routes.</p>';return}
  R2.innerHTML='<p class="note">Loading routes...</p>';
- const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.pending?"Checking routes...":"No route found for that pair."}</p>`)+`<p class="note">${res.live?(res.pending&&!capped?"Checking "+res.pending+" more...":"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`};
+ const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.pending?"Checking routes...":"No route found for that pair."}</p>`)+`<p class="note">${res.live?(res.pending?(capped?"Checking where the stops are...":d?"Checking more options and where the stops are...":"Checking "+res.pending+" more..."):"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`};
  draw(await getRoutes(o,d,draw,()=>my==sseq))}
 // ---- Booking request and receipt ----
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
