@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-10k">
+<meta name="build" content="2026-10-10l">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -580,8 +580,9 @@ const FIRSTAL=new Set(["SQ","EK","CX","QF","BA","LH","JL"]);
 function sample(o,d){return Object.keys(AP).filter(k=>k!=o&&(!d||k==d)).map(k=>{const a=(RT[o]||{})[k],c=(a||["EK","QR","SQ"]).filter(x=>AL[x]),f=c.filter(x=>FIRSTAL.has(x)).map(x=>AL[x]);return c.length?{iata:k,city:AP[k],stops:a?0:1,cabins:[...(f.length?[{c:"First",a:f}]:[]),{c:"Business",a:c.map(x=>AL[x])}]}:null}).filter(Boolean)}
 const RM=new Map();
 // Polls /api/routes: documented routes arrive instantly from the server cache, new ones fill in as they are fetched.
-async function getRoutes(o,d,cb){const k=o+"|"+(d||"");if(RM.has(k))return RM.get(k);let r=null;
- try{for(let i=0;i<80;i++){const x=await fetch("/api/routes?origin="+o+(d?"&dest="+d:""));if(!x.ok)break;const j=await x.json();
+// cur() says whether this search is still the one on screen; once the visitor starts another, the old polling loop stops at once.
+async function getRoutes(o,d,cb,cur){const k=o+"|"+(d||"");if(RM.has(k))return RM.get(k);let r=null;const OLD={live:true,list:[],pending:0,error:"",stale:true};
+ try{for(let i=0;i<80;i++){if(cur&&!cur())return OLD;const x=await fetch("/api/routes?origin="+o+(d?"&dest="+d:""));if(cur&&!cur())return OLD;if(!x.ok)break;const j=await x.json();if(cur&&!cur())return OLD;
    r={live:true,list:j.routes||[],pending:j.pending||0,error:j.error||""};
    if(!r.pending)break;if(cb)cb(r);await new Promise(t=>setTimeout(t,3000))}}catch(e){r=null}
  if(r&&(r.list.length||!r.error)){if(!r.pending)RM.set(k,r);return r}
@@ -715,12 +716,13 @@ pxDraw();
 const SB=["One way","Multi-city","Round-trip"],SBB=[...$("sb").querySelectorAll("button")];
 function ty(){const v=$("ty").value,mc=v=="Multi-city";$("mcx").hidden=!mc;$("fbl").textContent=mc?"Destination 1":"Going to";if(mc&&!MC.n())MC.put("");if(v=="One way"){DT.ret="";DT.ret2=""}sync();SBB.forEach((b,i)=>b.classList.toggle("on",SB[i]==v))}
 SBB.forEach((b,i)=>b.onclick=()=>{$("ty").value=SB[i];ty()});$("ty").onchange=ty;
+let sseq=0;
 async function show(){
- const o=cd($("fa").value),d=cd($("fb").value),R2=$("rr");R2.hidden=false;
+ const my=++sseq,o=cd($("fa").value),d=cd($("fb").value),R2=$("rr");R2.hidden=false;
  if(!o){R2.innerHTML='<p class="note">Choose a departure city above to see available routes.</p>';return}
  R2.innerHTML='<p class="note">Loading routes...</p>';
- const draw=res=>{const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.pending?"Checking routes...":"No route found for that pair."}</p>`)+`<p class="note">${res.live?(res.pending&&!capped?"Checking "+res.pending+" more...":"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`};
- draw(await getRoutes(o,d,draw))}
+ const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.pending?"Checking routes...":"No route found for that pair."}</p>`)+`<p class="note">${res.live?(res.pending&&!capped?"Checking "+res.pending+" more...":"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`};
+ draw(await getRoutes(o,d,draw,()=>my==sseq))}
 // ---- Booking request and receipt ----
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
@@ -772,7 +774,7 @@ function renderL(){
  $("lg").innerHTML=(LD?banner(l):"")+(l.length?l.map(card).join(""):`<p class="note">${PEND?"Checking routes...":(LIVE&&!LR.length)?"No first or business class routes found from this airport yet.":"No routes match this filter."}</p>`);paint();fillPhotos()}
 async function loadL(d){const my=++seq;PEND=0;ERRM="";LD=d||"";LR=[];chipsFor();$("ls").textContent="Finding routes...";$("lg").innerHTML=LD?banner([]):"";if(LD){paint();fillPhotos()}
  const up=x=>{if(my!=seq)return;LR=x.list;LIVE=x.live;PEND=x.pending||0;ERRM=x.error||"";renderL()};
- up(await getRoutes(LO.code,d,up))}
+ up(await getRoutes(LO.code,d,up,()=>my==seq))}
 async function initL(force){if(LI&&!force)return;LI=true;$("ls").textContent="Detecting your location...";const g=await(force?geoOrigin():geoOnce());LG=!!g;LO=g||{code:"LHR",city:"London"};N[LO.code]=LO.city;$("la").value=LO.city+" ("+LO.code+")";$("lb").value="";LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL()}
 $("lu").onclick=()=>initL(true);
 $("lf").onsubmit=e=>{e.preventDefault();const o=cd($("la").value),d=cd($("lb").value);if(!o){$("ls").textContent="Choose a departure city to search.";return}N[o]=N[o]||$("la").value.replace(/\s*\(.*\)/,"");LO={code:o,city:N[o]};LG=true;LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL(d)};
