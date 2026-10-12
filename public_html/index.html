@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-12a">
+<meta name="build" content="2026-10-12b">
 <title>Fly First Class International | First Class Airline Tickets & Business Class Fares</title>
 <meta name="description" content="Flyfirstclass offers consolidated pricing on first class airline tickets and business class flights for frequent travellers. Request a private quote.">
 <meta property="og:type" content="website">
@@ -245,7 +245,13 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .tp.x input,.tp.x select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
 .tp.x input:focus-visible,.tp.x select:focus-visible{outline:3px solid var(--j);outline-offset:1px}
 .lk .btn{margin-bottom:4px}
-.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.lkr{margin-top:20px}.cpr{margin:0 0 22px}.cpr .rf{white-space:nowrap}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}.lkr .tc{margin-bottom:14px;max-width:none}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.lkr{margin-top:20px}.cpr{margin:0 0 22px}.cpr .rf{white-space:nowrap}
+.cpy{position:relative;font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--au);text-decoration-thickness:1px;text-underline-offset:3px;text-transform:none;white-space:nowrap}
+.cpy:hover,.cpy:focus-visible{color:var(--j);text-decoration-color:var(--j)}.cpy:focus-visible{outline:2px solid var(--j);outline-offset:3px;border-radius:2px}
+.cpy::after{content:"";position:absolute;right:0;bottom:calc(100% + 6px);padding:3px 9px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--j);font-size:.72rem;line-height:1.3;letter-spacing:.04em;font-weight:500;white-space:nowrap;text-decoration:none;box-shadow:0 2px 10px #00000014;opacity:0;pointer-events:none;transition:opacity .15s}
+@media (hover:hover){.cpy:hover::after,.cpy:focus-visible::after{content:"Click to copy";opacity:1}}
+.cpy[data-s]::after{opacity:1!important}.cpy[data-s=copied]::after{content:"Copied"!important}.cpy[data-s=fail]::after{content:"Couldn't copy"!important;color:var(--ac)}
+@media (prefers-reduced-motion:reduce){.cpy::after{transition:none}}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}.lkr .tc{margin-bottom:14px;max-width:none}
 .tp.mg{padding:40px 44px 44px}
 .mgw{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:56px;align-items:start}
 .tp.mg:has(#edf) .mgw{grid-template-columns:minmax(0,1fr)}.tp.mg:has(#edf) .adv,.tp.mg:has(#edf) .lkx,.tp.mg:has(#edf) .lka,.tp.mg:has(#edf) .nt{display:none}.tp.mg .mgl>.nt{flex:0 0 100%;margin:0;max-width:none;color:var(--j)}
@@ -408,6 +414,162 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .tp2{max-width:760px}
 .tp2 h2{font-size:1.25rem;font-weight:600;letter-spacing:-.01em;margin:26px 0 8px}
 .tp2 p{margin-bottom:10px}
+
+/* ===== 2026-10 redesign: Home, About, Services, Contact ===== */
+/* ===== shared by every draft ===== */
+.pcw{position:relative;overflow:hidden;margin:0;background:linear-gradient(135deg,var(--soft),var(--line))}
+.pcw img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.pcw:hover img{transform:scale(1.045)}
+.pc{position:absolute;right:12px;bottom:9px;z-index:4;font-size:.68rem;line-height:1.2;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);opacity:0;transition:opacity .25s;pointer-events:none}
+.pcw:hover .pc{opacity:1}.pcw.ne .pc{display:none}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.ey{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);font-weight:600;margin:0 0 14px}
+.frost{background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.pcw img{transition:none}.pcw:hover img{transform:none}}
+/* ===== Design A: Horizon. Full-bleed photography, frosted white cards, gold hairlines. ===== */
+.a-hd{position:relative;isolation:isolate;min-height:clamp(440px,74vh,660px);display:flex;align-items:flex-end;border-bottom:1px solid var(--line)}
+.a-hd>.pcw{position:absolute;inset:0;z-index:-2}
+.a-hd::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,var(--bg) 3%,color-mix(in srgb,var(--bg) 80%,transparent) 24%,color-mix(in srgb,var(--bg) 0%,transparent) 62%)}
+.a-hd .w{width:100%;padding-top:150px;padding-bottom:56px}
+.a-hd h1{max-width:17ch}
+.a-hd h1::after{content:"";display:block;width:64px;height:3px;background:var(--au);margin-top:22px}
+.a-hd .lead{max-width:560px;margin-top:16px;font-size:1.15rem}
+.a-hd.sm{min-height:clamp(380px,56vh,500px)}.a-hd.cthd .w{padding-bottom:150px}
+.a-s{padding:104px 0}.a-soft{background:var(--soft)}
+.a-lead{max-width:60ch;color:var(--mute)}
+.a-more{padding-top:26px;padding-bottom:6px}
+.a-tp{padding-bottom:40px}
+.a-why{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:50px}
+.a-card{position:relative}.a-card .pcw{aspect-ratio:4/5;border-radius:3px}
+.a-card:nth-child(2){margin-top:46px}
+.a-card .num{position:absolute;left:18px;top:10px;z-index:3;color:#fff;font-size:2.8rem;font-weight:200;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.a-card h3{margin-top:22px}.a-card p{color:var(--mute)}
+.a-tri{display:grid;grid-template-columns:repeat(3,1fr);margin-top:30px}
+.a-pn{position:relative;min-height:clamp(440px,52vw,620px);overflow:hidden}
+.a-pn .pcw{position:absolute;inset:0}
+.a-pn .tx{position:absolute;left:22px;right:22px;bottom:22px;z-index:3;padding:22px 24px;border-top:3px solid var(--au);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.a-pn:hover .tx{transform:translateY(-6px)}
+.a-pn .tx h3{margin-bottom:6px}.a-pn .tx p{color:var(--mute);font-size:.95rem;margin:0}
+.a-bandimg{position:relative;height:clamp(230px,36vw,440px);margin-top:70px}.a-bandimg .pcw{position:absolute;inset:0}
+.a-qs{display:grid;grid-template-columns:repeat(3,1fr);gap:38px;margin-top:40px}
+.a-qs blockquote{border-top:1px solid var(--ink);padding-top:22px}
+.a-qs blockquote::before{content:"\201C";display:block;font-size:4.6rem;line-height:.62;height:34px;color:var(--au);font-weight:300}
+.a-qs p{font-size:1.1rem;font-weight:300}.a-qs cite{display:block;margin-top:14px;font-style:normal;color:var(--mute);font-size:.88rem;letter-spacing:.04em}
+.a-built{display:grid;grid-template-columns:1fr 1fr;min-height:580px}
+.a-built .tx{padding:clamp(40px,7vw,110px);display:flex;flex-direction:column;justify-content:center;background:var(--soft)}
+.a-built .tx p:not(.ey){color:var(--mute);max-width:46ch}
+.a-built .pcw{min-height:380px}
+.a-cta{position:relative;isolation:isolate;padding:clamp(90px,13vw,170px) 22px;text-align:center}
+.a-cta>.pcw{position:absolute;inset:0;z-index:-1}
+.a-cta .box{max-width:640px;margin:auto;padding:56px 40px;border-top:3px solid var(--au)}
+.a-cta h2{margin:0 auto 12px;max-width:18ch}.a-cta p{margin:0 auto 26px;max-width:46ch;color:var(--mute)}
+.a-story{display:grid;grid-template-columns:5fr 6fr;gap:76px;align-items:center}
+.a-story .pcw{aspect-ratio:4/5;border-radius:3px}.a-story p:not(.ey){color:var(--mute);font-size:1.06rem}
+.a-mis{position:relative;isolation:isolate;min-height:540px;display:flex;align-items:center;padding:80px 0}
+.a-mis>.pcw{position:absolute;inset:0;z-index:-1}
+.a-mis .box{max-width:640px;padding:48px 46px;border-top:3px solid var(--au)}
+.a-mis .big{font-size:clamp(1.45rem,2.7vw,2.1rem);font-weight:300;line-height:1.32;color:var(--ink);margin:0;letter-spacing:-.01em}
+.a-diff{display:grid;grid-template-columns:repeat(2,1fr);gap:0 70px;margin-top:40px}
+.a-diff .it2{border-top:1px solid var(--line);padding:30px 0;display:grid;grid-template-columns:76px 1fr}
+.a-diff .no{font-size:2.2rem;font-weight:200;color:var(--ac);line-height:1.1}.a-diff p{color:var(--mute)}
+.a-strip{display:grid;grid-template-columns:repeat(4,1fr)}.a-strip .pcw{aspect-ratio:1/1.05}
+.a-do{display:grid;grid-template-columns:repeat(3,1fr);gap:50px 30px;margin-top:50px}
+.a-do .pcw{aspect-ratio:3/2;border-radius:3px}.a-do h3{margin-top:20px}.a-do p{color:var(--mute)}
+.a-steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:50px;list-style:none;padding:0;position:relative}
+.a-steps::before{content:"";position:absolute;left:0;right:0;top:27px;height:1px;background:var(--au)}
+.a-steps li{position:relative;padding-right:26px}.a-steps p{color:var(--mute)}
+.a-steps .n{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--soft);border:1px solid var(--au);color:var(--ac);font-weight:300;font-size:1.3rem;margin-bottom:22px;position:relative}
+.a-faq{display:grid;grid-template-columns:5fr 7fr;gap:70px;align-items:start}
+.a-faq>div:first-child .pcw{position:sticky;top:96px;aspect-ratio:4/5;border-radius:3px}
+.a-faq h2{margin-bottom:24px}
+#p-contact .dsgc{padding-top:0}
+#p-contact .cform{align-self:start;background:var(--card);padding:clamp(24px,4vw,46px);border:1px solid var(--line);border-top:3px solid var(--au);box-shadow:0 26px 60px -34px rgba(0,0,0,.3);margin-top:-112px;position:relative;z-index:2}
+#p-contact .cside{margin-top:-112px;position:relative;z-index:2}
+#p-contact .cside .a-sidepic{aspect-ratio:4/3;border-radius:3px;margin-bottom:28px}
+#p-contact .cside .a-sidepic.b{aspect-ratio:16/9;margin:26px 0 0}
+@media(max-width:900px){
+ .a-s{padding:72px 0}
+ .a-why,.a-tri,.a-qs,.a-do,.a-diff,.a-built,.a-story,.a-faq{grid-template-columns:1fr}
+ .a-card:nth-child(2){margin-top:0}.a-story{gap:34px}.a-faq{gap:34px}.a-faq>div:first-child .pcw{position:relative;top:0}
+ .a-pn{min-height:420px}.a-built .pcw{min-height:320px;order:-1}
+ .a-strip{grid-template-columns:repeat(2,1fr)}
+ .a-steps{grid-template-columns:repeat(2,1fr);gap:34px 20px}.a-steps::before{display:none}
+ .a-hd .w{padding-top:120px}.a-hd.cthd .w{padding-bottom:110px}
+ #p-contact .cform,#p-contact .cside{margin-top:-70px}
+}
+
+
+/* ===== Design B: Gallery. A white gallery wall: framed plates, asymmetric mosaics, numbered captions, hairline gold. ===== */
+.b-s{padding:100px 0}.b-soft{background:var(--soft)}.b-tp{padding-bottom:70px}
+.b-hd{padding:clamp(70px,9vw,120px) 0 clamp(50px,6vw,84px);border-bottom:1px solid var(--line)}
+.b-hd>.w{display:grid;grid-template-columns:5fr 6fr;gap:clamp(30px,5vw,80px);align-items:center}
+.b-hd h1{max-width:14ch}.b-hd h1::after{content:"";display:block;width:64px;height:3px;background:var(--au);margin-top:22px}
+.b-hd .lead{font-size:1.14rem;margin-top:20px;max-width:480px}
+.b-mo{display:grid;grid-template-columns:1fr 1fr;gap:12px;aspect-ratio:1.08/1}
+.b-mo .tall{height:100%}.b-mo .col{display:grid;grid-template-rows:1fr 1fr;gap:12px}.b-mo .col .pcw{height:100%}
+.b-hd.sm>.w{grid-template-columns:5fr 5fr}.b-hd.sm .b-mo{aspect-ratio:1.25/1}
+.plate{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ac)}
+.plate i{display:block;width:26px;height:1px;background:var(--au)}
+.b-why{margin-top:50px;display:grid;gap:70px}
+.b-wr{display:grid;grid-template-columns:7fr 5fr;gap:clamp(30px,5vw,80px);align-items:center}
+.b-wr .pcw{aspect-ratio:3/2;border-radius:2px;box-shadow:0 30px 60px -38px rgba(0,0,0,.5)}
+.b-wr.flip{grid-template-columns:5fr 7fr}.b-wr.flip .pcw{order:2}
+.b-wr .nn{display:block;font-size:4.4rem;font-weight:200;line-height:1;color:var(--au);margin-bottom:10px}
+.b-wr h3{font-size:1.5rem;font-weight:400}.b-wr p{color:var(--mute);max-width:42ch}
+.b-bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(240px,28vw));gap:12px;margin-top:44px}
+.b-bento a{position:relative;display:block;overflow:hidden;color:inherit;text-decoration:none;border-radius:2px;isolation:isolate}
+.b-bento .big{grid-column:span 2;grid-row:span 2}.b-bento .sm{grid-column:span 1}.b-bento .wide{grid-column:span 2}
+.b-bento .pcw{position:absolute;inset:0;z-index:-1}
+.b-bento .cap{position:absolute;left:0;right:0;bottom:0;padding:70px 22px 20px;background:linear-gradient(to top,rgba(10,12,16,.72),rgba(10,12,16,0));color:#fff}
+.b-bento .cap .plate{color:#f1e3bd}.b-bento .cap .plate i{background:#f1e3bd}
+.b-bento .cap h3{color:#fff;margin:8px 0 4px;font-weight:500;font-size:1.15rem}.b-bento .cap p{color:rgba(255,255,255,.86);margin:0;font-size:.95rem;max-width:44ch}
+.b-bento .big .cap h3{font-size:1.6rem;font-weight:400}
+.b-bento a:hover .pcw img{transform:scale(1.06)}
+.b-tp .tl{margin-top:26px}
+.b-qs{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
+.b-qs blockquote{border-left:2px solid var(--au);padding-left:24px}
+.b-qs p{font-size:1.1rem;font-weight:300}.b-qs cite{display:block;margin-top:14px;font-style:normal;color:var(--mute);font-size:.88rem;letter-spacing:.04em}
+.b-built{padding:100px 0}.b-built>.w{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:center}
+.ph3{position:relative;aspect-ratio:1.1/1}
+.ph3>.pcw:first-child{position:absolute;left:0;top:0;width:78%;height:82%;border-radius:2px}
+.ph3>.pcw.off{position:absolute;right:0;bottom:0;width:48%;height:48%;border-radius:2px;border:8px solid var(--bg);box-shadow:0 20px 50px -26px rgba(0,0,0,.5)}
+.b-built .tx p:not(.ey){color:var(--mute);max-width:44ch}
+.b-cities{background:var(--soft);border-top:1px solid var(--line)}
+.b-cities .row4{display:grid;grid-template-columns:repeat(4,1fr)}
+.b-cities .cty{position:relative}.b-cities .cty .pcw{aspect-ratio:3/4}
+.b-cities .tag{position:absolute;left:16px;top:14px;z-index:3;color:#fff;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.b-cities .cta{text-align:center;padding:clamp(60px,8vw,100px) 0}
+.b-cities .cta h2{margin:0 auto 12px;max-width:18ch}.b-cities .cta p{margin:0 auto 26px;max-width:46ch}
+.b-story{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:center}
+.b-story p:not(.ey){color:var(--mute);font-size:1.06rem}
+.b-mis{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(70px,10vw,130px) 0}
+.b-mis .big{font-size:clamp(1.6rem,3.6vw,2.7rem);font-weight:200;line-height:1.25;color:var(--ink);max-width:24ch;letter-spacing:-.015em;margin:0}
+.b-mis .big::before{content:"";display:block;width:64px;height:3px;background:var(--au);margin-bottom:28px}
+.b-diff{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:40px}
+.b-diff .pcw{aspect-ratio:4/5;border-radius:2px}.b-diff .no{display:block;margin-top:18px;font-size:2rem;font-weight:200;color:var(--ac);line-height:1}
+.b-diff h3{margin-top:8px}.b-diff p{color:var(--mute);font-size:.95rem}
+.b-do{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.b-dc{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;isolation:isolate}
+.b-dc .pcw{position:absolute;inset:0;z-index:-1}
+.b-dc .no{position:absolute;left:18px;top:12px;z-index:3;color:#fff;font-size:1.3rem;font-weight:300;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.b-dc .tx{position:absolute;left:0;right:0;bottom:0;padding:90px 22px 22px;background:linear-gradient(to top,rgba(10,12,16,.78),rgba(10,12,16,0))}
+.b-dc h3{color:#fff;font-weight:500;margin-bottom:4px}.b-dc p{color:rgba(255,255,255,.88);font-size:.93rem;margin:0}
+.b-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;list-style:none;padding:0}
+.b-steps li{padding:0 26px 0 0;border-top:1px solid var(--ink);padding-top:22px;margin-right:26px}.b-steps li:last-child{margin-right:0}
+.b-steps .n{display:block;font-size:2.6rem;font-weight:200;color:var(--ac);line-height:1;margin-bottom:14px}.b-steps p{color:var(--mute)}
+.b-faq{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:start}
+.b-faq .ph3{position:sticky;top:96px}
+@media(max-width:900px){
+ .b-s{padding:70px 0}
+ .b-hd>.w,.b-hd.sm>.w,.b-wr,.b-wr.flip,.b-built>.w,.b-story,.b-faq{grid-template-columns:1fr}
+ .b-wr.flip .pcw{order:0}.b-qs,.b-do{grid-template-columns:1fr}.b-diff{grid-template-columns:repeat(2,1fr)}.b-steps{grid-template-columns:repeat(2,1fr);gap:30px 0}
+ .b-bento{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:minmax(220px,56vw)}.b-bento .big{grid-column:span 2;grid-row:span 1}.b-bento .wide{grid-column:span 2}
+ .b-cities .row4{grid-template-columns:repeat(2,1fr)}.b-faq .ph3{position:relative;top:0}
+ .b-dc{aspect-ratio:4/3}
+}
+footer .phc{margin-top:8px;font-size:.8rem}footer .phc a{text-decoration:underline}
+@media print{.rv{opacity:1!important;transform:none!important}}
 </style>
 </head>
 <body>
@@ -450,81 +612,24 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 </div>
 </div></div>
 <div class="air"><p class="at">Our partner airlines</p><div class="mq" id="mq"></div></div>
-<div class="s"><div class="w">
-<h2>Why frequent flyers book with us</h2>
-<div class="g3">
-<div class="it"><h3>Consolidated fares</h3><p>We negotiate in volume, so you see one clear price for first and business class instead of searching across booking sites.</p></div>
-<div class="it"><h3>A dedicated advisor</h3><p>One named contact plans routes, seats and connections, and stays on call until you land.</p></div>
-<div class="it"><h3>Flexibility built in</h3><p>Fare rules, change options and upgrades are explained up front, so a moved meeting never becomes an expensive one.</p></div>
-</div></div></div>
+<div class="a-s"><div class="w"><p class="ey">The way we work</p><h2>Why frequent flyers book with us</h2><div class="a-why"><div class="a-card rv" style="transition-delay:0.00s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1718948764598-ae43cdb6f98f?auto=format&fit=crop&w=800&q=72" alt="Business class window suite with a patterned cushion" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Frugal Flyer / Unsplash</figcaption></figure><span class="num">01</span><h3>Consolidated fares</h3><p>We negotiate in volume, so you see one clear price for first and business class instead of searching across booking sites.</p></div><div class="a-card rv" style="transition-delay:0.12s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1759038086846-c97a8adfce98?auto=format&fit=crop&w=800&q=72" alt="Premium lounge with curved tan leather seating and warm lighting" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Neon Wang / Unsplash</figcaption></figure><span class="num">02</span><h3>A dedicated advisor</h3><p>One named contact plans routes, seats and connections, and stays on call until you land.</p></div><div class="a-card rv" style="transition-delay:0.24s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=72" alt="Aircraft wing above the clouds at sunrise" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Ross Parmly / Unsplash</figcaption></figure><span class="num">03</span><h3>Flexibility built in</h3><p>Fare rules, change options and upgrades are explained up front, so a moved meeting never becomes an expensive one.</p></div></div></div></div>
 <div class="s"><div class="w">
 <div class="dh"><div><h2 id="ttl">Top destinations</h2><p class="loc" id="tsub"></p></div></div>
 <div class="tw" id="tw"><div class="fo"><button class="fa fl" id="tprev" type="button" aria-label="Previous destinations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="fa fr" id="tnext" type="button" aria-label="Next destinations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div><div class="tcar" id="tcar" role="list" tabindex="0" aria-label="Top destinations"></div></div>
 </div></div>
-<div class="s alt"><div class="w">
-<h2>What we arrange</h2>
-<div class="row"><h3>First class airline tickets</h3><p>Suites and private cabins on long-haul routes, with fares you can compare in one quote.</p></div>
-<div class="row"><h3>Business class fares</h3><p>Lie-flat seats for frequent work travel, priced for repeat routes and last-minute changes.</p></div>
-<div class="row"><h3>Multi-city and round-the-world</h3><p>Complex itineraries built around your calendar, with every sector ticketed together.</p></div>
-<a class="tl" href="#services">See every service</a>
-</div></div>
-<div class="s"><div class="w">
-<h2>What clients say</h2>
-<div class="g3">
-<blockquote class="it"><p>I fly Asia to Europe monthly. One call to my advisor replaced hours of searching, and the fare was lower.</p><cite>J.M., Managing Partner</cite></blockquote>
-<blockquote class="it"><p>When a deal moved forward two days, they rebooked everything before I'd finished my coffee.</p><cite>S.A., Chief Executive</cite></blockquote>
-<blockquote class="it"><p>Honest about fare rules and never pushy. That is rare in this business.</p><cite>D.K., Private Investor</cite></blockquote>
-</div></div></div>
-<div class="s alt"><div class="w split">
-<div class="pic"><img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=1000&q=70" alt="Passenger jet climbing at dusk" loading="lazy" onerror="this.remove()"></div>
-<div><h2>Built by frequent flyers, for frequent flyers</h2><p>We started Fly First Class International because premium travel should not require premium effort. Today we pair consolidated pricing with personal service for clients who value their time.</p><a class="tl" href="#about">Read our story</a></div>
-</div></div>
-<div class="band"><div class="w"><h2>Tell us where you're flying next.</h2><p>Share your route and dates. We'll come back with your best available fare.</p><a class="btn go" href="#contact">Request a private quote</a></div></div>
+<div class="a-s a-tp"><div class="w"><p class="ey">Our services</p><h2>What we arrange</h2></div></div><div class="a-tri"><div class="a-pn rv" style="transition-delay:0.00s"><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/CX_First_Class_Suites_747.jpg/1280px-CX_First_Class_Suites_747.jpg" alt="First class suites glowing with soft pink cabin lighting" loading="lazy" style="object-position:30% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Richard Moross / Wikimedia Commons, CC BY 2.0</figcaption></figure><div class="tx frost"><h3>First class airline tickets</h3><p>Suites and private cabins on long-haul routes, with fares you can compare in one quote.</p></div></div><div class="a-pn rv" style="transition-delay:0.12s"><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg/1280px-2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg" alt="Business class suite with a privacy shell and window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: G och J / Wikimedia Commons, CC BY 4.0</figcaption></figure><div class="tx frost"><h3>Business class fares</h3><p>Lie-flat seats for frequent work travel, priced for repeat routes and last-minute changes.</p></div></div><div class="a-pn rv" style="transition-delay:0.24s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1577871598838-a543ee47cd79?auto=format&fit=crop&w=1000&q=72" alt="Traditional junk boat with red sails on Victoria Harbour at night" loading="lazy" style="object-position:50% 55%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Andres Garcia / Unsplash</figcaption></figure><div class="tx frost"><h3>Multi-city and round-the-world</h3><p>Complex itineraries built around your calendar, with every sector ticketed together.</p></div></div></div><div class="w a-more"><a class="tl" href="#services">See every service</a></div><div class="a-bandimg"><figure class="pcw "><img src="https://images.unsplash.com/photo-1620015092538-e33c665fc181?auto=format&fit=crop&w=1800&q=72" alt="Hong Kong skyline across Victoria Harbour at golden hour" loading="lazy" style="object-position:50% 60%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Manson / Unsplash</figcaption></figure></div><div class="a-s"><div class="w"><p class="ey">Kind words</p><h2>What clients say</h2><div class="a-qs"><blockquote class="rv" style="transition-delay:0.00s"><p>I fly Asia to Europe monthly. One call to my advisor replaced hours of searching, and the fare was lower.</p><cite>J.M., Managing Partner</cite></blockquote><blockquote class="rv" style="transition-delay:0.12s"><p>When a deal moved forward two days, they rebooked everything before I'd finished my coffee.</p><cite>S.A., Chief Executive</cite></blockquote><blockquote class="rv" style="transition-delay:0.24s"><p>Honest about fare rules and never pushy. That is rare in this business.</p><cite>D.K., Private Investor</cite></blockquote></div></div></div><div class="a-built"><div class="tx rv"><p class="ey">Our story</p><h2>Built by frequent flyers, for frequent flyers</h2><p>We started Fly First Class International because premium travel should not require premium effort. Today we pair consolidated pricing with personal service for clients who value their time.</p><a class="tl" href="#about">Read our story</a></div><figure class="pcw "><img src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1100&q=72" alt="Traveller with a suitcase watching a plane take off" loading="lazy" style="object-position:50% 40%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: yousef alfuhigi / Unsplash</figcaption></figure></div><div class="a-cta"><figure class="pcw "><img src="https://images.unsplash.com/photo-1500835556837-99ac94a94552?auto=format&fit=crop&w=1800&q=72" alt="Golden light over the clouds from above" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Tom Barrett / Unsplash</figcaption></figure><div class="box frost rv"><h2>Tell us where you're flying next.</h2><p>Share your route and dates. We'll come back with your best available fare.</p><a class="btn go" href="#contact">Request a private quote</a></div></div>
 </section>
 
 <section class="pg" id="p-about" hidden>
-<div class="ph"><div class="w"><h1>About Fly First Class International</h1><p>Consolidated pricing and personal service for people who fly first and business class often.</p></div></div>
-<div class="s"><div class="w split">
-<div><h2>Our story</h2><p>Our founders spent years booking premium travel for themselves and their colleagues, and saw the same problem each time: the best fares were hard to find and harder to compare.</p><p style="margin-top:14px">So we built a service around one idea. Pool buying power, negotiate with airlines, and give every client a single honest price and a person to call.</p></div>
-<div class="pic"><img src="https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=1000&q=70" alt="Passenger jet climbing at dusk" loading="lazy" onerror="this.remove()"></div>
-</div></div>
-<div class="s alt"><div class="w"><h2>Our mission</h2><p style="font-size:1.3rem;font-weight:300;color:var(--ink);max-width:36ch">Make first and business class travel simple to book, fair in price, and effortless from quote to landing.</p></div></div>
-<div class="s"><div class="w"><h2>What makes us different</h2>
-<div class="g3">
-<div class="it"><h3>One clear price</h3><p>Your quote shows the fare, taxes and fare rules together. No surprises later.</p></div>
-<div class="it"><h3>People, not a portal</h3><p>Every client has a named advisor who remembers preferred seats, airlines and routes.</p></div>
-<div class="it"><h3>Discretion</h3><p>Your itineraries and details stay private, whether you travel for business or leisure.</p></div>
-<div class="it"><h3>Ready for change</h3><p>Plans move. We plan for it and respond quickly when they do.</p></div>
-</div></div></div>
-<div class="band"><div class="w"><h2>Let's plan your next flight.</h2><p>Speak with an advisor about your routes.</p><a class="btn go" href="#contact">Talk to an advisor</a></div></div>
+<div class="b-hd "><div class="w"><div class="tx"><p class="ey">About us</p><h1>About Fly First Class International</h1><p class="lead">Consolidated pricing and personal service for people who fly first and business class often.</p></div><div class="b-mo rv"><figure class="pcw tall"><img src="https://images.unsplash.com/photo-1476900543704-4312b78632f8?auto=format&fit=crop&w=900&q=72" alt="Aircraft wing over a coastline at golden hour" fetchpriority="high" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Benjamin Voros / Unsplash</figcaption></figure><div class="col"><figure class="pcw "><img src="https://images.unsplash.com/photo-1620015092538-e33c665fc181?auto=format&fit=crop&w=700&q=72" alt="Hong Kong skyline across Victoria Harbour at golden hour" fetchpriority="high" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Manson / Unsplash</figcaption></figure><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg/960px-2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg" alt="Business class suite with a privacy shell and window" fetchpriority="high" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: G och J / Wikimedia Commons, CC BY 4.0</figcaption></figure></div></div></div></div><div class="b-s"><div class="w b-story"><div class="ph3 rv"><figure class="pcw "><img src="https://images.unsplash.com/photo-1706921271123-c3bef3d8a8c1?auto=format&fit=crop&w=1000&q=72" alt="Business class cabin with lie-flat suites in warm light" loading="lazy" style="object-position:40% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Frugal Flyer / Unsplash</figcaption></figure><figure class="pcw off"><img src="https://images.unsplash.com/photo-1692405245790-a9aba01a4fc3?auto=format&fit=crop&w=700&q=72" alt="Lounge with red armchairs beneath a circular chandelier" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Kenjiro Yagi / Unsplash</figcaption></figure></div><div class="rv"><p class="ey">Our story</p><h2>Our story</h2><p>Our founders spent years booking premium travel for themselves and their colleagues, and saw the same problem each time: the best fares were hard to find and harder to compare.</p><p style="margin-top:14px">So we built a service around one idea. Pool buying power, negotiate with airlines, and give every client a single honest price and a person to call.</p></div></div></div><div class="b-mis"><div class="w"><p class="ey">Our mission</p><p class="big rv">Make first and business class travel simple to book, fair in price, and effortless from quote to landing.</p></div></div><div class="b-s"><div class="w"><p class="ey">Our promise</p><h2>What makes us different</h2><div class="b-diff"><div class="it3 rv"><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/A_glass_of_Champagne_in_new_Finnair_Business_Class.jpg/960px-A_glass_of_Champagne_in_new_Finnair_Business_Class.jpg" alt="Glass of champagne on a business class side table beside the window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Aaaatu / Wikimedia Commons, CC BY-SA 4.0</figcaption></figure><span class="no">01</span><h3>One clear price</h3><p>Your quote shows the fare, taxes and fare rules together. No surprises later.</p></div><div class="it3 rv"><figure class="pcw "><img src="https://images.unsplash.com/photo-1759038086846-c97a8adfce98?auto=format&fit=crop&w=700&q=72" alt="Premium lounge with curved tan leather seating and warm lighting" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Neon Wang / Unsplash</figcaption></figure><span class="no">02</span><h3>People, not a portal</h3><p>Every client has a named advisor who remembers preferred seats, airlines and routes.</p></div><div class="it3 rv"><figure class="pcw "><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?auto=format&fit=crop&w=700&q=72" alt="Aerial view of Tokyo at night with Tokyo Tower lit up" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Takashi Miyazaki / Unsplash</figcaption></figure><span class="no">03</span><h3>Discretion</h3><p>Your itineraries and details stay private, whether you travel for business or leisure.</p></div><div class="it3 rv"><figure class="pcw "><img src="https://images.unsplash.com/photo-1614771830136-75623fc2e116?auto=format&fit=crop&w=700&q=72" alt="Singapore skyline reflected in Marina Bay at dusk" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Wesley Pribadi / Unsplash</figcaption></figure><span class="no">04</span><h3>Ready for change</h3><p>Plans move. We plan for it and respond quickly when they do.</p></div></div></div></div><div class="b-cities"><div class="row4"><div class="cty"><figure class="pcw "><img src="https://images.unsplash.com/photo-1620015092538-e33c665fc181?auto=format&fit=crop&w=700&q=72" alt="Hong Kong skyline across Victoria Harbour at golden hour" loading="lazy" style="object-position:72% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Manson / Unsplash</figcaption></figure><span class="tag">Hong Kong</span></div><div class="cty"><figure class="pcw "><img src="https://images.unsplash.com/photo-1541336032412-2048a678540d?auto=format&fit=crop&w=700&q=72" alt="Empire State Building above Manhattan at dusk" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Timo Wagner / Unsplash</figcaption></figure><span class="tag">New York</span></div><div class="cty"><figure class="pcw "><img src="https://images.unsplash.com/photo-1543832923-44667a44c804?auto=format&fit=crop&w=700&q=72" alt="Tower Bridge and the Shard in London at sunset" loading="lazy" style="object-position:66% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: David Monaghan / Unsplash</figcaption></figure><span class="tag">London</span></div><div class="cty"><figure class="pcw "><img src="https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=700&q=72" alt="Tokyo Tower rising above the city at dusk" loading="lazy" style="object-position:36% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Louie Martinez / Unsplash</figcaption></figure><span class="tag">Tokyo</span></div></div><div class="w"><div class="cta rv"><h2>Let's plan your next flight.</h2><p>Speak with an advisor about your routes.</p><a class="btn go" href="#contact">Talk to an advisor</a></div></div></div>
 </section>
 
 <section class="pg" id="p-services" hidden>
-<div class="ph"><div class="w"><h1>First class travel services</h1><p>From a single long-haul to a year of repeat routes, we handle the booking and the changes.</p></div></div>
-<div class="s"><div class="w"><h2>What we do</h2>
-<div class="g3">
-<div class="it"><h3>First class airline tickets</h3><p>Suites and private cabins on the world's leading long-haul airlines.</p></div>
-<div class="it"><h3>Business class fares</h3><p>Lie-flat seats at consolidated prices for regular work travel.</p></div>
-<div class="it"><h3>Multi-city and round-the-world</h3><p>Complex itineraries ticketed together around your schedule.</p></div>
-<div class="it"><h3>Executive and corporate travel</h3><p>Repeat routes for leadership teams, with one advisor and one invoice.</p></div>
-<div class="it"><h3>Last-minute bookings</h3><p>Urgent trips handled quickly, with options explained clearly.</p></div>
-<div class="it"><h3>Changes and upgrades</h3><p>We monitor fares, manage changes and look for upgrade options on your behalf.</p></div>
-</div></div></div>
-<div class="s alt"><div class="w"><h2>How it works</h2>
-<ol class="steps">
-<li><h3>Tell us your trip</h3><p>Share your route, dates and cabin through the form or by phone.</p></li>
-<li><h3>Receive your fares</h3><p>Your advisor returns the best available options with the fare rules explained.</p></li>
-<li><h3>Approve and ticket</h3><p>Choose your fare and we issue your tickets and confirm your seats.</p></li>
-<li><h3>Fly with support</h3><p>Your advisor stays reachable for changes, delays and upgrades.</p></li>
-</ol></div></div>
-<div class="s"><div class="w"><h2>Frequently asked questions</h2>
-<details><summary>How can your fares be lower?</summary><p>Consolidator fares are negotiated in volume and are not always shown on public booking sites. Savings vary by route, date and availability.</p></details>
+<div class="a-hd "><figure class="pcw "><img src="https://images.unsplash.com/photo-1545132147-d037e6c54cfd?auto=format&fit=crop&w=1800&q=72" alt="Cloud layer glowing at sunset through an aircraft window" fetchpriority="high" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Sasha Freemind / Unsplash</figcaption></figure><div class="w"><p class="ey">Services</p><h1>First class travel services</h1><p class="lead">From a single long-haul to a year of repeat routes, we handle the booking and the changes.</p></div></div><div class="a-s"><div class="w"><p class="ey">Everything we arrange</p><h2>What we do</h2><div class="a-do"><div class="rv" style="transition-delay:0.00s"><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/CX_First_Class_Suites_747.jpg/960px-CX_First_Class_Suites_747.jpg" alt="First class suites glowing with soft pink cabin lighting" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Richard Moross / Wikimedia Commons, CC BY 2.0</figcaption></figure><h3>First class airline tickets</h3><p>Suites and private cabins on the world's leading long-haul airlines.</p></div><div class="rv" style="transition-delay:0.10s"><figure class="pcw "><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg/960px-2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg" alt="Business class suite with a privacy shell and window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: G och J / Wikimedia Commons, CC BY 4.0</figcaption></figure><h3>Business class fares</h3><p>Lie-flat seats at consolidated prices for regular work travel.</p></div><div class="rv" style="transition-delay:0.20s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?auto=format&fit=crop&w=800&q=72" alt="Aerial view of Tokyo at night with Tokyo Tower lit up" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Takashi Miyazaki / Unsplash</figcaption></figure><h3>Multi-city and round-the-world</h3><p>Complex itineraries ticketed together around your schedule.</p></div><div class="rv" style="transition-delay:0.00s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1686455746257-0210c23f7064?auto=format&fit=crop&w=800&q=72" alt="Marina Bay Sands in Singapore at blue hour" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: VacationTravelInsider.com / Unsplash</figcaption></figure><h3>Executive and corporate travel</h3><p>Repeat routes for leadership teams, with one advisor and one invoice.</p></div><div class="rv" style="transition-delay:0.10s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1507812984078-917a274065be?auto=format&fit=crop&w=800&q=72" alt="Aircraft wing at sunset seen from the window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Leonardo Yip / Unsplash</figcaption></figure><h3>Last-minute bookings</h3><p>Urgent trips handled quickly, with options explained clearly.</p></div><div class="rv" style="transition-delay:0.20s"><figure class="pcw "><img src="https://images.unsplash.com/photo-1759038086846-c97a8adfce98?auto=format&fit=crop&w=800&q=72" alt="Premium lounge with curved tan leather seating and warm lighting" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Neon Wang / Unsplash</figcaption></figure><h3>Changes and upgrades</h3><p>We monitor fares, manage changes and look for upgrade options on your behalf.</p></div></div></div></div><div class="a-s a-soft"><div class="w"><p class="ey">Four simple steps</p><h2>How it works</h2><ol class="a-steps"><li class="rv" style="transition-delay:0.00s"><span class="n">1</span><h3>Tell us your trip</h3><p>Share your route, dates and cabin through the form or by phone.</p></li><li class="rv" style="transition-delay:0.10s"><span class="n">2</span><h3>Receive your fares</h3><p>Your advisor returns the best available options with the fare rules explained.</p></li><li class="rv" style="transition-delay:0.20s"><span class="n">3</span><h3>Approve and ticket</h3><p>Choose your fare and we issue your tickets and confirm your seats.</p></li><li class="rv" style="transition-delay:0.30s"><span class="n">4</span><h3>Fly with support</h3><p>Your advisor stays reachable for changes, delays and upgrades.</p></li></ol></div></div><div class="a-s"><div class="w a-faq"><div class="rv"><figure class="pcw "><img src="https://images.unsplash.com/photo-1692405245790-a9aba01a4fc3?auto=format&fit=crop&w=900&q=72" alt="Lounge with red armchairs beneath a circular chandelier" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Kenjiro Yagi / Unsplash</figcaption></figure></div><div class="rv"><p class="ey">Good to know</p><h2>Frequently asked questions</h2><details><summary>How can your fares be lower?</summary><p>Consolidator fares are negotiated in volume and are not always shown on public booking sites. Savings vary by route, date and availability.</p></details>
 <details><summary>Are these genuine airline tickets?</summary><p>Yes. Tickets are issued for the airline you choose, and your quote lists the fare rules before you commit.</p></details>
 <details><summary>Can I change or cancel a booking?</summary><p>It depends on the fare. Your advisor explains change and refund conditions in your quote so you can choose with confidence.</p></details>
 <details><summary>How quickly will I get a quote?</summary><p>Send your route and dates through the contact form. An advisor will reply with available fares as soon as possible.</p></details>
-<details><summary>Do you book for assistants and families?</summary><p>Yes. We can book for executive assistants, partners, family and groups, and keep every detail private.</p></details>
-</div></div>
-<div class="band"><div class="w"><h2>Ready for a better fare?</h2><p>Tell us your route and we'll take it from there.</p><a class="btn go" href="#contact">Request a private quote</a></div></div>
+<details><summary>Do you book for assistants and families?</summary><p>Yes. We can book for executive assistants, partners, family and groups, and keep every detail private.</p></details></div></div></div><div class="a-cta"><figure class="pcw "><img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1800&q=72" alt="Sunrise seen through an aircraft window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Eva Darron / Unsplash</figcaption></figure><div class="box frost rv"><h2>Ready for a better fare?</h2><p>Tell us your route and we'll take it from there.</p><a class="btn go" href="#contact">Request a private quote</a></div></div>
 </section>
 
 <section class="pg" id="p-listings" hidden>
@@ -539,9 +644,9 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 </section>
 
 <section class="pg" id="p-contact" hidden>
-<div class="ph"><div class="w"><h1>Request a private quote</h1><p>Tell us about your trip and an advisor will reply with your best available fares.</p></div></div>
-<div class="s"><div class="w cg">
-<div><h2>Send us your details</h2>
+<div class="a-hd sm cthd"><figure class="pcw "><img src="https://images.unsplash.com/photo-1738762932370-468a90e0ff68?auto=format&fit=crop&w=1800&q=72" alt="Overwater bungalows on a turquoise lagoon with a mountain behind" fetchpriority="high" style="object-position:50% 60%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Roméo A. / Unsplash</figcaption></figure><div class="w"><p class="ey">Get in touch</p><h1>Request a private quote</h1><p class="lead">Tell us about your trip and an advisor will reply with your best available fares.</p></div></div>
+<div class="s dsgc"><div class="w cg">
+<div class="cform"><h2>Send us your details</h2>
 <div class="tc" id="rc" role="region" aria-label="Your trip summary" hidden></div>
 <div class="mpr cpr" id="cpr" hidden></div>
 <form class="f" id="cf">
@@ -556,10 +661,11 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 <div class="pw"><p class="pl">We accept</p><div class="pay" id="pay1"></div></div>
 <p id="ok" role="status" hidden></p>
 </form></div>
-<div><h2>Contact information</h2>
+<div class="cside"><figure class="pcw a-sidepic"><img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=900&q=72" alt="Seaplane moored beside a tropical island" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Shifaaz shamoon / Unsplash</figcaption></figure><h2>Contact information</h2>
 <p>Email: <a href="mailto:hello@flyfirstclass.com">hello@flyfirstclass.com</a><br>Phone: <a href="tel:+15550100199">+1 (555) 010-0199</a><br>Concierge desk: open 24 hours<br>Private consultations by appointment</p>
 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Fly+First+Class+International" target="_blank" rel="noopener" aria-label="Open our location in Google Maps">Open in Google Maps</a>
-</div></div></div>
+<figure class="pcw a-sidepic b"><img src="https://images.unsplash.com/photo-1759038086846-c97a8adfce98?auto=format&fit=crop&w=900&q=72" alt="Premium lounge with curved tan leather seating and warm lighting" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: Neon Wang / Unsplash</figcaption></figure></div></div></div>
+
 </section>
 
 <section class="pg" id="p-privacy" hidden>
@@ -568,6 +674,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 </section>
 
 </main>
+<div id="cps" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></div>
 <footer>
 <div class="w"><div class="fg">
 <div><a class="logo" href="#home" aria-label="Fly First Class International, home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M3 21 27 5 21 25 15 18Z" fill="#c9b27c"/><path class="lm2" d="M15 18 27 5 11 16Z"/></svg><span>Fly First Class<small>International</small></span></a><p style="margin-top:14px">Consolidated pricing on first class airline tickets and business class flights.</p></div>
@@ -575,7 +682,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 <div><h3>Contact</h3><ul><li><a href="mailto:hello@flyfirstclass.com">hello@flyfirstclass.com</a></li><li><a href="tel:+15550100199">+1 (555) 010-0199</a></li><li>Concierge desk: open 24 hours</li></ul></div>
 </div>
 <div class="fb">
-<div class="pay" id="pay3" aria-label="Accepted cards"></div><p>&copy; 2026 Fly First Class International. All rights reserved.</p><p style="margin-top:8px"><strong>Accessibility statement:</strong> We aim to make this site usable for everyone, with keyboard navigation, clear contrast and screen reader support. If you have difficulty using any part of it, contact us and we will help.</p></div>
+<div class="pay" id="pay3" aria-label="Accepted cards"></div><p>&copy; 2026 Fly First Class International. All rights reserved.</p><p style="margin-top:8px"><strong>Accessibility statement:</strong> We aim to make this site usable for everyone, with keyboard navigation, clear contrast and screen reader support. If you have difficulty using any part of it, contact us and we will help.</p><p class="phc">Photography from Unsplash contributors. Cabin photos from Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:CX_First_Class_Suites_747.jpg" target="_blank" rel="noopener">Richard Moross</a> (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>), <a href="https://commons.wikimedia.org/wiki/File:2024-02-16_1915_Aff%C3%A4rsklasskabinen_i_SAS_A350_%22Ingeborg_Viking%22.jpg" target="_blank" rel="noopener">G och J</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>), <a href="https://commons.wikimedia.org/wiki/File:A_glass_of_Champagne_in_new_Finnair_Business_Class.jpg" target="_blank" rel="noopener">Aaaatu</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p></div>
 </div>
 </footer>
 <div class="cnb" id="cnb" role="region" aria-labelledby="cnh" hidden><div class="cnt"><b id="cnh">Consent to Cookies</b><p>This site collects cookies. Essential cookies keep it working and, only if you accept, we also collect optional cookie and device data with the quote requests you send. <button type="button" class="cx" id="cnx" aria-expanded="false" aria-controls="cnd">Read more</button> <span id="cns"></span></p><div id="cnd" hidden><p>We use cookies and similar browser storage on your device for essential things: your light or dark mode choice, your cookie choice, the trip summary you are building and the reference ID of the last request you sent or opened. These are always on.</p><p>If you press <b>Accept</b>, we also collect optional data when you send a quote request and add it to the email our team receives: your approximate location and IP address, your browser, operating system, language and time zone, and your device hardware (processor cores, approximate memory, screen size and touch support). If you press <b>Decline</b>, none of this is collected. Nothing optional is collected until you choose.</p><p>The full list of what we collect, why, and how long we keep it is in our <a href="#privacy">Privacy Policy</a>. You can change your choice any time with <b>Cookie settings</b> at the bottom of the page.</p></div></div><div class="cnk"><button class="btn" id="cnn" type="button">Decline</button><button class="btn" id="cny" type="button">Accept</button></div></div>
@@ -682,6 +789,13 @@ async function advRefresh(){const my=++ADVSEQ,t=REQ&&REQ.trip||{},code=t.to?cd(t
  if(my!=ADVSEQ)return;
  els.forEach(e=>{e.dataset.p=key;advPut(e,p,city?city+" city view":"Destination photo")})}
 // ---- Route data and search ----
+function cpl(ref){const r=esc(ref);return`<button type="button" class="cpy" data-copy="${r}" aria-label="Copy reference ID ${r}">${r}</button>`}
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){}
+ try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;left:-9999px;top:0;opacity:0";document.body.appendChild(a);a.select();a.setSelectionRange(0,t.length);const ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}}
+document.addEventListener("click",async e=>{const c=e.target.closest(".cpy");if(!c)return;e.preventDefault();
+ const ok=await copyText(c.dataset.copy||c.textContent.trim()),st=document.getElementById("cps");
+ c.dataset.s=ok?"copied":"fail";if(st){st.textContent="";setTimeout(()=>{st.textContent=ok?"Reference ID "+c.dataset.copy+" copied.":"Could not copy the reference ID."},30)}
+ clearTimeout(c._t);c._t=setTimeout(()=>{delete c.dataset.s},1900)});
 const esc=x=>String(x).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const AP={SYD:"Sydney",MEL:"Melbourne",SIN:"Singapore",HKG:"Hong Kong",TYO:"Tokyo",DXB:"Dubai",DOH:"Doha",LHR:"London",CDG:"Paris",FRA:"Frankfurt",JFK:"New York",LAX:"Los Angeles"};
 const PH={};"LHR London e;LGW London Gatwick e;CDG Paris e;AMS Amsterdam e;FRA Frankfurt e;MUC Munich e;ZRH Zurich e;GVA Geneva e;VIE Vienna e;BRU Brussels e;CPH Copenhagen e;ARN Stockholm e;OSL Oslo e;HEL Helsinki e;DUB Dublin e;MAN Manchester e;EDI Edinburgh e;LIS Lisbon e;OPO Porto e;MAD Madrid e;BCN Barcelona e;FCO Rome e;MXP Milan e;VCE Venice e;ATH Athens e;IST Istanbul e;PRG Prague e;WAW Warsaw e;BUD Budapest e;HAM Hamburg e;BER Berlin e;NCE Nice e;KEF Reykjavik e;DXB Dubai x;DOH Doha x;AUH Abu Dhabi x;RUH Riyadh x;JED Jeddah x;MCT Muscat x;KWI Kuwait City x;BAH Bahrain x;AMM Amman x;TLV Tel Aviv x;JNB Johannesburg f;CPT Cape Town f;NBO Nairobi f;ADD Addis Ababa f;LOS Lagos f;CMN Casablanca f;CAI Cairo f;MRU Mauritius f;ACC Accra f;SIN Singapore a;HKG Hong Kong a;NRT Tokyo Narita a;HND Tokyo Haneda a;TYO Tokyo a;KIX Osaka a;ICN Seoul a;PVG Shanghai a;PEK Beijing a;CAN Guangzhou a;TPE Taipei a;BKK Bangkok a;HKT Phuket a;KUL Kuala Lumpur a;CGK Jakarta a;DPS Bali a;MNL Manila a;SGN Ho Chi Minh City a;HAN Hanoi a;DEL Delhi a;BOM Mumbai a;BLR Bangalore a;MAA Chennai a;CMB Colombo a;MLE Maldives a;SYD Sydney a;MEL Melbourne a;BNE Brisbane a;PER Perth a;ADL Adelaide a;AKL Auckland a;CHC Christchurch a;NAN Fiji a;JFK New York m;EWR Newark m;BOS Boston m;IAD Washington m;PHL Philadelphia m;ATL Atlanta m;MIA Miami m;MCO Orlando m;ORD Chicago m;DFW Dallas m;IAH Houston m;DEN Denver m;PHX Phoenix m;LAS Las Vegas m;SFO San Francisco m;LAX Los Angeles m;SAN San Diego m;SEA Seattle m;HNL Honolulu m;YYZ Toronto m;YUL Montreal m;YVR Vancouver m;YYC Calgary m;MEX Mexico City m;CUN Cancun m;PTY Panama City m;BOG Bogota m;LIM Lima m;GRU Sao Paulo m;GIG Rio de Janeiro m;EZE Buenos Aires m;SCL Santiago m;SJU San Juan m;NAS Nassau m".split(";").forEach(s=>{const a=s.split(" "),c=a[0],r=a.pop();PH[c]=[a.slice(1).join(" "),{e:"europe",a:"apac",m:"americas",x:"me",f:"africa"}[r]]});
@@ -843,7 +957,7 @@ function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}ca
 function book(f,t,cab,via){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
 function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v)=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
- E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${esc(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
+ E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}setTimeout(()=>$("bk").scrollIntoView(),80)}};
 $("fa").onchange=$("fb").onchange=show;$("sr").onclick=show;
 $("swp").onclick=()=>{const t=$("fa").value;$("fa").value=$("fb").value;$("fb").value=t;if(cd($("fa").value))show()};
@@ -936,9 +1050,9 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
   if(!ref){const rec=await RQ.create({hp:d.get("website")||"",ft:window.__ft0?Date.now()-window.__ft0:null,ref:BK?BK.ref:"",trip:BK?tripOf(BK):{},contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl")});ref=rec.ref;REQ=rec;lastSet(rec);if(BK&&BK.ref!=ref)setBK({...BK,ref});renderAll()}
   const res=await sendQuote(ACTREF?(ACTKIND||"adv"):"new",ref,d,ph);
   if(res.bot)$("ok").textContent=res.error||GMSG;
-  else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+esc(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+esc(ref)+"</b>. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
+  else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+cpl(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+cpl(ref)+"</b>. Click it to copy. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
-   $("ok").innerHTML="Your request is saved as <b>"+esc(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to hello@flyfirstclass.com</a> and quote that ID."}
+   $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to hello@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
  }finally{sb.disabled=false;sb.textContent=lab}};
 // ---- Cookie and privacy choices: nothing optional is collected unless the visitor accepts ----
@@ -966,7 +1080,7 @@ async function sendQuote(kind,ref,d,ph,x){x=x||{};const consent=CONSENT===true;l
 window.cprShow=function(){const box=$("cpr");if(!box)return;const o=lastGet();
  if(!o||ACTREF||window.__cprNo){box.hidden=true;box.innerHTML="";return}
  const rt=[o.from,o.to].filter(Boolean).map(esc).join(" to ");
- box.innerHTML=`<b id="cprh">Would you like to modify your booking request?</b><p>You sent us a request earlier${rt?` for <strong>${rt}</strong>`:""} (reference <strong class="rf">${esc(o.ref)}</strong>). If your plans have changed, update that request instead of sending a new one.</p><div class="mpb"><button class="btn" type="button" id="cpm">Modify my request</button><button class="btn" type="button" id="cpn">No, send a new request</button><button class="btn" type="button" id="cpf">Forget it on this device</button></div>`;
+ box.innerHTML=`<b id="cprh">Would you like to modify your booking request?</b><p>You sent us a request earlier${rt?` for <strong>${rt}</strong>`:""} (reference <strong class="rf">${cpl(o.ref)}</strong>). If your plans have changed, update that request instead of sending a new one.</p><div class="mpb"><button class="btn" type="button" id="cpm">Modify my request</button><button class="btn" type="button" id="cpn">No, send a new request</button><button class="btn" type="button" id="cpf">Forget it on this device</button></div>`;
  box.setAttribute("role","group");box.setAttribute("aria-labelledby","cprh");box.hidden=false};
 const cprNo=()=>{window.__cprNo=1;$("cpr").hidden=true;$("fn").focus()};
 function cprForget(){lastForget();cprNo()}
@@ -1001,7 +1115,7 @@ const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;retu
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
 function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
- return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${esc(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
+ return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${cpl(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
 function renderAll(note,mail){advRefresh();for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
   box.innerHTML=sumCard(REQ)+(k==1?`${note?`<p class="note ok2 nt" role="status">${esc(note)}${mail?` <a href="${esc(mail)}">Email it to hello@flyfirstclass.com</a>`:""}</p>`:""}<div class="lkx"><button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button></div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
@@ -1110,5 +1224,11 @@ function tupd(){const c=$("tcar");$("tprev").disabled=c.scrollLeft<4;$("tnext").
 $("tcar").addEventListener("scroll",tupd,{passive:true});addEventListener("resize",tupd);
 ty();rc();initTop();window.__rd=1;go();
 </script>
+<script>(function(){var els=[].slice.call(document.querySelectorAll('.rv'));
+ function show(e){e.classList.add('in')}
+ if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){els.forEach(show);return}
+ var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){show(x.target);io.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+ els.forEach(function(e){io.observe(e)});
+ window.__revealAll=function(){els.forEach(show)}})();</script>
 </body>
 </html>
