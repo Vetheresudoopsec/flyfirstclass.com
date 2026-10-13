@@ -15,11 +15,20 @@ function qm2($v, $n = 3000) {          // keeps line breaks
 }
 function qd($v) { return is_string($v) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $v) ? $v : ''; }
 function qn($v, $lo, $hi) { return min($hi, max($lo, (int)$v)); }
+function qStops($s) {                  // stops of the route the visitor chose: n (0 = direct) and up to 3 stop lists such as "Doha (DOH)"
+    if (!is_array($s) || !isset($s['n']) || !(is_int($s['n']) || is_float($s['n']) || (is_string($s['n']) && is_numeric($s['n'])))) return null;
+    $n = qn($s['n'], 0, 9); $via = [];
+    if ($n) foreach (array_slice(is_array($s['via'] ?? null) ? $s['via'] : [], 0, 3) as $x) { $x = qs($x, 120); if ($x !== '') $via[] = $x; }
+    return ['n' => $n, 'via' => $via];
+}
+function qStopsText($s) { return $s ? ($s['n'] ? ($s['n'] === 1 ? '1 stop' : $s['n'] . ' stops') : 'Direct') . ($s['n'] && $s['via'] ? ' via ' . implode(' or ', $s['via']) : '') : ''; }
 function qTrip($t) {
     $t = is_array($t) ? $t : [];
     $via = []; foreach (array_slice(is_array($t['via'] ?? null) ? $t['via'] : [], 0, 4) as $x) { $x = qs($x); if ($x !== '') $via[] = $x; }
-    return ['from' => qs($t['from'] ?? null), 'to' => qs($t['to'] ?? null), 'via' => $via, 'cabin' => qs($t['cabin'] ?? null, 40), 'type' => qs($t['type'] ?? null, 40),
+    $o = ['from' => qs($t['from'] ?? null), 'to' => qs($t['to'] ?? null), 'via' => $via, 'cabin' => qs($t['cabin'] ?? null, 40), 'type' => qs($t['type'] ?? null, 40),
         'adults' => qn($t['adults'] ?? 0, 0, 9), 'children' => qn($t['children'] ?? 0, 0, 9), 'dep' => qd($t['dep'] ?? null), 'dep2' => qd($t['dep2'] ?? null), 'ret' => qd($t['ret'] ?? null), 'ret2' => qd($t['ret2'] ?? null), 'flex' => !empty($t['flex'])];
+    $st = qStops($t['stops'] ?? null); if ($st) $o['stops'] = $st;
+    return $o;
 }
 function qWho($c) {
     $c = is_array($c) ? $c : [];

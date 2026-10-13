@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-13a">
+<meta name="build" content="2026-10-13b">
 <title>Fly First Class International | Up to 70% Off First & Business Class Fares</title>
 <meta name="description" content="20+ years of excellence in the skies. Save up to 70% off market airfares on first class airline tickets and business class flights. Request a private quote.">
 <meta property="og:type" content="website">
@@ -87,6 +87,7 @@ details p{margin-top:10px;max-width:70ch}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
 .chips button{padding:9px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;font:500 .9rem Manrope,sans-serif;cursor:pointer}
 .chips button.on{background:var(--j);color:var(--jt);border-color:var(--j)}
+.chips[hidden]{display:none}#sch{margin-top:-18px;align-items:center}.chips .cl{font:600 .78rem Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-right:6px}
 .lg{display:flex;flex-direction:column;gap:16px}
 .lc{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .lc[hidden]{display:none}
@@ -195,6 +196,7 @@ img{-webkit-user-drag:none;user-drag:none}
 .tc h3{font-size:1.75rem;font-weight:300;line-height:1.2;margin:10px 0 20px}.tc h3 .ar{color:var(--ac)}
 .td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 20px;margin:0}.td .cp{grid-column:1}.td .ce{grid-column:span 2}
 @media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.td .ce,.td .cp{grid-column:1/-1}.tc{padding:20px 18px}}
+.td .cs{grid-column:1/-1}
 .td dt{font-size:.8rem;color:var(--mute)}
 .td dd{margin:0;font-weight:600;overflow-wrap:anywhere}.tc[hidden]{display:none}
 .tf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.85rem;color:var(--mute)}
@@ -692,6 +694,7 @@ footer .mot{margin-top:12px;font-size:.74rem;letter-spacing:.2em;text-transform:
 <div class="wd lsw"><form id="lf"><div class="r"><div class="c"><label for="la">Leaving from</label><input id="la" placeholder="City or airport" autocomplete="off"></div><div class="c"><label for="lb">Going to (optional)</label><input id="lb" placeholder="Anywhere" autocomplete="off"></div></div><div class="act"><button class="btn o" id="lu" type="button">Use my location</button><button class="btn" type="submit">Search routes</button></div></form></div>
 <p class="loc" id="ls" aria-live="polite"></p>
 <div class="chips" id="ch" role="group" aria-label="Filter fares"><button class="on" data-f="all">All</button><button data-f="first">First class</button><button data-f="business">Business class</button><button data-f="europe">Europe</button><button data-f="apac">Asia-Pacific</button><button data-f="americas">Americas</button><button data-f="me">Middle East</button><button data-f="africa">Africa</button></div>
+<div class="chips" id="sch" role="group" aria-label="Filter by stops" hidden></div>
 <div class="lg" id="lg"></div>
 </div></div>
 <div class="band"><div class="w"><h2>Don't see your route?</h2><p>We price routes worldwide. Tell us where you're going.</p><a class="btn go" href="#contact">Request a custom fare</a></div></div>
@@ -874,7 +877,13 @@ const cd=v=>{v=(v||"").trim();const m=v.match(/\(([A-Za-z]{3})\)/)||v.match(/^([
 const nm=c=>(N[c]||c)+" ("+c+")";
 const al=x=>[...new Set(x.cabins.flatMap(k=>k.a))];
 // "Direct", "1 stop" or "1 stop via Doha (DOH)" (the server adds the stop cities once it has them; routes saved earlier fill in at the next daily refresh)
-const stp=x=>(x.stops?(x.stops==1?"1 stop":x.stops+" stops"):"Direct")+(x.stops&&x.via&&x.via.length?" via "+x.via.map(esc).join(" or "):"");
+const stpP=(n,v)=>(n?(n==1?"1 stop":n+" stops"):"Direct")+(n&&v&&v.length?" via "+v.join(" or "):"");
+const stp=x=>esc(stpP(x.stops,x.via));
+// The stops of a route the visitor chose, as kept in the quote request: {n, via:[up to 3 stop lists]}.
+const stX=(n,v)=>typeof n=="number"&&n>=0&&n<=9?{n,via:(n&&Array.isArray(v)?v:[]).map(String).filter(Boolean).slice(0,3)}:null;
+const stS=s=>s?stpP(s.n,s.via):"";
+const stD=x=>typeof x.stops=="number"?` data-stops="${x.stops}" data-via="${esc((x.via||[]).slice(0,3).join("|"))}"`:"";
+const stFD=d=>d.stops===undefined||d.stops===""?null:stX(+d.stops,(d.via||"").split("|"));
 // Stops stay hidden until the visitor asks for them; a direct route has nothing to hide, so it just says "Direct".
 const stx=x=>!x.stops?`<span class="sx dr">Direct</span>`:`<button type="button" class="mo stb" aria-expanded="false">Show stops</button><span class="sx" hidden>${stp(x)}</span>`;
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".stb");if(!b)return;const x=b.parentNode.querySelector(".sx"),o=x.hidden;x.hidden=!o;b.setAttribute("aria-expanded",String(o));b.textContent=o?"Hide stops":"Show stops"});
@@ -999,24 +1008,24 @@ pxDraw();
 const SB=["One way","Multi-city","Round-trip"],SBB=[...$("sb").querySelectorAll("button")];
 function ty(){const v=$("ty").value,mc=v=="Multi-city";$("mcx").hidden=!mc;$("fbl").textContent=mc?"Destination 1":"Going to";if(mc&&!MC.n())MC.put("");if(v=="One way"){DT.ret="";DT.ret2=""}sync();SBB.forEach((b,i)=>b.classList.toggle("on",SB[i]==v))}
 SBB.forEach((b,i)=>b.onclick=()=>{$("ty").value=SB[i];ty()});$("ty").onchange=ty;
-let sseq=0;
+let sseq=0,RRS=[];
 async function show(){
  const my=++sseq,o=cd($("fa").value),d=cd($("fb").value),R2=$("rr");R2.hidden=false;
  if(!o){R2.innerHTML='<p class="note">Choose a departure city above to see available routes.</p>';return}
  R2.innerHTML='<p class="note">Loading routes...</p>';
- const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map(x=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.bot?esc(res.error):res.pending?"Checking routes...":"No route found for that pair."}</p>`)+(res.bot?"":`<p class="note">${res.live?(res.pending?(capped?"Checking where the stops are...":d?"Checking more options and where the stops are...":"Checking "+res.pending+" more..."):"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`)};
+ const draw=res=>{if(my!=sseq)return;const all=res.list,rs=d?all:all.slice(0,10),capped=!d&&all.length>=10;RRS=rs;R2.innerHTML=`<h3>${d?"Route":"Available routes"} from ${esc(nm(o))}</h3>`+(rs.length?`<ul class="rl">${rs.map((x,i)=>`<li><div class="rn"><b>${esc(N[x.iata]||x.city||x.iata)} (${esc(x.iata)})</b><span>${esc(x.cabins.map(k=>k.c).join(" & "))}</span><span>${stx(x)}</span></div><div class="lgs">${lgx(al(x))}</div><button class="btn sm${d?" go":""}" type="button" data-d="${esc(x.iata)}" data-o="${i}">${d?"Request this fare":"Select"}</button></li>`).join("")}</ul>`:`<p class="note">${res.bot?esc(res.error):res.pending?"Checking routes...":"No route found for that pair."}</p>`)+(res.bot?"":`<p class="note">${res.live?(res.pending?(capped?"Checking where the stops are...":d?"Checking more options and where the stops are...":"Checking "+res.pending+" more..."):"Live route data."):"Sample route network."} Shows routes only, not specific flights. Schedules, fares and availability are confirmed in your quote.</p>`)};
  draw(await getRoutes(o,d,draw,()=>my==sseq))}
 // ---- Booking request and receipt ----
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
-function book(f,t,cab,via){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
+function book(f,t,cab,via,stops){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
 function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
- const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v)=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
- E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
+ const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
+ E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+(BK.stops?it("Stops",stS(BK.stops),"cs"):"")+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}setTimeout(()=>$("bk").scrollIntoView(),80)}};
 $("fa").onchange=$("fb").onchange=show;$("sr").onclick=show;
 $("swp").onclick=()=>{const t=$("fa").value;$("fa").value=$("fb").value;$("fb").value=t;if(cd($("fa").value))show()};
-$("rr").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;const d=b.dataset.d,o=cd($("fa").value);if(cd($("fb").value)==d)book(nm(o),nm(d));else{$("fb").value=nm(d);show()}};
+$("rr").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;const d=b.dataset.d,o=cd($("fa").value);if(cd($("fb").value)==d)book(nm(o),nm(d),null,[],(x=>x&&x.iata==d?stX(x.stops,x.via):null)(RRS[+b.dataset.o]));else{$("fb").value=nm(d);show()}};
 $("bf").onsubmit=e=>{e.preventDefault();
  const bad=m=>{const E=$("de");E.textContent=m;E.hidden=false;$("dr").scrollIntoView({block:"nearest"})};
  const fa0=okPlace($("fa").value),fb0=okPlace($("fb").value);
@@ -1030,13 +1039,13 @@ $("bf").onsubmit=e=>{e.preventDefault();
  if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before getting your fare.":"Please select a date to leave and a date to return before getting your fare.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
  const o=cd($("fa").value),d=cd($("fb").value);book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via)};
 // ---- Listings (routes near the visitor) ----
-let LO=null,LR=[],LV="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,ERRM="",BOTM="",LD="";
+let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,ERRM="",BOTM="",LD="";
 let GEO;const geoOnce=()=>GEO||(GEO=geoOrigin());
 async function geoOrigin(){try{const r=await fetch("/api/geo");if(r.ok){const g=await r.json();if(g.airport)return{code:g.airport,city:g.airportCity||g.city}}}catch(e){}return null}
 // One wide banner (destination name + photo) above the rows when a specific destination is searched; the rows then drop their own pictures.
 function banner(l){const n=N[LD]||(LR.find(x=>x.iata==LD)||{}).city||LD,pic=PIC[LD];
  return`<div class="im ban" data-c="${esc(n)}" data-i="${esc(LD)}">${pic?`<img src="https://images.unsplash.com/photo-${pic}?auto=format&fit=crop&w=1600&q=75" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="bt"><span>Routes to</span><h2>${esc(n)}</h2><p>${esc(LO.city)} (${esc(LO.code)}) to ${esc(n)} (${esc(LD)})${l.length?" &middot; "+l.length+" option"+(l.length==1?"":"s"):""}</p></div></div>`}
-const card=x=>{const n=N[x.iata]||x.city||x.iata,fc=x.cabins.some(k=>k.c=="First");return`<article class="lr${LD?" nb":""}">${LD?"":`<div class="im" data-c="${esc(n)}" data-i="${esc(x.iata)}">${PIC[x.iata]?`<img src="https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=700&q=70" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="tags">${x.cabins.map(k=>`<span>${k.c}</span>`).join("")}</div></div>`}<div class="rb"><div><h3>${esc(LO.code)} to ${esc(x.iata)}</h3><p>${esc(LO.city)} to ${esc(n)}</p><p class="sp">${stx(x)}</p></div><div class="rcab">${x.cabins.map(k=>`<div><b>${k.c}</b><span class="lgs">${lgx(k.a)}</span></div>`).join("")}</div><button class="btn sm go" type="button" data-from="${esc(LO.city)} (${esc(LO.code)})" data-to="${esc(n)} (${esc(x.iata)})" data-cab="${fc?"First class":"Business class"}">Request this route</button></div></article>`};
+const card=x=>{const n=N[x.iata]||x.city||x.iata,fc=x.cabins.some(k=>k.c=="First");return`<article class="lr${LD?" nb":""}">${LD?"":`<div class="im" data-c="${esc(n)}" data-i="${esc(x.iata)}">${PIC[x.iata]?`<img src="https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=700&q=70" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="tags">${x.cabins.map(k=>`<span>${k.c}</span>`).join("")}</div></div>`}<div class="rb"><div><h3>${esc(LO.code)} to ${esc(x.iata)}</h3><p>${esc(LO.city)} to ${esc(n)}</p><p class="sp">${stx(x)}</p></div><div class="rcab">${x.cabins.map(k=>`<div><b>${k.c}</b><span class="lgs">${lgx(k.a)}</span></div>`).join("")}</div><button class="btn sm go" type="button" data-from="${esc(LO.city)} (${esc(LO.code)})" data-to="${esc(n)} (${esc(x.iata)})" data-cab="${fc?"First class":"Business class"}"${stD(x)}>Request this route</button></div></article>`};
 // Photos for Listings rows whose destination has no bundled picture: fetched from the server (Unsplash, cached there).
 const PHC=new Map();
 function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
@@ -1050,19 +1059,36 @@ function chipsFor(){const REG=["europe","apac","americas","me","africa"],dr=LD?(
   else if(!PEND&&LR.length&&(f=="first"||f=="business"))show=LR.some(x=>x.cabins.some(k=>k.c==(f=="first"?"First":"Business")));
   b.hidden=!show});
  if($("ch").querySelector(".on")&&$("ch").querySelector(".on").hidden){LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0))}}
+// ---- Stops: filter Listings by the cities where the trip stops ----
+// A route row has stops (0 = direct) and via (up to 3 alternative stop lists, for example "Doha (DOH)" or "Dubai (DXB) and Singapore (SIN)").
+const stN=x=>typeof x.stops=="number"?x.stops:-1;
+const viaCodes=x=>[...new Set((x.via||[]).flatMap(s=>[...String(s).matchAll(/\(([A-Z]{3})\)/g)].map(m=>m[1])))];
+const viaName=c=>{for(const x of LR)for(const s of x.via||[]){const m=String(s).match(new RegExp("([^()]+?)\\s*\\("+c+"\\)"));if(m)return m[1].replace(/^\s*and\s+/,"").trim()}return N[c]||c};
+const lvOK=x=>LV=="all"||(LV=="first"?x.cabins.some(k=>k.c=="First"):LV=="business"?x.cabins.some(k=>k.c=="Business"):(PH[x.iata]||[])[1]==LV);
+const stOK=x=>LS=="all"||(LS=="0"?stN(x)===0:LS=="1"?stN(x)===1:LS=="2"?stN(x)>=2:viaCodes(x).includes(LS.slice(4)));
+// The stop filters offered always fit what is on screen: a choice that would not narrow the list (or find nothing) is not shown.
+function stopsFor(){const E=$("sch"),rows=LR.filter(lvOK),k=[rows.some(x=>stN(x)===0),rows.some(x=>stN(x)===1),rows.some(x=>stN(x)>=2)],cnt={};
+ rows.forEach(x=>viaCodes(x).forEach(c=>cnt[c]=(cnt[c]||0)+1));
+ const vias=Object.keys(cnt).filter(c=>cnt[c]<rows.length).sort((a,b)=>cnt[b]-cnt[a]||(viaName(a)<viaName(b)?-1:1)).slice(0,8),bs=[["all","Any stops"]];
+ if(k.filter(Boolean).length>1){if(k[0])bs.push(["0","Direct"]);if(k[1])bs.push(["1","1 stop"]);if(k[2])bs.push(["2","2 or more stops"])}
+ vias.forEach(c=>bs.push(["via:"+c,"Via "+viaName(c)]));
+ if(!bs.some(b=>b[0]==LS))LS="all";
+ E.hidden=bs.length<2;
+ E.innerHTML=bs.length<2?"":`<span class="cl">Stops</span>`+bs.map(([f,t])=>`<button type="button" data-s="${esc(f)}"${f==LS?' class="on"':""}>${esc(t)}</button>`).join("")}
 function renderL(){
- chipsFor();
- const l=LR.filter(x=>LV=="all"||(LV=="first"?x.cabins.some(k=>k.c=="First"):LV=="business"?x.cabins.some(k=>k.c=="Business"):(PH[x.iata]||[])[1]==LV));
+ chipsFor();stopsFor();
+ const l=LR.filter(x=>lvOK(x)&&stOK(x));
  $("ls").textContent=`${l.length} route${l.length==1?"":"s"} from ${LO.city} (${LO.code})`+(PEND?` · checking ${PEND} more`:"")+(LIVE?"":" · sample data"+(ERRM?" ("+ERRM+")":""))+(LG?"":" · location not detected")+".";
  $("lg").innerHTML=(LD?banner(l):"")+(l.length?l.map(card).join(""):`<p class="note">${BOTM?esc(BOTM):PEND?"Checking routes...":(LIVE&&!LR.length)?"No first or business class routes found from this airport yet.":"No routes match this filter."}</p>`);paint();fillPhotos()}
-async function loadL(d){const my=++seq;PEND=0;ERRM="";BOTM="";LD=d||"";LR=[];chipsFor();$("ls").textContent="Finding routes...";$("lg").innerHTML=LD?banner([]):"";if(LD){paint();fillPhotos()}
+async function loadL(d){const my=++seq;PEND=0;ERRM="";BOTM="";LD=d||"";LR=[];LS="all";chipsFor();stopsFor();$("ls").textContent="Finding routes...";$("lg").innerHTML=LD?banner([]):"";if(LD){paint();fillPhotos()}
  const up=x=>{if(my!=seq)return;LR=x.list;LIVE=x.live;PEND=x.pending||0;ERRM=x.bot?"":x.error||"";BOTM=x.bot?x.error:"";renderL()};
  up(await getRoutes(LO.code,d,up,()=>my==seq))}
 async function initL(force){if(LI&&!force)return;LI=true;$("ls").textContent="Detecting your location...";const g=await(force?geoOrigin():geoOnce());LG=!!g;LO=g||{code:"LHR",city:"London"};N[LO.code]=LO.city;$("la").value=LO.city+" ("+LO.code+")";$("lb").value="";LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL()}
 $("lu").onclick=()=>initL(true);
 $("lf").onsubmit=e=>{e.preventDefault();const o=cd($("la").value),d=cd($("lb").value);if(!o){$("ls").textContent="Choose a departure city to search.";return}N[o]=N[o]||$("la").value.replace(/\s*\(.*\)/,"");LO={code:o,city:N[o]};LG=true;LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL(d)};
 $("ch").onclick=e=>{const b=e.target.closest("button");if(!b||!LO)return;LV=b.dataset.f;[...$("ch").children].forEach(x=>x.classList.toggle("on",x==b));renderL()};
-$("lg").onclick=e=>{const b=e.target.closest("button[data-to]");if(b)book(b.dataset.from,b.dataset.to,b.dataset.cab)};
+$("sch").onclick=e=>{const b=e.target.closest("button[data-s]");if(!b||!LO)return;const f=b.dataset.s;LS=f;renderL();const nb=[...$("sch").querySelectorAll("button")].find(x=>x.dataset.s==f);if(nb)nb.focus()};
+$("lg").onclick=e=>{const b=e.target.closest("button[data-to]");if(b)book(b.dataset.from,b.dataset.to,b.dataset.cab,[],stFD(b.dataset))};
 // ---- Phone: validation and ITU country selector ----
 const LP=window.libphonenumber||null,FB={US:1,CA:1,GB:44,AU:61,NZ:64,SG:65,HK:852,AE:971,JP:81,FR:33,DE:49,IN:91,CN:86,CH:41,IT:39,ES:34,QA:974,SA:966,ZA:27,BR:55,MX:52};
 const cc=c=>LP?LP.getCountryCallingCode(c):FB[c],ISO=LP?LP.getCountries():Object.keys(FB),RN=new Intl.DisplayNames(["en"],{type:"region"}),CN=c=>{try{return RN.of(c)}catch(e){return c}};
@@ -1106,7 +1132,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
   const res=await sendQuote(ACTREF?(ACTKIND||"adv"):"new",ref,d,ph);
   if(res.bot)$("ok").textContent=res.error||GMSG;
   else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+cpl(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+cpl(ref)+"</b>. Click it to copy. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
-  else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
+  else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),...(BK.stops?["Stops: "+stS(BK.stops)]:[]),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
    $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to hello@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
  }finally{sb.disabled=false;sb.textContent=lab}};
@@ -1165,12 +1191,12 @@ const RQ={
   const n=Date.now(),ref=x.ref&&REFRE.test(x.ref)&&!lsFind(x.ref)?x.ref:mkRef(),rec={ref,created:n,updated:n,exp:n+183*864e5,trip:x.trip||{},contact:x.contact||{},message:x.message||"",local:true},o=lsGet();o[ref]=rec;lsPut(o);return rec},
  async get(ref){const r=await srv("GET","/api/requests/"+ref);if(r&&r.s==200)return r.d;if(r&&(r.s==429||(r.s==403&&r.d&&r.d.bot)))return{limit:true,error:r.d.error};return lsFind(ref)},
  async put(ref,p){const r=await srv("POST","/api/requests/"+ref,p);if(r&&r.s==200)return r.d;if(r&&(r.s==429||(r.s==403&&r.d&&r.d.bot)))return{limit:true,error:r.d.error};const l=lsFind(ref);if(!l)return null;const o=lsGet(),n=Date.now();Object.assign(l,{trip:p.trip||l.trip,contact:p.contact||l.contact,updated:n,exp:n+183*864e5});o[ref]=l;lsPut(o);return l}};
-const tripOf=b=>({from:b.from,to:b.to,via:b.via||[],cabin:b.cabin,type:b.trip,adults:b.a,children:b.k,dep:b.dep,dep2:b.dep2,ret:b.ret,ret2:b.ret2,flex:!!b.flex});
-const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;return{from:t.from,to:t.to,via:t.via||[],cabin:t.cabin||"First class",trip:t.type||"One way",pax:paxText(a,k),a,k,dep:t.dep||"",dep2:t.dep2||"",ret:t.ret||"",ret2:t.ret2||"",flex:!!t.flex,ref:r.ref,at:new Date(r.created).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}};
+const tripOf=b=>({from:b.from,to:b.to,via:b.via||[],cabin:b.cabin,type:b.trip,adults:b.a,children:b.k,dep:b.dep,dep2:b.dep2,ret:b.ret,ret2:b.ret2,flex:!!b.flex,...(b.stops?{stops:b.stops}:{})});
+const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;return{from:t.from,to:t.to,via:t.via||[],cabin:t.cabin||"First class",trip:t.type||"One way",pax:paxText(a,k),a,k,dep:t.dep||"",dep2:t.dep2||"",ret:t.ret||"",ret2:t.ret2||"",flex:!!t.flex,...(t.stops?{stops:t.stops}:{}),ref:r.ref,at:new Date(r.created).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})}};
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
 function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
- return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${cpl(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
+ return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${cpl(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Stops",stS(t.stops),"cs")+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
 function renderAll(note,mail){advRefresh();for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
   box.innerHTML=sumCard(REQ)+(k==1?`${note?`<p class="note ok2 nt" role="status">${esc(note)}${mail?` <a href="${esc(mail)}">Email it to hello@flyfirstclass.com</a>`:""}</p>`:""}<div class="lkx"><button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button></div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
@@ -1206,7 +1232,7 @@ function openEd(){if(!REQ)return;const old=$("edf");if(old)old.remove();$("lkr1"
 function closeEd(){const f=$("edf");if(f)f.remove();const tc=$("lkr1").querySelector(".tc");if(tc)tc.hidden=false;const b=$("edb");if(b){b.setAttribute("aria-expanded","false");b.focus()}}
 // What changed between two versions of a request: [label, was, now]. Saved changes that were not sent yet are remembered until Save and send.
 function chgList(o,n){const a=o.trip||{},b=n.trip||{},c=o.contact||{},d=n.contact||{},L=[],ch=(k,x,y)=>{if((x||"")!==(y||""))L.push([k,x||"not set",y||"not set"])},rt=t=>[t.from,t.to,...(t.via||[])].filter(Boolean).join(" > "),px=t=>t.adults?paxText(t.adults,t.children||0):"",dt=(x,y)=>x?drl(x,y,1):"";
- ch("Route",rt(a),rt(b));ch("Cabin",a.cabin,b.cabin);ch("Trip type",a.type,b.type);ch("Passengers",px(a),px(b));ch("Departing",dt(a.dep,a.dep2),dt(b.dep,b.dep2));ch("Returning",dt(a.ret,a.ret2),dt(b.ret,b.ret2));ch("Name",whoName(c),whoName(d));ch("Email",c.email,d.email);ch("Phone",c.phone,d.phone);return L}
+ ch("Route",rt(a),rt(b));ch("Stops",stS(a.stops),stS(b.stops));ch("Cabin",a.cabin,b.cabin);ch("Trip type",a.type,b.type);ch("Passengers",px(a),px(b));ch("Departing",dt(a.dep,a.dep2),dt(b.dep,b.dep2));ch("Returning",dt(a.ret,a.ret2),dt(b.ret,b.ret2));ch("Name",whoName(c),whoName(d));ch("Email",c.email,d.email);ch("Phone",c.phone,d.phone);return L}
 function pend(ref,L){const u=UNSENT[ref]=UNSENT[ref]||{};L.forEach(([k,w,n])=>{if(u[k])u[k][1]=n;else u[k]=[w,n];if(u[k][0]===u[k][1])delete u[k]})}
 const pendL=ref=>Object.entries(UNSENT[ref]||{}).map(([k,v])=>[k,v[0],v[1]]);
 async function saveEd(e,send){e.preventDefault();const E=$("ede"),err=m=>{E.textContent=m;E.hidden=false},old=REQ.trip||{};E.hidden=true;
@@ -1222,7 +1248,7 @@ async function saveEd(e,send){e.preventDefault();const E=$("ede"),err=m=>{E.text
  let ph=$("eph").value.trim();if(ph){const dg=ph.replace(/\D/g,"");let n=null;try{if(LP)n=LP.parsePhoneNumberFromString(intl(ph),cs.value)}catch(x){}
   if(LP){if(!n||!n.isValid())return err("Please enter a valid phone number, with the country code if it is not in "+CN(cs.value)+".");ph=n.number}else{if(dg.length<7||dg.length>15)return err("Please enter a phone number with 7 to 15 digits.");ph=(/^(\+|00)/.test(ph)?"+":"+"+cc(cs.value))+dg.replace(/^0+/,"")}}
  const dep2=dep&&dep==old.dep?old.dep2||"":"",ret2=ret&&ret==old.ret?old.ret2||"":"";
- const patch={trip:{from:nm(fa),to:nm(fb),via:xc.map(nm),cabin:$("ecb").value,type:ty2,adults:a,children:k,dep,dep2,ret,ret2,flex:!!(dep2||ret2)},contact:{first:$("efn").value.trim(),middle:$("emn").value.trim(),last:$("eln").value.trim(),email:em,phone:ph}};
+ const patch={trip:{from:nm(fa),to:nm(fb),via:xc.map(nm),...(old.stops&&cd(old.from)==fa&&cd(old.to)==fb&&!xc.length?{stops:old.stops}:{}),cabin:$("ecb").value,type:ty2,adults:a,children:k,dep,dep2,ret,ret2,flex:!!(dep2||ret2)},contact:{first:$("efn").value.trim(),middle:$("emn").value.trim(),last:$("eln").value.trim(),email:em,phone:ph}};
  const prev=JSON.parse(JSON.stringify(REQ)),cm=send?($("ecm").value||"").trim():"";
  if(send&&!chgList(prev,patch).length&&!pendL(REQ.ref).length&&!cm)return err("Change a detail or add a comment first, then choose Save and send.");
  const bs=[...$("edf").querySelectorAll(".edb button")],sb=$("eds"),lab=sb.textContent;bs.forEach(x=>x.disabled=true);if(send)sb.textContent="Sending...";

@@ -10,6 +10,7 @@ hostgator/
       index.html         the site
       api.php            the one PHP file visitors' browsers talk to
       .htaccess          sends /api/... to api.php and hides private files
+      favicon.svg, favicon.ico, apple-touch-icon.png   the site icon (the logo mark) shown in browser tabs and on phone home screens
   ffc-private/           goes NEXT TO public_html, outside the web folder (nobody can open it from a browser)
       core.php, lib/     the server code
       cron.php           the scheduled job
@@ -31,7 +32,7 @@ hostgator/
 1. Put this `hostgator` folder in its own git repository (this folder must be the top of the repository, because `.cpanel.yml` has to sit at the top).
 2. cPanel > *Git™ Version Control* > **Create**. Either clone your GitHub/GitLab repository (private repositories need the SSH key cPanel shows you added as a deploy key), or create an empty repository in cPanel and push to it.
 3. Open **Manage** on the repository > *Pull or Deploy* > **Update from Remote** (if cloned) > **Deploy HEAD Commit**.
-4. Check in *File Manager* (turn on *Show Hidden Files* in Settings): `public_html` should contain `index.html`, `api.php`, `.htaccess`, and `ffc-private` should sit beside `public_html` with `core.php`, `lib`, and so on.
+4. Check in *File Manager* (turn on *Show Hidden Files* in Settings): `public_html` should contain `index.html`, `api.php`, `.htaccess`, the three icon files (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`), and `ffc-private` should sit beside `public_html` with `core.php`, `lib`, and so on.
 
 Deploying again later only replaces the code. It never touches `.env` or `cache/`.
 

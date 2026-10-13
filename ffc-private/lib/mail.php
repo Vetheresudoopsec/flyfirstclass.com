@@ -119,7 +119,7 @@ function quote_mail($p, $ref, $loc) {
     $name = implode(' ', array_filter([$c['first'], $c['middle'], $c['last']])) ?: 'Not given';
     $route = implode(' > ', array_filter(array_merge([$t['from'], $t['to']], $t['via']))) ?: 'To be confirmed';
     $pax = $t['adults'] ? $t['adults'] . ($t['adults'] === 1 ? ' adult' : ' adults') . ($t['children'] ? ', ' . $t['children'] . ($t['children'] === 1 ? ' child' : ' children') : '') : 'Not given';
-    $req = [['Reference ID', $ref], ['Route', $route], ['Cabin', $t['cabin'] ?: 'Not given'], ['Trip type', $t['type'] ?: 'Not given'], ['Passengers', $pax], [$t['flex'] && $t['dep2'] ? 'Departure window' : 'Departing', m_win($t['dep'], $t['dep2'])]];
+    $req = array_merge([['Reference ID', $ref], ['Route', $route]], !empty($t['stops']) ? [['Stops', qStopsText($t['stops'])]] : [], [['Cabin', $t['cabin'] ?: 'Not given'], ['Trip type', $t['type'] ?: 'Not given'], ['Passengers', $pax], [$t['flex'] && $t['dep2'] ? 'Departure window' : 'Departing', m_win($t['dep'], $t['dep2'])]]);
     if ($t['ret'] || $t['type'] === 'Round-trip') $req[] = [$t['flex'] && $t['ret2'] ? 'Return window' : 'Returning', m_win($t['ret'], $t['ret2'])];
     $req[] = ['Flexible dates', $t['flex'] ? 'Yes' : 'No'];
     $rows = [['Request', $req], ['Contact', [['Name', $name], ['Email', $c['email'] ?: 'Not given'], ['Phone', $c['phone'] ?: 'Not given'], ['Newsletter', !empty($p['newsletter']) ? 'Yes, subscribe' : 'No']]],
