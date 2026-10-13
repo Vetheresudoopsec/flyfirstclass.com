@@ -27,3 +27,10 @@ RewriteRule ^api/([A-Za-z-]+)/?$ api.php?route=$1 [QSA,L]
     Deny from all
   </IfModule>
 </FilesMatch>
+
+# Site icon: let browsers keep it for a day
+<IfModule mod_headers.c>
+  <FilesMatch "^(favicon\.(svg|ico)|apple-touch-icon\.png)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
