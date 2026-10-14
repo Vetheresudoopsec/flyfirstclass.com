@@ -1,11 +1,11 @@
 ---
 # cPanel > Git Version Control > "Deploy HEAD Commit" runs these steps.
-# TEST BRANCH: deploys only into /home/discoets/test-site (document root /home/discoets/test-site/public_html). Never merge this file into main.
+# TEST BRANCH: deploys only into /home/flyer007/test-site (document root /home/flyer007/test-site/public_html). Never merge this file into main.
 # public_html/ goes to the website folder; ffc-private/ goes beside it (outside the web folder). The .env file and the cache/ folder
 # on the server are never in this repository, so deploying never touches them.
 deployment:
   tasks:
-    - export HOMEDIR=/home/discoets/test-site
+    - export HOMEDIR=/home/flyer007/test-site
     - /bin/mkdir -p $HOMEDIR/public_html $HOMEDIR/ffc-private
     - /bin/cp -R public_html/. $HOMEDIR/public_html/
     - /bin/cp -R ffc-private/. $HOMEDIR/ffc-private/
