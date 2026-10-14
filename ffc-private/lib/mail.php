@@ -3,7 +3,7 @@
 // the message goes through that SMTP server (for example Gmail with an app password, or a cPanel mailbox).
 if (!defined('FFC_PRIVATE')) { exit; }
 
-const MAIL_INTENDED = 'sales@flyfirstclass.com';        // quote requests go to this address unless MAIL_TO is set in .env
+const MAIL_INTENDED = 'quote@flyfirstclass.com';        // quote requests go to this address unless MAIL_TO is set in .env
 function mail_cfg() {
     $host = env('SMTP_HOST'); $port = (int)env('SMTP_PORT', 465) ?: 465;
     $from = trim(env('MAIL_FROM') ?: (env('SMTP_USER') ?: MAIL_INTENDED));
