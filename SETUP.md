@@ -23,7 +23,7 @@ hostgator/
 ## 1. Before you start
 
 1. **PHP version.** cPanel > *MultiPHP Manager* > pick your domain > choose **PHP 8.1 or newer** (7.4 is the minimum). Keep the default extensions (curl, mbstring, json, openssl).
-2. **Create the mailbox.** cPanel > *Email Accounts* > create `sales@flyfirstclass.com`. HostGator's mail system only delivers reliably when the "From" address is a real mailbox.
+2. **Create the mailbox.** cPanel > *Email Accounts* > create `quote@flyfirstclass.com`. HostGator's mail system only delivers reliably when the "From" address is a real mailbox.
 3. **Find your cPanel username.** It is shown on the right of the cPanel home page, and it is the name in `/home/USERNAME`.
 4. In `.cpanel.yml`, replace `USERNAME` with that name. Commit the change.
 
@@ -101,7 +101,7 @@ It is on by default and needs nothing from you. No one is ever asked to pick pic
 
 ## 9. Where quote requests are delivered
 
-Quote requests are emailed to `sales@flyfirstclass.com` by default, so no setting is needed once that mailbox exists. If an older `.env` still has a `MAIL_TO=` line (for example one that sends requests to a personal inbox), delete the line or change it to `sales@flyfirstclass.com`. Set `MAIL_TO` only when you want requests delivered somewhere else, and keep `MAIL_FROM` as the `sales@` mailbox.
+Quote requests are emailed to `quote@flyfirstclass.com` by default, so no setting is needed once that mailbox exists. If an older `.env` still has a `MAIL_TO=` line (for example one that sends requests to a personal inbox), delete the line or change it to `quote@flyfirstclass.com`. Set `MAIL_TO` only when you want requests delivered somewhere else, and keep `MAIL_FROM` as the `quote@` mailbox.
 
 ## 10. If emails do not arrive
 
@@ -112,5 +112,5 @@ The site remembers the last 20 send attempts. Open `/api/mail-check?key=YOUR_KEY
   1. The spam folder of the receiving inbox.
   2. cPanel > *Email* > **Track Delivery**: search for the receiving address. It shows Delivered, Deferred or Failed, with the reason.
   3. cPanel > *Email* > **Email Deliverability**: if the domain shows a problem with SPF or DKIM, press **Repair**. If your domain's DNS is managed somewhere else (for example Cloudflare), add the records it lists there.
-  4. The mailbox named in `MAIL_FROM` (default `sales@flyfirstclass.com`) must exist in cPanel > *Email Accounts*.
+  4. The mailbox named in `MAIL_FROM` (default `quote@flyfirstclass.com`) must exist in cPanel > *Email Accounts*.
 - **Most reliable fix when the inbox is Gmail:** send through Gmail itself. In your Google account turn on 2-step verification, create an *App password*, then add to `.env`: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=you@gmail.com`, `SMTP_PASS=` (the app password, never share it) and `MAIL_FROM=you@gmail.com`. Run the mail-check link again.
