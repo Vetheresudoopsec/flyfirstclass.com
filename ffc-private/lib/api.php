@@ -1,7 +1,7 @@
 <?php
 // api.php: the endpoints. Same addresses and replies as server.js:
-//   /api/geo   /api/routes   /api/top   /api/photos   /api/places   /api/requests   /api/send
-// Diagnostics (/api/status, /api/duffel-check, /api/mail-check, /api/photo-test, /api/cron) need ?key=ADMIN_KEY from .env.
+//   /api/geo   /api/routes   /api/top   /api/photos   /api/places   /api/requests   /api/send   /api/subscribe
+// Diagnostics (/api/status, /api/duffel-check, /api/mail-check, /api/photo-test, /api/cron, /api/newsletter-export) need ?key=ADMIN_KEY from .env.
 if (!defined('FFC_PRIVATE')) { exit; }
 
 function cron_run($budget) {         // used by cron.php and /api/cron
@@ -10,6 +10,7 @@ function cron_run($budget) {         // used by cron.php and /api/cron
     try {
         $t0 = microtime(true);
         $out['purged'] = qpurge();
+        try { $out['newsletter'] = nl_run(); } catch (Throwable $e) { $out['newsletter'] = 'error: ' . $e->getMessage(); logm('cron newsletter: ' . $e->getMessage()); }
         try { air(); } catch (Throwable $e) { $out['airports'] = $e->getMessage(); }
         try { $out['refresh'] = refresh_step($budget); } catch (Throwable $e) { $out['refresh'] = 'error: ' . $e->getMessage(); logm('cron refresh: ' . $e->getMessage()); }
         $left = $budget - (microtime(true) - $t0);
@@ -34,6 +35,7 @@ function status_full() {
         'lastRefresh' => !empty($m['lastRefresh']) ? et_text($m['lastRefresh']) : 'never', 'nextRefresh' => et_text(next_noon()),
         'refreshInProgress' => isset($m['refresh']) ? count($m['refresh']['done'] ?? []) . ' routes done' : null,
         'cronLastRun' => !empty($m['cronLast']) ? et_text($m['cronLast']) : 'never (add the cron job, see the setup guide)',
+        'newsletter' => nl_status(),
         'recentEmails' => mail_recent(5),
         'recentLog' => log_tail(15)];
 }
@@ -125,13 +127,27 @@ function dispatch() {
             limit_hit($sk, 1000000000, 86400000);
             logm('[mail] ' . $ref . ' sent (' . $via . ')');
             json_out(200, ['sent' => true, 'ref' => $ref]);
+        case 'subscribe':
+            if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
+            guard_gate(1);
+            if (!limit_hit(client_ip() . ':nl', 8, 3600000) || !limit_hit('all:nl', 300, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
+            $nb = body_json(); guard_form($nb);
+            [$ncode, $nrep, $nh] = nl_signup($nb);
+            if ($nh !== '') json_out_then($ncode, $nrep, function () use ($nh) { nl_sync_one($nh); });
+            json_out($ncode, $nrep);
+        case 'newsletter-export':
+            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            nl_export();
         case 'requests':
             if (in_array($method, ['GET', 'PUT', 'POST'], true)) guard_gate(1);
             $ip = client_ip(); $ref = strtoupper($ref);
             if ($ref === '' && $method === 'POST') {
                 if (!limit_hit($ip . ':new', 30, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
                 $nb = body_json(); guard_form($nb);
-                json_out(200, q_create($nb));
+                $made = q_create($nb);
+                $nh = !empty($nb['newsletter']) ? nl_from_quote($made['contact']) : '';       // the "subscribe me" tick-box on the quote form
+                if ($nh !== '') json_out_then(200, $made, function () use ($nh) { nl_sync_one($nh); });
+                json_out(200, $made);
             }
             if ($ref !== '' && in_array($method, ['GET', 'PUT', 'POST'], true)) {      // POST is accepted for changes too (some hosting firewalls refuse PUT)
                 if (!miss_ok($ip)) json_out(429, ['error' => 'Too many attempts. Please try again in a few minutes.']);
