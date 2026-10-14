@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-13c">
+<meta name="build" content="2026-10-14a">
 <title>Fly First Class International | Up to 70% Off First & Business Class Fares</title>
 <meta name="description" content="20+ years of excellence in the skies. Save up to 70% off market airfares on first class airline tickets and business class flights. Request a private quote.">
 <meta property="og:type" content="website">
@@ -13,7 +13,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Figtree:wght@500&display=swap">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Fly First Class International","description":"Insider fares up to 70% off market airfares on first class airline tickets and business class flights. Serving travellers for 20+ years.","slogan":"Excellence in the skies","areaServed":"Worldwide","email":"hello@flyfirstclass.com"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TravelAgency","name":"Fly First Class International","description":"Insider fares up to 70% off market airfares on first class airline tickets and business class flights. Serving travellers for 20+ years.","slogan":"Excellence in the skies","areaServed":"Worldwide","email":"sales@flyfirstclass.com"}</script>
 <style>
 :root{--bg:#fff;--ink:#14181f;--mute:#59616f;--card:#fff;--line:#e3e6eb;--soft:#f5f6f8;--au:#c9b27c;--ac:#8a6d2f;--j:#006564;--jt:#fff;--lg:#8a6d2f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
@@ -158,9 +158,25 @@ footer ul{list-style:none;padding:0}
 .pxb span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .swp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.1rem;cursor:pointer}
 .swp:hover{border-color:var(--j);color:var(--j)}
+.stw{position:absolute;left:50%;top:calc(50% + 28px);transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center}.stw[hidden]{display:none}
+.stn{display:inline-flex;align-items:center;gap:8px;max-width:min(300px,60vw);padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:600 .82rem Manrope,sans-serif;cursor:pointer;white-space:nowrap}
+.stn span{overflow:hidden;text-overflow:ellipsis}
+.stn::after{content:"";width:7px;height:7px;border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(45deg) translateY(-2px);flex:none;transition:transform .15s}
+.stn[aria-expanded=true]::after{transform:rotate(-135deg) translateY(-2px)}
+.stn:hover,.stn:focus-visible,.stn[aria-expanded=true]{border-color:var(--j);color:var(--j)}
+.stpop{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:min(420px,calc(100vw - 44px));padding:18px 22px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 44px rgba(0,0,0,.18);text-align:left;cursor:default}
+.stpop[hidden]{display:none}.stpop:focus{outline:none}
+.stpop h4{margin:0 0 4px;font-size:1.05rem;font-weight:600;color:var(--ink)}.stpop p{margin:0 0 12px;font-size:.85rem;color:var(--mute)}
+.sto{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:13px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:500 1rem Manrope,sans-serif;text-align:left;cursor:pointer}
+.sto small{display:block;margin-top:2px;font:400 .82rem Manrope,sans-serif;color:var(--mute)}
+.sto::after{content:"";flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line)}
+.sto:hover,.sto:focus-visible{color:var(--j)}.sto:focus-visible{outline:none}
+.sto[aria-checked=true]{color:var(--j)}.sto[aria-checked=true]::after{border-color:var(--j);background:radial-gradient(var(--j) 0 5px,transparent 6px)}
+.sn{margin:0;padding:10px 28px 0;font-size:.92rem;color:var(--ink)}.sn[hidden]{display:none}
+@media(max-width:700px){.stw{position:relative;left:auto;top:auto;transform:none;align-items:flex-start;padding:10px 18px;border-bottom:1px solid var(--line)}.stpop{left:18px;right:18px;transform:none;width:auto}.sn{padding:10px 18px 0}}
 .act{display:flex;gap:12px 44px;justify-content:flex-end;flex-wrap:wrap;padding:20px 28px}
 #de{margin:0;padding:10px 28px 0}
-/* Booking bar: "Get my fare" is a compact gold box at the container's right end, as tall as the row (touching its top, bottom and right edges), and it stops short of the margin around "See available routes". */
+/* Booking bar: "Request a quote" is a compact gold box at the container's right end, as tall as the row (touching its top, bottom and right edges), and it stops short of the margin around "See available routes". */
 .act.bk2{gap:0;flex-wrap:nowrap;align-items:stretch;justify-content:flex-end;padding:0}
 .act.bk2 #sr{align-self:center;margin:20px 44px 20px 28px;white-space:nowrap}
 .btn.fare{display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin:0;padding:22px 42px;background:var(--au);color:#14181f;font-size:1.05rem;text-align:center;transition:background .2s}
@@ -183,6 +199,7 @@ footer ul{list-style:none;padding:0}
 .tp.x{padding:32px 28px}.tp.x p{margin:8px 0 22px;max-width:60ch}
 @media(max-width:800px){.sl{grid-template-columns:1fr}.st{padding:48px 22px}.si{border-bottom-left-radius:48px}.t4 button{padding:16px 18px;font-size:.98rem}}
 @media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
+@media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}.act.bk2 #sr{margin-right:8px}}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.act.bk2 #sr{margin:16px 12px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}.rr{padding:20px 18px}}
 .err{color:#b3261e;font-size:.85rem;margin-top:6px}
 .loc{margin:0 0 18px;color:var(--mute)}
@@ -658,12 +675,13 @@ footer .mot{margin-top:16px;font-size:.74rem;letter-spacing:.2em;text-transform:
 <div class="tp" id="tp0">
 <form id="bf">
 <div class="sub" id="sb" role="group" aria-label="Trip style"><button type="button" class="on">Book flights</button><button type="button">Multi-city</button><button type="button">Round-trip</button><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label></div>
-<div class="r"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
+<div class="r"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="stw" id="stw" hidden><button type="button" class="stn" id="stn" aria-haspopup="dialog" aria-expanded="false" aria-controls="stp2"><span id="stt">Choose your stop</span></button><div class="stpop" id="stp2" role="dialog" aria-label="Choose your stop" tabindex="-1" hidden></div></div><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
 <div class="mcx" id="mcx" hidden><div class="mcl" id="mcl"></div><div class="mca"><button type="button" class="btn sm" id="mca">Add another destination</button><span id="mcn"></span></div></div>
 <div class="r" id="pr"><div class="pxp" id="pxp" role="dialog" aria-label="Choose passengers" tabindex="-1" hidden><div class="ct"><b>Who is travelling?</b><span>Up to 9 travellers</span></div><div class="prw"><div><b>Adults</b><span>12 years and over</span></div><div class="stp"><button type="button" data-s="a-1" aria-label="Remove one adult">&minus;</button><input id="pxa" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of adults" value="1"><button type="button" data-s="a+1" aria-label="Add one adult">+</button></div></div><div class="prw"><div><b>Children</b><span>2 to 11 years</span></div><div class="stp"><button type="button" data-s="k-1" aria-label="Remove one child">&minus;</button><input id="pxk" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of children" value="0"><button type="button" data-s="k+1" aria-label="Add one child">+</button></div></div><p class="pxn" id="pxn" aria-live="polite"></p><div class="cf2"><p id="pxs">1 adult</p><button type="button" class="btn sm" id="pxd">Done</button></div></div><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class and passengers</label><div class="two"><select id="cb"><option>First class</option><option>Business class</option></select><div class="dd"><button type="button" class="db pxb" id="pxb" aria-haspopup="dialog" aria-expanded="false" aria-controls="pxp" aria-label="Passengers: 1 adult"><span id="pxt">1 adult</span></button></div></div></div></div>
 <div class="r" id="dr"><div class="cal" id="cal" role="dialog" aria-label="Choose your travel dates" hidden></div><div class="c"><label id="ddl">Departing on</label><button type="button" class="dv e" id="ddb">Select a date</button></div><div class="c"><label id="rdl">Returning on</label><button type="button" class="dv e" id="rdb">Add a return (optional)</button></div></div>
 <p class="err" id="de" role="alert" hidden></p>
-<div class="act bk2"><button class="btn o" id="sr" type="button">See available routes</button><button class="btn go fare" type="submit"><span class="ft">Get my fare</span></button></div>
+<p class="sn" id="sn" role="status" hidden></p>
+<div class="act bk2"><button class="btn o" id="sr" type="button">See available routes</button><button class="btn go fare" type="submit"><span class="ft">Request a quote</span></button></div>
 </form>
 <div class="rr" id="rr" hidden aria-live="polite"></div>
 </div>
@@ -721,7 +739,7 @@ footer .mot{margin-top:16px;font-size:.74rem;letter-spacing:.2em;text-transform:
 <p id="ok" role="status" hidden></p>
 </form></div>
 <div class="cside"><h2>Contact information</h2>
-<p>Email: <a href="mailto:hello@flyfirstclass.com">hello@flyfirstclass.com</a><br>Phone: <a href="tel:+15550100199">+1 (555) 010-0199</a><br>Concierge desk: open 24 hours<br>Private consultations by appointment</p>
+<p>Email: <a href="mailto:sales@flyfirstclass.com">sales@flyfirstclass.com</a><br>US local: <a href="tel:+12122211860">212-221-1860</a><br>Concierge desk: open 24 hours<br>Private consultations by appointment</p>
 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Fly+First+Class+International" target="_blank" rel="noopener" aria-label="Open our location in Google Maps">Open in Google Maps</a>
 </div></div></div>
 
@@ -729,7 +747,7 @@ footer .mot{margin-top:16px;font-size:.74rem;letter-spacing:.2em;text-transform:
 
 <section class="pg" id="p-terms" hidden>
 <div class="ph"><div class="w"><h1>Terms of Service</h1><p>The terms that apply when you send us a quote request.</p></div></div>
-<div class="s"><div class="w tp2"><p>By sending your request you agree to these Terms of Service. Our <a href="#privacy">Privacy Policy</a> explains what this site collects and how it is used.</p><h2>1. Nature of the quote request</h2><p>Submitting a request is not an offer, does not oblige Fly First Class International to provide any service, and does not create a binding contract. You agree to provide accurate, complete and current information, including names as they appear on travel documents, routes, dates and passenger numbers. Any quote or estimate based on inaccurate or incomplete information is void.</p><h2>2. Validity and expiration</h2><p>A quote is valid for 14 days from the date it is issued, subject to fare availability, unless it states otherwise. We may amend, withdraw or cancel a quote at any time before you formally accept it.</p><h2>3. Pricing and scope adjustments</h2><p>A quote is an estimate based on the information you provide and current fares, not a fixed price. Fares are not guaranteed until tickets are issued. Any change to your itinerary, dates, cabin, passengers or other requirements after your request will result in a revised quote. We are not bound by obvious pricing errors, typographical mistakes or technical glitches on this website or in any quote, and may correct them before acceptance.</p><h2>4. Intellectual property and confidentiality</h2><p>Information and documents you submit with your request are licensed to us solely to review your request and prepare your quote. Our quote documentation, including fare construction and routing strategies, is confidential and must not be shared with competitors or other third parties without our written consent.</p><h2>5. Communication and marketing consent</h2><p>By submitting a request you agree that we may contact you by email, phone or message about your quote. You can opt out of these messages at any time. If you tick the newsletter box we will also send you marketing emails, and you can unsubscribe at any time using the link in each email. We handle personal information as described in our <a href="#privacy">Privacy Policy</a> and comply with applicable anti-spam and data protection laws, including CAN-SPAM and the GDPR.</p><p>Each request is given a reference ID. We keep the request, your name, email and phone number with that ID for up to six months from its last change so you can look it up, change it and reuse your details. Anyone who has the ID can view and change the request, so keep it private.</p><p><a href="#contact">Back to your quote request</a></p></div></div>
+<div class="s"><div class="w tp2"><p>By sending your request you agree to these Terms of Service. Our <a href="#privacy">Privacy Policy</a> explains what this site collects and how it is used.</p><h2>1. Nature of the quote request</h2><p>Submitting a request is not an offer, does not oblige Fly First Class International to provide any service, and does not create a binding contract. You agree to provide accurate, complete and current information, including names as they appear on travel documents, routes, dates and passenger numbers. Any quote or estimate based on inaccurate or incomplete information is void.</p><h2>2. Validity and expiration</h2><p>A quote is valid for 14 days from the date it is issued, subject to fare availability, unless it states otherwise. We may amend, withdraw or cancel a quote at any time before you formally accept it.</p><h2>3. Pricing and scope adjustments</h2><p>A quote is an estimate based on the information you provide and current fares, not a fixed price. Fares are not guaranteed until tickets are issued. Any change to your itinerary, dates, cabin, passengers or other requirements after your request will result in a revised quote. We are not bound by obvious pricing errors, typographical mistakes or technical glitches on this website or in any quote, and may correct them before acceptance.</p><h2>4. Intellectual property and confidentiality</h2><p>Information and documents you submit with your request are licensed to us solely to review your request and prepare your quote. Our quote documentation, including fare construction and routing strategies, is confidential and must not be shared with competitors or other third parties without our written consent.</p><h2>5. Communication and marketing consent</h2><p>By submitting a request you agree that we may contact you by email, phone or message about your quote. You can opt out of these messages at any time. If you tick the newsletter box we will also send you marketing emails, and you can unsubscribe at any time using the link in each email. We handle personal information as described in our <a href="#privacy">Privacy Policy</a> and comply with applicable anti-spam and data protection laws, including CAN-SPAM and the GDPR.</p><p>Each request is given a reference ID. We keep the request, your name, email and phone number with that ID for up to six months from its last change so you can look it up, change it and reuse your details. Anyone who has the ID can view and change the request, so keep it private.</p><h2>6. Fares, availability and partner airlines</h2><p><b>Partner airlines and itinerary details.</b> To avoid competing directly with the retail sales of our airline partners, we do not publish the name of every travel partner or every itinerary detail on this website.</p><p><b>Savings.</b> Advertised savings of between 30% and 77% are calculated against the full, unrestricted published fares of major airlines. The saving on any individual fare depends on that fare's rules and may be lower or higher.</p><p><b>Availability.</b> Fares are subject to seat availability in the relevant booking inventory. Seats are limited and may not be offered on every flight or date.</p><p><b>Baggage.</b> Some airlines charge additional fees for baggage.</p><p><b>Flexibility, exchanges and cancellations.</b> Our fares carry a flexible booking policy: exchanges and cancellations are currently free of charge with our partner airlines. If a trip is cancelled, and unless your quote states otherwise, the value of your ticket is held as travel credit with the issuing airline for the period set by that airline's policy, less any airline fees. If a trip is exchanged, a fare difference may apply.</p><p><b>Changes to fares and rules.</b> Fares and the rules that govern them may change without prior notice, and other restrictions may apply.</p><p><a href="#contact">Back to your quote request</a></p></div></div>
 </section>
 
 <section class="pg" id="p-privacy" hidden>
@@ -743,7 +761,7 @@ footer .mot{margin-top:16px;font-size:.74rem;letter-spacing:.2em;text-transform:
 <div class="w"><div class="fg">
 <div><a class="logo" href="#home" aria-label="Fly First Class International, over 20 years of service, home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M3 21 27 5 21 25 15 18Z" fill="#c9b27c"/><path class="lm2" d="M15 18 27 5 11 16Z"/></svg><span>Fly First Class<small>International</small></span><span class="yrs" aria-hidden="true">20+</span></a><p class="mot">Excellence in the skies</p><p class="fd">Serving travellers for 20+ years.</p></div>
 <div><h3>Quick links</h3><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#listings">Listings</a></li><li><a href="#contact">Contact</a></li><li><a href="#terms">Terms of Service</a></li><li><a href="#privacy">Privacy Policy</a></li><li><button type="button" class="ckset lnk">Cookie settings</button></li></ul></div>
-<div><h3>Contact</h3><ul><li><a href="mailto:hello@flyfirstclass.com">hello@flyfirstclass.com</a></li><li><a href="tel:+15550100199">+1 (555) 010-0199</a></li><li>Concierge desk: open 24 hours</li></ul></div>
+<div><h3>Contact</h3><ul><li><a href="mailto:sales@flyfirstclass.com">sales@flyfirstclass.com</a></li><li>US local: <a href="tel:+12122211860">212-221-1860</a></li><li>Concierge desk: open 24 hours</li></ul></div>
 </div>
 <div class="fb">
 <div class="pay" id="pay3" aria-label="Accepted cards"></div><p>&copy; 2026 Fly First Class International. All rights reserved.</p><p style="margin-top:8px"><strong>Accessibility statement:</strong> We aim to make this site usable for everyone, with keyboard navigation, clear contrast and screen reader support. If you have difficulty using any part of it, contact us and we will help.</p></div>
@@ -795,7 +813,7 @@ $("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").
 // Cloudflare Turnstile check. A visitor who looks automated just gets a plain message with an email address and phone number. Nobody is asked to
 // pick pictures or type distorted text.
 const GD={cfg:null,cfgP:null,tok:"",lv:0,exp:0,ev:0,t0:Date.now(),busy:null,badAt:0,badEv:-1};
-const GMSG="We couldn't confirm that this request came from a person, so it wasn't processed. Please email hello@flyfirstclass.com or call +1 (555) 010-0199 and we'll help right away.";
+const GMSG="We couldn't confirm that this request came from a person, so it wasn't processed. Please email sales@flyfirstclass.com or call 212-221-1860 (US local) and we'll help right away.";
 ["pointerdown","pointermove","keydown","touchstart","wheel","click"].forEach(v=>addEventListener(v,e=>{if(e.isTrusted&&GD.ev<60)GD.ev++},{passive:true,capture:true}));
 function gSig(){const n=navigator,u=n.userAgent||"";let h=0;
  try{if(/HeadlessChrome|PhantomJS/i.test(u))h+=2;const mob=/Mobi|Android|iPhone|iPad/.test(u);
@@ -1009,7 +1027,7 @@ document.addEventListener("click",e=>{if($("pxp").hidden)return;const p=e.compos
 document.addEventListener("keydown",e=>{if(e.key=="Escape"&&!$("pxp").hidden)pxClose(true)});
 pxDraw();
 const SB=["One way","Multi-city","Round-trip"],SBB=[...$("sb").querySelectorAll("button")];
-function ty(){const v=$("ty").value,mc=v=="Multi-city";$("mcx").hidden=!mc;$("fbl").textContent=mc?"Destination 1":"Going to";if(mc&&!MC.n())MC.put("");if(v=="One way"){DT.ret="";DT.ret2=""}sync();SBB.forEach((b,i)=>b.classList.toggle("on",SB[i]==v))}
+function ty(){const v=$("ty").value,mc=v=="Multi-city";window.spSync&&spSync();$("mcx").hidden=!mc;$("fbl").textContent=mc?"Destination 1":"Going to";if(mc&&!MC.n())MC.put("");if(v=="One way"){DT.ret="";DT.ret2=""}sync();SBB.forEach((b,i)=>b.classList.toggle("on",SB[i]==v))}
 SBB.forEach((b,i)=>b.onclick=()=>{$("ty").value=SB[i];ty()});$("ty").onchange=ty;
 let sseq=0,RRS=[];
 async function show(){
@@ -1021,14 +1039,46 @@ async function show(){
 // ---- Booking request and receipt ----
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
-function book(f,t,cab,via,stops){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
+function book(f,t,cab,via,stops,sp){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),...(sp?{sp}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});location.hash="#contact"}
 function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
  E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+(BK.stops?it("Stops",stS(BK.stops),"cs"):"")+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="#home" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
-$("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}setTimeout(()=>$("bk").scrollIntoView(),80)}};
+$("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){const sub=lastGet();if(!ACTREF&&!(sub&&sub.ref==BK.ref))$("t4").children[0].click();$("fa").value=BK.from;$("fb").value=BK.to;MC.clear();Object.assign(DT,{dep:BK.dep||"",dep2:BK.dep2||"",ret:BK.ret||"",ret2:BK.ret2||""});$("fx").checked=BK.flex;$("ty").value=BK.trip=="Return"?"Round-trip":BK.trip;if(BK.a)setPx(BK.a,BK.k||0);if([...$("cb").options].some(o=>o.value==BK.cabin))$("cb").value=BK.cabin;ty();if(BK.trip=="Multi-city"){MC.clear();(BK.via||[]).forEach(x=>MC.put(x));if(!MC.n())MC.put("")}SP=BK.sp?{o:cd(BK.from),d:cd(BK.to),n:BK.sp.n,via:BK.sp.via,pick:BK.sp.pick==null?null:BK.sp.pick}:null;$("sn").hidden=true;spRender();setTimeout(()=>$("bk").scrollIntoView(),80)}};
 $("fa").onchange=$("fb").onchange=show;$("sr").onclick=show;
 $("swp").onclick=()=>{const t=$("fa").value;$("fa").value=$("fb").value;$("fb").value=t;if(cd($("fa").value))show()};
-$("rr").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;const d=b.dataset.d,o=cd($("fa").value);if(cd($("fb").value)==d)book(nm(o),nm(d),null,[],(x=>x&&x.iata==d?stX(x.stops,x.via):null)(RRS[+b.dataset.o]));else{$("fb").value=nm(d);show()}};
+$("rr").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;const d=b.dataset.d,o=cd($("fa").value);
+ if(cd($("fb").value)==d){const st=(x=>x&&x.iata==d?stX(x.stops,x.via):null)(RRS[+b.dataset.o]);if(st&&st.n>=1)pickRoute(nm(o),nm(d),null,st);else book(nm(o),nm(d),null,[],st)}else{$("fb").value=nm(d);show()}};
+// ---- Stops on the booking page ----
+// A route with stops is not sent straight to the request page: the visitor comes back to the booking page to confirm the details, and when the route has several stop options
+// (for example "Doha (DOH)" or "Dubai (DXB)") a small picker under the swap arrows lets them choose the stop they want.
+var SP=null;   // {o,d,n,via:[stop lists],pick}: the stops of the route chosen for the pair now in the boxes
+const spOpts=()=>SP&&SP.n>=1&&SP.via.length>1&&$("ty").value!="Multi-city"?SP.via:[];
+const spStops=()=>{const o=cd($("fa").value),d=cd($("fb").value);return SP&&SP.o==o&&SP.d==d&&$("ty").value!="Multi-city"?stX(SP.n,SP.pick?[SP.pick]:SP.via):null};   // pick: null = not chosen yet, "" = no preference, otherwise the chosen stop
+function spOpen(v){$("stp2").hidden=!v;$("stn").setAttribute("aria-expanded",String(v));if(v){const o=$("stp2").querySelector('.sto[aria-checked="true"]')||$("stp2").querySelector(".sto");if(o)o.focus()}}
+function spNote(){const E=$("sn");if(!SP||$("ty").value=="Multi-city"){E.hidden=true;return}
+ const k=SP.n==1?"1 stop":SP.n+" stops",m=spOpts().length&&SP.pick===null;
+ E.textContent="Route selected: "+nm(SP.o)+" to "+nm(SP.d)+", "+(m?k+". Choose your stop under the arrows, check your details, then press Request a quote.":stpP(SP.n,SP.pick?[SP.pick]:SP.via)+". Check your details, then press Request a quote.");E.hidden=false}
+function spRender(){const w=$("stw"),o=spOpts();w.hidden=!o.length;
+ if(!SP||$("ty").value=="Multi-city")$("sn").hidden=true;else if(SP.note)spNote();
+ if(!o.length){$("stp2").hidden=true;$("stn").setAttribute("aria-expanded","false");return}
+ $("stt").textContent=SP.pick?"Via "+SP.pick:SP.pick===""?"Any of these stops":"Choose your stop";
+ const k=SP.n==1?"1 stop":SP.n+" stops";
+ $("stp2").innerHTML=`<h4>Choose your stop</h4><p>This route has ${o.length} options for its ${SP.n==1?"stop":"stops"}.</p><div role="radiogroup" aria-label="Stop options">`+o.map(v=>`<button type="button" class="sto" role="radio" aria-checked="${SP.pick===v}" data-v="${esc(v)}"><span>${esc(v)}<small>${k}</small></span></button>`).join("")+`<button type="button" class="sto" role="radio" aria-checked="${SP.pick===""}" data-v=""><span>No preference<small>Your advisor chooses from these options</small></span></button></div>`}
+function spSync(){if(SP&&(cd($("fa").value)!=SP.o||cd($("fb").value)!=SP.d)){SP=null;$("sn").hidden=true}spRender()}
+function pickRoute(f,t,cab,st){ACTREF=null;ACTKIND="";
+ if($("ty").value=="Multi-city"){$("ty").value="One way";ty()}
+ $("fa").value=f;$("fb").value=t;if(cab&&[...$("cb").options].some(o=>o.value==cab))$("cb").value=cab;
+ SP={o:cd(f),d:cd(t),n:st.n,via:st.via,pick:st.via.length==1?st.via[0]:null,note:1};
+ $("t4").children[0].click();spRender();$("de").hidden=true;
+ if(location.hash&&location.hash!="#home")location.hash="#home";
+ setTimeout(()=>{$("bk").scrollIntoView();if(spOpts().length)spOpen(true);else{const b=$("bf").querySelector(".fare");b&&b.focus({preventScroll:true})}},120)}
+$("stn").onclick=()=>spOpen($("stp2").hidden);
+$("stp2").onclick=e=>{const b=e.target.closest(".sto");if(!b||!SP)return;SP.pick=b.dataset.v;spRender();spOpen(false);$("stn").focus()};
+$("stp2").onkeydown=e=>{const L=[...$("stp2").querySelectorAll(".sto")],i=L.indexOf(document.activeElement);
+ if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();L[(i+(e.key=="ArrowDown"?1:-1)+L.length)%L.length].focus()}
+ else if(e.key=="Escape"){e.preventDefault();spOpen(false);$("stn").focus()}};
+document.addEventListener("click",e=>{if(!$("stp2").hidden&&!$("stw").contains(e.target))spOpen(false)});
+["fa","fb"].forEach(i=>["input","change"].forEach(v=>$(i).addEventListener(v,spSync)));$("swp").addEventListener("click",spSync);$("ty").addEventListener("change",spSync);
 $("bf").onsubmit=e=>{e.preventDefault();
  const bad=m=>{const E=$("de");E.textContent=m;E.hidden=false;$("dr").scrollIntoView({block:"nearest"})};
  const fa0=okPlace($("fa").value),fb0=okPlace($("fb").value);
@@ -1039,8 +1089,8 @@ $("bf").onsubmit=e=>{e.preventDefault();
   if(cs2.some(c=>!c)){xs.forEach((i,k)=>{if(!cs2[k])i.value=""});bad("Please choose each destination from the list, or remove the box.");return}
   if(!cs2.length){bad("Please add at least one more destination for a multi-city trip.");const r=MC.rows()[0];if(r)r.querySelector("input").focus();return}
   xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
- if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before getting your fare.":"Please select a date to leave and a date to return before getting your fare.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
- const o=cd($("fa").value),d=cd($("fb").value);book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via)};
+ if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before requesting your quote.":"Please select a date to leave and a date to return before requesting your quote.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
+ const o=cd($("fa").value),d=cd($("fb").value),sp=spStops();book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via,sp,sp?{n:SP.n,via:SP.via,pick:SP.pick}:null)};
 // ---- Listings (routes near the visitor) ----
 let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,ERRM="",BOTM="",LD="";
 let GEO;const geoOnce=()=>GEO||(GEO=geoOrigin());
@@ -1091,7 +1141,7 @@ $("lu").onclick=()=>initL(true);
 $("lf").onsubmit=e=>{e.preventDefault();const o=cd($("la").value),d=cd($("lb").value);if(!o){$("ls").textContent="Choose a departure city to search.";return}N[o]=N[o]||$("la").value.replace(/\s*\(.*\)/,"");LO={code:o,city:N[o]};LG=true;LV="all";[...$("ch").children].forEach((b,i)=>b.classList.toggle("on",i==0));loadL(d)};
 $("ch").onclick=e=>{const b=e.target.closest("button");if(!b||!LO)return;LV=b.dataset.f;[...$("ch").children].forEach(x=>x.classList.toggle("on",x==b));renderL()};
 $("sch").onclick=e=>{const b=e.target.closest("button[data-s]");if(!b||!LO)return;const f=b.dataset.s;LS=f;renderL();const nb=[...$("sch").querySelectorAll("button")].find(x=>x.dataset.s==f);if(nb)nb.focus()};
-$("lg").onclick=e=>{const b=e.target.closest("button[data-to]");if(b)book(b.dataset.from,b.dataset.to,b.dataset.cab,[],stFD(b.dataset))};
+$("lg").onclick=e=>{const b=e.target.closest("button[data-to]");if(!b)return;const st=stFD(b.dataset);if(st&&st.n>=1)pickRoute(b.dataset.from,b.dataset.to,b.dataset.cab,st);else book(b.dataset.from,b.dataset.to,b.dataset.cab,[],st)};
 // ---- Phone: validation and ITU country selector ----
 const LP=window.libphonenumber||null,FB={US:1,CA:1,GB:44,AU:61,NZ:64,SG:65,HK:852,AE:971,JP:81,FR:33,DE:49,IN:91,CN:86,CH:41,IT:39,ES:34,QA:974,SA:966,ZA:27,BR:55,MX:52};
 const cc=c=>LP?LP.getCountryCallingCode(c):FB[c],ISO=LP?LP.getCountries():Object.keys(FB),RN=new Intl.DisplayNames(["en"],{type:"region"}),CN=c=>{try{return RN.of(c)}catch(e){return c}};
@@ -1136,7 +1186,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
   if(res.bot)$("ok").textContent=res.error||GMSG;
   else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+cpl(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+cpl(ref)+"</b>. Click it to copy. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),...(BK.stops?["Stops: "+stS(BK.stops)]:[]),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
-   $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to hello@flyfirstclass.com</a> and quote that ID."}
+   $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:sales@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to sales@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
  }finally{sb.disabled=false;sb.textContent=lab}};
 // ---- Cookie and privacy choices: nothing optional is collected unless the visitor accepts ----
@@ -1201,7 +1251,7 @@ const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString
 function sumCard(r){const t=r.trip||{},c=r.contact||{},it=(k,v,c)=>v?`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";
  return`<div class="tc"><div class="tt"><span>Your request</span><span>Ref ${cpl(r.ref)}</span></div><h3>${[t.from,t.to,...(t.via||[])].filter(Boolean).map(esc).join(' <span class="ar">\u2192</span> ')||"Trip details to be confirmed"}</h3><dl class="td">`+it("Cabin",t.cabin)+it("Trip type",t.type)+it("Stops",stS(t.stops),"cs")+it("Passengers",t.adults?paxText(t.adults,t.children||0):"")+it(t.flex&&t.dep2?"Departure window":"Departing",t.dep?drl(t.dep,t.dep2,1):"To be confirmed")+((t.ret||t.type=="Round-trip")?it(t.flex&&t.ret2?"Return window":"Returning",t.ret?drl(t.ret,t.ret2,1):"To be confirmed"):"")+it("Name",whoName(c))+it("Phone",phShow(c.phone),"cp")+it("Email",c.email,"ce")+`</dl><div class="tf"><span>Sent ${dlong(r.created)}</span><span>Kept until ${dlong(r.exp)}</span></div></div>`}
 function renderAll(note,mail){advRefresh();for(const k of[1,2]){const box=$("lkr"+k),inp=$("lk"+k);if(!box)continue;if(!REQ){box.innerHTML="";continue}inp.value=REQ.ref;
-  box.innerHTML=sumCard(REQ)+(k==1?`${note?`<p class="note ok2 nt" role="status">${esc(note)}${mail?` <a href="${esc(mail)}">Email it to hello@flyfirstclass.com</a>`:""}</p>`:""}<div class="lkx"><button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button></div>`:"")}}
+  box.innerHTML=sumCard(REQ)+(k==1?`${note?`<p class="note ok2 nt" role="status">${esc(note)}${mail?` <a href="${esc(mail)}">Email it to sales@flyfirstclass.com</a>`:""}</p>`:""}<div class="lkx"><button class="btn" id="edb" type="button" aria-expanded="false">Modify request</button></div>`:"")}}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
  if(!REFRE.test(ref)){E.textContent="Enter your reference ID, for example FFC-AB12CD34.";E.hidden=false;REQ=null;renderAll();return"none"}
  bt.disabled=true;const r=await RQ.get(ref);bt.disabled=false;
@@ -1263,7 +1313,7 @@ async function saveEd(e,send){e.preventDefault();const E=$("ede"),err=m=>{E.text
  const d=new FormData();d.set("fn",c.first||"");d.set("mn",c.middle||"");d.set("ln",c.last||"");d.set("e",c.email||"");d.set("m",msg);
  const res=await sendQuote("chg",r.ref,d,c.phone||"",{trip:r.trip,ft:null});
  if(res.ok){delete UNSENT[r.ref];renderAll("Saved and sent. Your advisor has your changes and will reply to "+c.email+".")}
- else{const mail="mailto:hello@flyfirstclass.com?subject="+encodeURIComponent("Change request "+r.ref)+"&body="+encodeURIComponent(msg+"\n\nName: "+whoName(c)+"\nEmail: "+(c.email||"")+"\nPhone: "+(c.phone||""));
+ else{const mail="mailto:sales@flyfirstclass.com?subject="+encodeURIComponent("Change request "+r.ref)+"&body="+encodeURIComponent(msg+"\n\nName: "+whoName(c)+"\nEmail: "+(c.email||"")+"\nPhone: "+(c.phone||""));
   renderAll(res.bot?res.error:"Your changes are saved, but we could not send them to your advisor ("+String(res.error||"").replace(/[.\s]+$/,"")+").",res.bot?"":mail)}}
 // ---- No text cursor, selection, copy or paste outside form fields ----
 const inF=t=>{t=t&&(t.nodeType==1?t:t.parentElement);return !!(t&&t.closest("input,textarea"))};

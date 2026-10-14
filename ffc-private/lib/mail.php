@@ -3,12 +3,11 @@
 // the message goes through that SMTP server (for example Gmail with an app password, or a cPanel mailbox).
 if (!defined('FFC_PRIVATE')) { exit; }
 
-const MAIL_INTENDED = 'hello@flyfirstclass.com';        // requests are meant for this address ...
-const MAIL_REROUTE = 'BigLeung210@gmail.com';           // ... and go here until MAIL_TO is set in .env
+const MAIL_INTENDED = 'sales@flyfirstclass.com';        // quote requests go to this address unless MAIL_TO is set in .env
 function mail_cfg() {
     $host = env('SMTP_HOST'); $port = (int)env('SMTP_PORT', 465) ?: 465;
     $from = trim(env('MAIL_FROM') ?: (env('SMTP_USER') ?: MAIL_INTENDED));
-    $cfg = ['to' => trim(env('MAIL_TO', MAIL_REROUTE)), 'from' => $from, 'smtp' => null];
+    $cfg = ['to' => trim(env('MAIL_TO', MAIL_INTENDED)), 'from' => $from, 'smtp' => null];
     if ($host) $cfg['smtp'] = ['host' => $host, 'port' => $port, 'user' => env('SMTP_USER'), 'pass' => env('SMTP_PASS'), 'secure' => env('SMTP_SECURE') ?: ($port === 465 ? 'ssl' : ($port === 587 ? 'starttls' : 'none')), 'verify' => env('SMTP_VERIFY_TLS') !== 'off'];
     return $cfg;
 }

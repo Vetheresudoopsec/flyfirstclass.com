@@ -15,7 +15,7 @@
 //   GUARD_SECRET=...        signing key (made automatically and kept in the cache folder when not set)
 if (!defined('FFC_PRIVATE')) { exit; }
 
-const GUARD_MSG = "We couldn't confirm that this request came from a person, so it wasn't processed. Please email hello@flyfirstclass.com or call +1 (555) 010-0199 and we'll help right away.";
+const GUARD_MSG = "We couldn't confirm that this request came from a person, so it wasn't processed. Please email sales@flyfirstclass.com or call 212-221-1860 (US local) and we'll help right away.";
 
 function guard_on() { return strtolower(trim(env('BOT_GUARD', 'on'))) !== 'off'; }
 function guard_ttl() { $t = (int)env('GUARD_TTL', 1800); return $t >= 5 && $t <= 86400 ? $t : 1800; }
