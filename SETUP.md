@@ -43,7 +43,7 @@ Deploying again later only replaces the code. It never touches `.env` or `cache/
 3. Right-click `.env` > *Change Permissions* > **600**.
 4. Optional but recommended: carry over what the Node server already collected. On your computer zip the old `cache` folder, upload the zip into `ffc-private` and *Extract* it. The PHP version reads the same files, so every documented fare and photo is kept.
 
-## 4. Turn on the scheduled job (daily refresh, photos, clean-up)
+## 4. Turn on the scheduled job (daily refresh, photos, newsletter retries, clean-up)
 
 cPanel > *Cron Jobs* > *Add New Cron Job* > *Common Settings*: **Once Per Fifteen Minutes**, command:
 
@@ -114,3 +114,41 @@ The site remembers the last 20 send attempts. Open `/api/mail-check?key=YOUR_KEY
   3. cPanel > *Email* > **Email Deliverability**: if the domain shows a problem with SPF or DKIM, press **Repair**. If your domain's DNS is managed somewhere else (for example Cloudflare), add the records it lists there.
   4. The mailbox named in `MAIL_FROM` (default `quote@flyfirstclass.com`) must exist in cPanel > *Email Accounts*.
 - **Most reliable fix when the inbox is Gmail:** send through Gmail itself. In your Google account turn on 2-step verification, create an *App password*, then add to `.env`: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=you@gmail.com`, `SMTP_PASS=` (the app password, never share it) and `MAIL_FROM=you@gmail.com`. Run the mail-check link again.
+
+## 11. Newsletter sign-ups and Mailchimp
+
+The site has three places where a visitor can join the newsletter: a section on the home page, a small prompt that appears after about 90 seconds on the site, on whichever page the visitor is on, and then stays in its corner as they move between pages until they close it or subscribe (closing it keeps it away for 90 days), and the tick-box on the quote form. Everyone who agrees is passed to Mailchimp. Until you do the steps below, sign-ups are simply held safely on the server and nothing is lost.
+
+**Set it up (about 5 minutes):**
+
+1. In Mailchimp > *Audience* > **Settings** > *Audience name and defaults*, copy the **Audience ID** (letters and numbers).
+2. In Mailchimp > your profile > **Extras** > *API keys* > **Create A Key**. Copy the key. It ends with a dash and a code such as `-us21`: that code is your data centre and is used automatically.
+3. Add two lines to `ffc-private/.env` (File Manager > right-click `.env` > Edit):
+
+```
+MAILCHIMP_API_KEY=the_key_ending_in_-us21
+MAILCHIMP_LIST_ID=your_audience_id
+```
+
+4. Open `/api/status?key=YOUR_KEY` and look at `newsletter`: `mailchimp` should say `on`. Subscribe once from the home page with your own address and the same status page should show it as `sentToMailchimp` (the cron job from step 4 does the retries).
+
+**How it behaves**
+
+- Each new address is saved on the server, then sent to Mailchimp straight away. If Mailchimp is slow, down or the key is wrong, the address stays *waiting* and the 15-minute cron job tries again with longer and longer pauses (5 minutes, 30 minutes, 2 hours, 6 hours, 12 hours, then daily). After 12 failed tries it is marked *gave up* but kept so you can add it by hand.
+- **Double opt-in is on.** Mailchimp emails each new person a confirmation link and they join the list only after clicking it. This is the safest setting for consent and for protecting your sending reputation. To subscribe people immediately instead, add `MAILCHIMP_DOUBLE_OPTIN=off` (then also edit clause 2.3 of the Privacy Policy, which describes the confirmation email).
+- Once Mailchimp has an address, the address and name are wiped from the server. Only a small stamp (page used, time) stays for 90 days so the counts make sense. Addresses Mailchimp has not accepted are held for at most six months.
+- People get the tags `Website newsletter` and `Website newsletter - home` (or `about`, `services`, `listings`, `contact`, `privacy`, `terms`, `thanks`, `quote`) so you can see where they joined. Change the first tag with `MAILCHIMP_TAG=...`, or turn tags off with `MAILCHIMP_TAG=none`.
+- Someone who unsubscribed in Mailchimp is never re-added by the website. If they want back on, they use the sign-up link Mailchimp provides. Someone who never clicks the confirmation link stays *pending* in Mailchimp; the website cannot resend it, so look for a resend option on that contact in Mailchimp.
+- If the quote-form tick-box is ticked, the address is added the same way. The tick-box also still shows as `Newsletter: Yes` in the quote email.
+
+**Checking and fixing**
+
+| Address | What it tells you |
+| --- | --- |
+| `/api/status?key=YOUR_KEY` > `newsletter` | `waiting`, `sentToMailchimp`, `refusedByMailchimp` (for example a contact Mailchimp had permanently deleted), `gaveUp`, the oldest waiting sign-up and the last problem in plain words |
+| `/api/newsletter-export?key=YOUR_KEY` | A CSV (Mailchimp's import format) of every address Mailchimp does not have yet. Import it in Mailchimp > *Audience* > *Import contacts* if you ever need to add them by hand |
+
+- *"Mailchimp rejected the API key"*: copy the key again (the whole thing including the `-us21` part) into `MAILCHIMP_API_KEY`.
+- *"Mailchimp could not find the audience"*: `MAILCHIMP_LIST_ID` must be the Audience ID, not the audience name.
+- Mailchimp requires your physical address and an unsubscribe link in every campaign; both are added in Mailchimp's own campaign builder, not on this site.
+- `MAILCHIMP_BASE` exists only for testing with a stand-in server. Leave it out.

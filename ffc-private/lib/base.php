@@ -146,7 +146,7 @@ function log_tail($n = 25) {
 }
 
 // ---------- HTTP: many requests at once (curl_multi), each with an optional earliest start time ----------
-// job: url, method (GET), body, headers [], timeout (25), at (earliest start, microtime), id (optional). Returns id => result.
+// job: url, method (GET, POST, PUT or PATCH), body, headers [], timeout (25), at (earliest start, microtime), id (optional). Returns id => result.
 // result: status (0 = no reply), headers (lower-case names), body, error (string or null)
 function http_multi(array $jobs) {
     $mh = curl_multi_init();
@@ -161,6 +161,7 @@ function http_multi(array $jobs) {
                 CURLOPT_HTTPHEADER => $j['headers'] ?? [], CURLOPT_USERAGENT => 'FlyFirstClass/' . BUILD,
                 CURLOPT_HEADERFUNCTION => function ($c, $line) use (&$hdrs, $k) { $p = strpos($line, ':'); if ($p > 0) $hdrs[$k][strtolower(trim(substr($line, 0, $p)))] = trim(substr($line, $p + 1)); return strlen($line); }];
             if (($j['method'] ?? 'GET') === 'POST') { $o[CURLOPT_POST] = true; $o[CURLOPT_POSTFIELDS] = $j['body'] ?? ''; }
+            elseif (in_array($j['method'] ?? 'GET', ['PUT', 'PATCH'], true)) { $o[CURLOPT_CUSTOMREQUEST] = $j['method']; $o[CURLOPT_POSTFIELDS] = $j['body'] ?? ''; }   // Mailchimp member updates
             curl_setopt_array($ch, $o);
             curl_multi_add_handle($mh, $ch);
             $active[spl_object_id($ch)] = [$k];
@@ -200,6 +201,19 @@ function json_out($code, $b) {
     header('Content-Type: application/json');
     header('Cache-Control: no-store');
     echo json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
+    exit;
+}
+// Sends the reply first and only then runs $after (the slower Mailchimp call), so the visitor never waits for it.
+function json_out_then($code, $b, $after) {
+    ignore_user_abort(true);
+    $s = json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
+    http_response_code($code);
+    header('Content-Type: application/json'); header('Cache-Control: no-store'); header('Content-Length: ' . strlen($s)); header('Connection: close');
+    echo $s;
+    if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+    elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();        // LiteSpeed (used by many HostGator plans)
+    else { while (ob_get_level() > 0) @ob_end_flush(); @flush(); }
+    try { $after(); } catch (Throwable $e) { logm('after-reply task: ' . $e->getMessage()); }
     exit;
 }
 function client_ip() {      // the connecting address; proxy headers are believed only when TRUST_PROXY=on (for example behind Cloudflare)
