@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-14a">
+<meta name="build" content="2026-10-14b">
 <title>Fly First Class International | Up to 70% Off First & Business Class Fares</title>
 <meta name="description" content="20+ years of excellence in the skies. Save up to 70% off market airfares on first class airline tickets and business class flights. Request a private quote.">
 <meta property="og:type" content="website">
@@ -104,6 +104,7 @@ details p{margin-top:10px;max-width:70ch}
 .f input,.f textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
 .f .btn{margin-top:22px}
 #ok{margin-top:18px;color:var(--ink);background:var(--soft);padding:14px 18px;border-radius:6px}
+#ok.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;background:none}
 .map{display:grid;place-items:center;height:200px;border-radius:8px;margin:24px 0;text-decoration:none;font-weight:600;color:var(--ink);background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/36px 36px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/36px 36px,var(--soft)}
 .soc{display:flex;flex-wrap:wrap;gap:10px}
 .soc a{padding:8px 16px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:500}
@@ -1176,15 +1177,15 @@ $("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=
 // The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
 $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
- if(await gToken(1)===null){$("ok").textContent=GMSG;$("ok").hidden=false;return}
+ if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
- sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;
+ sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
  try{
   let ref=ACTREF||"";
   if(!ref){const rec=await RQ.create({hp:d.get("website")||"",ft:window.__ft0?Date.now()-window.__ft0:null,ref:BK?BK.ref:"",trip:BK?tripOf(BK):{},contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl")});ref=rec.ref;REQ=rec;lastSet(rec);if(BK&&BK.ref!=ref)setBK({...BK,ref});renderAll()}
   const res=await sendQuote(ACTREF?(ACTKIND||"adv"):"new",ref,d,ph);
   if(res.bot)$("ok").textContent=res.error||GMSG;
-  else if(res.ok)$("ok").innerHTML=(ACTREF?"Thank you. Your message about <b>"+cpl(ref)+"</b> has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is <b>"+cpl(ref)+"</b>. Click it to copy. Keep it: paste it into Manage booking or Check in on the home page to look up or change your request (kept for up to 6 months).")+" We will reply to "+esc(d.get("e"))+".";
+  else if(res.ok){$("ok").textContent=(ACTREF?"Thank you. Your message about "+ref+" has been sent to our team.":"Thank you. Your request has been sent to our team. Your reference ID is "+ref+".")+" We will reply to "+d.get("e")+".";$("ok").classList.add("sr")}   // not shown on screen: a thank-you page will replace it; kept as a status line for screen readers
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),...(BK.stops?["Stops: "+stS(BK.stops)]:[]),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
    $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:sales@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to sales@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
