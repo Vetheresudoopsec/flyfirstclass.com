@@ -161,3 +161,7 @@ Each page has its own address: `/about/`, `/services/`, `/routes/` (the Listings
 - `robots.txt` lets search engines in and points them at `sitemap.xml`. On any address that starts with `test.`, `.htaccess` serves `robots-test.txt` instead (keep everything out) and adds a `noindex` header, so the test site never appears in Google. This needs no change when you go live: the same files work on both.
 - `.htaccess` also sends the old WordPress addresses (`/fly-first-class-reviews/`, `/fly-first-class-offers/`, the city pages and so on) permanently (301) to the matching new page, so existing Google results and links keep working. Send me any other old address you want mapped.
 - After going live: add `https://flyfirstclass.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+
+## 13. Welcome email for new subscribers
+
+`email/welcome-email.html` is the "Welcome aboard" email (subject line and preview text are in the comment at the top of the file). It is not part of the website and is not deployed. To use it, paste it into a Mailchimp welcome automation (Automations > Welcome new subscribers > Code your own). It uses Mailchimp's own unsubscribe and postal-address tags, and Mailchimp needs your postal address saved in Audience settings. To send it instead of Mailchimp's confirmation email, set `MAILCHIMP_DOUBLE_OPTIN=off` in `.env` and update clause 2.3 of the Privacy Policy.
