@@ -1,5 +1,6 @@
 # Fly First Class International: send /api/... to api.php, keep private files private.
 Options -Indexes
+ErrorDocument 404 /404.html
 DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
@@ -8,6 +9,10 @@ RewriteEngine On
 # The test site is kept out of search engines; the live site gets the real robots.txt
 RewriteCond %{HTTP_HOST} ^test\. [NC]
 RewriteRule ^robots\.txt$ robots-test.txt [L]
+
+# /index.html and /about/index.html are the same page as / and /about/: send them to the short address
+RewriteCond %{THE_REQUEST} \s/(.*/)?index\.html[\s?]
+RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
 
 # Old WordPress addresses: permanent redirects to the matching new page (keeps search ranking)
 RewriteRule ^fly-first-class-reviews/?$ /about/ [R=301,L]
