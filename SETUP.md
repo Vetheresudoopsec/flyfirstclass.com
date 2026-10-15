@@ -167,3 +167,17 @@ Each page has its own address: `/about/`, `/services/`, `/routes/` (the Listings
 ## 13. Welcome email for new subscribers
 
 `email/welcome-email.html` is the "Welcome aboard" email (subject line and preview text are in the comment at the top of the file). It is not part of the website and is not deployed. To use it, paste it into a Mailchimp welcome automation (Automations > Welcome new subscribers > Code your own). It uses Mailchimp's own unsubscribe and postal-address tags, and Mailchimp needs your postal address saved in Audience settings (use `100 Church St, New York, NY 10007-2601`). To send it instead of Mailchimp's confirmation email, set `MAILCHIMP_DOUBLE_OPTIN=off` in `.env` (clause 2.3 of the Privacy Policy already describes the welcome email).
+
+## 14. Quote email for clients
+
+`email/quote-email.html` is the one-to-one quote email advisors send from Gmail or Apple Mail. It is not part of the website and is not deployed. It is built around screenshots: up to three options at different price points, each with a box where the advisor pastes the screenshot of that option, followed by the booking prompt (reply with first name, last name, date of birth and phone, plus the preferred option, and an invoice follows).
+
+To use it:
+1. Open the file in Chrome or Safari, select everything (Ctrl+A or Cmd+A) and copy.
+2. Paste into a new message. The layout, colours and links come across.
+3. In the message, replace each `[bracketed]` item by typing over it. The heading reads "Good morning, [Client first name]." (the advisor changes "morning" to suit the time of day). For each option, click into the dashed box, delete the bracketed text and paste the screenshot (in Gmail choose *Best fit* for the image size). Delete any option you do not need. The grey box under the options is for extra details about the flight plan; delete it if there are none.
+4. Gmail can keep it as a template (turn on *Settings > See all settings > Advanced > Templates*, then *three-dot menu > Templates > Save draft as template*). In Apple Mail, keep a blank copy in Drafts and copy from it for each quote.
+
+`email/ADVISOR-GUIDE.md` is the one-page guide for advisors (setup in Gmail, Apple Mail and Outlook, the steps for each quote, a checklist). The same text is also kept as a document in Claude Docs for sharing. The template loads its logo from `https://flyfirstclass.com/email-logo.png`, which only exists once the new site is live. The gold "Reply with my details" button opens a message to `quote@flyfirstclass.com`; a client who just presses Reply writes to the advisor, so both inboxes need watching.
+
+The email also has a "Good to know" section (seat availability, last-minute tickets) and asks the client to read the Terms of Service before booking. The ticket rules it summarises are clause 7 of the Terms (`/terms/`): tickets valid for one year, rebooking within the same continent, non-refundable, no name changes, other airline restrictions. If those rules change, change clause 7, clause 6.5 and the "Can I change or cancel a booking?" answer in `public_html/index.html` (it appears twice), and the "In brief" sentence in the email, then run `python3 tools/build_pages.py`.
