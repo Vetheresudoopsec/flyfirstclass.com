@@ -4,6 +4,17 @@ DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
+
+# The test site is kept out of search engines; the live site gets the real robots.txt
+RewriteCond %{HTTP_HOST} ^test\. [NC]
+RewriteRule ^robots\.txt$ robots-test.txt [L]
+
+# Old WordPress addresses: permanent redirects to the matching new page (keeps search ranking)
+RewriteRule ^fly-first-class-reviews/?$ /about/ [R=301,L]
+RewriteRule ^(fly-first-class-booking-help|fly-first-class-business-class-gallery)/?$ /services/ [R=301,L]
+RewriteRule ^(fly-first-class-offers|fly-first-class-ticket-deals)/?$ /routes/ [R=301,L]
+RewriteRule ^blog(/.*)?$ / [R=301,L]
+RewriteRule ^(lufthansa-fly-first-class-frankfurt|fly-first-class-sydney|fly-first-class-discount-business-class-bangkok|fly-first-class-new-york|etihad-business-class-abu-dhabi|fly-first-class-singapore|fly-first-class-tokyo|cathay-pacific-fly-first-class-hong-kong|fly-first-class-london)/?$ /routes/ [R=301,L]
 RewriteRule ^api/requests/([A-Za-z0-9-]+)/?$ api.php?route=requests&_ref=$1 [QSA,L]
 RewriteRule ^api/([A-Za-z-]+)/?$ api.php?route=$1 [QSA,L]
 </IfModule>
@@ -33,4 +44,24 @@ RewriteRule ^api/([A-Za-z-]+)/?$ api.php?route=$1 [QSA,L]
   <FilesMatch "^(favicon\.(svg|ico)|apple-touch-icon\.png)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
+</IfModule>
+
+# Keep the test site out of search results
+<IfModule mod_setenvif.c>
+  SetEnvIfNoCase Host ^test\. FFC_TEST
+</IfModule>
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow" env=FFC_TEST
+</IfModule>
+
+# Smaller, faster pages
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json application/xml image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
