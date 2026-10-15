@@ -152,3 +152,12 @@ MAILCHIMP_LIST_ID=your_audience_id
 - *"Mailchimp could not find the audience"*: `MAILCHIMP_LIST_ID` must be the Audience ID, not the audience name.
 - Mailchimp requires your physical address and an unsubscribe link in every campaign; both are added in Mailchimp's own campaign builder, not on this site.
 - `MAILCHIMP_BASE` exists only for testing with a stand-in server. Leave it out.
+
+## 12. Page addresses, search engines and the test site
+
+Each page has its own address: `/about/`, `/services/`, `/routes/` (the Listings page), `/contact/`, `/terms/` and `/privacy-policy/`. Older links such as `/#about` still work and are tidied into the clean address.
+
+- **`public_html/index.html` is the source of the whole site. After you change it, run `python3 tools/build_pages.py`** (from the repository folder). It rewrites the six page folders (`about/`, `services/` and so on), `sitemap.xml`, `robots.txt` and `robots-test.txt`, so each page reaches search engines with its own title, description and canonical address. Commit those generated files with the change. (`og-image.png`, the picture shown when the site is shared, is made once; delete it and run the script to make it again.)
+- `robots.txt` lets search engines in and points them at `sitemap.xml`. On any address that starts with `test.`, `.htaccess` serves `robots-test.txt` instead (keep everything out) and adds a `noindex` header, so the test site never appears in Google. This needs no change when you go live: the same files work on both.
+- `.htaccess` also sends the old WordPress addresses (`/fly-first-class-reviews/`, `/fly-first-class-offers/`, the city pages and so on) permanently (301) to the matching new page, so existing Google results and links keep working. Send me any other old address you want mapped.
+- After going live: add `https://flyfirstclass.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
