@@ -6,11 +6,16 @@ if (!defined('FFC_PRIVATE')) { exit; }
 
 function cron_run($budget) {         // used by cron.php and /api/cron
     $out = [];
-    if (!claim('cron', 'cron', max(300, (int)$budget + 120))) return ['skipped' => 'another run is still working'];
+    // Newsletter sign-ups go first, under their own short claim, so a long route refresh or photo run never holds them up
+    // (and a manual /api/cron call can send a waiting address even while the main job is busy).
+    if (claim('newsletter-run', 'cron', 120)) {
+        try { $out['newsletter'] = nl_run(); } catch (Throwable $e) { $out['newsletter'] = 'error: ' . $e->getMessage(); logm('cron newsletter: ' . $e->getMessage()); }
+        finally { unclaim('newsletter-run'); }
+    } else { $out['newsletter'] = 'skipped: another newsletter run is working'; }
+    if (!claim('cron', 'cron', max(300, (int)$budget + 120))) { $out['skipped'] = 'another run is still working'; return $out; }
     try {
         $t0 = microtime(true);
         $out['purged'] = qpurge();
-        try { $out['newsletter'] = nl_run(); } catch (Throwable $e) { $out['newsletter'] = 'error: ' . $e->getMessage(); logm('cron newsletter: ' . $e->getMessage()); }
         try { air(); } catch (Throwable $e) { $out['airports'] = $e->getMessage(); }
         try { $out['refresh'] = refresh_step($budget); } catch (Throwable $e) { $out['refresh'] = 'error: ' . $e->getMessage(); logm('cron refresh: ' . $e->getMessage()); }
         $left = $budget - (microtime(true) - $t0);
