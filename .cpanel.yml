@@ -5,7 +5,7 @@
 # on the server are never in this repository, so deploying never touches them.
 deployment:
   tasks:
-    - export HOMEDIR=/home/discoets
+    - export HOMEDIR=/home/flyer007
     - /bin/mkdir -p $HOMEDIR/public_html $HOMEDIR/ffc-private
     - /bin/cp -R public_html/. $HOMEDIR/public_html/
     - /bin/cp -R ffc-private/. $HOMEDIR/ffc-private/
