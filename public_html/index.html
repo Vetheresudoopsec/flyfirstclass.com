@@ -1420,6 +1420,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
   const res=await sendQuote(ACTREF?(ACTKIND||"adv"):"new",ref,d,ph);
   if(res.bot)$("ok").textContent=res.error||GMSG;
   else if(res.ok){$("ok").textContent=(act?"Thank you. Your message about "+ref+" has been sent to our team.":trip?"Thank you. Your request has been sent to our team. Your reference ID is "+ref+".":"Thank you. Your message has been sent to our team.")+" We will reply to "+d.get("e")+".";$("ok").classList.add("sr");   // not shown on screen: the thank-you page replaces it; kept as a status line for screen readers
+   if(trip)trkLead(BK);   // analytics: quote request with a route
    if(!act&&d.get("nl")&&window.nlQuoteDone)nlQuoteDone();
    tyShow({k:trip?"thanks":"thanksm",act,first:(d.get("fn")||"").trim(),email:(d.get("e")||"").trim(),ref,trip:trip?((REQ&&REQ.ref==ref&&REQ.trip&&REQ.trip.from)?REQ.trip:tripOf(BK)):null})}
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),...(BK.stops?["Stops: "+stS(BK.stops)]:[]),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
@@ -1535,6 +1536,9 @@ function collectEnv(){const n=navigator,u=n.userAgent||"",ud=n.userAgentData,s=w
  const os=/Windows NT/.test(u)?"Windows":/Android ([\d.]+)/.test(u)?"Android "+RegExp.$1:/iPhone|iPad|iPod/.test(u)?"iOS":/Mac OS X/.test(u)?"macOS":/CrOS/.test(u)?"ChromeOS":/Linux/.test(u)?"Linux":"Unknown";
  let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
  return{browser:br,os:(ud&&ud.platform)||os,ua:u.slice(0,300),lang:(n.languages||[n.language]).filter(Boolean).join(", "),platform:n.platform||"",screen:s.width+"x"+s.height,viewport:innerWidth+"x"+innerHeight,dpr:String(devicePixelRatio||1),colors:String(s.colorDepth||""),cores:String(n.hardwareConcurrency||""),memory:n.deviceMemory?n.deviceMemory+" GB":"",touch:String(n.maxTouchPoints||0),tz,mobile:String(!!(ud&&ud.mobile)||/Mobi|Android|iPhone/.test(u))}}
+// ---- Analytics: one dataLayer event for Google Tag Manager each time a quote request with a route is sent. Route and trip details only; never a name, email, phone number or reference ID. ----
+function trkLead(b){try{if(!b||!b.from||!b.to)return;const t=x=>String(x==null?"":x).slice(0,100),a=+b.a||0,k=+b.k||0;
+ (window.dataLayer=window.dataLayer||[]).push({event:"form_submission_lead",form_name:"quote_request",route:t(b.from)+" > "+t(b.to),origin:t(b.from),destination:t(b.to),trip_type:t(b.trip),cabin:t(b.cabin),passengers:a+k,adults:a,children:k,consent_accepted:CONSENT===true})}catch(e){}}
 async function sendQuote(kind,ref,d,ph,x){x=x||{};const consent=CONSENT===true;let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
  const r=await srv("POST","/api/send",{hp:d.get("website")||"",ft:"ft" in x?x.ft:(window.__ft0?Date.now()-window.__ft0:null),ref,kind,trip:x.trip||(BK?tripOf(BK):(REQ&&REQ.ref==ref?REQ.trip:{})),contact:{first:d.get("fn"),middle:d.get("mn"),last:d.get("ln"),email:d.get("e"),phone:ph},message:d.get("m")||"",newsletter:!!d.get("nl"),consent,env:consent?collectEnv():null,localTime:new Date().toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}),tz});
  if(r&&r.s==403&&r.d&&r.d.bot)return{ok:false,bot:true,error:r.d.error};return r&&r.s==200&&r.d.sent?{ok:true}:{ok:false,error:(r&&r.d&&r.d.error)||"our mail server could not be reached"}}
