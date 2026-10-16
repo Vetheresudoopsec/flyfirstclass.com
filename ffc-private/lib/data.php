@@ -168,5 +168,5 @@ function geo() {
     $g = $r['status'] >= 200 && $r['status'] < 300 ? json_decode($r['body'], true) : [];
     if (!is_array($g) || empty($g['success'])) throw fail('IP lookup failed (' . $r['status'] . ')', 502);
     $a = nearest((float)$g['latitude'], (float)$g['longitude']);
-    return ['city' => $g['city'] ?? null, 'country' => $g['country'] ?? null, 'airport' => $a['k'], 'airportCity' => $a['city']];
+    return ['city' => $g['city'] ?? null, 'country' => $g['country'] ?? null, 'countryCode' => $g['country_code'] ?? null, 'airport' => $a['k'], 'airportCity' => $a['city']];
 }
