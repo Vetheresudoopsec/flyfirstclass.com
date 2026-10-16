@@ -289,7 +289,7 @@ function routes($o, $d) {
     // Fewer than 10 listings once everything is checked: make another call for more routes.
     if (!$r['pending'] && count($r['list']) < LISTMIN && count($r['dests']) < MAXTOTAL && !($r['errs'] && !$r['list']) && expand_once($o)) $r = snap($o, $t0);
     $error = !$r['list'] && !$r['pending'] ? ($r['limited'] ? 'Too many new route lookups from your connection. Please try again in a while.' : ($r['errs'] ? $r['errs'][0]['msg'] : '')) : '';
-    return ['routes' => $r['list'], 'pending' => $r['pending'], 'error' => $error, 'test' => C('test')];
+    return ['routes' => $r['list'], 'pending' => $r['pending'], 'error' => $error, 'test' => C('test'), 'rtw' => market_rtw($o)];
 }
 // A chosen destination: list every distinct airline option. Fewer than 3 options: make another call (another date).
 function options_for($o, $d, $t0) {
