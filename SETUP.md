@@ -14,7 +14,8 @@ hostgator/
   ffc-private/           goes NEXT TO public_html, outside the web folder (nobody can open it from a browser)
       core.php, lib/     the server code
       cron.php           the scheduled job
-      data.json          airport lists
+      data.json          airport lists, the price sheet used for the carousel's estimated fares (FARES: airline, cabin F or J, from, to, USD),
+                         and the Singapore / Hong Kong / US destination order (MARKETS). Edit these two lists to change prices or route order.
       .env.example       the template for your keys
       .env               YOU create this on the server (never in git)
       cache/             created automatically (fares, photos, quote requests)
