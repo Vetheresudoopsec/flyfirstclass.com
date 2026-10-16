@@ -384,7 +384,11 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .cr:hover{text-decoration:underline;text-underline-offset:3px}
 .lr .im .cr{left:10px;bottom:8px;font-size:.62rem;max-width:calc(100% - 20px)}
 .dcard h3{font-size:1.3rem;font-weight:500;margin-bottom:2px}.dcard p{font-size:.92rem;margin-bottom:12px}
-.dcard .pr{display:grid;gap:2px;margin:-4px 0 12px}.dcard .pr span{display:block}.dcard .pr b{color:var(--ink);font-weight:600}.dcard .pr.no{font-size:.86rem}
+.dim .pbx{position:absolute;left:0;bottom:0;z-index:2;display:grid;gap:2px;padding:14px 26px 14px 18px;background:var(--card);border-top-right-radius:14px;text-align:left}
+.pbx span{display:block;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.pbx b{font-size:clamp(1.5rem,2.4vw,1.9rem);font-weight:400;line-height:1.15;color:var(--ink)}
+.pbx .pf{margin-top:4px;font-size:.82rem;font-weight:500;letter-spacing:0;text-transform:none}.pbx .pf b{font-size:.82rem;font-weight:600}
+.dim .cr{top:12px;bottom:auto;left:auto;right:12px;transform:translateY(-4px)}
 .dcard{display:flex;flex-direction:column}.dcard .btn{margin-top:auto;align-self:flex-start}
 .tfn{margin:2px 0 0;font-size:.78rem;line-height:1.5;color:var(--mute);max-width:72ch}
 @media(max-width:900px){.dcard{flex-basis:calc((100% - 20px)/2)}}
@@ -1680,9 +1684,9 @@ const AIRL=["Singapore Airlines","Emirates","Etihad","Qatar Airways","Cathay Pac
 let TO=null;
 const topSample=o=>{const a=["LHR","JFK","SIN","DXB","BKK","RUH","NRT","SYD","CPT","GRU","MLE","FCO","DPS"].filter(k=>k!=o&&N[k]);for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,10).map(k=>({iata:k,city:N[k],image:null}))};
 const fm=v=>"$"+Number(v).toLocaleString("en-US");
-function prLine(x){if(x.rtw)return'<p class="pr no">Multi-city, planned around you</p>';if(!("price" in x))return"";const p=x.price;if(!p||!(p.business>0))return'<p class="pr no">Fare on request</p>';return`<p class="pr"><span>Business from <b>${fm(p.business)}</b></span>${p.first>0?`<span>First from <b>${fm(p.first)}</b></span>`:""}</p>`}
+function pbx(x){if(x.rtw)return'<div class="pbx"><span>Multi-city</span><b>Custom quote</b></div>';const p=x.price;if(!p||!(p.business>0))return"";return`<div class="pbx"><span>Business from</span><b>${fm(p.business)}</b>${p.first>0?`<span class="pf">First from <b>${fm(p.first)}</b></span>`:""}</div>`}
 function renderTop(l){$("tcar").innerHTML=l.slice(0,11).map(x=>{const n=N[x.iata]||x.city||x.iata,im=x.image&&x.image.url?x.image.url:(PIC[x.iata]?`https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=1400&q=80`:"");
- return`<article class="dcard" role="listitem"><div class="dim" data-c="${esc(n)}"${x.rtw?"":` data-i="${esc(x.iata)}"`}>${im?`<img src="${esc(im)}" alt="${esc(n)} city view" loading="lazy" onerror="var n=this.nextElementSibling;if(n&&n.classList.contains('cr'))n.remove();this.remove()">`:""}${x.image&&x.image.credit?`<a class="cr" href="${esc(x.image.link)}" target="_blank" rel="noopener">Photo: ${esc(x.image.credit)} / Unsplash</a>`:""}</div><h3>${esc(n)}</h3><p>From ${esc(TO.city)}</p>${prLine(x)}<button class="btn sm go" type="button" ${x.rtw?`data-rtw="1">Plan this trip`:`data-to="${esc(x.iata)}" data-tn="${esc(n)}">View routes`}</button></article>`}).join("");$("tfn").hidden=!l.some(x=>x.price&&x.price.business>0);paint();fillPhotos();tupd()}
+ return`<article class="dcard" role="listitem"><div class="dim" data-c="${esc(n)}"${x.rtw?"":` data-i="${esc(x.iata)}"`}>${im?`<img src="${esc(im)}" alt="${esc(n)} city view" loading="lazy" onerror="var n=this.nextElementSibling;if(n&&n.classList.contains('cr'))n.remove();this.remove()">`:""}${x.image&&x.image.credit?`<a class="cr" href="${esc(x.image.link)}" target="_blank" rel="noopener">Photo: ${esc(x.image.credit)} / Unsplash</a>`:""}${pbx(x)}</div><h3>${esc(n)}</h3><p>From ${esc(TO.city)}</p><button class="btn sm go" type="button" ${x.rtw?`data-rtw="1">Plan this trip`:`data-to="${esc(x.iata)}" data-tn="${esc(n)}">View routes`}</button></article>`}).join("");$("tfn").hidden=!l.some(x=>x.price&&x.price.business>0);paint();fillPhotos();tupd()}
 async function initTop(){
  const g=await geoOnce();TO=g||{code:"LHR",city:"London"};N[TO.code]=TO.city;
  $("ttl").textContent=g?"Top destinations from "+TO.city:"Top destinations";$("tsub").textContent=g?"":"Showing popular routes. Allow location detection for destinations near you.";
