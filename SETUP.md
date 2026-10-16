@@ -182,3 +182,13 @@ To use it:
 `email/ADVISOR-GUIDE.md` is the one-page guide for advisors (setup in Gmail, Apple Mail and Outlook, the steps for each quote, a checklist). The same text is also kept as a document in Claude Docs for sharing. The template loads its logo from `https://flyfirstclass.com/email-logo.png`, which only exists once the new site is live. The gold "Reply with my details" button opens a message to `quote@flyfirstclass.com`; a client who just presses Reply writes to the advisor, so both inboxes need watching.
 
 The email also has a "Good to know" section (seat availability, last-minute tickets) and asks the client to read the Terms of Service before booking. The ticket rules it summarises are clause 7 of the Terms (`/terms/`): tickets valid for one year, rebooking within the same continent, non-refundable, no name changes, other airline restrictions. If those rules change, change clause 7, clause 6.5 and the "Can I change or cancel a booking?" answer in `public_html/index.html` (it appears twice), and the "In brief" sentence in the email, then run `python3 tools/build_pages.py`.
+
+## 15. Prices on the home page carousel
+
+Each carousel card shows a "from" price in a white box over the photo, and only routes with a price are shown.
+
+- **Where prices come from, in order.** (1) Your price sheet (`FARES` in `data.json`) when the route is on it. (2) An estimate from the nearest routes on the sheet, when one is close enough to trust. (3) The cheapest partner-airline fare Duffel returned for that route, multiplied by the ratio between your prices and Duffel's on the sheet's own routes. A route with no price we trust is replaced by the next one on that market's list.
+- **AirLabs** only tells the site which routes exist; it has no fares. Duffel is the only live price source.
+- **Needs the cron job.** The home page never searches Duffel itself. The cron job looks up your price-sheet routes first, then routes the carousel could not price, six per run (`WARM_PER_RUN`). The daily 12:00 PM Eastern refresh keeps the saved Duffel fares current.
+- **Check it.** `/api/status` (with your admin key) has a `pricing` section: how many sheet routes Duffel has priced, the ratio, and how far off the ratio is on your own prices (`medianMiss`, `worstMiss`). The Duffel step only switches on when the median miss is 15% or less and the worst is 30% or less; until then those routes are replaced rather than priced.
+- Duffel quotes some fares in other currencies. `FX` in `data.json` holds approximate rates; update it now and then.

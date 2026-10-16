@@ -99,49 +99,57 @@ function queue_photos($codes) {
     if ($add) cupdate('prio.json', [], function (&$p) use ($add) { foreach ($add as $c) $p[] = $c; $p = array_slice(array_values(array_unique($p)), -300); });
 }
 
-// Carousel: 10 routes. For Singapore, Hong Kong and US visitors these are the first 10 of that market's own list, in order, and
-// (Singapore, Hong Kong) an "Around the World" card follows. For every other origin the AirLabs routes come first; if fewer than 5
-// appear, a second AirLabs call looks for more; if there are still fewer than 10, other high-ticket routes fill the rest. Shuffled on
-// every request. Each card carries an estimated "from" price when one can be given (see pricing.php).
+// Carousel: 10 routes, every one with a price (see pricing.php). A route that cannot be priced is replaced by the next one that can.
+// For Singapore, Hong Kong and US visitors the routes are taken from that market's own list, in order, and (Singapore, Hong Kong) an
+// "Around the World" card follows. For every other origin the AirLabs routes come first, then other high-ticket routes; if fewer than 5
+// AirLabs routes appear, a second AirLabs call looks for more. Shuffled on every request. Routes that had no price are queued so the
+// background job can look them up with Duffel, and they can take a place once priced.
 function rtw_card() {
     return ['iata' => 'RTW', 'city' => 'Around the World', 'rtw' => true, 'price' => null, 'image' => pub([
         'url' => 'https://images.unsplash.com/photo-1507812984078-917a274065be?auto=format&fit=crop&w=1400&q=80', 'credit' => 'Leonardo Yip',
         'link' => 'https://unsplash.com/@yipleonardo?utm_source=fly_first_class&utm_medium=referral'])];
 }
-function with_prices($o, array $items) {
-    $RC = cload('routes.json', []);
-    foreach ($items as &$it) if (empty($it['rtw'])) $it['price'] = card_price($o, $it['iata'], $RC);
-    unset($it);
-    return $items;
+// The first $want routes of $pool that have a price, in pool order: code => price. Routes passed over are collected in $skipped.
+function priced_pick($o, array $pool, $want, array $ctx, &$skipped) {
+    $out = []; $skipped = [];
+    foreach ($pool as $c) {
+        if ($c === $o || isset($out[$c])) continue;
+        $p = card_price($o, $c, $ctx);
+        if ($p) { $out[$c] = $p; if (count($out) >= $want) break; } else $skipped[] = $c;
+    }
+    return $out;
 }
 function top_list($o) {
-    $mk = market_dests($o);
+    $ctx = price_ctx(); $mk = market_dests($o);
     if ($mk) {
-        $l = array_slice($mk, 0, 10);
-        queue_photos($mk);
+        $picked = priced_pick($o, $mk, 10, $ctx, $skipped);
+        queue_lanes($o, array_slice($skipped, 0, 8));
+        $l = array_keys($picked); queue_photos($mk);
         $imgs = images_lookup($l); $out = [];
-        foreach ($l as $c) { $v = $imgs[$c] ?? null; $out[] = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v)]; }
-        $out = with_prices($o, $out);
+        foreach ($l as $c) { $v = $imgs[$c] ?? null; $out[] = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v), 'price' => $picked[$c]]; }
         if (market_rtw($o)) $out[] = rtw_card();
         return $out;
     }
     $all = all_dests($o);
     if (count($all) < 5) { expand_once($o); $all = all_dests($o); }
-    if (count($all) < 10) { $have = array_flip($all); $all = array_slice(array_merge($all, array_values(array_filter(candidates_all($o), function ($c) use ($have) { return !isset($have[$c]); }))), 0, 10); }
-    queue_photos($all);
-    $IMG = img_all(true); $ordered = shuffle_a($all);
-    $withPhoto = array_values(array_filter($ordered, function ($c) use ($IMG) { return !empty($IMG[$c]); }));
-    $lookups = array_slice(array_values(array_filter($ordered, function ($c) use ($IMG) { return !array_key_exists($c, $IMG); })), 0, TOPBUDGET);
-    $l = array_slice(shuffle_a(array_merge($withPhoto, $lookups)), 0, 10);
-    if (count($l) < 10) $l = array_slice(array_merge($l, array_values(array_diff($ordered, $l))), 0, 10);
+    $have = array_flip($all);
+    $extra = array_values(array_filter(candidates_all($o), function ($c) use ($have) { return !isset($have[$c]); }));
+    queue_photos(array_slice(array_merge($all, $extra), 0, 30));
+    $IMG = img_all(true);
+    $pool = array_merge(shuffle_a($all), shuffle_a($extra));
+    $withPhoto = array_values(array_filter($pool, function ($c) use ($IMG) { return !empty($IMG[$c]); }));
+    $pool = array_merge($withPhoto, array_values(array_diff($pool, $withPhoto)));      // routes that already have a photo first
+    $picked = priced_pick($o, $pool, 10, $ctx, $skipped);
+    queue_lanes($o, array_slice($skipped, 0, 8));
+    $l = shuffle_a(array_keys($picked));
     $imgs = images_lookup($l);
     $with = []; $without = [];
     foreach ($l as $c) {
         $v = $imgs[$c] ?? null;
-        $item = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v)];     // image is null when no photo yet, same as server.js
+        $item = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v), 'price' => $picked[$c]];     // image is null when no photo yet, same as server.js
         if ($v) $with[] = $item; else $without[] = $item;
     }
-    return with_prices($o, array_merge($with, $without));
+    return array_merge($with, $without);
 }
 // Photos for a list of destinations (Listings rows and carousel cards). Saved ones come back at once; a few new ones are looked up
 // per request and the rest are reported as pending so the page can ask again shortly.

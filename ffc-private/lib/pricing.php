@@ -112,20 +112,112 @@ function fare_estimate($o, $d, $cabin, $airline = null) {
     return ['est' => (int)round($est), 'from' => $close ? (int)(ceil($est * PR_BUFFER / 100) * 100) : null, 'conf' => $close ? 'high' : 'low', 'km' => (int)round($dist)];
 }
 
-// What a carousel card shows: business class "from" price, plus first class when the documented routes for this pair include a
-// first class partner flight. null = no number (the card says to request a quote).
-function card_price($o, $c, $RC = null) {
-    $b = fare_estimate($o, $c, 'J');
-    if (!$b || empty($b['from'])) return null;
-    $p = ['business' => $b['from']];
-    if ($RC === null) $RC = cload('routes.json', []);
-    $e = $RC[rkey($o, $c)] ?? null;
-    if (fresh($e) && ($v = view($o, $c, $e))) {
-        foreach ($v['cabins'] as $cb) {
-            if ($cb['c'] !== 'First') continue;
-            $f = fare_estimate($o, $c, 'F');
-            if ($f && !empty($f['from']) && $f['from'] > $b['from']) $p['first'] = $f['from'];
-        }
+// ---------- Prices from Duffel ----------
+// Every Duffel search keeps the cheapest partner-airline fare before taxes (USD, one way) in the route's saved record (px: overall, pxa:
+// per airline). Our own price is lower than that public fare by a fairly steady factor, which the price sheet lets us measure: for each
+// sheet lane that Duffel has also priced, sheet price / Duffel fare. The median is the ratio; it is only trusted when predicting each
+// lane from the others stays close (median miss 15% or less, worst 30% or less). A route the estimator above cannot price is then priced as
+// Duffel fare x ratio, if the two methods do not disagree wildly and the route is documented.
+function to_usd($amt, $cur) {
+    if ($amt === null || !is_numeric($amt)) return null;
+    $cur = strtoupper((string)$cur); $fx = D()['FX'] ?? [];
+    $r = $cur === 'USD' ? 1.0 : ($fx[$cur] ?? null);
+    return $r === null ? null : (int)round((float)$amt * $r);
+}
+function pr_median(array $a) { sort($a); $n = count($a); return $n % 2 ? $a[intdiv($n, 2)] : ($a[$n / 2 - 1] + $a[$n / 2]) / 2; }
+function fare_calib($cl, array $RC) {                 // $cl: 'business' | 'first'
+    $cab = $cl === 'first' ? 'F' : 'J'; $pts = [];
+    foreach (pr_refs() as $f) {
+        if ($f[1] !== $cab) continue;
+        $e = $RC[rkey($f[2], $f[3])] ?? null;
+        $p = fresh($e) ? ($e['raw']['pxa'][$cl][$f[0]] ?? null) : null;
+        if ($p > 0) $pts[] = [$f[4] / $p, $f[4], $p];
+    }
+    $need = $cl === 'first' ? 3 : 4;
+    if (count($pts) < $need) return ['ok' => false, 'lanes' => count($pts), 'why' => 'needs ' . $need . ' sheet lanes with a live Duffel fare'];
+    $R = pr_median(array_column($pts, 0)); $errs = [];
+    foreach ($pts as $i => $pt) {                      // predict each lane from the others
+        $o = $pts; unset($o[$i]);
+        $errs[] = abs($pt[2] * pr_median(array_column($o, 0)) - $pt[1]) / $pt[1];
+    }
+    $med = pr_median($errs); $max = max($errs);
+    return ['ok' => $med <= 0.15 && $max <= 0.30, 'lanes' => count($pts), 'ratio' => round($R, 3), 'medianMiss' => round($med, 3), 'worstMiss' => round($max, 3)];
+}
+function price_ctx() {
+    $RC = cload('routes.json', []);
+    return ['RC' => $RC, 'cal' => ['business' => fare_calib('business', $RC), 'first' => fare_calib('first', $RC)]];
+}
+function duffel_fill($o, $c, $cl, array $ctx, $est = null) {
+    $cal = $ctx['cal'][$cl] ?? null;
+    if (!$cal || empty($cal['ok'])) return null;
+    $A = air(); if (!isset($A[$o], $A[$c])) return null;
+    $e = $ctx['RC'][rkey($o, $c)] ?? null; $px = fresh($e) ? ($e['raw']['px'][$cl] ?? null) : null;
+    if (!($px > 0)) return null;
+    $d = pr_km($o, $c); if ($d < 3500 || $d > 18500) return null;
+    $v = $px * $cal['ratio'];
+    if ($est && ($est['est'] ?? 0) > 0 && abs($v - $est['est']) / $est['est'] > 0.5) return null;
+    return (int)(ceil($v * PR_BUFFER / 100) * 100);
+}
+
+// What a carousel card shows: the business class "from" price, plus first class when the documented routes for this pair include a first
+// class partner flight. null = no price we trust (the carousel then uses another route). Order of trust: the price sheet, the estimate
+// when a comparable lane is close, then Duffel x ratio. A route Duffel has documented with no partner-airline flight in either cabin is
+// not priced at all, so the card never links to an empty listing.
+function card_price($o, $c, array $ctx) {
+    $e = $ctx['RC'][rkey($o, $c)] ?? null; $v = null;
+    if (fresh($e)) { $v = view($o, $c, $e); if (!$v) return null; }
+    $est = fare_estimate($o, $c, 'J');
+    $b = !empty($est['from']) ? $est['from'] : duffel_fill($o, $c, 'business', $ctx, $est);
+    if (!$b) return null;
+    $p = ['business' => $b];
+    if ($v) foreach ($v['cabins'] as $cb) {
+        if ($cb['c'] !== 'First') continue;
+        $fe = fare_estimate($o, $c, 'F');
+        $f = !empty($fe['from']) ? $fe['from'] : duffel_fill($o, $c, 'first', $ctx, $fe);
+        if ($f && $f > $b) $p['first'] = $f;
     }
     return $p;
+}
+
+// ---------- Routes the carousel could not price yet: looked up in the background ----------
+function queue_lanes($o, array $codes) {
+    if (!C('token') || !$codes) return;
+    $RC = cload('routes.json', []); $add = [];
+    foreach ($codes as $c) if (!fresh($RC[rkey($o, $c)] ?? null)) $add[] = $o . '-' . $c;
+    if ($add) cupdate('warm.json', [], function (&$q) use ($add) { foreach ($add as $k) if (!in_array($k, $q, true)) $q[] = $k; $q = array_slice(array_values($q), -300); });
+}
+// Run from cron: first the price sheet's own lanes (they calibrate the Duffel prices), then routes the carousel asked for. A few per run.
+function warm_step($budget) {
+    if (!C('token')) return 'no Duffel token';
+    if (doff()) return 'Duffel token rejected';
+    $RC = cload('routes.json', []); $E = errs_now(); $m = META(); $today = day_et(); $keys = [];
+    $want = function ($k) use (&$keys, $E, $m, $today) {
+        if (in_array($k, $keys, true) || cooling($E, $k) || claimed($k)) return;
+        $w = $m['warm'][$k] ?? null; if ($w && ($w['d'] ?? '') === $today && ($w['n'] ?? 0) >= 2) return;      // twice a day at most per route
+        $keys[] = $k;
+    };
+    foreach (pr_refs() as $f) { $k = rkey($f[2], $f[3]); $e = $RC[$k] ?? null; if (!fresh($e) || !isset($e['raw']['px'])) $want($k); }
+    $q = cload('warm.json', []);
+    foreach ($q as $p) { $k = C('mode') . ':' . $p; if (!fresh($RC[$k] ?? null)) $want($k); }
+    $keys = array_slice($keys, 0, (int)env('WARM_PER_RUN', 6) ?: 6);
+    if (!$keys) { if ($q) cupdate('warm.json', [], function (&$x) use ($RC) { $x = array_values(array_filter($x, function ($p) use ($RC) { return !fresh($RC[C('mode') . ':' . $p] ?? null); })); }); return 'nothing to look up'; }
+    $date = travel_date(); $tasks = []; $mine = [];
+    foreach ($keys as $k) {
+        if (!claim($k, 'refresh')) continue;
+        [$o, $c] = explode('-', substr($k, strlen(C('mode')) + 1)); $mine[] = $k;
+        $tasks[] = ['type' => 'refresh', 'o' => $o, 'c' => $c, 'key' => $k, 'date' => $date];
+    }
+    if (!$tasks) return 'busy';
+    try { $res = run_tasks($tasks, microtime(true) + max(10, min(40, $budget))); } finally { foreach ($mine as $k) unclaim($k); }
+    $done = [];
+    foreach ($res as $k => $r) if ($r !== 'skip') $done[] = $k;
+    cupdate('meta.json', ['lastRefresh' => 0], function (&$mm) use ($done, $today) { foreach ($done as $k) { $w = $mm['warm'][$k] ?? null; $mm['warm'][$k] = ['d' => $today, 'n' => ($w && ($w['d'] ?? '') === $today ? $w['n'] : 0) + 1]; } });
+    if ($done) cupdate('warm.json', [], function (&$x) use ($done) { $pre = C('mode') . ':'; $x = array_values(array_filter($x, function ($p) use ($done, $pre) { return !in_array($pre . $p, $done, true); })); });
+    $ok = count(array_filter($res, function ($r) { return $r === 'ok'; }));
+    return $ok . ' route(s) priced from Duffel, ' . (count($res) - $ok) . ' skipped or failed';
+}
+// For the status page: is the Duffel fill switched on, and how well does it predict your own prices?
+function pricing_status() {
+    $RC = cload('routes.json', []); $q = cload('warm.json', []);
+    return ['sheetLanes' => count(pr_refs()), 'duffelCalibration' => ['business' => fare_calib('business', $RC), 'first' => fare_calib('first', $RC)], 'queuedForLookup' => count($q)];
 }
