@@ -280,11 +280,11 @@ function snap($o, $t0) {
             if ($skipped) quota_refund($skipped);                                   // not started (busy or rate limited): not counted against the visitor
         }
     }
-    $RC = cload('routes.json', []); $E = errs_now();
+    $RC = cload('routes.json', []); $E = errs_now(); $ctx = price_ctx();
     $list = []; $pending = 0; $errs = [];
     foreach ($dests as $c) {
         $k = rkey($o, $c); $e = $RC[$k] ?? null;
-        if (fresh($e)) { $v = view($o, $c, $e); if ($v) $list[] = $v; }
+        if (fresh($e)) { $v = view($o, $c, $e); if ($v) { $v['price'] = card_price($o, $c, $ctx); $list[] = $v; } }       // price: same "from" figure as the carousel, or null
         if (isset($E[$k])) $errs[] = $E[$k];
         $wait = !fresh($e) || (needs_hubs($e) && ($v2 = view($o, $c, $e)) && $v2['stops'] > 0);
         if ($wait && !cooling($E, $k) && (!$limited || claimed($k))) $pending++;
@@ -328,7 +328,7 @@ function options_for($o, $d, $t0) {
         elseif (((int)($e['tries'] ?? 1) < MAXTRIES && count($opts) < 3) || (needs_hubs($e) && array_filter($opts, function ($x) { return $x['stops'] > 0; }))) $pending = 1;
         elseif ($busy()) $pending = 1;
     }
-    return ['routes' => $opts, 'pending' => $pending, 'error' => !$opts && !$pending ? ($limited ? 'Too many new route lookups from your connection. Please try again in a while.' : ($E[$k]['msg'] ?? '')) : '', 'test' => C('test')];
+    return ['routes' => $opts, 'pending' => $pending, 'error' => !$opts && !$pending ? ($limited ? 'Too many new route lookups from your connection. Please try again in a while.' : ($E[$k]['msg'] ?? '')) : '', 'test' => C('test'), 'price' => $opts ? card_price($o, $d, price_ctx()) : null];
 }
 
 // ---------- Checks used by the diagnostics endpoints ----------
