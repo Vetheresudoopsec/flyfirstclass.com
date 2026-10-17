@@ -223,7 +223,7 @@ footer ul{list-style:none;padding:0}
 @media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
 @media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}.act.bk2 #sr{margin-right:8px}}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.act.bk2 #sr{margin:16px 12px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}.rr{padding:20px 18px}}
-/* Booking block, design A: underline tabs, one options row, one row of cells, gold "Request a quote" cell.
+/* Booking block, design A: underline tabs, one options row, one row of cells, gold "Request a free quote" cell, three reasons under the box.
    Every rule is scoped to #bk, so the Manage booking and Check in panels, the contact page and the rest of the site keep their own styles. */
 #bk{--bkh:88px}
 #bk .t4{display:flex;gap:0;padding:0 28px;border:1px solid var(--line);border-bottom:0;background:var(--card);overflow-x:auto}
@@ -242,7 +242,7 @@ footer ul{list-style:none;padding:0}
 #bk .bko .pill{margin-left:auto;gap:10px;min-height:44px;padding:0;border-radius:0;background:none;font:600 .95rem Manrope,sans-serif}
 #bk .bko #sr{min-height:44px;padding:0;font:600 .95rem Manrope,sans-serif;white-space:nowrap}
 #bk .bko #sr:hover,#bk .bko #sr:focus-visible{color:var(--j);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
-#bk .bkr{position:relative;display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1fr) 180px 200px;grid-template-rows:minmax(var(--bkh),auto) auto;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+#bk .bkr{position:relative;display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1fr) 180px 244px;grid-template-rows:minmax(var(--bkh),auto);gap:1px;background:var(--line);border-top:1px solid var(--line)}
 #bk .bkp{position:relative;display:flex;gap:1px;background:var(--line);min-width:0}
 #bk .bkp>.c{flex:1 1 0}
 #bk .bkd{display:contents}
@@ -263,11 +263,14 @@ footer ul{list-style:none;padding:0}
 #bk .bkp .stw{z-index:6}
 #bk .bkx{position:relative}
 #bk .pxp{right:0;top:100%;margin-top:6px;width:380px;max-width:calc(100vw - 44px);z-index:60}
-#bk .bkr .fare{grid-column:5;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;margin:0;padding:12px 20px;border-radius:0;background:var(--au);color:#14181f;font:600 1.05rem Manrope,sans-serif;text-align:left}
+#bk .bkr .fare{grid-column:5;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;margin:0;padding:12px 20px;border-radius:0;background:var(--au);color:#14181f;font:700 1.0625rem Manrope,sans-serif;text-align:left;white-space:nowrap}
 #bk .bkr .fare small{display:block;font:600 .75rem Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#4a3b17}
 #bk .bkr .fare:hover,#bk .bkr .fare:focus-visible{background:#b9a063;color:#14181f}
 #bk .bkr .fare:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
-#bk .bkr .ahl{grid-column:1/5;grid-row:2;margin:0;max-width:none;padding:10px 20px;background:var(--card);font-size:.85rem;line-height:1.45;color:var(--mute)}
+#bk .bkw{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px 28px;font:600 .875rem/1.4 Manrope,sans-serif;color:#3f4652}
+#bk .bkw li{display:flex;align-items:center;gap:8px}
+#bk .bkw svg{flex:none}
+#bk:has(#tp0[hidden]) .bkw{display:none}
 #bk .mcx{border-top:1px solid var(--line)}
 #bk .mcl{gap:0}
 #bk .mcx .mcx1{border-bottom:1px solid var(--line)}
@@ -277,11 +280,10 @@ footer ul{list-style:none;padding:0}
 #bk .mca{border-top:1px solid var(--line);border-bottom:0}
 #bk .mca .btn{min-height:40px}
 #bk #de,#bk .sn{padding:12px 28px;border-top:1px solid var(--line)}
-@media(max-width:1100px){
+@media(max-width:1180px){
 #bk .bkr{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none}
 #bk .bkp{grid-column:1/-1}
-#bk .bkr .fare{grid-column:1/-1;grid-row:auto;min-height:68px}
-#bk .bkr .ahl{grid-column:1/-1;grid-row:auto}
+#bk .bkr .fare{grid-column:1/-1;min-height:68px}
 }
 @media(max-width:700px){
 #bk .t4{padding:0 16px;gap:0}
@@ -289,6 +291,7 @@ footer ul{list-style:none;padding:0}
 #bk .bko{padding:2px 16px;gap:0 16px}
 #bk .bko .pill{margin-left:0;font-size:.9rem}
 #bk .bko #sr{margin-left:auto;font-size:.9rem}
+#bk .bkw{gap:6px 20px;font-size:.8125rem}
 #bk .bkr{grid-template-columns:repeat(2,minmax(0,1fr))}
 #bk .bkp{flex-direction:column}
 #bk .bkr .c,#bk .mcx .c{padding:12px 16px}
@@ -935,8 +938,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="bkp"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="stw" id="stw" hidden><button type="button" class="stn" id="stn" aria-haspopup="dialog" aria-expanded="false" aria-controls="stp2"><span id="stt">Choose your stop</span></button><div class="stpop" id="stp2" role="dialog" aria-label="Choose your stop" tabindex="-1" hidden></div></div><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
 <div class="bkd" id="dr"><div class="cal" id="cal" role="dialog" aria-label="Choose your travel dates" hidden></div><div class="c"><label id="ddl">Departing on</label><button type="button" class="dv e" id="ddb">Select a date</button></div><div class="c"><label id="rdl">Returning on</label><button type="button" class="dv e" id="rdb">Add a return (optional)</button></div></div>
 <div class="c bkx"><label for="pxb">Travellers</label><div class="dd"><button type="button" class="db pxb" id="pxb" aria-haspopup="dialog" aria-expanded="false" aria-controls="pxp" aria-label="Passengers: 1 adult"><span id="pxt">1 adult</span></button></div><div class="pxp" id="pxp" role="dialog" aria-label="Choose passengers" tabindex="-1" hidden><div class="ct"><b>Who is travelling?</b><span>Up to 9 travellers</span></div><div class="prw"><div><b>Adults</b><span>12 years and over</span></div><div class="stp"><button type="button" data-s="a-1" aria-label="Remove one adult">&minus;</button><input id="pxa" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of adults" value="1"><button type="button" data-s="a+1" aria-label="Add one adult">+</button></div></div><div class="prw"><div><b>Children</b><span>2 to 11 years</span></div><div class="stp"><button type="button" data-s="k-1" aria-label="Remove one child">&minus;</button><input id="pxk" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of children" value="0"><button type="button" data-s="k+1" aria-label="Add one child">+</button></div></div><p class="pxn" id="pxn" aria-live="polite"></p><div class="cf2"><p id="pxs">1 adult</p><button type="button" class="btn sm" id="pxd">Done</button></div></div></div>
-<button class="btn go fare" type="submit"><small>Next step</small><span class="ft">Request a quote</span></button>
-<p class="ahl">Free quote. Browse routes first, or send your trip and an advisor will reply with available fares within 24 hours.</p>
+<button class="btn go fare" type="submit"><small>Next step</small><span class="ft">Request a free quote</span></button>
 </div>
 <div class="mcx" id="mcx" hidden><div class="mcl" id="mcl"></div><div class="mca"><button type="button" class="btn sm" id="mca">Add another destination</button><span id="mcn"></span></div></div>
 <p class="err" id="de" role="alert" hidden></p>
@@ -944,7 +946,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </form>
 <div class="rr" id="rr" hidden aria-live="polite"></div>
 </div>
-</div></div>
+</div>
+<ul class="bkw" aria-label="Why ask us"><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6 5.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM14 12.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Up to 70% off business and first class</li><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 5.5V9l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advisor reply within 24 hours</li><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m6 9.2 2 2 4-4.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Free quote</li></ul>
+</div>
 <div class="air"><p class="at">Our partner airlines</p><div class="mq" id="mq"></div></div>
 <div class="s"><div class="w">
 <div class="dh"><div><h2 id="ttl">Top destinations</h2><p class="loc" id="tsub"></p></div></div>
@@ -1382,7 +1386,7 @@ const spStops=()=>{const o=cd($("fa").value),d=cd($("fb").value);return SP&&SP.o
 function spOpen(v){$("stp2").hidden=!v;$("stn").setAttribute("aria-expanded",String(v));if(v){const o=$("stp2").querySelector('.sto[aria-checked="true"]')||$("stp2").querySelector(".sto");if(o)o.focus()}}
 function spNote(){const E=$("sn");if(!SP||$("ty").value=="Multi-city"){E.hidden=true;return}
  const k=SP.n==1?"1 stop":SP.n+" stops",m=spOpts().length&&SP.pick===null;
- E.textContent="Route selected: "+nm(SP.o)+" to "+nm(SP.d)+", "+(m?k+". Choose your stop under the arrows, check your details, then press Request a quote.":stpP(SP.n,SP.pick?[SP.pick]:SP.via)+". Check your details, then press Request a quote.");E.hidden=false}
+ E.textContent="Route selected: "+nm(SP.o)+" to "+nm(SP.d)+", "+(m?k+". Choose your stop under the arrows, check your details, then press Request a free quote.":stpP(SP.n,SP.pick?[SP.pick]:SP.via)+". Check your details, then press Request a free quote.");E.hidden=false}
 function spRender(){const w=$("stw"),o=spOpts();w.hidden=!o.length;
  if(!SP||$("ty").value=="Multi-city")$("sn").hidden=true;else if(SP.note)spNote();
  if(!o.length){$("stp2").hidden=true;$("stn").setAttribute("aria-expanded","false");return}
