@@ -126,7 +126,7 @@ function queue_photos($codes) {
 function rtw_card() {
     return ['iata' => 'RTW', 'city' => 'Around the World', 'rtw' => true, 'price' => null, 'image' => pub([
         'url' => 'https://images.unsplash.com/photo-1507812984078-917a274065be?auto=format&fit=crop&w=1400&q=80', 'credit' => 'Leonardo Yip',
-        'link' => 'https://unsplash.com/@yipleonardo?utm_source=fly_first_class&utm_medium=referral'])];
+        'link' => 'https://unsplash.com/photos/window-view-of-airplane-during-golden-hour-rn-NLirHQPY?utm_source=fly_first_class&utm_medium=referral'])];
 }
 // The first $want routes of $pool that have a price, in pool order: code => price. Routes passed over are collected in $skipped.
 function priced_pick($o, array $pool, $want, array $ctx, &$skipped) {
