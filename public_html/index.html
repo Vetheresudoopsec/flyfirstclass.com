@@ -222,6 +222,87 @@ footer ul{list-style:none;padding:0}
 @media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
 @media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}.act.bk2 #sr{margin-right:8px}}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.act.bk2 #sr{margin:16px 12px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}.rr{padding:20px 18px}}
+/* Booking block, design A: underline tabs, one options row, one row of cells, gold "Request a quote" cell.
+   Every rule is scoped to #bk, so the Manage booking and Check in panels, the contact page and the rest of the site keep their own styles. */
+#bk{--bkh:88px}
+#bk .t4{display:flex;gap:0;padding:0 28px;border:1px solid var(--line);border-bottom:0;background:var(--card);overflow-x:auto}
+#bk .t4 button{flex:none;display:block;margin:0 28px 0 0;padding:20px 2px 17px;background:none;color:var(--mute);font:500 .95rem Manrope,sans-serif;text-align:left;white-space:nowrap}
+#bk .t4 button svg{display:none}
+#bk .t4 button:hover,#bk .t4 button:focus-visible{color:var(--j)}
+#bk .t4 button[aria-selected=true]{background:none;color:var(--ink);font-weight:700;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bko{display:flex;align-items:center;flex-wrap:wrap;gap:0 28px;padding:4px 28px}
+#bk .bko .c{display:block;position:relative;min-height:0;padding:0;border:0;background:none}
+#bk .bko .c:focus-within{background:none;box-shadow:none}
+#bk .bko label:not(.pill){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#bk .bko .db{width:auto;min-height:44px;gap:10px;padding:0;font:600 .95rem Manrope,sans-serif}
+#bk .bko .db:hover,#bk .bko .db[aria-expanded=true],#bk .bko .db:focus-visible{color:var(--j)}
+#bk .bko .db:focus-visible{outline:2px solid var(--j);outline-offset:4px;border-radius:2px}
+#bk .bko .dl{left:0;top:calc(100% + 6px);min-width:220px}
+#bk .bko .pill{margin-left:auto;gap:10px;min-height:44px;padding:0;border-radius:0;background:none;font:600 .95rem Manrope,sans-serif}
+#bk .bko #sr{min-height:44px;padding:0;font:600 .95rem Manrope,sans-serif;white-space:nowrap}
+#bk .bko #sr:hover,#bk .bko #sr:focus-visible{color:var(--j);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
+#bk .bkr{position:relative;display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1fr) 180px 200px;grid-template-rows:minmax(var(--bkh),auto) auto;gap:1px;background:var(--line);border-top:1px solid var(--line)}
+#bk .bkp{position:relative;display:flex;gap:1px;background:var(--line);min-width:0}
+#bk .bkp>.c{flex:1 1 0}
+#bk .bkd{display:contents}
+#bk .bkr .c,#bk .mcx .c{position:relative;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;min-height:var(--bkh);padding:12px 20px;border:0;background:var(--card)}
+#bk .c label{display:block;font:600 .75rem Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+#bk .bkr .c label[for]::after,#bk .mcx .c label[for]::after{content:"";position:absolute;inset:0}
+#bk .bkr .c .dd,#bk .mcx .c .dd{position:relative}
+#bk .bkr .c>.dd>input,#bk .mcx .c>.dd>input,#bk .bkr .c>.dd>.db,#bk .bkr .c>.dv{display:block;width:100%;min-width:0;padding:2px 0;color:var(--ink);font:600 1.125rem/1.3 Manrope,sans-serif;text-overflow:ellipsis}
+#bk .bkr .c>.dd>.db{display:flex}
+#bk .bkr .c>.dv{white-space:normal;overflow-wrap:anywhere}
+#bk .bkr .c>.dv.e{opacity:.6}
+#bk .bkr .c>.dd>input::placeholder,#bk .mcx .c>.dd>input::placeholder{color:var(--ink);opacity:.55;font-size:1rem;font-weight:500}
+#bk .bkr .c:focus-within,#bk .mcx .c:focus-within{outline:0;background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bkr .c:has(.db[aria-expanded=true]){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bkd:has(#cal:not([hidden])) .c{background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bkr .dl{left:-20px;top:calc(100% + 22px);min-width:max(280px,calc(100% + 40px))}
+#bk .swp{z-index:6}
+#bk .bkp .stw{z-index:6}
+#bk .bkx{position:relative}
+#bk .pxp{right:0;top:100%;margin-top:6px;width:380px;max-width:calc(100vw - 44px);z-index:60}
+#bk .bkr .fare{grid-column:5;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;margin:0;padding:12px 20px;border-radius:0;background:var(--au);color:#14181f;font:600 1.05rem Manrope,sans-serif;text-align:left}
+#bk .bkr .fare small{display:block;font:600 .75rem Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#4a3b17}
+#bk .bkr .fare:hover,#bk .bkr .fare:focus-visible{background:#b9a063;color:#14181f}
+#bk .bkr .fare:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
+#bk .bkr .ahl{grid-column:1/5;grid-row:2;margin:0;max-width:none;padding:10px 20px;background:var(--card);font-size:.85rem;line-height:1.45;color:var(--mute)}
+#bk .mcx{border-top:1px solid var(--line)}
+#bk .mcl{gap:0}
+#bk .mcx .mcx1{border-bottom:1px solid var(--line)}
+#bk .mcx .mcx1:nth-child(odd){border-right:1px solid var(--line)}
+#bk .mcl .mcx1{padding-right:96px}
+#bk .mcl .mcr{top:50%;right:16px;transform:translateY(-50%);min-height:40px}
+#bk .mca{border-top:1px solid var(--line);border-bottom:0}
+#bk .mca .btn{min-height:40px}
+#bk #de,#bk .sn{padding:12px 28px;border-top:1px solid var(--line)}
+@media(max-width:1100px){
+#bk .bkr{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none}
+#bk .bkp{grid-column:1/-1}
+#bk .bkr .fare{grid-column:1/-1;grid-row:auto;min-height:68px}
+#bk .bkr .ahl{grid-column:1/-1;grid-row:auto}
+}
+@media(max-width:700px){
+#bk .t4{padding:0 16px;gap:0}
+#bk .t4 button{margin-right:20px;padding:16px 0 14px;font-size:.85rem;text-align:left}
+#bk .bko{padding:2px 16px;gap:0 16px}
+#bk .bko .pill{margin-left:0;font-size:.9rem}
+#bk .bko #sr{margin-left:auto;font-size:.9rem}
+#bk .bkr{grid-template-columns:repeat(2,minmax(0,1fr))}
+#bk .bkp{flex-direction:column}
+#bk .bkr .c,#bk .mcx .c{padding:12px 16px}
+#bk .bkx{grid-column:1/-1}
+#bk .swp{left:auto;right:16px;top:var(--bkh);transform:translateY(-50%)}
+#bk .bkp .stw{top:auto;left:auto;transform:none;padding:10px 16px;border-bottom:0;background:var(--card)}
+#bk .pxp{left:0;right:0;width:auto;max-width:none}
+#bk .bkr .dl{left:-16px;min-width:max(240px,calc(100% + 32px))}
+#bk .mcl{grid-template-columns:1fr}
+#bk .mcx .mcx1:nth-child(odd){border-right:0}
+#bk .mcl .mcx1{padding-right:92px}
+#bk .mca{padding:12px 16px}
+#bk #de,#bk .sn{padding:12px 16px}
+}
+@media(prefers-reduced-motion:reduce){#bk .bkr .c,#bk .bkr .fare{transition:none}}
 .err{color:#b3261e;font-size:.85rem;margin-top:6px}
 .loc{margin:0 0 18px;color:var(--mute)}
 .lsw{margin-bottom:22px}
@@ -847,14 +928,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="wd">
 <div class="tp" id="tp0">
 <form id="bf">
-<div class="sub" id="sb" role="group" aria-label="Trip style"><button type="button">One-way</button><button type="button">Multi-city</button><button type="button" class="on">Round-trip</button><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label></div>
-<div class="r"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="stw" id="stw" hidden><button type="button" class="stn" id="stn" aria-haspopup="dialog" aria-expanded="false" aria-controls="stp2"><span id="stt">Choose your stop</span></button><div class="stpop" id="stp2" role="dialog" aria-label="Choose your stop" tabindex="-1" hidden></div></div><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
+<div id="sb" hidden></div>
+<div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb"><option>First class</option><option>Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See available routes</button></div>
+<div class="bkr">
+<div class="bkp"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="stw" id="stw" hidden><button type="button" class="stn" id="stn" aria-haspopup="dialog" aria-expanded="false" aria-controls="stp2"><span id="stt">Choose your stop</span></button><div class="stpop" id="stp2" role="dialog" aria-label="Choose your stop" tabindex="-1" hidden></div></div><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
+<div class="bkd" id="dr"><div class="cal" id="cal" role="dialog" aria-label="Choose your travel dates" hidden></div><div class="c"><label id="ddl">Departing on</label><button type="button" class="dv e" id="ddb">Select a date</button></div><div class="c"><label id="rdl">Returning on</label><button type="button" class="dv e" id="rdb">Add a return (optional)</button></div></div>
+<div class="c bkx"><label for="pxb">Travellers</label><div class="dd"><button type="button" class="db pxb" id="pxb" aria-haspopup="dialog" aria-expanded="false" aria-controls="pxp" aria-label="Passengers: 1 adult"><span id="pxt">1 adult</span></button></div><div class="pxp" id="pxp" role="dialog" aria-label="Choose passengers" tabindex="-1" hidden><div class="ct"><b>Who is travelling?</b><span>Up to 9 travellers</span></div><div class="prw"><div><b>Adults</b><span>12 years and over</span></div><div class="stp"><button type="button" data-s="a-1" aria-label="Remove one adult">&minus;</button><input id="pxa" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of adults" value="1"><button type="button" data-s="a+1" aria-label="Add one adult">+</button></div></div><div class="prw"><div><b>Children</b><span>2 to 11 years</span></div><div class="stp"><button type="button" data-s="k-1" aria-label="Remove one child">&minus;</button><input id="pxk" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of children" value="0"><button type="button" data-s="k+1" aria-label="Add one child">+</button></div></div><p class="pxn" id="pxn" aria-live="polite"></p><div class="cf2"><p id="pxs">1 adult</p><button type="button" class="btn sm" id="pxd">Done</button></div></div></div>
+<button class="btn go fare" type="submit"><small>Next step</small><span class="ft">Request a quote</span></button>
+<p class="ahl">Free quote. Browse routes first, or send your trip and an advisor will reply with available fares within 24 hours.</p>
+</div>
 <div class="mcx" id="mcx" hidden><div class="mcl" id="mcl"></div><div class="mca"><button type="button" class="btn sm" id="mca">Add another destination</button><span id="mcn"></span></div></div>
-<div class="r" id="pr"><div class="pxp" id="pxp" role="dialog" aria-label="Choose passengers" tabindex="-1" hidden><div class="ct"><b>Who is travelling?</b><span>Up to 9 travellers</span></div><div class="prw"><div><b>Adults</b><span>12 years and over</span></div><div class="stp"><button type="button" data-s="a-1" aria-label="Remove one adult">&minus;</button><input id="pxa" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of adults" value="1"><button type="button" data-s="a+1" aria-label="Add one adult">+</button></div></div><div class="prw"><div><b>Children</b><span>2 to 11 years</span></div><div class="stp"><button type="button" data-s="k-1" aria-label="Remove one child">&minus;</button><input id="pxk" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" aria-label="Number of children" value="0"><button type="button" data-s="k+1" aria-label="Add one child">+</button></div></div><p class="pxn" id="pxn" aria-live="polite"></p><div class="cf2"><p id="pxs">1 adult</p><button type="button" class="btn sm" id="pxd">Done</button></div></div><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class and passengers</label><div class="two"><select id="cb"><option>First class</option><option>Business class</option></select><div class="dd"><button type="button" class="db pxb" id="pxb" aria-haspopup="dialog" aria-expanded="false" aria-controls="pxp" aria-label="Passengers: 1 adult"><span id="pxt">1 adult</span></button></div></div></div></div>
-<div class="r" id="dr"><div class="cal" id="cal" role="dialog" aria-label="Choose your travel dates" hidden></div><div class="c"><label id="ddl">Departing on</label><button type="button" class="dv e" id="ddb">Select a date</button></div><div class="c"><label id="rdl">Returning on</label><button type="button" class="dv e" id="rdb">Add a return (optional)</button></div></div>
 <p class="err" id="de" role="alert" hidden></p>
 <p class="sn" id="sn" role="status" hidden></p>
-<div class="act bk2"><p class="ahl">Free quote. Browse routes first, or send your trip and an advisor will reply with available fares within 24 hours.</p><button class="btn o" id="sr" type="button">See available routes</button><button class="btn go fare" type="submit"><span class="ft">Request a quote</span></button></div>
 </form>
 <div class="rr" id="rr" hidden aria-live="polite"></div>
 </div>
