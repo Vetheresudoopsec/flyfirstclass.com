@@ -3,6 +3,23 @@ Options -Indexes
 ErrorDocument 404 /404.html
 DirectoryIndex index.html index.php
 
+# TEST SITE LOCK (test branch only, never merge into main).
+# Every page on test.* asks for a username and password. The password list is ffc-private/.htpasswd-test
+# (a bcrypt hash, deployed beside public_html by .cpanel.yml). Anyone who cancels the sign-in box sees
+# /locked.html, which says this is the test site and points to flyfirstclass.com.
+# The host check means the live site is never locked, even if this file is copied there by mistake.
+# robots.txt and locked.html stay open so search engines can read "Disallow: /" and the lock page can load.
+<IfModule mod_authz_core.c>
+<If "%{HTTP_HOST} =~ /^test[.]/i && %{REQUEST_URI} != '/locked.html' && %{REQUEST_URI} != '/robots.txt' && %{REQUEST_URI} != '/robots-test.txt'">
+  AuthType Basic
+  AuthName "Private test site of Fly First Class International. The public site is flyfirstclass.com"
+  AuthBasicProvider file
+  AuthUserFile /home/flyer007/test-site/ffc-private/.htpasswd-test
+  Require valid-user
+</If>
+ErrorDocument 401 /locked.html
+</IfModule>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
