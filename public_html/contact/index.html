@@ -82,7 +82,7 @@ nav{margin-left:auto}
 .strip{background:var(--card);border-bottom:1px solid var(--line)}
 .strip .w{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 28px;padding:26px 22px}
 .strip span{font-weight:500;font-size:.95rem;padding-left:16px;border-left:2px solid var(--j)}
-.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:40px 36px;margin-top:40px}
+
 .it{border-top:1px solid var(--ink);padding-top:20px}
 .row{display:grid;grid-template-columns:1fr 2fr;gap:24px;padding:26px 0;border-top:1px solid var(--line)}
 .row:last-of-type{border-bottom:1px solid var(--line)}
@@ -110,15 +110,13 @@ details p{margin-top:10px;max-width:70ch}
 .chips button.on{background:var(--j);color:var(--jt);border-color:var(--j)}
 .chips[hidden]{display:none}#sch{margin-top:-18px;align-items:center}.chips .cl{font:600 .78rem Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-right:6px}
 .lg{display:flex;flex-direction:column;gap:16px}
-.lc{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.lc[hidden]{display:none}
+
 .im{position:relative;aspect-ratio:16/10;background:var(--soft);display:grid;place-items:center}
 .im::after{content:attr(data-c);color:var(--mute);font-weight:300;font-size:1.8rem}
 .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .tags{position:absolute;left:12px;top:12px;z-index:2;display:flex;gap:6px;flex-wrap:wrap}
 .tags span{background:var(--j);color:var(--jt);font-size:.78rem;font-weight:600;padding:4px 12px;border-radius:999px}
-.lc .b{padding:18px 20px 22px;border-top:2px dashed var(--line)}
-.lc .b p{margin-bottom:6px;font-size:.92rem}.lc .b .btn{margin-top:12px}.lc b{color:var(--ink)}
+
 .cg{display:grid;grid-template-columns:3fr 2fr;gap:56px}
 @media(max-width:860px){.cg{grid-template-columns:1fr;gap:40px}}
 .f label{display:block;font-weight:600;font-size:.9rem;margin:18px 0 6px}
@@ -127,8 +125,7 @@ details p{margin-top:10px;max-width:70ch}
 #ok{margin-top:18px;color:var(--ink);background:var(--soft);padding:14px 18px;border-radius:6px}
 #ok.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;background:none}
 .map{display:grid;place-items:center;height:200px;border-radius:8px;margin:24px 0;text-decoration:none;font-weight:600;color:var(--ink);background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/36px 36px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/36px 36px,var(--soft)}
-.soc{display:flex;flex-wrap:wrap;gap:10px}
-.soc a{padding:8px 16px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:500}
+
 footer{background:var(--soft);color:var(--ink);border-top:1px solid var(--line);padding:64px 0 32px}
 footer p,footer li,footer a{color:var(--mute);font-size:.92rem}
 footer a{text-decoration:none}footer a:hover{color:var(--j)}
@@ -199,8 +196,7 @@ footer ul{list-style:none;padding:0}
 .act{display:flex;gap:12px 44px;justify-content:flex-end;flex-wrap:wrap;padding:20px 28px}
 #de{margin:0;padding:10px 28px 0}
 /* Booking bar: "Request a quote" is a compact gold box at the container's right end, as tall as the row (touching its top, bottom and right edges), and it stops short of the margin around "See available routes". */
-.act.bk2{gap:0;flex-wrap:nowrap;align-items:stretch;justify-content:flex-end;padding:0}
-.act.bk2 #sr{align-self:center;margin:20px 44px 20px 28px;white-space:nowrap}
+
 .btn.fare{display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin:0;padding:22px 42px;background:var(--au);color:#14181f;font-size:1.05rem;text-align:center;transition:background .2s}
 .btn.fare:hover,.btn.fare:focus-visible{color:#14181f;background:#b9a063}
 .btn.fare::before,.btn.fare::after{display:none}
@@ -216,12 +212,12 @@ footer ul{list-style:none;padding:0}
 .tp.x{padding:32px 28px}.tp.x p{margin:8px 0 22px;max-width:60ch}
 @media(max-width:800px){.sl{grid-template-columns:1fr}.st{padding:48px 22px}.si{border-bottom-left-radius:48px}.t4 button{padding:16px 18px;font-size:.98rem}}
 @media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
-@media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}.act.bk2 #sr{margin-right:8px}}
-@media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.act.bk2 #sr{margin:16px 12px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}}
+@media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}}
+@media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}}
 /* Booking block, design A: underline tabs, one options row, one row of cells, gold "Request a free quote" cell, three reasons under the box.
    Every rule is scoped to #bk, so the Manage booking and Check in panels, the contact page and the rest of the site keep their own styles. */
 #bk{--bkh:88px}
-#bk .t4{display:flex;gap:0;padding:0 28px;border:1px solid var(--line);border-bottom:0;background:var(--card);overflow-x:auto}
+#bk .t4{display:flex;gap:0;padding:0;overflow-x:auto}
 #bk .t4 button{flex:none;display:block;margin:0 28px 0 0;padding:20px 2px 17px;background:none;color:var(--mute);font:500 .95rem Manrope,sans-serif;text-align:left;white-space:nowrap}
 #bk .t4 button svg{display:none}
 #bk .t4 button:hover,#bk .t4 button:focus-visible{color:var(--j)}
@@ -276,7 +272,7 @@ footer ul{list-style:none;padding:0}
 #bk .mca .btn{min-height:40px}
 #bk #de,#bk .sn{padding:12px 28px;border-top:1px solid var(--line)}
 @media(max-width:700px){
-#bk .t4{padding:0 16px;gap:0}
+#bk .t4{padding:0;gap:0}
 #bk .t4 button{margin-right:20px;padding:16px 0 14px;font-size:.85rem;text-align:left}
 #bk .bko{padding:2px 16px;gap:0 16px}
 #bk .bko .pill{margin-left:0;font-size:.9rem}
@@ -297,18 +293,17 @@ footer ul{list-style:none;padding:0}
 #bk #de,#bk .sn{padding:12px 16px}
 }
 @media(prefers-reduced-motion:reduce){#bk .bkr .c,#bk .bkr .fare{transition:none}}
-/* Featured fares: dark band; one fare is shown large (picture, route, price, request button) with the full list beside it, cheapest first.
-   Every rule is scoped to #fares. */
-#fares{padding:96px 0 88px;background:#14181f;color:#fff}
+/* Featured fares: one fare is shown large (picture, route, price, request button) with the full list beside it, cheapest first.
+   Light, like the rest of the site. Every rule is scoped to #fares. */
+#fares{padding:84px 0;background:var(--soft)}
 #fares .fs-hd{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 40px}
-#fares .fs-ey{margin:0 0 14px;font-size:.875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--au)}
-#fares h2{margin:0;max-width:760px;text-wrap:balance;font-size:clamp(1.9rem,4vw,2.75rem);line-height:1.1;font-weight:300;letter-spacing:-.02em;color:#fff}
-#fares .fs-sub{margin:16px 0 0;max-width:700px;font-size:1.125rem;line-height:1.6;color:#aeb6c2}
+#fares h2{margin:0;max-width:760px;text-wrap:balance}
+#fares .fs-sub{margin:16px 0 0;max-width:700px;font-size:1.125rem;line-height:1.6}
 #fares .fs-tabs{display:flex;flex-wrap:wrap;gap:0 28px}
-#fares .fs-tabs button{display:flex;align-items:baseline;gap:8px;padding:14px 2px 15px;border:0;background:none;color:#aeb6c2;font:500 1.0625rem Manrope,sans-serif;cursor:pointer}
+#fares .fs-tabs button{display:flex;align-items:baseline;gap:8px;padding:14px 2px 15px;border:0;background:none;color:var(--mute);font:500 1.0625rem Manrope,sans-serif;cursor:pointer}
 #fares .fs-tabs button span{font-size:.8125rem;font-weight:600}
-#fares .fs-tabs button:hover{color:#e6d3a3}
-#fares .fs-tabs button[aria-pressed=true]{color:#fff;font-weight:700;box-shadow:inset 0 -3px 0 var(--au)}
+#fares .fs-tabs button:hover{color:var(--j)}
+#fares .fs-tabs button[aria-pressed=true]{color:var(--ink);font-weight:700;box-shadow:inset 0 -3px 0 var(--j)}
 #fares .fs-bd{margin-top:48px;display:flex;flex-wrap:wrap;gap:40px 48px;align-items:flex-start}
 #fares .fs-sp{flex:1 1 520px;min-width:0}
 #fares .fs-tl{position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#6d7f93}
@@ -318,48 +313,49 @@ footer ul{list-style:none;padding:0}
 #fares .fs-tl .h2{left:-20%;bottom:-36%;width:90%;height:50%;background:rgba(20,24,31,.16)}
 #fares .fs-cd{position:absolute;left:20px;bottom:6px;font-size:clamp(72px,10vw,128px);font-weight:200;line-height:1;letter-spacing:.01em;color:rgba(255,255,255,.95)}
 #fares .fs-chip{position:absolute;left:20px;top:20px;z-index:3;padding:7px 14px;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:.04em}
-#fares .fs-chip.f{background:var(--au);color:#14181f}
+#fares .fs-chip.f{background:var(--au);color:var(--ink)}
 #fares .fs-chip.b{background:rgba(255,255,255,.94);color:var(--j)}
-#fares .fs-pos{position:absolute;right:20px;top:20px;z-index:3;padding:7px 14px;border-radius:999px;font-size:.8125rem;font-weight:600;background:rgba(20,24,31,.55);color:#fff}
+#fares .fs-pos{position:absolute;right:20px;top:20px;z-index:3;padding:7px 14px;border-radius:999px;font-size:.8125rem;font-weight:600;background:rgba(255,255,255,.94);color:var(--ink)}
 #fares .fs-tl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 #fares .fs-tl.ph i,#fares .fs-tl.ph .fs-cd{display:none}
 #fares .fs-tl.ph::after{content:"";position:absolute;inset:auto 0 0;height:38%;z-index:2;background:linear-gradient(0deg,rgba(0,0,0,.5),rgba(0,0,0,0));pointer-events:none}
 #fares .fs-tl .cr{left:auto;top:auto;right:16px;bottom:12px;z-index:4;opacity:1;transform:none;pointer-events:auto}
 #fares .fs-it{margin-top:28px;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:16px 24px}
-#fares h3{margin:0;font-size:clamp(1.6rem,3vw,2.25rem);line-height:1.15;font-weight:300;letter-spacing:-.015em;color:#fff}
-#fares .fs-as{margin:8px 0 0;font-size:1.0625rem;font-weight:600;color:var(--au)}
+#fares h3{margin:0;font-size:clamp(1.6rem,3vw,2.25rem);line-height:1.15;font-weight:300;letter-spacing:-.015em;color:var(--ink)}
+#fares .fs-as{margin:8px 0 0;font-size:1.0625rem;font-weight:600;color:var(--ac)}
 #fares .fs-ar{display:flex;gap:12px}
-#fares .fs-ar button{width:48px;height:48px;display:grid;place-items:center;padding:0;border:1px solid #3a4452;border-radius:50%;background:none;color:#fff;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-#fares .fs-ar button:hover:not(:disabled){background:var(--au);color:#14181f;border-color:var(--au)}
-#fares .fs-ar button:disabled{opacity:.35;cursor:default}
-#fares .fs-pr{margin-top:28px;padding-top:24px;border-top:1px solid #2a323d;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px}
-#fares .fs-pr small{display:block;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aeb6c2}
+#fares .fs-ar button{width:48px;height:48px;display:grid;place-items:center;padding:0;border:1px solid #cdd3dc;border-radius:50%;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .15s,color .15s}
+#fares .fs-ar button:hover:not(:disabled){border-color:var(--j);color:var(--j)}
+#fares .fs-ar button:disabled{opacity:.4;cursor:default}
+#fares .fs-pr{margin-top:28px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px}
+#fares .fs-pr small{display:block;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 #fares .fs-pr .px{margin-top:4px;display:flex;align-items:baseline;gap:10px}
-#fares .fs-pr .px span{font-size:1.125rem;font-weight:700;color:#aeb6c2}
-#fares .fs-pr .px b{font-size:clamp(2.5rem,5vw,3.25rem);font-weight:300;line-height:1.05;letter-spacing:-.02em}
-#fares .fs-pr em{display:block;margin-top:6px;font-size:.8125rem;font-style:normal;font-weight:500;color:#aeb6c2}
-#fares .fs-go{display:flex;align-items:center;gap:10px;min-height:60px;padding:0 32px;border:0;border-radius:0;background:var(--au);color:#14181f;font:700 1.0625rem Manrope,sans-serif;white-space:nowrap;cursor:pointer;transition:background .15s}
+#fares .fs-pr .px span{font-size:1.125rem;font-weight:700;color:var(--mute)}
+#fares .fs-pr .px b{font-size:clamp(2.5rem,5vw,3.25rem);font-weight:300;line-height:1.05;letter-spacing:-.02em;color:var(--ink)}
+#fares .fs-pr em{display:block;margin-top:6px;font-size:.8125rem;font-style:normal;font-weight:500;color:var(--mute)}
+#fares .fs-go{display:flex;align-items:center;gap:10px;min-height:60px;padding:0 32px;border:0;border-radius:0;background:var(--au);color:var(--ink);font:700 1.0625rem Manrope,sans-serif;white-space:nowrap;cursor:pointer;transition:background .15s}
 #fares .fs-go:hover,#fares .fs-go:focus-visible{background:#b9a063}
 #fares .fs-go svg{opacity:0;transform:translateX(-4px);transition:opacity .15s,transform .15s}
 #fares .fs-go:hover svg,#fares .fs-go:focus-visible svg{opacity:1;transform:none}
 #fares .fs-ls{flex:1 1 440px;min-width:0}
-#fares .fs-list{position:relative;max-height:640px;overflow-y:auto;border-top:1px solid #2a323d;scrollbar-width:thin;scrollbar-color:#3a4452 transparent}
-#fares .fs-r{width:100%;display:flex;align-items:center;gap:14px;padding:14px 18px;border:0;border-bottom:1px solid #2a323d;border-radius:0;background:none;color:#fff;font:inherit;text-align:left;cursor:pointer;transition:background .15s}
+#fares .fs-list{position:relative;max-height:640px;overflow-y:auto;border:1px solid var(--line);background:var(--card);scrollbar-width:thin;scrollbar-color:#c4cad3 transparent}
+#fares .fs-r{width:100%;display:flex;align-items:center;gap:14px;padding:14px 18px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer;transition:background .15s}
+#fares .fs-r:last-child{border-bottom:0}
 #fares .fs-r[hidden]{display:none}
-#fares .fs-r:hover{background:#1a212b}
-#fares .fs-r[aria-pressed=true]{background:#1f2732}
+#fares .fs-r:hover{background:var(--soft)}
+#fares .fs-r[aria-pressed=true]{background:#f1f7f6}
 #fares .fs-d{flex:none;width:8px;height:8px;border-radius:50%;background:transparent}
-#fares .fs-r[aria-pressed=true] .fs-d{background:var(--au)}
+#fares .fs-r[aria-pressed=true] .fs-d{background:var(--j)}
 #fares .fs-m{flex:1 1 0;min-width:0}
 #fares .fs-rt{display:block;font-size:1rem;font-weight:600;line-height:1.3}
-#fares .fs-rs{display:block;margin-top:2px;font-size:.8125rem;line-height:1.4;color:#aeb6c2}
+#fares .fs-rs{display:block;margin-top:2px;font-size:.8125rem;line-height:1.4;color:var(--mute)}
 #fares .fs-p{flex:none;text-align:right;white-space:nowrap}
-#fares .fs-p span{display:block;font-size:.75rem;font-weight:600;color:#aeb6c2}
+#fares .fs-p span{display:block;font-size:.75rem;font-weight:600;color:var(--mute)}
 #fares .fs-p b{display:block;font-size:1.0625rem;font-weight:600}
-#fares .fs-r[aria-pressed=true] .fs-p b{color:var(--au)}
-#fares .fs-fn{margin:32px 0 0;max-width:72ch;font-size:.8125rem;line-height:1.5;color:#aeb6c2}
-#fares button:focus-visible{outline:2px solid #e6d3a3;outline-offset:2px}
-@media(max-width:700px){#fares{padding:72px 0 64px}#fares .fs-bd{margin-top:36px}#fares .fs-tabs{gap:0 18px}#fares .fs-tabs button{font-size:.9375rem}#fares .fs-go{width:100%;justify-content:center}}
+#fares .fs-r[aria-pressed=true] .fs-p b{color:var(--j)}
+#fares .fs-fn{margin:32px 0 0;max-width:72ch;font-size:.8125rem;line-height:1.5;color:var(--mute)}
+#fares button:focus-visible{outline:2px solid var(--j);outline-offset:2px}
+@media(max-width:700px){#fares{padding:64px 0}#fares .fs-bd{margin-top:36px}#fares .fs-go{width:100%;justify-content:center}#fares .fs-tabs{gap:0 18px}#fares .fs-tabs button{font-size:.9375rem}}
 @media(prefers-reduced-motion:reduce){#fares .fs-r,#fares .fs-go,#fares .fs-go svg,#fares .fs-ar button{transition:none}}
 .err{color:#b3261e;font-size:.85rem;margin-top:6px}
 .loc{margin:0 0 18px;color:var(--mute)}
@@ -481,9 +477,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .cnt{flex:1 1 420px}.cnt b#cnh{display:block;margin-bottom:4px;font-size:1rem}.cnt p{margin:0 0 8px;font-size:.88rem;line-height:1.55}.cnt p:last-child,#cnd p:last-child{margin-bottom:0}#cnd{margin-top:10px}#cnd[hidden]{display:none}.cx{border:0;background:none;padding:0;margin:0;font:inherit;color:var(--j);text-decoration:underline;cursor:pointer}.cx:hover{text-decoration-thickness:2px}.cnt a{color:var(--j);text-decoration:underline}.cnt #cns{display:block;margin-top:4px;color:var(--ink);font-weight:600}.cnt #cns:empty{display:none}
 .cnk{display:flex;gap:34px;margin-left:auto}
 .lnk{border:0;background:none;padding:0;color:var(--mute);font:inherit;font-size:.92rem;cursor:pointer}footer .lnk:hover{color:var(--j)}
-.tp2 ul{margin:0 0 12px 20px;color:var(--mute)}.tp2 li{margin-bottom:6px}
-.tos{margin-top:18px;font-size:.78rem;line-height:1.55;color:var(--mute)}
-.tos p{margin:0 0 8px}.tos b{color:var(--ink)}
+
 .air{border-bottom:1px solid var(--line);padding:26px 0 24px;overflow:hidden}
 .at{text-align:center;font-size:.85rem;color:var(--mute);margin-bottom:16px}
 .mq{display:flex;width:max-content;animation:mq 55s linear infinite}
@@ -540,8 +534,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 @media(max-width:800px){.lsk{grid-template-columns:1fr}.lsk i{min-height:110px}}
 .rpx{margin-top:6px;font-size:.92rem;color:var(--mute)}.rpx b,.ban .bp b{color:var(--ink);font-weight:600}.rpx i,.ban .bp i{font-style:normal;font-size:.72rem;font-weight:600;letter-spacing:.08em;margin-left:1px}
 .ban .bp{margin:8px 0 0;font-size:.95rem;color:var(--mute)}.ban .bp b{font-size:1.05rem}
-.ahl{margin:0 auto 0 0;align-self:center;max-width:560px;padding:0 28px;font-size:.9rem;line-height:1.45;color:var(--mute)}
-@media(max-width:700px){.act.bk2{flex-wrap:wrap}.ahl{order:3;flex:1 0 100%;max-width:none;padding:0 18px 14px}}
+
 .sbar{display:none}
 @media(max-width:700px){.sbar{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:70;display:flex}.sbar a{display:grid;place-items:center;min-height:40px;padding:0 18px;border:1px solid var(--ink);background:var(--card);color:var(--ink);font:600 .88rem Manrope,sans-serif;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.14);-webkit-tap-highlight-color:transparent}.sbar a.q{background:var(--au);border-color:var(--au);color:#14181f}.sbar a:not(.q){display:none}/* "Call us" is hidden for now: delete the line above this comment to bring it back */body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}body .nlp{bottom:calc(66px + env(safe-area-inset-bottom,0px))}body[data-pg=contact] .sbar,body[data-pg=thanks] .sbar,body[data-pg=thanksm] .sbar,body.cn-on .sbar,body.typing .sbar{display:none}body[data-pg=contact],body[data-pg=thanks],body[data-pg=thanksm]{padding-bottom:0}}
 @media(max-width:900px){.dcard{flex-basis:calc((100% - 20px)/2)}}
@@ -607,9 +600,6 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .pl{font-size:.85rem;color:var(--mute);margin:0}
 .pw .pay{margin:0}
 .pay img{height:28px;width:auto;filter:grayscale(1);opacity:.6}
-.tp2{max-width:760px}
-.tp2 h2{font-size:1.25rem;font-weight:600;letter-spacing:-.01em;margin:26px 0 8px}
-.tp2 p{margin-bottom:10px}
 
 /* ===== 2026-10 redesign: Home, About, Services, Contact ===== */
 /* ===== shared by every draft ===== */
@@ -623,7 +613,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .rv.in{opacity:1;transform:none}
 .ey{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);font-weight:600;margin:0 0 14px}
-.frost{background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.pcw img{transition:none}.pcw:hover img{transform:none}}
 /* ===== Design A: Horizon. Full-bleed photography, frosted white cards, gold hairlines. ===== */
 .a-hd{position:relative;isolation:isolate;min-height:clamp(440px,74vh,660px);display:flex;align-items:flex-end;border-bottom:1px solid var(--line)}
@@ -633,27 +623,11 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .a-hd h1{max-width:17ch}
 .a-hd h1::after{content:"";display:block;width:64px;height:3px;background:var(--au);margin-top:22px}
 .a-hd .lead{max-width:560px;margin-top:16px;font-size:1.15rem}
-.a-hd.sm{min-height:clamp(380px,56vh,500px)}.a-hd.cthd .w{padding-bottom:150px}
+.a-hd.sm{min-height:clamp(380px,56vh,500px)}
 .a-s{padding:104px 0}.a-soft{background:var(--soft)}
-.a-lead{max-width:60ch;color:var(--mute)}
-.a-more{padding-top:26px;padding-bottom:6px}
-.a-tp{padding-bottom:40px}
-.a-why{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:50px}
-.a-card{position:relative}.a-card .pcw{aspect-ratio:4/5;border-radius:3px}
-.a-card:nth-child(2){margin-top:46px}
-.a-card .num{position:absolute;left:18px;top:10px;z-index:3;color:#fff;font-size:2.8rem;font-weight:200;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.5)}
-.a-card h3{margin-top:22px}.a-card p{color:var(--mute)}
-.a-tri{display:grid;grid-template-columns:repeat(3,1fr);margin-top:30px}
-.a-pn{position:relative;min-height:clamp(440px,52vw,620px);overflow:hidden}
-.a-pn .pcw{position:absolute;inset:0}
-.a-pn .tx{position:absolute;left:22px;right:22px;bottom:22px;z-index:3;padding:22px 24px;border-top:3px solid var(--au);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.a-pn:hover .tx{transform:translateY(-6px)}
-.a-pn .tx h3{margin-bottom:6px}.a-pn .tx p{color:var(--mute);font-size:.95rem;margin:0}
+
 .a-bandimg{position:relative;height:clamp(230px,36vw,440px);margin-top:70px}.a-bandimg .pcw{position:absolute;inset:0}
-.a-qs{display:grid;grid-template-columns:repeat(3,1fr);gap:38px;margin-top:40px}
-.a-qs blockquote{border-top:1px solid var(--ink);padding-top:22px}
-.a-qs blockquote::before{content:"\201C";display:block;font-size:4.6rem;line-height:.62;height:34px;color:var(--au);font-weight:300}
-.a-qs p{font-size:1.1rem;font-weight:300}.a-qs cite{display:block;margin-top:14px;font-style:normal;color:var(--mute);font-size:.88rem;letter-spacing:.04em}
+
 .a-built{display:grid;grid-template-columns:1fr 1fr;min-height:580px}
 .a-built .tx{padding:clamp(40px,7vw,110px);display:flex;flex-direction:column;justify-content:center;background:var(--soft)}
 .a-built .tx p:not(.ey){color:var(--mute);max-width:46ch}
@@ -662,16 +636,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .a-cta>.pcw{position:absolute;inset:0;z-index:-1}
 .a-cta .box{max-width:640px;margin:auto;padding:56px 40px;border-top:3px solid var(--au)}
 .a-cta h2{margin:0 auto 12px;max-width:18ch}.a-cta p{margin:0 auto 26px;max-width:46ch;color:var(--mute)}
-.a-story{display:grid;grid-template-columns:5fr 6fr;gap:76px;align-items:center}
-.a-story .pcw{aspect-ratio:4/5;border-radius:3px}.a-story p:not(.ey){color:var(--mute);font-size:1.06rem}
-.a-mis{position:relative;isolation:isolate;min-height:540px;display:flex;align-items:center;padding:80px 0}
-.a-mis>.pcw{position:absolute;inset:0;z-index:-1}
-.a-mis .box{max-width:640px;padding:48px 46px;border-top:3px solid var(--au)}
-.a-mis .big{font-size:clamp(1.45rem,2.7vw,2.1rem);font-weight:300;line-height:1.32;color:var(--ink);margin:0;letter-spacing:-.01em}
-.a-diff{display:grid;grid-template-columns:repeat(2,1fr);gap:0 70px;margin-top:40px}
-.a-diff .it2{border-top:1px solid var(--line);padding:30px 0;display:grid;grid-template-columns:76px 1fr}
-.a-diff .no{font-size:2.2rem;font-weight:200;color:var(--ac);line-height:1.1}.a-diff p{color:var(--mute)}
-.a-strip{display:grid;grid-template-columns:repeat(4,1fr)}.a-strip .pcw{aspect-ratio:1/1.05}
+
 .a-do{display:grid;grid-template-columns:repeat(3,1fr);gap:50px 30px;margin-top:50px}
 .a-do .pcw{aspect-ratio:3/2;border-radius:3px}.a-do h3{margin-top:20px}.a-do p{color:var(--mute)}
 .a-steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:50px;list-style:none;padding:0;position:relative}
@@ -683,78 +648,28 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .a-faq h2{margin-bottom:24px}
 @media(max-width:900px){
  .a-s{padding:72px 0}
- .a-why,.a-tri,.a-qs,.a-do,.a-diff,.a-built,.a-story,.a-faq{grid-template-columns:1fr}
- .a-card:nth-child(2){margin-top:0}.a-story{gap:34px}.a-faq{gap:34px}.a-faq>div:first-child .pcw{position:relative;top:0}
- .a-pn{min-height:420px}.a-built .pcw{min-height:320px;order:-1}
- .a-strip{grid-template-columns:repeat(2,1fr)}
+ .a-do,.a-built,.a-faq{grid-template-columns:1fr}
+ .a-faq{gap:34px}.a-faq>div:first-child .pcw{position:relative;top:0}
+ .a-built .pcw{min-height:320px;order:-1}
+ 
  .a-steps{grid-template-columns:repeat(2,1fr);gap:34px 20px}.a-steps::before{display:none}
- .a-hd .w{padding-top:120px}.a-hd.cthd .w{padding-bottom:110px}
+ .a-hd .w{padding-top:120px}
 }
 
 /* ===== Design B: Gallery. A white gallery wall: framed plates, asymmetric mosaics, numbered captions, hairline gold. ===== */
-.b-s{padding:100px 0}.b-soft{background:var(--soft)}.b-tp{padding-bottom:70px}
-.b-hd{padding:clamp(70px,9vw,120px) 0 clamp(50px,6vw,84px);border-bottom:1px solid var(--line)}
-.b-hd>.w{display:grid;grid-template-columns:5fr 6fr;gap:clamp(30px,5vw,80px);align-items:center}
-.b-hd h1{max-width:14ch}.b-hd h1::after{content:"";display:block;width:64px;height:3px;background:var(--au);margin-top:22px}
-.b-hd .lead{font-size:1.14rem;margin-top:20px;max-width:480px}
-.b-mo{display:grid;grid-template-columns:1fr 1fr;gap:12px;aspect-ratio:1.08/1}
-.b-mo .tall{height:100%}.b-mo .col{display:grid;grid-template-rows:1fr 1fr;gap:12px}.b-mo .col .pcw{height:100%}
-.b-hd.sm>.w{grid-template-columns:5fr 5fr}.b-hd.sm .b-mo{aspect-ratio:1.25/1}
-.plate{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ac)}
-.plate i{display:block;width:26px;height:1px;background:var(--au)}
-.b-why{margin-top:50px;display:grid;gap:70px}
-.b-wr{display:grid;grid-template-columns:7fr 5fr;gap:clamp(30px,5vw,80px);align-items:center}
-.b-wr .pcw{aspect-ratio:3/2;border-radius:2px;box-shadow:0 30px 60px -38px rgba(0,0,0,.5)}
-.b-wr.flip{grid-template-columns:5fr 7fr}.b-wr.flip .pcw{order:2}
-.b-wr .nn{display:block;font-size:4.4rem;font-weight:200;line-height:1;color:var(--au);margin-bottom:10px}
-.b-wr h3{font-size:1.5rem;font-weight:400}.b-wr p{color:var(--mute);max-width:42ch}
-.b-bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(240px,28vw));gap:12px;margin-top:44px}
-.b-bento a{position:relative;display:block;overflow:hidden;color:inherit;text-decoration:none;border-radius:2px;isolation:isolate}
-.b-bento .big{grid-column:span 2;grid-row:span 2}.b-bento .sm{grid-column:span 1}.b-bento .wide{grid-column:span 2}
-.b-bento .pcw{position:absolute;inset:0;z-index:-1}
-.b-bento .cap{position:absolute;left:0;right:0;bottom:0;padding:70px 22px 20px;background:linear-gradient(to top,rgba(10,12,16,.72),rgba(10,12,16,0));color:#fff}
-.b-bento .cap .plate{color:#f1e3bd}.b-bento .cap .plate i{background:#f1e3bd}
-.b-bento .cap h3{color:#fff;margin:8px 0 4px;font-weight:500;font-size:1.15rem}.b-bento .cap p{color:rgba(255,255,255,.86);margin:0;font-size:.95rem;max-width:44ch}
-.b-bento .big .cap h3{font-size:1.6rem;font-weight:400}
-.b-bento a:hover .pcw img{transform:scale(1.06)}
-.b-tp .tl{margin-top:26px}
-.b-qs{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
-.b-qs blockquote{border-left:2px solid var(--au);padding-left:24px}
-.b-qs p{font-size:1.1rem;font-weight:300}.b-qs cite{display:block;margin-top:14px;font-style:normal;color:var(--mute);font-size:.88rem;letter-spacing:.04em}
-.b-built{padding:100px 0}.b-built>.w{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:center}
-.ph3{position:relative;aspect-ratio:1.1/1}
-.ph3>.pcw:first-child{position:absolute;left:0;top:0;width:78%;height:82%;border-radius:2px}
-.ph3>.pcw.off{position:absolute;right:0;bottom:0;width:48%;height:48%;border-radius:2px;border:8px solid var(--bg);box-shadow:0 20px 50px -26px rgba(0,0,0,.5)}
-.b-built .tx p:not(.ey){color:var(--mute);max-width:44ch}
-.b-cities{background:var(--soft);border-top:1px solid var(--line)}
-.b-cities .row4{display:grid;grid-template-columns:repeat(4,1fr)}
-.b-cities .cty{position:relative}.b-cities .cty .pcw{aspect-ratio:3/4}
-.b-cities .tag{position:absolute;left:16px;top:14px;z-index:3;color:#fff;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.55)}
-.b-cities .cta{text-align:center;padding:clamp(60px,8vw,100px) 0}
-.b-cities .cta h2{margin:0 auto 12px;max-width:18ch}.b-cities .cta p{margin:0 auto 26px;max-width:46ch}
-.b-story{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:center}
-.b-story p:not(.ey){color:var(--mute);font-size:1.06rem}
+.b-s{padding:100px 0}
+
 .b-mis{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(70px,10vw,130px) 0}
 .b-mis .big{font-size:clamp(1.6rem,3.6vw,2.7rem);font-weight:200;line-height:1.25;color:var(--ink);max-width:24ch;letter-spacing:-.015em;margin:0}
 .b-mis .big::before{content:"";display:block;width:64px;height:3px;background:var(--au);margin-bottom:28px}
-.b-do{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
-.b-dc{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;isolation:isolate}
-.b-dc .pcw{position:absolute;inset:0;z-index:-1}
-.b-dc .no{position:absolute;left:18px;top:12px;z-index:3;color:#fff;font-size:1.3rem;font-weight:300;text-shadow:0 1px 10px rgba(0,0,0,.5)}
-.b-dc .tx{position:absolute;left:0;right:0;bottom:0;padding:90px 22px 22px;background:linear-gradient(to top,rgba(10,12,16,.78),rgba(10,12,16,0))}
-.b-dc h3{color:#fff;font-weight:500;margin-bottom:4px}.b-dc p{color:rgba(255,255,255,.88);font-size:.93rem;margin:0}
-.b-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:44px;list-style:none;padding:0}
-.b-steps li{padding:0 26px 0 0;border-top:1px solid var(--ink);padding-top:22px;margin-right:26px}.b-steps li:last-child{margin-right:0}
-.b-steps .n{display:block;font-size:2.6rem;font-weight:200;color:var(--ac);line-height:1;margin-bottom:14px}.b-steps p{color:var(--mute)}
-.b-faq{display:grid;grid-template-columns:6fr 5fr;gap:clamp(30px,6vw,90px);align-items:start}
-.b-faq .ph3{position:sticky;top:96px}
+
 @media(max-width:900px){
  .b-s{padding:70px 0}
- .b-hd>.w,.b-hd.sm>.w,.b-wr,.b-wr.flip,.b-built>.w,.b-story,.b-faq{grid-template-columns:1fr}
- .b-wr.flip .pcw{order:0}.b-qs,.b-do{grid-template-columns:1fr}.b-steps{grid-template-columns:repeat(2,1fr);gap:30px 0}
- .b-bento{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:minmax(220px,56vw)}.b-bento .big{grid-column:span 2;grid-row:span 1}.b-bento .wide{grid-column:span 2}
- .b-cities .row4{grid-template-columns:repeat(2,1fr)}.b-faq .ph3{position:relative;top:0}
- .b-dc{aspect-ratio:4/3}
+ 
+ 
+ 
+ 
+ 
 }
 /* ---- text-only headers, call-to-action bands, service list, FAQ and contact page (no photographs) ---- */
 .a-hd.t{min-height:0;display:block}
@@ -995,12 +910,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <ul class="bkw" aria-label="Why ask us"><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 14 14 4M6 5.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM14 12.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Up to 70% off business and first class</li><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 5.5V9l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advisor reply within 24 hours</li><li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m6 9.2 2 2 4-4.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Free quote</li></ul>
 </div>
 <div class="air"><p class="at">Our partner airlines</p><div class="mq" id="mq"></div></div>
+<section id="fares" aria-labelledby="fs-h"><div class="w"><div class="fs-hd"><div><h2 id="fs-h">Featured first and business class fares</h2><p class="fs-sub">Round-trip fares, plus taxes and fees. Choose a route to see it in full.</p></div><div class="fs-tabs" role="group" aria-label="Filter fares by cabin"><button type="button" aria-pressed="true" data-f="all">All fares <span>17</span></button><button type="button" aria-pressed="false" data-f="first">First class <span>6</span></button><button type="button" aria-pressed="false" data-f="business">Business class <span>11</span></button></div></div><div class="fs-bd"><div class="fs-sp" id="fsp"><div class="fs-tl" id="fst" style="background:linear-gradient(180deg,#dce1e6 0%,#acbbc9 55%,#6d8196 100%)"><i class="sun" aria-hidden="true"></i><i class="h1" aria-hidden="true"></i><i class="h2" aria-hidden="true"></i><span class="fs-chip b" id="fsc">Business class</span><span class="fs-pos" id="fsn">1 of 17</span><span class="fs-cd" id="fsk" aria-hidden="true">CPH</span></div><div class="fs-it" aria-live="polite"><div><h3 id="fsr">Singapore to Copenhagen</h3><p class="fs-as" id="fsa">Singapore Airlines, Business Class</p></div><div class="fs-ar"><button type="button" id="fsb" aria-label="Previous fare" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" id="fsx" aria-label="Next fare"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div><div class="fs-pr"><div><small>From</small><div class="px"><span>USD</span><b id="fsv">3,300</b></div><em>Round trip, plus taxes and fees</em></div><button class="fs-go" type="button" id="fsq">Request this fare<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="fs-ls"><div class="fs-list" role="group" aria-label="All featured fares, cheapest first"><button class="fs-r" type="button" aria-pressed="true" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="Copenhagen" data-ta="CPH" data-al="Singapore Airlines" data-cb="Business Class" data-px="3300" data-g="#dce1e6,#acbbc9,#6d8196"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to Copenhagen</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Washington" data-fa="IAD" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3300" data-g="#bfcbd8,#8798ae,#4b5d78"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Dallas" data-ta="DFW" data-al="Cathay Pacific" data-cb="Business Class" data-px="3700" data-g="#f5d3a8,#e2966c,#8d5149"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Dallas</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="Business Class" data-px="3700" data-g="#d5d9de,#a6b2bf,#65748a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Atlanta" data-fa="ATL" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3800" data-g="#cdd2d9,#97a1b1,#58667a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Atlanta to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="London" data-fa="LHR" data-to="Hong Kong" data-ta="HKG" data-al="Cathay Pacific" data-cb="Business Class" data-px="3900" data-g="#86c4c3,#359596,#0f505a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">London to Hong Kong</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="New York" data-fa="JFK" data-to="Maldives" data-ta="MLE" data-al="Qatar Airways" data-cb="Business Class" data-px="3900" data-g="#c3ece5,#62c4c0,#14797f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Maldives</span><span class="fs-rs">Qatar Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="New York" data-ta="JFK" data-al="Cathay Pacific" data-cb="Business Class" data-px="4200" data-g="#a6bdd6,#738fb0,#38496a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to New York</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,200</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Washington" data-fa="IAD" data-to="Frankfurt" data-ta="FRA" data-al="Lufthansa Airlines" data-cb="First Class" data-px="4400" data-g="#cdd6dc,#8fa4ae,#4d6370"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to Frankfurt</span><span class="fs-rs">Lufthansa Airlines, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,400</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Vancouver" data-ta="YVR" data-al="Cathay Pacific" data-cb="Business Class" data-px="4600" data-g="#abd3ca,#62a493,#27574c"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Vancouver</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="New York" data-ta="JFK" data-al="Singapore Airlines" data-cb="Business Class" data-px="4600" data-g="#b3c2d9,#7f93b6,#3f4f74"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to New York</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Los Angeles" data-fa="LAX" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="First Class" data-px="4800" data-g="#d3d0dc,#a29cb6,#5f5a7a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Los Angeles to London</span><span class="fs-rs">British Airways, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="San Francisco" data-ta="SFO" data-al="Singapore Airlines" data-cb="Business Class" data-px="4800" data-g="#f7cdab,#e2917c,#7d4d5f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to San Francisco</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Abu Dhabi" data-ta="AUH" data-al="Etihad" data-cb="First Class Suite" data-px="5900" data-g="#f1dcae,#dcb27e,#8b7152"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Abu Dhabi</span><span class="fs-rs">Etihad, First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 5,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Hong Kong" data-fa="HKG" data-to="London" data-ta="LHR" data-al="Cathay Pacific" data-cb="First Class" data-px="6800" data-g="#c3d3d4,#8ba5a8,#4d6a70"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to London</span><span class="fs-rs">Cathay Pacific, First Class</span></span><span class="fs-p"><span>From</span><b>USD 6,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="A380 First Class Suite" data-px="7600" data-g="#c4cfdc,#93a5ba,#566a82"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, A380 First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 7,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Dubai" data-ta="DXB" data-al="" data-cb="First Class" data-px="7800" data-g="#f4cf9c,#e79c6c,#8a5a52"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Dubai</span><span class="fs-rs">First Class</span></span><span class="fs-p"><span>From</span><b>USD 7,800</b></span></button></div></div></div><p class="fs-fn">Fares change with the date and availability; your free quote confirms the exact price.</p></div></section>
 <div class="s"><div class="w">
 <div class="dh"><div><h2 id="ttl">Looking for a different route?</h2><p class="tsub" id="tsub">Top destinations</p></div></div>
 <div class="tw" id="tw"><div class="fo"><button class="fa fl" id="tprev" type="button" aria-label="Previous destinations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="fa fr" id="tnext" type="button" aria-label="Next destinations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div><div class="tcar" id="tcar" role="list" tabindex="0" aria-label="Top destinations"></div></div>
 <p class="tfn" id="tfn" hidden>Estimated round-trip fares in US dollars (USD), per person, before taxes and fees. Fares change with the date and availability; your free quote confirms the exact price.</p>
 </div></div>
-<section id="fares" aria-labelledby="fs-h"><div class="w"><div class="fs-hd"><div><p class="fs-ey">Featured fares</p><h2 id="fs-h">Featured first and business class fares</h2><p class="fs-sub">Round-trip fares, plus taxes and fees. Choose a route to see it in full.</p></div><div class="fs-tabs" role="group" aria-label="Filter fares by cabin"><button type="button" aria-pressed="true" data-f="all">All fares <span>17</span></button><button type="button" aria-pressed="false" data-f="first">First class <span>6</span></button><button type="button" aria-pressed="false" data-f="business">Business class <span>11</span></button></div></div><div class="fs-bd"><div class="fs-sp" id="fsp"><div class="fs-tl" id="fst" style="background:linear-gradient(180deg,#dce1e6 0%,#acbbc9 55%,#6d8196 100%)"><i class="sun" aria-hidden="true"></i><i class="h1" aria-hidden="true"></i><i class="h2" aria-hidden="true"></i><span class="fs-chip b" id="fsc">Business class</span><span class="fs-pos" id="fsn">1 of 17</span><span class="fs-cd" id="fsk" aria-hidden="true">CPH</span></div><div class="fs-it" aria-live="polite"><div><h3 id="fsr">Singapore to Copenhagen</h3><p class="fs-as" id="fsa">Singapore Airlines, Business Class</p></div><div class="fs-ar"><button type="button" id="fsb" aria-label="Previous fare" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" id="fsx" aria-label="Next fare"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div><div class="fs-pr"><div><small>From</small><div class="px"><span>USD</span><b id="fsv">3,300</b></div><em>Round trip, plus taxes and fees</em></div><button class="fs-go" type="button" id="fsq">Request this fare<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="fs-ls"><div class="fs-list" role="group" aria-label="All featured fares, cheapest first"><button class="fs-r" type="button" aria-pressed="true" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="Copenhagen" data-ta="CPH" data-al="Singapore Airlines" data-cb="Business Class" data-px="3300" data-g="#dce1e6,#acbbc9,#6d8196"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to Copenhagen</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Washington" data-fa="IAD" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3300" data-g="#bfcbd8,#8798ae,#4b5d78"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Dallas" data-ta="DFW" data-al="Cathay Pacific" data-cb="Business Class" data-px="3700" data-g="#f5d3a8,#e2966c,#8d5149"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Dallas</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="Business Class" data-px="3700" data-g="#d5d9de,#a6b2bf,#65748a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Atlanta" data-fa="ATL" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3800" data-g="#cdd2d9,#97a1b1,#58667a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Atlanta to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="London" data-fa="LHR" data-to="Hong Kong" data-ta="HKG" data-al="Cathay Pacific" data-cb="Business Class" data-px="3900" data-g="#86c4c3,#359596,#0f505a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">London to Hong Kong</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="New York" data-fa="JFK" data-to="Maldives" data-ta="MLE" data-al="Qatar Airways" data-cb="Business Class" data-px="3900" data-g="#c3ece5,#62c4c0,#14797f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Maldives</span><span class="fs-rs">Qatar Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="New York" data-ta="JFK" data-al="Cathay Pacific" data-cb="Business Class" data-px="4200" data-g="#a6bdd6,#738fb0,#38496a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to New York</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,200</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Washington" data-fa="IAD" data-to="Frankfurt" data-ta="FRA" data-al="Lufthansa Airlines" data-cb="First Class" data-px="4400" data-g="#cdd6dc,#8fa4ae,#4d6370"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to Frankfurt</span><span class="fs-rs">Lufthansa Airlines, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,400</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Vancouver" data-ta="YVR" data-al="Cathay Pacific" data-cb="Business Class" data-px="4600" data-g="#abd3ca,#62a493,#27574c"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Vancouver</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="New York" data-ta="JFK" data-al="Singapore Airlines" data-cb="Business Class" data-px="4600" data-g="#b3c2d9,#7f93b6,#3f4f74"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to New York</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Los Angeles" data-fa="LAX" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="First Class" data-px="4800" data-g="#d3d0dc,#a29cb6,#5f5a7a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Los Angeles to London</span><span class="fs-rs">British Airways, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="San Francisco" data-ta="SFO" data-al="Singapore Airlines" data-cb="Business Class" data-px="4800" data-g="#f7cdab,#e2917c,#7d4d5f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to San Francisco</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Abu Dhabi" data-ta="AUH" data-al="Etihad" data-cb="First Class Suite" data-px="5900" data-g="#f1dcae,#dcb27e,#8b7152"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Abu Dhabi</span><span class="fs-rs">Etihad, First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 5,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Hong Kong" data-fa="HKG" data-to="London" data-ta="LHR" data-al="Cathay Pacific" data-cb="First Class" data-px="6800" data-g="#c3d3d4,#8ba5a8,#4d6a70"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to London</span><span class="fs-rs">Cathay Pacific, First Class</span></span><span class="fs-p"><span>From</span><b>USD 6,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="A380 First Class Suite" data-px="7600" data-g="#c4cfdc,#93a5ba,#566a82"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, A380 First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 7,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Dubai" data-ta="DXB" data-al="" data-cb="First Class" data-px="7800" data-g="#f4cf9c,#e79c6c,#8a5a52"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Dubai</span><span class="fs-rs">First Class</span></span><span class="fs-p"><span>From</span><b>USD 7,800</b></span></button></div></div></div><p class="fs-fn">Fares change with the date and availability; your free quote confirms the exact price.</p></div></section>
 <div class="a-s nl-s" id="nls"><div class="w"><div class="nl-g rv"><div class="nl-c"><h2>Fare and route updates, by email</h2><p class="nl-p">Occasional notes from our advisors on first and business class routes, fares and seasonal offers.</p></div><div class="nl-wrap" id="nlh"></div></div></div></div><div class="a-built"><div class="tx rv"><h2>Excellence in the skies, for over 20 years</h2><p>For more than two decades we have paired deep airline relationships with personal service, so clients who value their time fly first and business class at up to 70% off market airfares.</p><a class="tl" href="/about/">More about us</a></div><figure class="pcw "><img src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1600&q=72" srcset="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=800&q=72 800w, https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1200&q=72 1200w, https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1600&q=72 1600w, https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=2000&q=72 2000w" sizes="(min-width:900px) 50vw, 100vw" alt="Traveller with a suitcase watching a plane take off" loading="lazy" style="object-position:50% 40%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: <a href="https://unsplash.com/photos/silhouette-of-man-holding-luggage-inside-airport-bMIlyKZHKMY?utm_source=fly_first_class&utm_medium=referral" target="_blank" rel="noopener noreferrer">yousef alfuhigi</a> / <a href="https://unsplash.com/?utm_source=fly_first_class&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></figcaption></figure></div><div class="a-bandimg"><figure class="pcw "><img src="https://images.unsplash.com/photo-1507812984078-917a274065be?auto=format&fit=crop&w=1800&q=72" alt="Aircraft wing at sunset seen from the window" loading="lazy" style="object-position:50% 50%" onerror="this.parentNode.classList.add('ne');this.remove()"><figcaption class="pc">Photo: <a href="https://unsplash.com/photos/window-view-of-airplane-during-golden-hour-rn-NLirHQPY?utm_source=fly_first_class&utm_medium=referral" target="_blank" rel="noopener noreferrer">Leonardo Yip</a> / <a href="https://unsplash.com/?utm_source=fly_first_class&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></figcaption></figure><div class="geo-sc" aria-hidden="true"></div><div class="geo-tx"><div class="w rv"><h2 id="geo-h">Wherever you're leaving from, fly at the front of the aircraft.</h2><p>Business and first class fares from airports around the world.</p><a class="btn go" href="/contact/">Request a free quote</a></div></div></div></section>
 
 <section class="pg" id="p-about" hidden>
@@ -1132,7 +1047,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 // Test site only (a host name that starts with "test."): every load starts as a first-time visitor, so the sign-up, cookie choice and saved request can be tried again. Does nothing on the live site.
 if(/^test\./i.test(location.hostname)){try{localStorage.clear()}catch(e){}try{sessionStorage.clear()}catch(e){}}
 const $=id=>document.getElementById(id);
-const R=document.documentElement;
 const P={thanks:["Thank you | Fly First Class International","We have received your request."],thanksm:["Thank you | Fly First Class International","We have received your message."],terms:["Terms of Service | Fly First Class International","The terms that apply when you send a quote request to Fly First Class International: validity, pricing, confidentiality and communication."],privacy:["Privacy Policy | Fly First Class International","How Fly First Class International collects and uses your information, including cookies, and the choices you have."],home:["First Class Airline Tickets up to 70% Off | Fly First Class","Insider first and business class fares up to 70% off market airfares, arranged by an advisor with 20+ years of experience. Request a free quote."],about:["About Us | Fly First Class International","20+ years of dedicated service in first and business class travel. Meet the team behind Fly First Class International and its insider fares."],services:["First & Business Class Travel Services | Fly First Class","First class tickets, business class fares, multi-city and executive travel, plus how it works and your questions answered."],listings:["First & Business Class Routes and Fares | Fly First Class","Explore first and business class routes, cabins and airlines from your nearest airport, then request a free quote."],contact:["Contact Us | Fly First Class International","Request a free quote for first class travel. Share your route and dates and an advisor will reply with your best fares."]};
 const RP={home:"/",about:"/about/",services:"/services/",listings:"/routes/",contact:"/contact/",terms:"/terms/",privacy:"/privacy-policy/"};
 const PR={};Object.keys(RP).forEach(k=>PR[RP[k]]=k);
