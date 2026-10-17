@@ -17,12 +17,31 @@ function u_blocked() {
     return !C('ukey') || !empty($s['off']) || (!empty($s['pause']) && now_ms() < $s['pause']);
 }
 
+// Hand-picked photos (data.json "PHOTOS"): IATA => [Unsplash image id, photographer, photo page slug]. Each one is an easily recognised
+// landmark or a skyline of the destination. They win over whatever the automatic Unsplash search found, and a destination that has one is
+// never searched for. To change a picture, replace its image id (the part after "photo-" in the image address).
+function curated_photos() {
+    static $cur = null;
+    if ($cur !== null) return $cur;
+    $cur = [];
+    foreach ((D()['PHOTOS'] ?? []) as $c => $p) {
+        if (!is_array($p) || empty($p[0])) continue;
+        $cur[$c] = [
+            'url' => 'https://images.unsplash.com/photo-' . $p[0] . '?auto=format&fit=crop&w=1400&q=80',
+            'credit' => (string)($p[1] ?? ''),
+            'link' => 'https://unsplash.com/' . (!empty($p[2]) ? 'photos/' . $p[2] : '') . '?utm_source=fly_first_class&utm_medium=referral',
+        ];
+    }
+    return $cur;
+}
+
 // IATA -> photo { url, credit, link } (null = none found; an old "none" is retried after 7 days)
 function img_all($reload = false) {
     static $c = null;
     if ($c !== null && !$reload) return $c;
     $IMG = cload('images.json', []); $NOPH = cload('nophoto.json', []);
     foreach ($IMG as $k => $v) if ($v === null && !(isset($NOPH[$k]) && now_ms() - $NOPH[$k] < 7 * 864e5)) unset($IMG[$k]);
+    foreach (curated_photos() as $k => $v) $IMG[$k] = $v;
     return $c = $IMG;
 }
 function pub($v) { return ($v && !C('credits')) ? ['url' => $v['url']] : $v; }   // the photographer credit is only sent when PHOTO_CREDITS is not "off"
