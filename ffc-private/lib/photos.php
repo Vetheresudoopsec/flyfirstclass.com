@@ -17,12 +17,31 @@ function u_blocked() {
     return !C('ukey') || !empty($s['off']) || (!empty($s['pause']) && now_ms() < $s['pause']);
 }
 
+// Hand-picked photos (data.json "PHOTOS"): IATA => [Unsplash image id, photographer, photo page slug]. Each one is an easily recognised
+// landmark or a skyline of the destination. They win over whatever the automatic Unsplash search found, and a destination that has one is
+// never searched for. To change a picture, replace its image id (the part after "photo-" in the image address).
+function curated_photos() {
+    static $cur = null;
+    if ($cur !== null) return $cur;
+    $cur = [];
+    foreach ((D()['PHOTOS'] ?? []) as $c => $p) {
+        if (!is_array($p) || empty($p[0])) continue;
+        $cur[$c] = [
+            'url' => 'https://images.unsplash.com/photo-' . $p[0] . '?auto=format&fit=crop&w=1400&q=80',
+            'credit' => (string)($p[1] ?? ''),
+            'link' => 'https://unsplash.com/' . (!empty($p[2]) ? 'photos/' . $p[2] : '') . '?utm_source=fly_first_class&utm_medium=referral',
+        ];
+    }
+    return $cur;
+}
+
 // IATA -> photo { url, credit, link } (null = none found; an old "none" is retried after 7 days)
 function img_all($reload = false) {
     static $c = null;
     if ($c !== null && !$reload) return $c;
     $IMG = cload('images.json', []); $NOPH = cload('nophoto.json', []);
     foreach ($IMG as $k => $v) if ($v === null && !(isset($NOPH[$k]) && now_ms() - $NOPH[$k] < 7 * 864e5)) unset($IMG[$k]);
+    foreach (curated_photos() as $k => $v) $IMG[$k] = $v;
     return $c = $IMG;
 }
 function pub($v) { return ($v && !C('credits')) ? ['url' => $v['url']] : $v; }   // the photographer credit is only sent when PHOTO_CREDITS is not "off"
@@ -99,23 +118,54 @@ function queue_photos($codes) {
     if ($add) cupdate('prio.json', [], function (&$p) use ($add) { foreach ($add as $c) $p[] = $c; $p = array_slice(array_values(array_unique($p)), -300); });
 }
 
-// Carousel: always 10 routes. The origin's AirLabs routes come first; if fewer than 5 appear, a second AirLabs call looks for more;
-// if there are still fewer than 10, other high-ticket routes fill the rest. Shuffled on every request.
+// Carousel: 10 routes, every one with a price (see pricing.php). A route that cannot be priced is replaced by the next one that can.
+// For Singapore, Hong Kong and US visitors the routes are taken from that market's own list, in order, and (Singapore, Hong Kong) an
+// "Around the World" card follows. For every other origin the AirLabs routes come first, then other high-ticket routes; if fewer than 5
+// AirLabs routes appear, a second AirLabs call looks for more. Shuffled on every request. Routes that had no price are queued so the
+// background job can look them up with Duffel, and they can take a place once priced.
+function rtw_card() {
+    return ['iata' => 'RTW', 'city' => 'Around the World', 'rtw' => true, 'price' => null, 'image' => pub([
+        'url' => 'https://images.unsplash.com/photo-1507812984078-917a274065be?auto=format&fit=crop&w=1400&q=80', 'credit' => 'Leonardo Yip',
+        'link' => 'https://unsplash.com/photos/window-view-of-airplane-during-golden-hour-rn-NLirHQPY?utm_source=fly_first_class&utm_medium=referral'])];
+}
+// The first $want routes of $pool that have a price, in pool order: code => price. Routes passed over are collected in $skipped.
+function priced_pick($o, array $pool, $want, array $ctx, &$skipped) {
+    $out = []; $skipped = [];
+    foreach ($pool as $c) {
+        if ($c === $o || isset($out[$c])) continue;
+        $p = card_price($o, $c, $ctx);
+        if ($p) { $out[$c] = $p; if (count($out) >= $want) break; } else $skipped[] = $c;
+    }
+    return $out;
+}
 function top_list($o) {
+    $ctx = price_ctx(); $mk = market_dests($o);
+    if ($mk) {
+        $picked = priced_pick($o, $mk, 10, $ctx, $skipped);
+        queue_lanes($o, array_slice($skipped, 0, 8));
+        $l = array_keys($picked); queue_photos($mk);
+        $imgs = images_lookup($l); $out = [];
+        foreach ($l as $c) { $v = $imgs[$c] ?? null; $out[] = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v), 'price' => $picked[$c]]; }
+        if (market_rtw($o)) $out[] = rtw_card();
+        return $out;
+    }
     $all = all_dests($o);
     if (count($all) < 5) { expand_once($o); $all = all_dests($o); }
-    if (count($all) < 10) { $have = array_flip($all); $all = array_slice(array_merge($all, array_values(array_filter(candidates_all($o), function ($c) use ($have) { return !isset($have[$c]); }))), 0, 10); }
-    queue_photos($all);
-    $IMG = img_all(true); $ordered = shuffle_a($all);
-    $withPhoto = array_values(array_filter($ordered, function ($c) use ($IMG) { return !empty($IMG[$c]); }));
-    $lookups = array_slice(array_values(array_filter($ordered, function ($c) use ($IMG) { return !array_key_exists($c, $IMG); })), 0, TOPBUDGET);
-    $l = array_slice(shuffle_a(array_merge($withPhoto, $lookups)), 0, 10);
-    if (count($l) < 10) $l = array_slice(array_merge($l, array_values(array_diff($ordered, $l))), 0, 10);
+    $have = array_flip($all);
+    $extra = array_values(array_filter(candidates_all($o), function ($c) use ($have) { return !isset($have[$c]); }));
+    queue_photos(array_slice(array_merge($all, $extra), 0, 30));
+    $IMG = img_all(true);
+    $pool = array_merge(shuffle_a($all), shuffle_a($extra));
+    $withPhoto = array_values(array_filter($pool, function ($c) use ($IMG) { return !empty($IMG[$c]); }));
+    $pool = array_merge($withPhoto, array_values(array_diff($pool, $withPhoto)));      // routes that already have a photo first
+    $picked = priced_pick($o, $pool, 10, $ctx, $skipped);
+    queue_lanes($o, array_slice($skipped, 0, 8));
+    $l = shuffle_a(array_keys($picked));
     $imgs = images_lookup($l);
     $with = []; $without = [];
     foreach ($l as $c) {
         $v = $imgs[$c] ?? null;
-        $item = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v)];     // image is null when no photo yet, same as server.js
+        $item = ['iata' => $c, 'city' => city_of($c), 'image' => pub($v), 'price' => $picked[$c]];     // image is null when no photo yet, same as server.js
         if ($v) $with[] = $item; else $without[] = $item;
     }
     return array_merge($with, $without);

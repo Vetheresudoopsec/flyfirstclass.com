@@ -80,6 +80,13 @@ function parse_offers($j, $cl, &$raw) {
         if (!$good) continue;
         $it = [];
         foreach ($segs as $s) { $mc = $s['marketing_carrier'] ?? []; $it[] = ($mc['iata_code'] ?? '') ?: (($mc['name'] ?? '') ?: '??'); }
+        if (all_ok($it, $cl)) {                  // cheapest fare before taxes (USD) among partner airlines: overall (px) and per airline when one airline flies every leg (pxa)
+            $usd = to_usd($of['base_amount'] ?? null, ($of['base_currency'] ?? '') ?: ($of['total_currency'] ?? ''));
+            if ($usd !== null && $usd > 0) {
+                if (!isset($raw['px'][$cl]) || $usd < $raw['px'][$cl]) $raw['px'][$cl] = $usd;
+                if (count(array_unique($it)) === 1 && (!isset($raw['pxa'][$cl][$it[0]]) || $usd < $raw['pxa'][$cl][$it[0]])) $raw['pxa'][$cl][$it[0]] = $usd;
+            }
+        }
         $k = implode('>', $it);
         if (!isset($seen[$k])) { if (count($seen) >= 40) continue; $seen[$k] = 1; $raw[$cl][] = $it; }
         $via = [];                      // where the stop(s) are, for example "DOH" or "DXB>SIN": kept per airline sequence, at most 4 different stop cities each
@@ -94,6 +101,11 @@ function merge_raw($old, $raw) {
     foreach (['first', 'business'] as $cl) {
         $seen = []; foreach ($merged[$cl] as $x) $seen[implode('>', $x)] = 1;
         foreach (($raw[$cl] ?? []) as $it) if (!isset($seen[implode('>', $it)])) $merged[$cl][] = $it;
+    }
+    $merged['px'] = $old['px'] ?? []; $merged['pxa'] = $old['pxa'] ?? [];          // keep the lowest fare seen across look-ups
+    foreach (['first', 'business'] as $cl) {
+        if (isset($raw['px'][$cl]) && (!isset($merged['px'][$cl]) || $raw['px'][$cl] < $merged['px'][$cl])) $merged['px'][$cl] = $raw['px'][$cl];
+        foreach (($raw['pxa'][$cl] ?? []) as $al => $v) if (!isset($merged['pxa'][$cl][$al]) || $v < $merged['pxa'][$cl][$al]) $merged['pxa'][$cl][$al] = $v;
     }
     $merged['hubs'] = ['first' => $old['hubs']['first'] ?? [], 'business' => $old['hubs']['business'] ?? []];
     foreach (['first', 'business'] as $cl) foreach (($raw['hubs'][$cl] ?? []) as $sq => $hs) {
@@ -136,7 +148,7 @@ function run_tasks(array $tasks, $launchBy) {
     $stats = ['ok' => 0, 'fail' => 0, 'limited' => 0]; $save = []; $limited = false;
     foreach ($tasks as $ti => $t) {
         if (isset($res[$t['key']])) continue;
-        $name = '/air/offer_requests'; $raw = ['first' => [], 'business' => [], 'hubs' => ['first' => [], 'business' => []]]; $err = null; $lim = false;
+        $name = '/air/offer_requests'; $raw = ['first' => [], 'business' => [], 'hubs' => ['first' => [], 'business' => []], 'px' => [], 'pxa' => []]; $err = null; $lim = false;
         foreach (['first', 'business'] as $cl) {
             $r = $out[$ti . ':' . $cl] ?? null;
             if (!$r) { $err = $err ?: 'Duffel ' . $name . ' no reply'; continue; }
@@ -268,11 +280,11 @@ function snap($o, $t0) {
             if ($skipped) quota_refund($skipped);                                   // not started (busy or rate limited): not counted against the visitor
         }
     }
-    $RC = cload('routes.json', []); $E = errs_now();
+    $RC = cload('routes.json', []); $E = errs_now(); $ctx = price_ctx();
     $list = []; $pending = 0; $errs = [];
     foreach ($dests as $c) {
         $k = rkey($o, $c); $e = $RC[$k] ?? null;
-        if (fresh($e)) { $v = view($o, $c, $e); if ($v) $list[] = $v; }
+        if (fresh($e)) { $v = view($o, $c, $e); if ($v) { $v['price'] = card_price($o, $c, $ctx); $list[] = $v; } }       // price: same "from" figure as the carousel, or null
         if (isset($E[$k])) $errs[] = $E[$k];
         $wait = !fresh($e) || (needs_hubs($e) && ($v2 = view($o, $c, $e)) && $v2['stops'] > 0);
         if ($wait && !cooling($E, $k) && (!$limited || claimed($k))) $pending++;
@@ -289,7 +301,7 @@ function routes($o, $d) {
     // Fewer than 10 listings once everything is checked: make another call for more routes.
     if (!$r['pending'] && count($r['list']) < LISTMIN && count($r['dests']) < MAXTOTAL && !($r['errs'] && !$r['list']) && expand_once($o)) $r = snap($o, $t0);
     $error = !$r['list'] && !$r['pending'] ? ($r['limited'] ? 'Too many new route lookups from your connection. Please try again in a while.' : ($r['errs'] ? $r['errs'][0]['msg'] : '')) : '';
-    return ['routes' => $r['list'], 'pending' => $r['pending'], 'error' => $error, 'test' => C('test')];
+    return ['routes' => $r['list'], 'pending' => $r['pending'], 'error' => $error, 'test' => C('test'), 'rtw' => market_rtw($o)];
 }
 // A chosen destination: list every distinct airline option. Fewer than 3 options: make another call (another date).
 function options_for($o, $d, $t0) {
@@ -316,7 +328,7 @@ function options_for($o, $d, $t0) {
         elseif (((int)($e['tries'] ?? 1) < MAXTRIES && count($opts) < 3) || (needs_hubs($e) && array_filter($opts, function ($x) { return $x['stops'] > 0; }))) $pending = 1;
         elseif ($busy()) $pending = 1;
     }
-    return ['routes' => $opts, 'pending' => $pending, 'error' => !$opts && !$pending ? ($limited ? 'Too many new route lookups from your connection. Please try again in a while.' : ($E[$k]['msg'] ?? '')) : '', 'test' => C('test')];
+    return ['routes' => $opts, 'pending' => $pending, 'error' => !$opts && !$pending ? ($limited ? 'Too many new route lookups from your connection. Please try again in a while.' : ($E[$k]['msg'] ?? '')) : '', 'test' => C('test'), 'price' => $opts ? card_price($o, $d, price_ctx()) : null];
 }
 
 // ---------- Checks used by the diagnostics endpoints ----------

@@ -19,6 +19,8 @@ function cron_run($budget) {         // used by cron.php and /api/cron
         try { air(); } catch (Throwable $e) { $out['airports'] = $e->getMessage(); }
         try { $out['refresh'] = refresh_step($budget); } catch (Throwable $e) { $out['refresh'] = 'error: ' . $e->getMessage(); logm('cron refresh: ' . $e->getMessage()); }
         $left = $budget - (microtime(true) - $t0);
+        if ($left > 60) { try { $out['prices'] = warm_step($left - 30); } catch (Throwable $e) { $out['prices'] = 'error: ' . $e->getMessage(); logm('cron prices: ' . $e->getMessage()); } }
+        $left = $budget - (microtime(true) - $t0);
         if ($left > 30) { try { $out['photos'] = prefetch_photos($left); } catch (Throwable $e) { $out['photos'] = 'error: ' . $e->getMessage(); logm('cron photos: ' . $e->getMessage()); } }
         cupdate('meta.json', ['lastRefresh' => 0], function (&$m) { $m['cronLast'] = now_ms(); });
     } finally { unclaim('cron'); }
@@ -41,6 +43,7 @@ function status_full() {
         'refreshInProgress' => isset($m['refresh']) ? count($m['refresh']['done'] ?? []) . ' routes done' : null,
         'cronLastRun' => !empty($m['cronLast']) ? et_text($m['cronLast']) : 'never (add the cron job, see the setup guide)',
         'newsletter' => nl_status(),
+        'pricing' => pricing_status(),
         'recentEmails' => mail_recent(5),
         'recentLog' => log_tail(15)];
 }

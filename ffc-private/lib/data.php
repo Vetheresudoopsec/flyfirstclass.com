@@ -114,9 +114,34 @@ function dests_for($o) {
     }
     return candidates($o);
 }
+// Markets with a curated destination order (data.json > MARKETS): Singapore, Hong Kong and the US. An origin belongs to a market by its
+// airport code or its country.
+function market_of($o) {
+    $cc = air()[$o]['cc'] ?? '';
+    foreach ((D()['MARKETS'] ?? []) as $id => $m) {
+        if (in_array($o, $m['from'] ?? [], true) || ($cc !== '' && in_array($cc, $m['cc'] ?? [], true))) return $id;
+    }
+    return null;
+}
+// The market's destinations in their set order, without the origin itself, India, unknown airports and anything too close to be a
+// long-haul premium trip. Empty for every other origin.
+function market_dests($o) {
+    $id = market_of($o); if ($id === null) return [];
+    $AIR = air(); $f = $AIR[$o] ?? null; $out = [];
+    foreach (D()['MARKETS'][$id]['to'] as $c) {
+        if ($c === $o || !isset($AIR[$c]) || !auto_ok($c) || in_array($c, $out, true)) continue;
+        if ($f && km([$f['lat'], $f['lng']], [$AIR[$c]['lat'], $AIR[$c]['lng']]) < 1500) continue;
+        $out[] = $c;
+    }
+    return $out;
+}
+function market_rtw($o) { $id = market_of($o); return $id !== null && !empty(D()['MARKETS'][$id]['rtw']); }
+// Destinations for an origin, in display order. A market origin gets its curated list first; whatever else AirLabs says is served follows.
 function all_dests($o) {
     $XS = cload('expand.json', []);
-    return array_values(array_filter(array_unique(array_merge(dests_for($o), $XS[$o]['add'] ?? [])), 'auto_ok'));
+    $base = array_values(array_filter(array_unique(array_merge(dests_for($o), $XS[$o]['add'] ?? [])), 'auto_ok'));
+    $mk = market_dests($o);
+    return $mk ? array_slice(array_values(array_unique(array_merge($mk, $base))), 0, MAXTOTAL) : $base;
 }
 
 // A "follow-up call" for more routes from an origin: first flights arriving at the origin (the same city pairs seen from the other
