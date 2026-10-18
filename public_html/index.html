@@ -1401,11 +1401,23 @@ let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,LR
 const ctry=n=>/^(United States|United Kingdom|United Arab Emirates|Netherlands|Philippines|Bahamas|Maldives|Seychelles|Gambia|Dominican Republic|Czech Republic|Cayman Islands|Marshall Islands|Comoros|Central African Republic)$/.test(n||"")?"the "+n:(n||"");   // "the United States", "the Netherlands"
 let GEO;const geoOnce=()=>GEO||(GEO=geoOrigin());
 async function geoOrigin(){try{const r=await fetch("/api/geo");if(r.ok){const g=await r.json();if(g.airport)return{code:g.airport,city:g.airportCity||g.city,cc:g.countryCode||"",place:g.city||"",country:g.country||""}}}catch(e){}return null}
+// Hand-picked photos for the featured-fare destinations on hero slide 2: [Unsplash photo id, photographer, photo page]. Others fall back to the usual destination photo.
+const DPIC={CPH:["1761408631616-28be60406669","Bob Jenkin","colorful-buildings-line-a-harbor-with-boats-rgoK-w86-RI"],
+DFW:["1621904878414-d4ca4756bd7e","R K","city-buildings-under-blue-sky-during-daytime-h1n7o0yb0sE"],
+HKG:["1620015092538-e33c665fc181","Manson","hong-kong-skyline-across-victoria-harbour-4vf1KEkD7Gc"],
+MLE:["1573843981267-be1999ff37cd","Rayyu Maldives","aerial-photography-of-resort-rooms-and-island-xPsFXsbXJRg"],
+LHR:["1543832923-44667a44c804","David Monaghan","tower-bridge-london-J-wEJwSiAbQ"],
+JFK:["1485871981521-5b1fd3805eee","Michael Discenza","landscape-photo-of-new-york-empire-state-building-5omwAMDxmkU"],
+FRA:["1564335357796-fe17930f8c57","Kai Pilger","river-in-city-m9TjCeDQvhE"],
+YVR:["1647655806923-e8202f4f2b8c","Adrian Yu","vancouver-skyline-and-false-creek-waterfront-Wc45W-dQFlA"],
+SFO:["1501594907352-04cda38ebc29","Maarten van den Heuvel","golden-gate-bridge-during-daytime-gZXx8lKAb7Y"],
+AUH:["1512632578888-169bbbc64f33","David Rodrigo","sheikh-zayed-grand-mosque-in-abu-dhabi-kZ1zThg6G40"],
+DXB:["1607414851776-f2fcc379fb48","Karen Dalton","city-skyline-across-body-of-water-during-sunset-nk7rQ24o0v8"]};
 // ---- Hero slide 2: the cheapest featured fare that leaves from the visitor's nearest airport (or city); with no match the Tokyo slide stays. The photo is loaded first, and the slide is only swapped while it is out of sight. ----
 (async()=>{try{const g=await geoOnce();if(!g||!g.code)return;
  const rows=[...document.querySelectorAll("#fares .fs-r")].map(r=>r.dataset),cty=String(g.city||"").toLowerCase();
  const m=rows.filter(d=>d.fa===g.code),pick=(m.length?m:rows.filter(d=>d.fr.toLowerCase()===cty)).sort((a,b)=>a.px-b.px)[0];
- if(!pick)return;const ph=await advFor(pick.ta);if(!ph||!ph.url)return;
+ if(!pick)return;const dp=DPIC[pick.ta],ph=dp?{url:"https://images.unsplash.com/photo-"+dp[0]+"?auto=format&fit=crop&w=2000&q=75",credit:dp[1],link:"https://unsplash.com/photos/"+dp[2]+"?utm_source=fly_first_class&utm_medium=referral"}:await advFor(pick.ta);if(!ph||!ph.url)return;
  await new Promise((ok,no)=>{const i=new Image();i.onload=ok;i.onerror=no;i.src=ph.url});
  const apply=()=>{dealFn=null;const d=pick;
   $("dlb").textContent="Featured "+(d.c=="first"?"First":"Business")+" Class Fare";
@@ -1421,13 +1433,13 @@ async function geoOrigin(){try{const r=await fetch("/api/geo");if(r.ok){const g=
 const byTz=z=>/^Asia\/(Hong_Kong|Macau|Shanghai|Taipei|Tokyo|Seoul)/.test(z)?CX:/^(Asia\/(Singapore|Kuala_Lumpur|Jakarta|Bangkok|Ho_Chi_Minh|Manila)|Australia\/|Pacific\/Auckland)/.test(z)?SQ:/^Asia\/(Qatar|Kuwait|Bahrain|Muscat)/.test(z)?QR:/^(Asia\/(Dubai|Riyadh|Kolkata|Calcutta|Karachi|Dhaka|Colombo|Kathmandu)|Africa\/)/.test(z)?EK:/^(Europe\/(London|Dublin)|America\/)/.test(z)?BA:/^Europe\//.test(z)?LH:EK;
 const tzn=()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){return""}};
 const AM={"Emirates":["Save up to 70% and explore Dubai with access to the Emirates first class lounge, then settle into a private first class suite, with the onboard Shower Spa on the A380 available by appointment with the cabin crew.","1627501691850-db08eb81199a"],
-"Qatar Airways":["Save up to 70% and explore Doha with the Al Mourjan lounge, with à la carte dining and showers before you fly, then settle into your Qsuite, a private business class cabin with a sliding door and a double bed option for two.","1688499050334-d48bea10190d"],
-"Singapore Airlines":["Save up to 70% and explore Changi with The Private Room, where made-to-order Asian dishes and champagne await, then settle into an A380 Suite, an enclosed private room with a separate full-length bed and Book the Cook dining.","1777522259520-4cea1bd46530"],
-"Cathay Pacific Airways":["The Aria Suite gives business class a sliding privacy door and a fully flat bed, with Cantonese dining from leading Hong Kong restaurants. Save up to 70% and explore Hong Kong with The Pier lounge and its table-service dining.","1698761326553-7bdf872d8771"],
-"Lufthansa":["Save up to 70% and explore Frankfurt with the private First Class Terminal, with its own check-in, à la carte dining and a personal assistant, then step into an Allegris First suite with floor-to-ceiling walls and a closing door.","1659318081203-ce0fa274966d"],
+"Qatar Airways":["Save up to 70% and explore Doha with the Al Mourjan lounge, with à la carte dining and showers before you fly, then settle into your Qsuite, a private business class cabin with a sliding door and a double bed option for two.","1716747936903-2de320700fed"],
+"Singapore Airlines":["Save up to 70% and explore Changi with The Private Room, where made-to-order Asian dishes and champagne await, then settle into an A380 Suite, an enclosed private room with a separate full-length bed and Book the Cook dining.","1732976662505-b71d6c7702f3"],
+"Cathay Pacific Airways":["The Aria Suite gives business class a sliding privacy door and a fully flat bed, with Cantonese dining from leading Hong Kong restaurants. Save up to 70% and explore Hong Kong with The Pier lounge and its table-service dining.","1732975949642-2cbb90a5fe3a"],
+"Lufthansa":["Save up to 70% and explore Frankfurt with the private First Class Terminal, with its own check-in, à la carte dining and a personal assistant, then step into an Allegris First suite with floor-to-ceiling walls and a closing door.","1562368305-c68041ff0244"],
 "British Airways":["Save up to 70% and explore Heathrow with The Concorde Room at Terminal 5, the first class lounge with a full bar, traditional dining, a concierge and a spa. Reserve a private cabana with a shower to unwind before you board.","1584084807193-bed442df7a75"],
 "Etihad Airways":["Save up to 70% and explore The Residence, a three-room cabin on the A380 with a living room, a bedroom and an ensuite shower, where a personal butler trained at the Savoy Butler Academy attends to every detail.","1786200004364-01487886e344"]};
-const set=a=>{const m=AM[a]||AM[EK],im=$("jim");$("jal").textContent=a;$("jtx").textContent=m[0];if(im){im.src="https://images.unsplash.com/photo-"+m[1]+"?auto=format&fit=crop&w=1400&h=900&q=70";im.alt=a+" aircraft in flight";im.style.objectPosition=m[2]||""}$("jb").dataset.m="I'd like a free quote on "+a+". Route and dates: "};
+const set=a=>{const m=AM[a]||AM[EK],im=$("jim");$("jal").textContent=a;$("jtx").textContent=m[0];if(im){im.src="https://images.unsplash.com/photo-"+m[1]+"?auto=format&fit=crop&w=2000&q=75";im.alt=a+" aircraft in flight";im.style.objectPosition=m[2]||""}$("jb").dataset.m="I'd like a free quote on "+a+". Route and dates: "};
 $("jb").addEventListener("click",()=>{const m=$("m");if(m&&!m.value.trim())m.value=$("jb").dataset.m});
 const tm=setTimeout(()=>set(byTz(tzn())),4000);
 geoOnce().then(g=>{clearTimeout(tm);set(g&&g.cc==="AE"&&/abu dhabi/i.test(g.place)?"Etihad Airways":g&&g.cc&&CC[g.cc]||byTz(tzn()))},()=>{clearTimeout(tm);set(byTz(tzn()))})}
