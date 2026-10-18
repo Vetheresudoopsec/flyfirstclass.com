@@ -152,6 +152,9 @@ footer ul{list-style:none;padding:0}
 .htab h1,.htab .hd{display:block;height:auto;margin:0;max-width:none;font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:400;line-height:1.1;letter-spacing:-.015em;color:var(--ink)}
 .htab .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media(prefers-reduced-motion:reduce){.hsl,.sl,.sl.on{transition:none}}
+.htab .hd a{color:inherit;text-decoration:none}.htab .hd a span{color:var(--j)}.htab .hd a:hover,.htab .hd a:focus-visible{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
+.hcr{display:none;position:absolute;z-index:5;top:14px;left:max(22px,calc((100vw - 1160px)/2 + 22px));padding:3px 8px;border-radius:4px;background:rgba(20,24,31,.55);color:#fff;font-size:.7rem;line-height:1.4;text-decoration:none}
+.hero.hc .hcr{display:block}
 .ind{display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:0}
 .ind .d{box-sizing:content-box;width:12px;height:3px;padding:9px 0;border:0;border-radius:3px;background:var(--line);background-clip:content-box;cursor:pointer;transition:width .3s}
 .ind .d.on{width:24px;background:var(--j);background-clip:content-box}
@@ -247,10 +250,10 @@ footer ul{list-style:none;padding:0}
 #bk .c label{display:block;font:600 .75rem Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 #bk .bkr .c label[for]::after,#bk .mcx .c label[for]::after{content:"";position:absolute;inset:0}
 #bk .bkr .c .dd,#bk .mcx .c .dd{position:relative}
-#bk .bkr .c>.dd>input,#bk .mcx .c>.dd>input,#bk .bkr .c>.dd>.db,#bk .bkr .c>.dv{display:block;width:100%;min-width:0;padding:2px 0;color:var(--ink);font:600 1.125rem/1.3 Manrope,sans-serif;text-overflow:ellipsis}
+#bk .bkr .c>.dd>input,#bk .mcx .c>.dd>input,#bk .bkr .c>.dd>.db,#bk .bkr .c>.dv{display:block;width:100%;min-width:0;padding:2px 0;color:var(--ink);font:500 1rem/1.3 Manrope,sans-serif;text-overflow:ellipsis}
 #bk .bkr .c>.dd>.db{display:flex}
 #bk .bkr .c>.dv{white-space:normal;overflow-wrap:anywhere}
-#bk .bkr .c>.dv.e{opacity:.6}
+#bk .bkr .c>.dv.e{opacity:.55}
 #bk .bkr .c>.dd>input::placeholder,#bk .mcx .c>.dd>input::placeholder{color:var(--ink);opacity:.55;font-size:1rem;font-weight:500}
 #bk .bkr .c:focus-within,#bk .mcx .c:focus-within{outline:0;background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .c:has(.db[aria-expanded=true]){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
@@ -301,7 +304,7 @@ footer ul{list-style:none;padding:0}
 #bk .bko{padding:4px 24px}
 #bk .bkr{border-radius:0 0 16px 16px}
 @media(min-width:1025px){
-#bk .bkr{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.95fr) minmax(0,1.3fr)}
+#bk .bkr{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,.9fr) minmax(0,1.3fr)}
 #bk .bkp{grid-column:auto}
 #bk .bkp>.c:first-child{border-bottom-left-radius:16px}
 #bk .bkr .fare{grid-column:auto;min-height:var(--bkh);border-bottom-right-radius:16px}
@@ -896,12 +899,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="pg" id="p-home">
 <div class="hero" id="hero">
-<div class="hph" aria-hidden="true"><div class="hsl on"><picture><source type="image/webp" srcset="/images/first-class-suite.webp"><img src="/images/first-class-suite.jpg" width="1200" height="900" alt="" fetchpriority="high" onerror="this.remove()"></picture></div><div class="hsl"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=70" alt="" loading="lazy" onerror="this.remove()"></div><div class="hsl"><img id="jim" alt="" loading="lazy" onerror="this.remove()"></div></div>
+<div class="hph" aria-hidden="true"><div class="hsl on"><picture><source type="image/webp" srcset="/images/first-class-suite.webp"><img src="/images/first-class-suite.jpg" width="1200" height="900" alt="" fetchpriority="high" onerror="this.remove()"></picture></div><div class="hsl"><img id="dim" src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=70" alt="" loading="lazy" onerror="this.remove()"></div><div class="hsl"><img id="jim" alt="" loading="lazy" onerror="this.remove()"></div></div>
 <button class="fa fl" id="hprev" type="button" aria-label="Previous slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="fa fr" id="hnext" type="button" aria-label="Next slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+<a class="hcr" id="hcr" href="https://unsplash.com" target="_blank" rel="noopener"></a>
 <div class="w ell"><div class="hcol">
 <div class="htab"><div class="hts">
 <article class="sl on"><p class="lb">Travel First and Business Class</p><h1>Save up to 70% off first class airfares.</h1></article>
-<article class="sl" aria-hidden="true"><p class="lb">Business Class</p><h2 class="hd">Lie-flat comfort on the routes you fly most.</h2></article>
+<article class="sl" aria-hidden="true"><p class="lb" id="dlb">Business Class</p><h2 class="hd" id="dtt">Lie-flat comfort on the routes you fly most.</h2></article>
 <article class="sl" aria-hidden="true"><p class="lb">Featured Airline</p><h2 class="hd">Journey with <span id="jal">Emirates</span></h2><p id="jtx" class="vh"></p><a id="jb" class="vh" href="/contact/" tabindex="-1" aria-hidden="true" data-m="I'd like a free quote on Emirates. Route and dates: "></a></article>
 </div>
 <div class="ind" role="group" aria-label="Hero slides"><button class="d on" type="button" aria-label="Show slide 1"></button><button class="d" type="button" aria-label="Show slide 2"></button><button class="d" type="button" aria-label="Show slide 3"></button><button class="pz" id="pz" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button></div>
@@ -1083,9 +1087,9 @@ $("mb").onclick=()=>{const o=$("nav").classList.toggle("open");$("mb").setAttrib
 {const d=document.querySelector(".b-diff"),q=matchMedia("(max-width:980px)"),f=()=>{if(q.matches){d.tabIndex=0;d.setAttribute("role","group");d.setAttribute("aria-label","What makes us different")}else{d.removeAttribute("tabindex");d.removeAttribute("role");d.removeAttribute("aria-label")}};f();q.addEventListener("change",f)}
 
 // ---- Hero carousel ----
-const SL=[...document.querySelectorAll(".sl")],HP=[...document.querySelectorAll(".hsl")],DS=[...document.querySelectorAll(".ind .d")],HE=$("hero");let si=0,ht,pl=!matchMedia("(prefers-reduced-motion:reduce)").matches;
+const SL=[...document.querySelectorAll(".sl")],HP=[...document.querySelectorAll(".hsl")],DS=[...document.querySelectorAll(".ind .d")],HE=$("hero");let si=0,ht,dealOn=false,dealFn=null,pl=!matchMedia("(prefers-reduced-motion:reduce)").matches;
 // Photos cross-fade; the headline slides out one way and the next slides in from the other (d = 1 forward, -1 back).
-function ss(i,d){const p=si;si=(i+SL.length)%SL.length;HE.style.setProperty("--d",d||1);SL.forEach((x,k)=>{x.classList.toggle("on",k==si);x.classList.toggle("out",k==p&&p!=si);x.setAttribute("aria-hidden",String(k!=si))});HP.forEach((x,k)=>x.classList.toggle("on",k==si));DS.forEach((b,k)=>b.classList.toggle("on",k==si))}
+function ss(i,d){const p=si;si=(i+SL.length)%SL.length;HE.style.setProperty("--d",d||1);SL.forEach((x,k)=>{x.classList.toggle("on",k==si);x.classList.toggle("out",k==p&&p!=si);x.setAttribute("aria-hidden",String(k!=si))});HP.forEach((x,k)=>x.classList.toggle("on",k==si));DS.forEach((b,k)=>b.classList.toggle("on",k==si));HE.classList.toggle("hc",dealOn&&si==1);if(dealFn&&si!=1)setTimeout(()=>{if(dealFn&&si!=1)dealFn()},800)}
 function pz(){$("pz").innerHTML=pl?"&#10074;&#10074;":"&#9654;";$("pz").setAttribute("aria-label",pl?"Pause slideshow":"Play slideshow")}
 function arm(){clearInterval(ht);ht=setInterval(()=>{if(pl&&!document.hidden)ss(si+1)},6500)}
 function man(i,d){ss(i,d);arm()}
@@ -1397,6 +1401,20 @@ let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,LR
 const ctry=n=>/^(United States|United Kingdom|United Arab Emirates|Netherlands|Philippines|Bahamas|Maldives|Seychelles|Gambia|Dominican Republic|Czech Republic|Cayman Islands|Marshall Islands|Comoros|Central African Republic)$/.test(n||"")?"the "+n:(n||"");   // "the United States", "the Netherlands"
 let GEO;const geoOnce=()=>GEO||(GEO=geoOrigin());
 async function geoOrigin(){try{const r=await fetch("/api/geo");if(r.ok){const g=await r.json();if(g.airport)return{code:g.airport,city:g.airportCity||g.city,cc:g.countryCode||"",place:g.city||"",country:g.country||""}}}catch(e){}return null}
+// ---- Hero slide 2: the cheapest featured fare that leaves from the visitor's nearest airport (or city); with no match the Tokyo slide stays. The photo is loaded first, and the slide is only swapped while it is out of sight. ----
+(async()=>{try{const g=await geoOnce();if(!g||!g.code)return;
+ const rows=[...document.querySelectorAll("#fares .fs-r")].map(r=>r.dataset),cty=String(g.city||"").toLowerCase();
+ const m=rows.filter(d=>d.fa===g.code),pick=(m.length?m:rows.filter(d=>d.fr.toLowerCase()===cty)).sort((a,b)=>a.px-b.px)[0];
+ if(!pick)return;const ph=await advFor(pick.ta);if(!ph||!ph.url)return;
+ await new Promise((ok,no)=>{const i=new Image();i.onload=ok;i.onerror=no;i.src=ph.url});
+ const apply=()=>{dealFn=null;const d=pick;
+  $("dlb").textContent="Featured "+(d.c=="first"?"First":"Business")+" Class Fare";
+  $("dtt").innerHTML=`<a href="/contact/">${esc(d.fr)} to ${esc(d.to)} <span>from USD ${Number(d.px).toLocaleString("en-US")} &rarr;</span></a>`;
+  let im=HP[1].querySelector("img");if(!im){im=new Image();im.alt="";HP[1].appendChild(im)}im.removeAttribute("onerror");im.style.objectPosition="";im.src=ph.url;
+  const c=$("hcr");if(ph.credit){c.textContent="Photo: "+ph.credit+" / Unsplash";c.href=ph.link||"https://unsplash.com"}else c.textContent="";
+  dealOn=!!ph.credit};
+ $("dtt").addEventListener("click",e=>{if(!e.target.closest("a"))return;e.preventDefault();book(pick.fr+" ("+pick.fa+")",pick.to+" ("+pick.ta+")",pick.c=="first"?"First class":"Business class")});
+ if(si!=1)apply();else dealFn=apply}catch(e){}})();
 // ---- Hero slide 3, "Journey with [airline]": the airline follows the visitor's country (the page's one IP lookup, shared via geoOnce); time zone is only the fallback ----
 {const CX="Cathay Pacific Airways",SQ="Singapore Airlines",QR="Qatar Airways",EK="Emirates",BA="British Airways",LH="Lufthansa",CC={};
 [[CX,"HK MO CN TW JP KR"],[SQ,"SG MY ID TH VN PH AU NZ"],[QR,"QA KW BH OM JO IQ"],[EK,"AE SA IN PK BD LK NP ZA NG KE EG MA GH ET MU"],[BA,"GB IE US CA MX BR AR CL CO PE PA PR"],[LH,"DE AT CH LI LU NL BE DK SE NO FI IS PL CZ SK HU SI HR RO BG GR PT ES IT FR EE LV LT"]].forEach(([a,c])=>c.split(" ").forEach(k=>CC[k]=a));
