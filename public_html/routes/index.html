@@ -135,22 +135,29 @@ footer ul{list-style:none;padding:0}
 @media(max-width:860px){.fg{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.fg{grid-template-columns:1fr}}
 .fb{border-top:1px solid var(--line);margin-top:40px;padding-top:24px;font-size:.85rem}
-.hero{position:relative;background:var(--soft);display:grid;grid-template-columns:minmax(0,1fr)}
-.sl{grid-area:1/1;display:grid;grid-template-columns:1fr 1fr;min-height:480px}
-.sl.off{visibility:hidden}
-.st{align-self:center;padding:64px 48px 64px max(22px,calc((100vw - 1160px)/2))}
-.lb{color:var(--j);font-weight:500;margin-bottom:12px}
-.st h1,.st .hd{font-size:clamp(2rem,4vw,3rem);font-weight:400;max-width:18ch;color:var(--ink)}
-.st h2.hd{display:block;height:auto;margin-bottom:0}
-.st p:not(.lb){font-size:1.1rem;max-width:520px;margin:18px 0 28px}
-.si{position:relative;min-height:300px;background:var(--line);border-bottom-left-radius:72px;overflow:hidden;display:grid;place-items:center}
-.si::after{content:attr(data-c);color:var(--mute);font-size:1.6rem;font-weight:300}
-.si img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.ind{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding-top:18px;padding-bottom:18px}
-.ind .d{box-sizing:content-box;width:40px;height:4px;padding:10px 0;border:0;border-radius:4px;background:var(--line);background-clip:content-box;cursor:pointer}
-.ind .d.on{width:80px;background:var(--j);background-clip:content-box}
+/* Hero, photo stage: three photos cross-fade behind a white headline tab and the booking card; the headline slides in and out.
+   The card is #bk, so every booking rule below stays scoped to it. */
+.hero{position:relative;padding:250px 0 48px;background:var(--soft);--d:1}
+.hph{position:absolute;left:0;right:0;top:0;bottom:88px;overflow:hidden;background:var(--line)}
+.hsl{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.hsl.on{opacity:1}
+.hsl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%}
+.ell{position:relative;z-index:5}
+.hcol{display:flex;flex-direction:column;align-items:flex-end;filter:drop-shadow(0 18px 28px rgba(20,24,31,.16))}
+.htab{width:520px;max-width:100%;padding:28px 34px 12px;background:var(--card);border-radius:16px 16px 0 0}
+.hts{display:grid;overflow:hidden}
+.sl{grid-area:1/1;opacity:0;visibility:hidden;transform:translateX(calc(var(--d)*30px));transition:opacity .45s ease,transform .55s cubic-bezier(.22,.8,.3,1),visibility 0s .55s}
+.sl.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.sl.out{transform:translateX(calc(var(--d)*-30px))}
+.lb{color:var(--j);font-weight:500;font-size:.95rem;line-height:1.5;margin:0 0 6px}
+.htab h1,.htab .hd{display:block;height:auto;margin:0;max-width:none;font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:400;line-height:1.1;letter-spacing:-.015em;color:var(--ink)}
+.htab .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.hsl,.sl,.sl.on{transition:none}}
+.ind{display:flex;justify-content:flex-start;align-items:center;gap:8px;padding:2px 0 0}
+.ind .d{box-sizing:content-box;width:28px;height:4px;padding:10px 0;border:0;border-radius:4px;background:var(--line);background-clip:content-box;cursor:pointer;transition:width .3s}
+.ind .d.on{width:56px;background:var(--j);background-clip:content-box}
+.ind .pz{margin-left:4px;font-size:.7rem;line-height:1}
 .pz{border:0;background:none;color:var(--j);font-size:1rem;cursor:pointer;padding:6px}
-.bk{padding:12px 22px 72px}
 .t4{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .t4 button{display:flex;align-items:center;gap:12px;padding:20px 22px;border:0;background:var(--soft);color:var(--ink);font:500 1.05rem Manrope,sans-serif;cursor:pointer;text-align:left}
 .t4 button[aria-selected=true]{background:var(--j);color:var(--jt)}
@@ -210,7 +217,7 @@ footer ul{list-style:none;padding:0}
 @media(prefers-reduced-motion:reduce){.fare .ft::before,.fare .ft::after{transition:none}}
 .note{font-size:.85rem;margin-top:14px}
 .tp.x{padding:32px 28px}.tp.x p{margin:8px 0 22px;max-width:60ch}
-@media(max-width:800px){.sl{grid-template-columns:1fr}.st{padding:48px 22px}.si{border-bottom-left-radius:48px}.t4 button{padding:16px 18px;font-size:.98rem}}
+@media(max-width:800px){.t4 button{padding:16px 18px;font-size:.98rem}}
 @media(max-width:600px){.t4{gap:8px}.t4 button{flex-direction:column;justify-content:center;gap:6px;padding:12px 4px;font-size:.8rem;line-height:1.25;text-align:center}}
 @media(max-width:420px){.btn.fare{padding:18px 20px;font-size:1rem}}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}}
@@ -288,6 +295,28 @@ footer ul{list-style:none;padding:0}
 #bk #de,#bk .sn{padding:12px 16px}
 }
 @media(prefers-reduced-motion:reduce){#bk .bkr .c,#bk .bkr .fare{transition:none}}
+/* Photo-stage card: #bk is the white card under the headline tab. Desktop puts every field on one row; tablet keeps the 3-across layout; phone keeps the 2-across layout. */
+#bk{background:var(--card);border-radius:16px 0 16px 16px;align-self:stretch;--bkh:88px}
+#bk .wd{border:0;background:none}
+#bk .t4{padding:0 24px;border-bottom:1px solid var(--line)}
+#bk .bko{padding:4px 24px}
+#bk .bkr{border-radius:0 0 16px 16px}
+@media(min-width:1025px){
+#bk .bkr{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.95fr) minmax(0,1.3fr)}
+#bk .bkp{grid-column:auto}
+#bk .bkp>.c:first-child{border-bottom-left-radius:16px}
+#bk .bkr .fare{grid-column:auto;min-height:var(--bkh);border-bottom-right-radius:16px}
+}
+@media(max-width:1024px){#bk .bkr .fare{border-radius:0 0 16px 16px}}
+@media(max-width:760px){
+.hero{padding:0 0 32px}
+.hph{position:relative;bottom:auto;height:260px}
+.ell{margin-top:-80px;padding:0 12px}
+.htab{width:auto;align-self:stretch;padding:22px 20px 8px}
+#bk{border-radius:0 0 16px 16px}
+.hero .fa{top:130px}
+#bk .t4{padding:0 16px}
+}
 /* Featured fares: one fare is shown large (picture, route, price, request button) with the full list beside it, cheapest first.
    Light, like the rest of the site. Every rule is scoped to #fares. */
 #fares{padding:84px 0;background:var(--soft)}
@@ -498,8 +527,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .fo{position:absolute;left:0;right:0;top:6px;padding-top:calc((100% - 44px)/3*1.25);pointer-events:none;z-index:5}
 @media(max-width:900px){.fo{padding-top:calc((100% - 24px)/2*1.25)}}
 @media(max-width:700px){.fo{padding-top:calc((100% - 4px)*.82*1.25)}}
-.hero .fa.fl{left:calc(50% + 16px)}.hero .fa.fr{right:16px}
-@media(max-width:800px){.hero .fa{top:auto;bottom:128px;transform:none}.hero .fa:active{transform:scale(.94)}.hero .fa.fl{left:14px}.hero .fa.fr{right:14px}}
+.hero .fa{top:125px}.hero .fa.fl{left:16px}.hero .fa.fr{right:16px}
 @media(hover:none){.fa{opacity:1;pointer-events:auto;width:42px;height:42px}.fa:disabled{opacity:0;pointer-events:none}}
 @media(prefers-reduced-motion:reduce){.fa,.cr{transition:none}}
 .tcar{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;scrollbar-width:thin}
@@ -868,14 +896,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main id="main" tabindex="-1">
 
 <section class="pg" id="p-home" hidden>
-<div class="hero">
-<article class="sl"><div class="st"><p class="lb">First class</p><h1>Save up to 70% off first class airfares.</h1><p>Save on luxury airlines like Cathay Pacific, Etihad and Singapore Airlines with insider fares, arranged by an advisor who knows your routes.</p><a class="btn go" href="/contact/">Request a free quote</a></div><div class="si" data-c="First class"><picture><source type="image/webp" srcset="/images/first-class-suite.webp"><img src="/images/first-class-suite.jpg" width="1200" height="900" alt="Passenger enjoying a meal in a private first class suite" fetchpriority="high" onerror="this.remove()"></picture></div></article>
-<article class="sl off" aria-hidden="true"><div class="st"><p class="lb">Business class</p><h2 class="hd">Lie-flat comfort on the routes you fly most.</h2><p>Repeat-route pricing for frequent work travel, with changes handled by your advisor.</p><a class="btn go" href="/routes/">See routes</a></div><div class="si" data-c="Business class"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1400&q=70" alt="Tokyo skyline at dusk" loading="lazy" onerror="this.remove()"></div></article>
-<article class="sl off" aria-hidden="true"><div class="st"><p class="lb">Featured airline</p><h2 class="hd">Journey with <span id="jal">Emirates</span></h2><p id="jtx">Save up to 70% and explore Dubai with access to the Emirates first class lounge, then settle into a private first class suite, with the onboard Shower Spa on the A380 available by appointment with the cabin crew.</p><a class="btn go" id="jb" href="/contact/" data-m="I'd like a free quote on Emirates. Route and dates: ">Request a free quote</a></div><div class="si" data-c="Airlines"><img id="jim" alt="" loading="lazy" onerror="this.remove()"></div></article>
+<div class="hero" id="hero">
+<div class="hph" aria-hidden="true"><div class="hsl on"><picture><source type="image/webp" srcset="/images/first-class-suite.webp"><img src="/images/first-class-suite.jpg" width="1200" height="900" alt="" fetchpriority="high" onerror="this.remove()"></picture></div><div class="hsl"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=70" alt="" loading="lazy" onerror="this.remove()"></div><div class="hsl"><img id="jim" alt="" loading="lazy" onerror="this.remove()"></div></div>
 <button class="fa fl" id="hprev" type="button" aria-label="Previous slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="fa fr" id="hnext" type="button" aria-label="Next slide"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+<div class="w ell"><div class="hcol">
+<div class="htab"><div class="hts">
+<article class="sl on"><p class="lb">First and business class</p><h1>Save up to 70% off first class airfares.</h1></article>
+<article class="sl" aria-hidden="true"><p class="lb">Business class</p><h2 class="hd">Lie-flat comfort on the routes you fly most.</h2></article>
+<article class="sl" aria-hidden="true"><p class="lb">Featured airline</p><h2 class="hd">Journey with <span id="jal">Emirates</span></h2><p id="jtx" class="vh"></p><a id="jb" class="vh" href="/contact/" tabindex="-1" aria-hidden="true" data-m="I'd like a free quote on Emirates. Route and dates: "></a></article>
 </div>
-<div class="w ind" role="group" aria-label="Hero slides"><button class="d on" type="button" aria-label="Show slide 1"></button><button class="d" type="button" aria-label="Show slide 2"></button><button class="d" type="button" aria-label="Show slide 3"></button><button class="pz" id="pz" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button></div>
-<div class="w bk" id="bk">
+<div class="ind" role="group" aria-label="Hero slides"><button class="d on" type="button" aria-label="Show slide 1"></button><button class="d" type="button" aria-label="Show slide 2"></button><button class="d" type="button" aria-label="Show slide 3"></button><button class="pz" id="pz" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button></div>
+</div>
+<div class="bk" id="bk">
 <div class="t4" id="t4" role="tablist" aria-label="Travel services"></div>
 <div class="wd">
 <div class="tp" id="tp0">
@@ -895,6 +927,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 </div>
 </div>
+</div></div></div>
 <div class="air"><p class="at">Our partner airlines</p><div class="mq" id="mq"></div></div>
 <section id="fares" aria-labelledby="fs-h"><div class="w"><div class="fs-hd"><div><h2 id="fs-h">Featured first and business class fares</h2><p class="fs-sub">Round-trip fares, plus taxes and fees. Choose a route to see it in full.</p></div><div class="fs-tabs" role="group" aria-label="Filter fares by cabin"><button type="button" aria-pressed="true" data-f="all">All fares <span>17</span></button><button type="button" aria-pressed="false" data-f="first">First class <span>6</span></button><button type="button" aria-pressed="false" data-f="business">Business class <span>11</span></button></div></div><div class="fs-bd"><div class="fs-sp" id="fsp"><div class="fs-tl" id="fst" style="background:linear-gradient(180deg,#dce1e6 0%,#acbbc9 55%,#6d8196 100%)"><i class="sun" aria-hidden="true"></i><i class="h1" aria-hidden="true"></i><i class="h2" aria-hidden="true"></i><span class="fs-chip b" id="fsc">Business class</span><span class="fs-pos" id="fsn">1 of 17</span><span class="fs-cd" id="fsk" aria-hidden="true">CPH</span></div><div class="fs-it" aria-live="polite"><div><h3 id="fsr">Singapore to Copenhagen</h3><p class="fs-as" id="fsa">Singapore Airlines, Business Class</p></div><div class="fs-ar"><button type="button" id="fsb" aria-label="Previous fare" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" id="fsx" aria-label="Next fare"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div><div class="fs-pr"><div><small>From</small><div class="px"><span>USD</span><b id="fsv">3,300</b></div><em>Round trip, plus taxes and fees</em></div><button class="fs-go" type="button" id="fsq">Request this fare<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="fs-ls"><div class="fs-list" role="group" aria-label="All featured fares, cheapest first"><button class="fs-r" type="button" aria-pressed="true" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="Copenhagen" data-ta="CPH" data-al="Singapore Airlines" data-cb="Business Class" data-px="3300" data-g="#dce1e6,#acbbc9,#6d8196"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to Copenhagen</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Washington" data-fa="IAD" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3300" data-g="#bfcbd8,#8798ae,#4b5d78"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,300</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Dallas" data-ta="DFW" data-al="Cathay Pacific" data-cb="Business Class" data-px="3700" data-g="#f5d3a8,#e2966c,#8d5149"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Dallas</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="Business Class" data-px="3700" data-g="#d5d9de,#a6b2bf,#65748a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,700</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Atlanta" data-fa="ATL" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="Business Class" data-px="3800" data-g="#cdd2d9,#97a1b1,#58667a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Atlanta to London</span><span class="fs-rs">British Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="London" data-fa="LHR" data-to="Hong Kong" data-ta="HKG" data-al="Cathay Pacific" data-cb="Business Class" data-px="3900" data-g="#86c4c3,#359596,#0f505a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">London to Hong Kong</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="New York" data-fa="JFK" data-to="Maldives" data-ta="MLE" data-al="Qatar Airways" data-cb="Business Class" data-px="3900" data-g="#c3ece5,#62c4c0,#14797f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Maldives</span><span class="fs-rs">Qatar Airways, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 3,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="New York" data-ta="JFK" data-al="Cathay Pacific" data-cb="Business Class" data-px="4200" data-g="#a6bdd6,#738fb0,#38496a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to New York</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,200</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Washington" data-fa="IAD" data-to="Frankfurt" data-ta="FRA" data-al="Lufthansa Airlines" data-cb="First Class" data-px="4400" data-g="#cdd6dc,#8fa4ae,#4d6370"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Washington to Frankfurt</span><span class="fs-rs">Lufthansa Airlines, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,400</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Hong Kong" data-fa="HKG" data-to="Vancouver" data-ta="YVR" data-al="Cathay Pacific" data-cb="Business Class" data-px="4600" data-g="#abd3ca,#62a493,#27574c"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to Vancouver</span><span class="fs-rs">Cathay Pacific, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="New York" data-ta="JFK" data-al="Singapore Airlines" data-cb="Business Class" data-px="4600" data-g="#b3c2d9,#7f93b6,#3f4f74"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to New York</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Los Angeles" data-fa="LAX" data-to="London" data-ta="LHR" data-al="British Airways" data-cb="First Class" data-px="4800" data-g="#d3d0dc,#a29cb6,#5f5a7a"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Los Angeles to London</span><span class="fs-rs">British Airways, First Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="business" data-fr="Singapore" data-fa="SIN" data-to="San Francisco" data-ta="SFO" data-al="Singapore Airlines" data-cb="Business Class" data-px="4800" data-g="#f7cdab,#e2917c,#7d4d5f"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to San Francisco</span><span class="fs-rs">Singapore Airlines, Business Class</span></span><span class="fs-p"><span>From</span><b>USD 4,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Abu Dhabi" data-ta="AUH" data-al="Etihad" data-cb="First Class Suite" data-px="5900" data-g="#f1dcae,#dcb27e,#8b7152"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Abu Dhabi</span><span class="fs-rs">Etihad, First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 5,900</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Hong Kong" data-fa="HKG" data-to="London" data-ta="LHR" data-al="Cathay Pacific" data-cb="First Class" data-px="6800" data-g="#c3d3d4,#8ba5a8,#4d6a70"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Hong Kong to London</span><span class="fs-rs">Cathay Pacific, First Class</span></span><span class="fs-p"><span>From</span><b>USD 6,800</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="Singapore" data-fa="SIN" data-to="London" data-ta="LHR" data-al="Singapore Airlines" data-cb="A380 First Class Suite" data-px="7600" data-g="#c4cfdc,#93a5ba,#566a82"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">Singapore to London</span><span class="fs-rs">Singapore Airlines, A380 First Class Suite</span></span><span class="fs-p"><span>From</span><b>USD 7,600</b></span></button><button class="fs-r" type="button" aria-pressed="false" data-c="first" data-fr="New York" data-fa="JFK" data-to="Dubai" data-ta="DXB" data-al="" data-cb="First Class" data-px="7800" data-g="#f4cf9c,#e79c6c,#8a5a52"><span class="fs-d" aria-hidden="true"></span><span class="fs-m"><span class="fs-rt">New York to Dubai</span><span class="fs-rs">First Class</span></span><span class="fs-p"><span>From</span><b>USD 7,800</b></span></button></div></div></div><p class="fs-fn">Fares change with the date and availability; your free quote confirms the exact price.</p></div></section>
 <div class="s"><div class="w">
@@ -1051,13 +1084,14 @@ $("mb").onclick=()=>{const o=$("nav").classList.toggle("open");$("mb").setAttrib
 {const d=document.querySelector(".b-diff"),q=matchMedia("(max-width:980px)"),f=()=>{if(q.matches){d.tabIndex=0;d.setAttribute("role","group");d.setAttribute("aria-label","What makes us different")}else{d.removeAttribute("tabindex");d.removeAttribute("role");d.removeAttribute("aria-label")}};f();q.addEventListener("change",f)}
 
 // ---- Hero carousel ----
-const SL=[...document.querySelectorAll(".sl")],DS=[...document.querySelectorAll(".ind .d")];let si=0,ht,pl=!matchMedia("(prefers-reduced-motion:reduce)").matches;
-function ss(i){si=(i+SL.length)%SL.length;SL.forEach((x,k)=>{x.classList.toggle("off",k!=si);x.setAttribute("aria-hidden",String(k!=si))});DS.forEach((b,k)=>b.classList.toggle("on",k==si))}
+const SL=[...document.querySelectorAll(".sl")],HP=[...document.querySelectorAll(".hsl")],DS=[...document.querySelectorAll(".ind .d")],HE=$("hero");let si=0,ht,pl=!matchMedia("(prefers-reduced-motion:reduce)").matches;
+// Photos cross-fade; the headline slides out one way and the next slides in from the other (d = 1 forward, -1 back).
+function ss(i,d){const p=si;si=(i+SL.length)%SL.length;HE.style.setProperty("--d",d||1);SL.forEach((x,k)=>{x.classList.toggle("on",k==si);x.classList.toggle("out",k==p&&p!=si);x.setAttribute("aria-hidden",String(k!=si))});HP.forEach((x,k)=>x.classList.toggle("on",k==si));DS.forEach((b,k)=>b.classList.toggle("on",k==si))}
 function pz(){$("pz").innerHTML=pl?"&#10074;&#10074;":"&#9654;";$("pz").setAttribute("aria-label",pl?"Pause slideshow":"Play slideshow")}
 function arm(){clearInterval(ht);ht=setInterval(()=>{if(pl&&!document.hidden)ss(si+1)},6500)}
-function man(i){ss(i);arm()}
-DS.forEach((b,k)=>b.onclick=()=>man(k));$("pz").onclick=()=>{pl=!pl;pz()};pz();
-$("hprev").onclick=()=>man(si-1);$("hnext").onclick=()=>man(si+1);arm();
+function man(i,d){ss(i,d);arm()}
+DS.forEach((b,k)=>b.onclick=()=>man(k,k>si?1:-1));$("pz").onclick=()=>{pl=!pl;pz()};pz();
+$("hprev").onclick=()=>man(si-1,-1);$("hnext").onclick=()=>man(si+1,1);arm();
 // ---- Booking tabs ----
 const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h16"/>','<rect x="3" y="4" width="18" height="14" rx="2"/><path d="m8 11 3 3 5-6"/>'];
 const TN=["Request a quote","Manage booking","Check in"];
