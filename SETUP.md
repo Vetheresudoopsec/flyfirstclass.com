@@ -65,6 +65,7 @@ Open these in a browser (use your `ADMIN_KEY` for `YOUR_KEY`):
 | `/api/status?key=YOUR_KEY` | Duffel token accepted?, routes stored, photos saved, last and next refresh, whether the cron job has run, the last log lines |
 | `/api/duffel-check?key=YOUR_KEY&search=1` | Sends one real test search and explains any Duffel error in plain words |
 | `/api/mail-check?key=YOUR_KEY&send=1` | Sends a test email to the `MAIL_TO` inbox |
+| `/api/mail-check?key=YOUR_KEY&preview=confirmation` | Shows the visitor's confirmation email in the browser (also `confirmation-oneway` and `confirmation-multi`). Add `&send=1&to=you@example.com` to send that sample to yourself |
 | `/api/photo-test?key=YOUR_KEY&code=LHR` | Looks up one photo and shows what Unsplash said |
 | `/api/status` (no key) | Only the build number, so strangers learn nothing |
 
@@ -103,6 +104,17 @@ It is on by default and needs nothing from you. No one is ever asked to pick pic
 ## 9. Where quote requests are delivered
 
 Quote requests are emailed to `quote@flyfirstclass.com` by default, so no setting is needed once that mailbox exists. If an older `.env` still has a `MAIL_TO=` line (for example one that sends requests to a personal inbox), delete the line or change it to `quote@flyfirstclass.com`. Set `MAIL_TO` only when you want requests delivered somewhere else, and keep `MAIL_FROM` as the `quote@` mailbox.
+
+### The confirmation email to the visitor
+
+When someone sends a **new quote request that includes a route** (an origin and a destination), they also receive a short "Thank you for your request" email with their trip, their contact details, the reference ID and how to reach us. It comes from `quote@flyfirstclass.com` (your `MAIL_FROM`), and a reply goes to `quote@flyfirstclass.com`. The email has a version for round-trip, one-way and multi-city trips.
+
+- **Nothing is sent** for a plain message with no route, for a change to an existing request, a booking enquiry or a check-in request, or when the email address is not usable.
+- It is sent just after the visitor sees their thank-you page, so it never slows the form down, and if it fails the visitor and the team email are not affected (the failure shows in `recent` on `/api/mail-check`, with the visitor's address partly hidden).
+- Limits: one confirmation per reference ID, at most 3 a day to the same address and 300 an hour overall, so the form cannot be used to send mail to someone else's inbox in bulk.
+- To turn it off, add `CUSTOMER_CONFIRMATION=off` to `.env`.
+- The small logo in the email is loaded from `https://flyfirstclass.com/email-logo.png` (already on the live site).
+- The wording and layout live in `ffc-private/lib/confirm.php`.
 
 ## 10. If emails do not arrive
 

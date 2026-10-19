@@ -70,23 +70,27 @@ function mail_note($ok, $info) {
 function mail_recent($n = 5) {
     return array_map(function ($x) { return ['when' => et_text($x['t'] ?? 0), 'ok' => !empty($x['ok']), 'via' => $x['via'] ?? null, 'to' => $x['to'] ?? null, 'from' => $x['from'] ?? null, 'subject' => $x['subject'] ?? null, 'error' => $x['error'] ?? null]; }, array_slice(cload('mail.json', []), 0, $n));
 }
+// A message goes to the team inbox (MAIL_TO) unless it names its own recipient in 'to' (the confirmation email to a visitor, see confirm.php).
+// Such a message may also set 'fromName' and 'headers' (extra header lines). A visitor's address is never written in full to the send log.
+function m_mask($addr) { $p = strrpos((string)$addr, '@'); return $p === false || $p < 1 ? '(hidden)' : substr($addr, 0, 1) . '***' . substr($addr, $p); }
 function send_mail($m) {
-    $cfg = mail_cfg(); $info = ['to' => $cfg['to'], 'from' => $cfg['from'], 'subject' => mb_substr((string)($m['subject'] ?? ''), 0, 120)];
+    $cfg = mail_cfg(); $info = ['to' => !empty($m['to']) ? m_mask($m['to']) : $cfg['to'], 'from' => $cfg['from'], 'subject' => mb_substr((string)($m['subject'] ?? ''), 0, 120)];
     try { $via = send_mail_now($m); mail_note(true, ['via' => $via] + $info); return $via; }
     catch (Throwable $e) { mail_note(false, ['via' => $cfg['smtp'] ? 'smtp' : 'mail()', 'error' => mb_substr($e->getMessage(), 0, 300)] + $info); throw $e; }
 }
 function send_mail_now($m) {
-    $cfg = mail_cfg(); $from = $cfg['from']; $to = $cfg['to'];
+    $cfg = mail_cfg(); $from = $cfg['from']; $to = !empty($m['to']) ? $m['to'] : $cfg['to'];
     $bnd = 'ffc_' . bin2hex(random_bytes(12)); $body = m_body($bnd, $m['text'], $m['html']);
     $ct = 'multipart/alternative; boundary="' . $bnd . '"';
-    $fromHdr = 'From: Fly First Class Website <' . m_hdr($from) . '>';
+    $fromHdr = 'From: ' . (!empty($m['fromName']) ? m_word(m_hdr($m['fromName'])) : 'Fly First Class Website') . ' <' . m_hdr($from) . '>';
+    $extraHdr = array_map('m_hdr', (array)($m['headers'] ?? []));
     if ($cfg['smtp']) {
-        $msg = implode("\r\n", array_filter([$fromHdr, 'To: ' . m_hdr($to), !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'Subject: ' . m_word(m_hdr($m['subject'])),
-            'Date: ' . gmdate('D, d M Y H:i:s') . ' GMT', 'Message-ID: <' . bin2hex(random_bytes(12)) . '@' . m_domain($from) . '>', 'MIME-Version: 1.0', 'Content-Type: ' . $ct, ''], function ($x) { return $x !== null; })) . "\r\n" . $body;
+        $msg = implode("\r\n", array_filter(array_merge([$fromHdr, 'To: ' . m_hdr($to), !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'Subject: ' . m_word(m_hdr($m['subject'])),
+            'Date: ' . gmdate('D, d M Y H:i:s') . ' GMT', 'Message-ID: <' . bin2hex(random_bytes(12)) . '@' . m_domain($from) . '>', 'MIME-Version: 1.0'], $extraHdr, ['Content-Type: ' . $ct, '']), function ($x) { return $x !== null; })) . "\r\n" . $body;
         smtp_send($cfg['smtp'], $from, $to, $msg);
         return 'smtp';
     }
-    $hdr = implode("\r\n", array_filter([$fromHdr, !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'MIME-Version: 1.0', 'Content-Type: ' . $ct], function ($x) { return $x !== null; }));
+    $hdr = implode("\r\n", array_filter(array_merge([$fromHdr, !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'MIME-Version: 1.0'], $extraHdr, ['Content-Type: ' . $ct]), function ($x) { return $x !== null; }));
     $extra = preg_match('/^[^\s@<>"\'`;|&$\\\\]+@[^\s@<>"\'`;|&$\\\\]+$/', $from) ? '-f' . $from : '';
     if (!function_exists('mail')) throw fail('Email is not available on this server (PHP mail() is disabled). Add SMTP_HOST to .env.', 503);
     if (!@mail($to, m_word(m_hdr($m['subject'])), $body, $hdr, $extra)) throw fail('The server could not hand the email to its mail system. Create the mailbox ' . $from . ' in cPanel, or add SMTP_HOST to .env.', 502);
