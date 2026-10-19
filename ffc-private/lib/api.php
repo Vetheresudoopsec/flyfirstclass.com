@@ -109,6 +109,20 @@ function dispatch() {
             json_out(200, cron_run(min(110, max(60, (int)($q['budget'] ?? 100)))));   // web version: about 100 seconds per call (the command-line cron uses CRON_BUDGET)
         case 'mail-check':
             if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            $pv = (string)($q['preview'] ?? '');
+            if ($pv !== '') {            // shows the visitor's confirmation email in the browser; add &send=1&to=you@example.com to send that sample to yourself as well
+                $cm = confirm_sample($pv);
+                if (!$cm) json_out(400, ['error' => 'preview must be confirmation, confirmation-oneway or confirmation-multi']);
+                if (($q['send'] ?? '') === '1') {
+                    $cm['to'] = cm_addr($q['to'] ?? '');
+                    if ($cm['to'] === '') json_out(400, ['error' => 'Add &to=you@example.com to send the sample.']);
+                    try { $out = ['sent' => true, 'via' => send_mail($cm), 'to' => m_mask($cm['to'])]; } catch (Throwable $e) { $out = ['sent' => false, 'error' => $e->getMessage()]; }
+                    $out['recent'] = mail_recent(3);
+                    json_out(200, $out);
+                }
+                header('Content-Type: text/html; charset=UTF-8'); header('Cache-Control: no-store'); header('X-Robots-Tag: noindex');
+                echo $cm['html']; exit;
+            }
             $cfg = mail_cfg(); $sm = $cfg['smtp'];
             $out = ['configured' => (bool)($sm || function_exists('mail')), 'method' => $sm ? 'smtp' : 'mail()', 'host' => $sm['host'] ?? null, 'port' => $sm['port'] ?? null, 'secure' => $sm['secure'] ?? null, 'user' => env('SMTP_USER') ?: null,
                 'password' => env('SMTP_PASS') ? 'set' : ($sm && $sm['user'] ? 'missing' : 'not needed'), 'from' => $cfg['from'], 'to' => $cfg['to'], 'intendedFor' => MAIL_INTENDED];
@@ -134,6 +148,10 @@ function dispatch() {
             $via = send_mail(quote_mail($b, $ref, $loc));
             limit_hit($sk, 1000000000, 86400000);
             logm('[mail] ' . $ref . ' sent (' . $via . ')');
+            // The thank-you email to the visitor (confirm.php): only for a new quote request that names a route. It is sent after the reply below,
+            // and nothing that goes wrong with it can change what the visitor sees.
+            try { $cm = confirm_mail($b, $ref); } catch (Throwable $e) { $cm = null; logm('[mail] ' . $ref . ' confirmation skipped: ' . $e->getMessage()); }
+            if ($cm) json_out_then(200, ['sent' => true, 'ref' => $ref], function () use ($cm, $ref) { confirm_deliver($cm, $ref); });
             json_out(200, ['sent' => true, 'ref' => $ref]);
         case 'subscribe':
             if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
