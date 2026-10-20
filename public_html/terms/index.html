@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-20b">
+<meta name="build" content="2026-10-20c">
 <title>Terms of Service | Fly First Class International</title>
 <meta name="description" content="The terms that apply when you send a quote request to Fly First Class International: validity, pricing, confidentiality and communication.">
 <link rel="canonical" href="https://flyfirstclass.com/terms/">
@@ -432,7 +432,10 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .dl li{display:flex;justify-content:space-between;gap:16px;padding:10px 12px;border-radius:6px;cursor:pointer;font-size:1rem;white-space:nowrap}
 .dl li:hover,.dl li.on{background:var(--soft)}
 .dl li[aria-selected=true]{color:var(--j);font-weight:600}
-.dl li span{color:var(--mute);font-size:.85rem;font-weight:500}
+.dl.ac{width:0}
+.dl li span{flex:none;color:var(--mute);font-size:.85rem;font-weight:500}
+.dl li .nm{flex:1 1 auto;min-width:0;overflow:hidden;font-style:normal}
+.dl li .nm.cut{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
 .c input:focus-visible,.c .db:focus-visible{outline:none}
 .nm3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .nm3 label span,.f>label span{font-weight:400;color:var(--mute)}
@@ -466,7 +469,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .mgops svg{flex:none;color:var(--ac)}
 .tp.mg .mgo .err{margin:0;max-width:none;font-size:.9rem}
 .mgo:has(.err:not([hidden])) .mgops{display:none}
-.tp.mg .mgo .mgnr{margin:0;min-height:0;font-size:.9rem;padding-block:6px}
+.tp.mg .mgo .mgnr{margin:0;min-height:0;font-size:.9rem;padding:6px 28px 6px 0;--ax:calc(100% - 22px)}
 .tp.mg .mgb .lk{display:grid;grid-template-columns:minmax(0,1fr) 219px;gap:0;margin:0;min-height:88px;align-items:stretch}
 .tp.mg .mgb .lf{display:flex;flex-direction:column;justify-content:center;gap:6px;max-width:none;padding:0 24px;transition:background .2s,box-shadow .2s}
 .tp.mg .mgb .lf:focus-within{background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
@@ -970,6 +973,8 @@ body[data-pg=manage] header :focus-visible{outline-color:var(--au)}
 .mg-lk label,.mg-hs label{display:block;font-size:.85rem;font-weight:600;margin:0 0 5px}
 .mg-help{margin:22px 0 0;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 24px}
 .mg-help span{font-size:.9375rem;color:var(--mute)}
+.mg-help:has(+ #mg-hsw:not([hidden])){display:none}
+#mg-hsw:not([hidden]){margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
 .mg-pn{padding:28px 36px 30px}
 .mg-hs h3{margin:0 0 6px;font-size:1.125rem;font-weight:600;letter-spacing:-.01em}
 .mg-hs>p,.mg-hs .mg-ok{margin:0 0 16px;max-width:62ch;font-size:.9375rem}
@@ -1388,10 +1393,10 @@ function csel(sel){
  ul.onmousedown=e=>{const li=e.target.closest("li");if(li){e.preventDefault();pick(+li.dataset.i)}};
  label()}
 function ac(inp){
- const w=document.createElement("div"),ul=document.createElement("ul");w.className="dd";ul.className="dl";ul.setAttribute("role","listbox");ul.hidden=true;
+ const w=document.createElement("div"),ul=document.createElement("ul");w.className="dd";ul.className="dl ac";ul.setAttribute("role","listbox");ul.hidden=true;
  inp.parentNode.insertBefore(w,inp);w.append(inp,ul);inp.setAttribute("role","combobox");inp.setAttribute("aria-autocomplete","list");inp.setAttribute("aria-expanded","false");
  let items=[],cur=-1,tm,sq=0;
- const draw=()=>{ul.innerHTML=items.map((x,i)=>`<li role="option" data-i="${i}" class="${i==cur?"on":""}">${esc(x.name)}<span>${esc(x.iata)}</span></li>`).join("");ul.hidden=!items.length;inp.setAttribute("aria-expanded",!!items.length)};
+ const draw=()=>{ul.innerHTML=items.map((x,i)=>`<li role="option" data-i="${i}" class="${i==cur?"on":""}"><i class="nm">${esc(x.name)}</i><span>${esc(x.iata)}</span></li>`).join("");ul.hidden=!items.length;inp.setAttribute("aria-expanded",!!items.length);if(items.length)ul.querySelectorAll(".nm").forEach(n=>n.classList.toggle("cut",n.scrollWidth>n.clientWidth+1))};
  const pick=i=>{const x=items[i];if(!x)return;N[x.iata]=x.name;inp.value=x.name+" ("+x.iata+")";items=[];draw();inp.dispatchEvent(new Event("change",{bubbles:true}))};
  const local=q=>{q=q.toLowerCase();return Object.keys(N).filter(k=>k.toLowerCase()==q||N[k].toLowerCase().startsWith(q)).slice(0,8).map(k=>({iata:k,name:N[k]}))};
  w.close=()=>{items=[];draw()};
