@@ -9,9 +9,10 @@ import re, os, sys, html, datetime
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public_html")
 SITE = "https://flyfirstclass.com"
 PATHS = {"home": "/", "about": "/about/", "services": "/services/", "listings": "/routes/",
-         "contact": "/contact/", "terms": "/terms/", "privacy": "/privacy-policy/"}
-CRUMB = {"about": "About", "services": "Services", "listings": "Routes", "contact": "Contact",
+         "contact": "/contact/", "manage": "/manage-booking/", "terms": "/terms/", "privacy": "/privacy-policy/"}
+CRUMB = {"about": "About", "services": "Services", "listings": "Routes", "contact": "Contact", "manage": "Manage Booking",
          "terms": "Terms of Service", "privacy": "Privacy Policy"}
+NOINDEX = {"manage"}   # a tool page, not content: kept out of search results and out of sitemap.xml
 src = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
 pm = re.search(r"const P=\{(.*?)\};", src, re.S).group(1)
 P = {k: (t, d) for k, t, d in re.findall(r'(\w+):\["([^"]*)","([^"]*)"\]', pm)}
@@ -38,6 +39,8 @@ def make(k):
              '[{"@type":"ListItem","position":1,"name":"Home","item":"%s/"},{"@type":"ListItem","position":2,"name":"%s","item":"%s"}]}</script>\n'
              % (SITE, CRUMB[k], u))
     s = s.replace("<style>", crumb + "<style>", 1)
+    if k in NOINDEX:
+        s = s.replace('<link rel="canonical"', '<meta name="robots" content="noindex,follow">\n<link rel="canonical"', 1)
     s = sub1(r'<section class="pg" id="p-home">', '<section class="pg" id="p-home" hidden>', s)
     s = sub1(r'<section class="pg" id="p-%s" hidden>' % k, '<section class="pg" id="p-%s">' % k, s)
     return s
@@ -50,7 +53,7 @@ for k in PATHS:
     open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(make(k))
 
 today = datetime.date.today().isoformat()
-urls = "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (SITE, PATHS[k], today) for k in PATHS)
+urls = "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (SITE, PATHS[k], today) for k in PATHS if k not in NOINDEX)
 open(os.path.join(ROOT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
 open(os.path.join(ROOT, "robots.txt"), "w").write("User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: %s/sitemap.xml\n" % SITE)
 open(os.path.join(ROOT, "robots-test.txt"), "w").write("# Test site: keep out of search engines\nUser-agent: *\nDisallow: /\n")
