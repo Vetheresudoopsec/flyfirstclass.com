@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-20a">
+<meta name="build" content="2026-10-20b">
 <title>About Us | Fly First Class International</title>
 <meta name="description" content="20+ years of dedicated service in first and business class travel. Meet the team behind Fly First Class International and its insider fares.">
 <link rel="canonical" href="https://flyfirstclass.com/about/">
@@ -458,46 +458,41 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 @media (hover:hover){.cpy:hover::after,.cpy:focus-visible::after{content:"Click to copy";opacity:1}}
 .cpy[data-s]::after{opacity:1!important}.cpy[data-s=copied]::after{content:"Copied"!important}.cpy[data-s=fail]::after{content:"Couldn't copy"!important;color:var(--ac)}
 @media (prefers-reduced-motion:reduce){.cpy::after{transition:none}}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}.lkr .tc{margin-bottom:14px;max-width:none}
-.tp.mg{padding:40px 44px 44px}
-.mgw{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:56px;align-items:start}
-.tp.mg:has(#edf) .mgw{grid-template-columns:minmax(0,1fr)}.tp.mg:has(#edf) .adv,.tp.mg:has(#edf) .lkx,.tp.mg:has(#edf) .lka,.tp.mg:has(#edf) .nt{display:none}.tp.mg .mgl>.nt{flex:0 0 100%;margin:0;max-width:none;color:var(--j)}
+/* Manage Booking tab of the booking box: one slim bar, as tall as Request a Quote (tabs 55 + top row 53 + bottom row 88) */
+.tp.mg{padding:0}
+.mgo{display:flex;align-items:center;justify-content:space-between;gap:8px 24px;min-height:53px;padding:0 24px;border-bottom:1px solid var(--line)}
+.mgops{display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;margin:0;padding:0;list-style:none}
+.mgops li{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:600}
+.mgops svg{flex:none;color:var(--ac)}
+.tp.mg .mgo .err{margin:0;max-width:none;font-size:.9rem}
+.mgo:has(.err:not([hidden])) .mgops{display:none}
+.tp.mg .mgo .mgnr{margin:0;min-height:0;font-size:.9rem;padding-block:6px}
+.tp.mg .mgb .lk{display:grid;grid-template-columns:minmax(0,1fr) 219px;gap:0;margin:0;min-height:88px;align-items:stretch}
+.tp.mg .mgb .lf{display:flex;flex-direction:column;justify-content:center;gap:6px;max-width:none;padding:0 24px;transition:background .2s,box-shadow .2s}
+.tp.mg .mgb .lf:focus-within{background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+.tp.mg .mgb .lk label{margin:0;font-size:.6875rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.tp.mg .mgb .lfi{display:flex;align-items:center;gap:10px}
+.tp.mg .mgb .lfi svg{position:static;margin:0;flex:none}
+.tp.mg .mgb input{width:100%;height:26px;padding:0;border:0;border-radius:0;background:transparent;color:var(--ink);font:600 1rem Manrope,sans-serif;letter-spacing:.06em}
+.tp.mg .mgb input:focus-visible{outline:none}
+.tp.mg .mgb input::placeholder{font-weight:400;letter-spacing:.02em;color:#676f7c}
+.tp.mg .mgb .mgf{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-height:88px;margin:0;padding:0 24px;border-radius:0 0 16px 0;background:var(--au);color:#14181f;font:700 1.0625rem Manrope,sans-serif;text-align:left;transition:background .2s}
+.tp.mg .mgb .mgf small{font:600 .75rem Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#4a3b17}
+.tp.mg .mgb .mgf:hover,.tp.mg .mgb .mgf:focus-visible{background:#b9a063;color:#14181f}
+.tp.mg .mgb .mgf:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
+.tp.mg .mgb .mgf:disabled{opacity:.7;cursor:wait}
+@media(max-width:760px){
+.mgb{display:flex;flex-direction:column}
+.tp.mg .mgb .lk{order:1;grid-template-columns:minmax(0,1fr)}
+.tp.mg .mgb .lf{padding:15px 18px;border-bottom:1px solid var(--line)}
+.tp.mg .mgb .mgf{min-height:64px;padding:0 18px;border-radius:0}
+.mgb .mgo{order:2;flex-direction:column;align-items:stretch;gap:0;padding:0;border-bottom:0}
+.tp.mg .mgo .err{order:-2;padding:14px 18px}
+.tp.mg .mgo .mgnr{order:-1;display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:8px 36px 8px 18px;border-bottom:1px solid var(--line);white-space:normal;font-size:.875rem;line-height:1.35;--ax:calc(100% - 28px)}
+.mgops{padding:15px 18px}
+}
 .ecm{margin-top:16px}.ecm textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit;resize:vertical;min-height:84px}.ecm textarea:focus-visible{outline:3px solid var(--j);outline-offset:1px}.ecm p{margin:6px 0 0;max-width:none;font-size:.82rem;color:var(--mute)}
-.mgl{display:flex;flex-flow:row wrap;align-items:center;column-gap:36px;min-width:0}
-.mgl>h3,.mgl>.lk,.mgl>.err,.mgl .tc,.mgl .ed{flex:0 0 100%}
-.tp.mg .lkr{display:contents}.tp.mg .mgl .tc{margin:20px 0 14px}.tp.mg .lkx,.tp.mg .lka{margin:0}
-.tp.mg .mgl>h3{font-size:1.9rem;font-weight:600;letter-spacing:-.01em;line-height:1.2;margin:0}
-.tp.mg .lk{margin:24px 0 4px}
 .lfi{position:relative}.lfi svg{position:absolute;left:16px;top:50%;margin-top:-10px;color:var(--ac);pointer-events:none}
-.tp.mg .lk input{height:52px;padding:0 16px 0 48px;border-radius:8px;font-weight:600;letter-spacing:.06em}
-.tp.mg .lk input::placeholder{font-weight:400;letter-spacing:.02em}
-.adv{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0}
-.advp{position:relative;height:150px;background:var(--soft);overflow:hidden}
-.advp .sky{position:absolute;inset:0;width:100%;height:100%}
-.advp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.advp .cr{left:14px;bottom:8px;font-size:.7rem}.advp:hover .cr,.advp:focus-within .cr{opacity:1;transform:none;pointer-events:auto}@media(hover:none){.advp .cr{opacity:1;transform:none;pointer-events:auto}}
-.adv .ah{padding:22px 26px 8px}
-.adv .ahd{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
-.ti{display:grid;grid-template-columns:88px minmax(0,1fr);gap:20px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
-.ti:last-child{border-bottom:0;padding-bottom:16px}
-.ti svg{display:block;width:88px;height:88px}
-.ti b{display:block;font-size:1rem;font-weight:600}
-.ti span{display:block;margin-top:3px;font-size:.875rem;line-height:1.5;color:var(--mute)}
-.tp.mg .adv .af{margin:0;max-width:none;padding:0 26px 24px;font-size:.84rem;line-height:1.6;color:var(--mute)}
-.ti svg .bg{fill:var(--soft);stroke:var(--line)}
-.ti svg .ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.ti svg .pa{fill:var(--card)}
-.ti svg .bd{fill:var(--line)}
-.ti svg .gl{fill:none;stroke:var(--mute);stroke-width:1.6;stroke-linecap:round;opacity:.45}
-.ti svg .gf{fill:var(--mute);opacity:.45}
-.ti svg .ky{fill:var(--ink)}
-.ti svg .au{fill:var(--au)}
-.ti svg .gd{fill:none;stroke:var(--au);stroke-width:2.4;stroke-linecap:round}
-.ti svg .as{fill:none;stroke:var(--ac);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
-.ti svg .bm{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:960px){.mgw{grid-template-columns:minmax(0,1fr);gap:36px}.adv{max-width:520px}}
-@media(max-width:700px){.tp.mg{padding:28px 18px 32px}}
-@media(max-width:520px){.ti{grid-template-columns:72px minmax(0,1fr);gap:16px}.ti svg{width:72px;height:72px}.adv .ah{padding:20px 18px 6px}.tp.mg .adv .af{padding:0 18px 20px}}
-.lkx,.lka{display:flex;flex-wrap:wrap;align-items:center;gap:8px 36px}.lka{margin-top:6px}.lkx .note{flex:1 1 100%;margin:0 0 4px;color:var(--j)}
 .ed{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);max-width:760px}.ed h4{font-size:1.1rem;font-weight:600;margin:0 0 14px}
 .eg,.egd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 20px}.edx{grid-column:1/-1}
 .sp2{grid-column:span 2}.eg>.ec1{grid-column-start:1}
@@ -1276,18 +1271,12 @@ const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h1
 const TN=["Request a Quote","Manage Booking"];
 $("t4").innerHTML=TN.map((n,i)=>`<button role="tab" type="button" aria-selected="${i==0}" data-i="${i}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[i]}</svg>${n}</button>`).join("");
 const TK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 0 0 6v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a2 2 0 0 1 0-6V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg>';
-const TV=b=>`<svg viewBox="0 0 88 88" aria-hidden="true"><rect class="bg" x=".5" y=".5" width="87" height="87" rx="18"/>${b}</svg>`;
-// Drawn tile pictures for the Manage booking side panel (colours come from the page theme).
-const TI={
- ch:TV('<rect class="pa ln" x="19" y="24" width="50" height="46" rx="6"/><path class="ln" d="M19 36h50M31 19v10M57 19v10"/><g class="gf"><circle cx="30" cy="45" r="2"/><circle cx="40" cy="45" r="2"/><circle cx="50" cy="45" r="2"/><circle cx="60" cy="45" r="2"/><circle cx="40" cy="55" r="2"/><circle cx="60" cy="55" r="2"/><circle cx="30" cy="63" r="2"/><circle cx="40" cy="63" r="2"/><circle cx="50" cy="63" r="2"/></g><circle class="ln" cx="30" cy="55" r="4.5" stroke-dasharray="2 2"/><circle class="au" cx="50" cy="55" r="4.5"/><path class="as" d="M32 50.5C36 44.5 44 44.5 48 50M44.6 47.6 48.2 50.2 44.4 52"/>'),
- up:TV('<rect class="pa ln" x="26" y="24" width="30" height="36" rx="12"/><rect class="bd ln" x="33" y="19" width="16" height="11" rx="5"/><rect class="pa ln" x="20" y="42" width="8" height="22" rx="4"/><rect class="pa ln" x="54" y="42" width="8" height="22" rx="4"/><rect class="pa ln" x="24" y="54" width="34" height="12" rx="5"/><path class="ln" d="M30 71h22"/><path class="gl" d="M33 40h16"/><circle class="au" cx="66" cy="23" r="10"/><path class="bm" d="M61.5 25.5 66 21l4.5 4.5"/>'),
- ca:TV('<path class="pa ln" d="M18 30H64a4 4 0 0 1 4 4V41a6 6 0 0 0 0 12V60a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V53a6 6 0 0 0 0-12V34a4 4 0 0 1 4-4Z"/><path class="gl" d="M30 33v28" stroke-dasharray="3 3"/><path class="gl" d="M38 43h20M38 51h13"/><circle class="au" cx="66" cy="28" r="10"/><path class="bm" d="M62 24l8 8M70 24l-8 8"/>')};
-// Sky strip behind the destination photo: it is what shows until a photo has loaded (or if none is available).
-const SKY=(n,sx,px,py)=>`<svg class="sky" viewBox="0 0 398 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="adk${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f7aa5"/><stop offset=".6" stop-color="#cdb7a6"/><stop offset="1" stop-color="#f3cfa4"/></linearGradient><radialGradient id="adn${n}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe6b0" stop-opacity=".95"/><stop offset="1" stop-color="#ffe6b0" stop-opacity="0"/></radialGradient></defs><rect width="398" height="150" fill="url(#adk${n})"/><circle cx="${sx}" cy="150" r="150" fill="url(#adn${n})"/><path d="M0 118C60 100 120 128 190 112S320 98 398 116V150H0Z" fill="#fff" opacity=".22"/><path d="M0 134C80 120 150 142 230 130S340 122 398 134V150H0Z" fill="#fff" opacity=".38"/><g transform="translate(${px} ${py}) rotate(-6) scale(.8)" fill="#fff" opacity=".92"><path d="M0 14Q6 6 22 6L70 6Q88 6 92 14Q88 22 70 22L22 22Q6 22 0 14Z"/><path d="M12 6L4-8L14-8L28 6Z"/><path d="M38 12L58-12L67-12L56 12Z"/><path d="M38 16L58 40L67 40L56 16Z"/></g></svg>`;
-const TPM=[
- {t:"Manage booking",h:"What you can do",sx:300,px:236,py:40,f:"Your advisor handles every change with the airline.",s:[["ch","Change","Update your route, dates or passengers."],["up","Upgrade","Ask about moving up a cabin."],["ca","Cancel","Ask about cancelling a ticket."]]}];
-TPM.forEach((t,i)=>{const k=i+1,d=document.createElement("div");d.className="tp x mg";d.id="tp"+k;d.hidden=true;d.innerHTML=`<div class="mgw"><div class="mgl"><h3>${t.t}</h3><form class="lk" data-k="${k}"><div class="lf"><label for="lk${k}">Reference ID</label><div class="lfi">${TK}<input id="lk${k}" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div></div><button class="btn" type="submit">Find My Request</button></form><p class="err" id="lke${k}" role="alert" hidden></p><div class="lka"><a class="btn go" href="/manage-booking/" data-mg="hs">No Reference ID? Use Your Email or Phone</a></div></div><aside class="adv" aria-label="${t.h}"><div class="advp" data-k="${k}">${SKY(k,t.sx,t.px,t.py)}</div><div class="ah"><div class="ahd">${t.h}</div>${t.s.map(x=>`<div class="ti">${TI[x[0]]}<div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join("")}</div><p class="af">${t.f}</p></aside></div>`;$("tp0").parentNode.appendChild(d)});
-$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i);if(b.dataset.i=="1")advRefresh()};
+// Manage Booking tab: one slim bar the same height as Request a Quote. The reference field and the gold cell sit on the bottom row; Change, Upgrade and Cancel (what the next page offers) and the email-or-phone link sit above.
+const MGOPT=[["Change","M3 7h13M13 4l3 3-3 3M17 13H4M7 10l-3 3 3 3"],["Upgrade","M10 15V4.5M5.5 9 10 4.5 14.5 9M5 17.5h10"],["Cancel","M5.5 5.5l9 9M14.5 5.5l-9 9"]];
+{const d=document.createElement("div");d.className="tp x mg";d.id="tp1";d.hidden=true;
+ d.innerHTML=`<div class="mgb"><div class="mgo"><ul class="mgops" aria-label="What you can do once your request is open">${MGOPT.map(o=>`<li><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${o[1]}"/></svg>${o[0]}</li>`).join("")}</ul><p class="err" id="lke1" role="alert" hidden></p><a class="btn go mgnr" href="/manage-booking/" data-mg="hs">No Reference ID? Use Your Email or Phone</a></div><form class="lk" data-k="1"><div class="lf"><label for="lk1">Reference ID</label><div class="lfi">${TK}<input id="lk1" placeholder="FFC-XXXXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24"></div></div><button class="btn mgf" type="submit"><small>Next Step</small>Find My Request</button></form></div>`;
+ $("tp0").parentNode.appendChild(d)}
+$("t4").onclick=e=>{const b=e.target.closest("button");if(!b)return;[...$("t4").children].forEach(x=>x.setAttribute("aria-selected",x==b));document.querySelectorAll(".tp").forEach((q,i)=>q.hidden=i!=b.dataset.i)};
 // ---- Bot checks: quiet and automatic, never a puzzle ----
 // Before routes, photos or requests are looked up, or a quote is sent, the page gets a short-lived signed pass from the server (POST /api/guard).
 // The server weighs a few signals: is this a normal browser, has anyone used the page, is the hidden field empty and, if you set it up, an invisible
@@ -1333,21 +1322,10 @@ async function gf(u,o,need,quiet,again){o=o||{};let t="";try{t=await gToken(need
  if(r.status==403&&!again){let j=null;try{j=await r.clone().json()}catch(e){}if(j&&j.stale){GD.tok="";GD.exp=0;try{sessionStorage.removeItem("ffc-g")}catch(e){}return gf(u,o,need,quiet,true)}}
  return r}
 // ---- Manage booking side panel photo: the destination of the request that was found; until then (or if that city has no photo) any photo already saved on the server ----
-let ANYP=null,ADVSEQ=0;
 const advPic=c=>PIC[c]?{url:"https://images.unsplash.com/photo-"+PIC[c]+"?auto=format&fit=crop&w=1400&q=75"}:null;
-async function advAny(){if(ANYP)return ANYP;let p=null;try{const r=await gf("/api/photos?any=1",{},0,true);if(r.ok){const j=await r.json();if(j&&j.any&&j.any.url)p=j.any}}catch(e){}
- if(!p){const ks=Object.keys(PIC);if(ks.length)p=advPic(ks[Math.floor(Math.random()*ks.length)])}
- return ANYP=p}
 async function advFor(code){if(!code)return null;if(PIC[code])return advPic(code);
  for(let n=0;n<6;n++){try{const r=await gf("/api/photos?codes="+code,{},0,true);if(!r.ok)return null;const j=await r.json(),p=(j.photos||{})[code];if(p&&p.url)return p;if(!(j.pending||[]).includes(code))return null}catch(e){return null}await new Promise(t=>setTimeout(t,2500))}
  return null}
-function advPut(el,p,label){el.querySelectorAll("img,.cr").forEach(x=>x.remove());if(!p)return;const im=new Image();im.alt=label||"Destination photo";im.onload=()=>{el.querySelectorAll("img,.cr").forEach(x=>x.remove());el.insertAdjacentElement("afterbegin",im);if(p.credit)el.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link||"https://unsplash.com")}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url}
-async function advRefresh(){const my=++ADVSEQ,t=REQ&&REQ.trip||{},code=t.to?cd(t.to):"",nmz=t.to?String(t.to).replace(/\s*\(.*\)$/,""):"";
- const els=[1].map(k=>document.querySelector("#tp"+k+" .advp")).filter(Boolean),key=code||"any";
- if(els.every(e=>e.dataset.p===key))return;
- let p=await advFor(code),city=nmz;if(!p){p=await advAny();city=""}
- if(my!=ADVSEQ)return;
- els.forEach(e=>{e.dataset.p=key;advPut(e,p,city?city+" city view":"Destination photo")})}
 // ---- Route data and search ----
 function cpl(ref){const r=esc(ref);return`<button type="button" class="cpy" data-copy="${r}" aria-label="Copy reference ID ${r}">${r}</button>`}
 async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){}
@@ -1872,7 +1850,7 @@ const bkOf=r=>{const t=r.trip||{},a=Math.max(1,t.adults||1),k=t.children||0;retu
 const whoName=c=>[c.first,c.middle,c.last].filter(Boolean).join(" "),dlong=t=>new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
 const phShow=p=>{if(!p)return"";try{if(LP){const n=LP.parsePhoneNumberFromString(p);if(n)return n.formatInternational()}}catch(e){}return p};
 // The request is shown on the Manage Booking page (mgRender, further down). Finding one from the booking box takes the visitor there.
-function renderAll(note,mail){advRefresh();mgRender(note,mail)}
+function renderAll(note,mail){mgRender(note,mail)}
 async function lookup(k){const inp=$("lk"+k),E=$("lke"+k),ref=normRef(inp.value),bt=inp.closest("form").querySelector("button");E.hidden=true;
  if(!REFRE.test(ref)){E.textContent="Enter your reference ID, for example FFC-AB12CD34.";E.hidden=false;REQ=null;renderAll();return"none"}
  bt.disabled=true;const r=await RQ.get(ref);bt.disabled=false;
