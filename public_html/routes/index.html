@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-20d">
+<meta name="build" content="2026-10-20e">
 <title>First &amp; Business Class Routes and Fares | Fly First Class</title>
 <meta name="description" content="Explore first and business class routes, cabins and airlines from your nearest airport, then request a free quote.">
 <link rel="canonical" href="https://flyfirstclass.com/routes/">
@@ -145,6 +145,8 @@ footer ul{list-style:none;padding:0}
 .ell{position:relative;z-index:5}
 .hcol{display:flex;flex-direction:column;align-items:flex-end;filter:drop-shadow(0 18px 28px rgba(20,24,31,.16))}
 .htab{width:520px;max-width:100%;padding:28px 34px 8px;background:var(--card);border-radius:16px 16px 0 0}
+/* Wide screens: the headline card sits down over the empty right end of the booking box's tab row, resting on the line under the tabs, so it takes less of the photo. --tabh is the tab row height (set from script). */
+@media(min-width:900px){.htab{position:relative;z-index:2;transform:translateY(var(--tabh,52px))}}
 .hts{display:grid;overflow:hidden}
 .sl{grid-area:1/1;opacity:0;visibility:hidden;transform:translateX(calc(var(--d)*30px));transition:opacity .45s ease,transform .55s cubic-bezier(.22,.8,.3,1),visibility 0s .55s}
 .sl.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
@@ -1274,6 +1276,7 @@ $("hprev").onclick=()=>man(si-1,-1);$("hnext").onclick=()=>man(si+1,1);arm();
 // ---- Booking tabs ----
 const IC=['<path d="M2 10 22 2 15 22 11 14Z"/>','<path d="M4 6h16M4 12h10M4 18h16"/>'];
 const TN=["Request a Quote","Manage Booking"];
+{const t=$("t4"),set=()=>document.documentElement.style.setProperty("--tabh",Math.max(0,t.offsetHeight-1)+"px");addEventListener("resize",set);if(window.ResizeObserver)new ResizeObserver(set).observe(t);requestAnimationFrame(set)}
 $("t4").innerHTML=TN.map((n,i)=>`<button role="tab" type="button" aria-selected="${i==0}" data-i="${i}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[i]}</svg>${n}</button>`).join("");
 const TK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 0 0 6v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a2 2 0 0 1 0-6V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/></svg>';
 // Manage Booking tab: one slim bar the same height as Request a Quote. The reference field and the gold cell sit on the bottom row; Change, Upgrade and Cancel (what the next page offers) and the email-or-phone link sit above.
