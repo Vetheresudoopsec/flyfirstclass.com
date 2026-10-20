@@ -164,6 +164,21 @@ function dispatch() {
         case 'newsletter-export':
             if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
             nl_export();
+        case 'history':                                // Request History on the Manage Booking page (history.php): a code emailed to the address proves it is theirs
+            if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
+            if (!hs_on()) json_out(404, ['error' => 'Not found']);
+            guard_gate(1);
+            $hb = body_json(); guard_form($hb); $act = (string)($hb['act'] ?? '');
+            if ($act === 'send') {
+                [$hr, $hm] = hs_start($hb);
+                if (!$hm) json_out(200, $hr);
+                json_out_then(200, $hr, function () use ($hm) {
+                    foreach ($hm as $m) { try { $via = send_mail($m); logm('[history] code sent to ' . m_mask($m['to']) . ' (' . $via . ')'); } catch (Throwable $e) { logm('[history] code not sent to ' . m_mask($m['to']) . ': ' . $e->getMessage()); } }
+                });
+            }
+            if ($act === 'check') json_out(200, hs_check($hb));
+            if ($act === 'list') json_out(200, hs_list($hb));
+            json_out(400, ['error' => 'Unknown action']);
         case 'requests':
             if (in_array($method, ['GET', 'PUT', 'POST'], true)) guard_gate(1);
             $ip = client_ip(); $ref = strtoupper($ref);

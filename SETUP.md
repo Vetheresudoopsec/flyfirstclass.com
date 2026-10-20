@@ -116,6 +116,21 @@ When someone sends a **new quote request that includes a route** (an origin and 
 - The small logo in the email is loaded from `https://flyfirstclass.com/email-logo.png` (already on the live site).
 - The wording and layout live in `ffc-private/lib/confirm.php`.
 
+### Manage Booking and request history
+
+The Manage Booking page (`/manage-booking/`) is where a visitor opens, changes and asks about a request. Every "edit my route" button on the site leads there: the booking box, the contact page's *Modify My Request* and *Edit* links, and the *Change* button on the page itself. The page is kept out of search results and out of `sitemap.xml`. The dark header applies to this page only.
+
+**Request history** finds a visitor's requests without the reference ID, by the email address or phone number they used. Anyone can type any email address or phone number into the quote form, so a match alone is never trusted:
+
+- The visitor types an email address or phone number and asks for a code. The page always answers "we have emailed a code if we have requests for that", whether or not anything matched, so it cannot be used to check who has made a request.
+- If requests match, a 6-digit code is emailed to the email address on them (for a phone number, to each address on requests with that number, up to 3). The code works once, expires after 15 minutes and is cancelled after 6 wrong tries. Only a scrambled (hashed) copy is stored, in `cache/hist.json`.
+- The right code lists the requests that carry that email address, newest first (25 at most, with a short trip summary). A phone number is only used to find where to send the code: requests are never listed by phone number alone.
+- A pass of 30 minutes is kept in the visitor's browser tab, so reloading does not need a new code. *Hide History* ends it.
+- Limits: 10 code requests an hour from one visitor address, 3 an hour for one typed email or phone number, 3 an hour to one mailbox (however it was found), and 300 an hour overall.
+- The code email comes from `quote@flyfirstclass.com` (your `MAIL_FROM`) with the subject "123456 is your Fly First Class code". It uses the same mail settings as the confirmation email, so if that email arrives, this one will. If it does not, read `recent` on `/api/mail-check` (section 10).
+- To turn it off, add `REQUEST_HISTORY=off` to `.env`. The history box then stops working (it shows an error); finding a request by its reference ID is not affected.
+- The wording and the checks live in `ffc-private/lib/history.php`.
+
 ## 10. If emails do not arrive
 
 The site remembers the last 20 send attempts. Open `/api/mail-check?key=YOUR_KEY&send=1` (sends a test) and read `recent`: each line says when, whether the server accepted it, and the reason if not. `/api/status?key=YOUR_KEY` shows the same list as `recentEmails`.
@@ -168,9 +183,9 @@ MAILCHIMP_LIST_ID=your_audience_id
 
 ## 12. Page addresses, search engines and the test site
 
-Each page has its own address: `/about/`, `/services/`, `/routes/` (the Listings page), `/contact/`, `/terms/` and `/privacy-policy/`. Older links such as `/#about` still work and are tidied into the clean address.
+Each page has its own address: `/about/`, `/services/`, `/routes/` (the Listings page), `/contact/`, `/manage-booking/` (Manage Booking), `/terms/` and `/privacy-policy/`. Older links such as `/#about` still work and are tidied into the clean address.
 
-- **`public_html/index.html` is the source of the whole site. After you change it, run `python3 tools/build_pages.py`** (from the repository folder). It rewrites the six page folders (`about/`, `services/` and so on), `sitemap.xml`, `robots.txt` and `robots-test.txt`, so each page reaches search engines with its own title, description and canonical address. Commit those generated files with the change. (`og-image.png`, the picture shown when the site is shared, is made once; delete it and run the script to make it again.)
+- **`public_html/index.html` is the source of the whole site. After you change it, run `python3 tools/build_pages.py`** (from the repository folder). It rewrites the page folders (`about/`, `services/`, `manage-booking/` and so on), `sitemap.xml`, `robots.txt` and `robots-test.txt`, so each page reaches search engines with its own title, description and canonical address. Commit those generated files with the change. (`og-image.png`, the picture shown when the site is shared, is made once; delete it and run the script to make it again.)
 - `robots.txt` lets search engines in and points them at `sitemap.xml`. On any address that starts with `test.`, `.htaccess` serves `robots-test.txt` instead (keep everything out) and adds a `noindex` header, so the test site never appears in Google. This needs no change when you go live: the same files work on both.
 - `.htaccess` also sends the old WordPress addresses (`/fly-first-class-reviews/`, `/fly-first-class-offers/`, the city pages and so on) permanently (301) to the matching new page, so existing Google results and links keep working. Send me any other old address you want mapped.
 - `.htaccess` sends `www.flyfirstclass.com/...` permanently (301) to the same page on `flyfirstclass.com`, so Google only ever sees one address per page. If you ever want the `www.` address to be the main one instead, say so: the redirect, the canonical tags and the sitemap all change together.

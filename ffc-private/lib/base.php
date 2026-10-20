@@ -3,7 +3,7 @@
 // base.php: settings, small file store with locks, parallel HTTP, logging, JSON replies.
 if (!defined('FFC_PRIVATE')) { exit; }
 
-const BUILD = '2026-10-15d-php';
+const BUILD = '2026-10-20a-php';
 const SCHEMA = 2;                    // bump when the stored data format changes: older cache entries are ignored
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('UTC');
