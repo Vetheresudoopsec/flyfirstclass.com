@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-21e">
+<meta name="build" content="2026-10-21f">
 <title>Manage Booking | Fly First Class International</title>
 <meta name="description" content="Find your request with its reference ID, change your trip, or see the requests linked to your email address or phone number.">
 <meta name="robots" content="noindex,follow">
@@ -1490,14 +1490,14 @@ function drawCal(){const f=$("fx").checked,hi=DT.dep2||DT.dep,min=CP==1?(CK=="re
  $("cal").innerHTML=`<p class="vh" aria-live="polite">${msg}</p><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}${CK?" &middot; Now pick the last day":""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
 function openCal(ph){pxClose();CP=ph==1&&DT.dep?1:0;CK=null;const ref=CP==1?(DT.ret||DT.dep):DT.dep;CMo=ref?new Date(ref+"T00:00"):new Date();CMo.setDate(1);$("cal").hidden=false;drawCal()}
 function closeCal(){$("cal").hidden=true;CK=null;if(DT.ret&&$("ty").value=="One way"){$("ty").value="Round-trip"}ty()}
-function lockCal(ms){LKT=Date.now()+ms;const c=$("cal");c.classList.add("lk");clearTimeout(lockCal.t);lockCal.t=setTimeout(()=>{c.classList.remove("lk");setTimeout(()=>{const h=c.querySelector("button[data-d]:hover");if(h)pvShow(h)},80)},ms)}
+function lockCal(ms){LKT=Date.now()+ms;const c=$("cal");c.classList.add("clk");clearTimeout(lockCal.t);lockCal.t=setTimeout(()=>{c.classList.remove("clk");setTimeout(()=>{const h=c.querySelector("button[data-d]:hover");if(h)pvShow(h)},80)},ms)}
 // Hover preview: the dates between the departure and the date under the pointer (or between it and the return) light up before the click.
 const pvR=d=>{const hi=DT.dep2||DT.dep;
  if(CP==1){const lo=CK=="ret"?DT.ret:hi;return lo&&d>lo?[lo,d]:null}
  if(CK=="dep")return d>DT.dep?[DT.dep,d]:null;
  return DT.ret&&d<DT.ret?[d,DT.ret]:null};
 function pvClear(){const c=$("cal");c.classList.remove("pvon");c.querySelectorAll(".pm,.ps,.pe,.pl,.pr,.pvt").forEach(x=>x.classList.remove("pm","ps","pe","pl","pr","pvt"))}
-function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("lk"))return;const d=b.dataset.d,r=pvR(d);if(!r)return;
+function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("clk"))return;const d=b.dataset.d,r=pvR(d);if(!r)return;
  const c=$("cal");c.classList.add("pvon");b.classList.add("pvt");
  c.querySelectorAll(".cdg").forEach(g=>{const L=[...g.querySelectorAll("button[data-d]")];L.forEach((x,k)=>{const i=x.dataset.d;if(i<r[0]||i>r[1])return;
   const wd=(new Date(i+"T00:00").getDay()+6)%7,first=wd==0||k==0,last=wd==6||k==L.length-1;
