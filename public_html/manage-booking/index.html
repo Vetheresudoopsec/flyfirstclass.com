@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-21d">
+<meta name="build" content="2026-10-21e">
 <title>Manage Booking | Fly First Class International</title>
 <meta name="description" content="Find your request with its reference ID, change your trip, or see the requests linked to your email address or phone number.">
 <meta name="robots" content="noindex,follow">
@@ -612,24 +612,36 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .cn button:hover{border-color:var(--j);color:var(--j)}
 .cdg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0;text-align:center}
 .cdg span{font-size:.75rem;color:var(--mute);padding:4px 0}
-.cdg button{aspect-ratio:1;border:0;background:none;color:var(--ink);border-radius:50%;font:500 .95rem Manrope,sans-serif;cursor:pointer}
-.cdg button:hover:not(:disabled){background:var(--soft)}
+.cdg i{aspect-ratio:1}
+.cdg button{--bn:#dfeceb;--bp:#d0e6e4;position:relative;isolation:isolate;aspect-ratio:1;border:0;background:none;color:var(--ink);border-radius:0;font:500 .95rem Manrope,sans-serif;cursor:pointer}
+/* a date's circle is its ::before, the pill band running through the range is its ::after, so the band joins the selected dates and neither animates the other */
+.cdg button::before{content:"";position:absolute;inset:0;border-radius:50%;z-index:-1}
+.cdg button::after{content:"";position:absolute;inset:0;z-index:-2}
+.cdg button:hover:not(:disabled):not(.sel):not(.pvt)::before{background:var(--soft)}
 .cdg button:disabled{opacity:.3;cursor:default}
-.cdg button.in{background:var(--soft);border-radius:0}
-.cdg button.sel{background:var(--j);color:var(--jt);font-weight:600}
+.cdg button.sel{color:var(--jt);font-weight:600}
+.cdg button.sel::before{background:var(--j)}
 .cdg button.sel:disabled{opacity:1}
-.cdg button{transition:background .15s,color .15s}
-.cdg button.pv{background:#dcebea;border-radius:0}
-.cdg button.pvt:not(.sel){background:#dcebea;box-shadow:inset 0 0 0 2px var(--j)}
-.cal.an .cdg button.sel.pop{animation:cpop .34s cubic-bezier(.2,.9,.3,1.3)}
-.cal.an .cdg button.in{animation:cin .3s ease both;animation-delay:calc(var(--k,0)*14ms)}
-@keyframes cpop{0%{transform:scale(.7)}60%{transform:scale(1.14)}100%{transform:scale(1)}}
-@keyframes cin{from{background:transparent;transform:scaleX(.5);opacity:.3}to{background:var(--soft);transform:none;opacity:1}}
-@media(prefers-reduced-motion:reduce){.cal.an .cdg button{animation:none!important}.cdg button{transition:none}}
+.cdg button.pvt:not(.sel)::before{background:var(--bp);box-shadow:inset 0 0 0 2px var(--j)}
+.cdg button.rm::after,.cdg button.rs::after,.cdg button.re::after{background:var(--bn)}
+.cdg button.pm::after,.cdg button.ps::after,.cdg button.pe::after{background:var(--bp)}
+.cdg button.rs::after{background:linear-gradient(90deg,transparent 50%,var(--bn) 50%)}
+.cdg button.re::after{background:linear-gradient(270deg,transparent 50%,var(--bn) 50%)}
+.cdg button.ps::after{background:linear-gradient(90deg,transparent 50%,var(--bp) 50%)}
+.cdg button.pe::after{background:linear-gradient(270deg,transparent 50%,var(--bp) 50%)}
+.cdg button.rl::after,.cdg button.pl::after{border-radius:999px 0 0 999px}
+.cdg button.rr::after,.cdg button.pr::after{border-radius:0 999px 999px 0}
+.cal.pvon .cdg button.rm::after,.cal.pvon .cdg button.rs::after,.cal.pvon .cdg button.re::after{background:none}
+.cal.an .cdg button.sel.pop::before{animation:cpop .34s cubic-bezier(.2,.9,.3,1.3)}
+.cal.an .cdg button.rm::after,.cal.an .cdg button.rs::after,.cal.an .cdg button.re::after{animation:cin .28s ease both;animation-delay:calc(var(--k,0)*12ms)}
+@keyframes cpop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes cin{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.cal.an .cdg button::before,.cal.an .cdg button::after{animation:none!important}}
+.cal .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cf2{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 30px 0 0;border-top:1px solid var(--line)}
 .cf2>div{display:flex;align-items:center;gap:40px}
 .cf2 p{font-size:.9rem;margin:0}
-@media(max-width:800px){.cm{grid-template-columns:1fr}.m2{display:none}.cal{padding:16px}}
+@media(max-width:800px){.cm{grid-template-columns:1fr}.m2{display:none}.cal{padding:16px}.cf2{flex-direction:column;align-items:flex-start;padding-right:0}.cf2>div{gap:16px}}
 .lgs{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
 .alg{height:26px;width:auto;max-width:120px;object-fit:contain;filter:grayscale(1);opacity:.8;transition:filter .2s,opacity .2s}
 .alt{font-size:.85rem;font-weight:600;color:var(--mute)}span.alt{background:none}
@@ -1465,14 +1477,17 @@ function sync(){if(window.gcClear)gcClear();if(DT.dep&&DT.ret&&DT.ret<=(DT.dep2|
 let LKT=0,LASTP="",ANI=false;
 function drawCal(){const f=$("fx").checked,hi=DT.dep2||DT.dep,min=CP==1?(CK=="ret"?DT.ret:hi||TODAY):TODAY,strict=CP==1&&CK!="ret"&&!!hi,one=$("ty").value=="One way",rt=$("ty").value=="Round-trip";
  const msg=CP==0?(f?(CK?"Now pick the last day you could leave":"Select your departure window: the first and last day you could leave"):"Select your departure date"):(f?(CK?"Now pick the last day you could return":rt?"Select your return window":"Select your return window, or skip the return"):(rt?"Select your return date":"Select your return date, or skip the return"));
- const nn=f?"window":"date",msg2=(CP==1&&DT.ret&&!CK)?"Return "+nn+" set. Pick another date to change it, or select Departing on to change your departure.":(CP==0&&DT.dep&&DT.ret&&!CK&&!f)?"Departure set. Pick another date to change it, or select Returning on to change your return.":msg;$("dr").dataset.ph=CP;
+ $("dr").dataset.ph=CP;
+ const A=DT.dep,Z=DT.ret2||DT.ret||DT.dep2,band=!!(A&&Z&&Z>A);   // the pill runs from the departure through to the last date chosen
  const month=k=>{const m=new Date(CMo.getFullYear(),CMo.getMonth()+k,1),n=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),lead=(m.getDay()+6)%7,narrow=window.innerWidth<=800;
   let h=`<div class="cn">${k==0?'<button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button>':"<span></span>"}<b>${m.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</b>${(k==1||narrow)?'<button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button>':"<span></span>"}</div><div class="cdg">`+["M","T","W","T","F","S","S"].map(x=>`<span>${x}</span>`).join("")+"<i></i>".repeat(lead);
-  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),inr=(DT.dep2&&i>DT.dep&&i<DT.dep2)||(DT.ret2&&i>DT.ret&&i<DT.ret2),dis=strict?i<=min:i<min;
-   h+=`<button type="button" data-d="${i}" class="${sel?"sel"+(ANI&&i==LASTP?" pop":""):inr?"in":""}"${inr?` style="--k:${Math.min(20,Math.abs(Math.round((new Date(i+"T00:00")-new Date((DT.dep2&&i>DT.dep&&i<DT.dep2?DT.dep:DT.ret)+"T00:00"))/864e5)))}"`:""}${dis?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
-  return h+"</div>"};
- $("cal").classList.toggle("an",ANI);ANI=false;
- $("cal").innerHTML=`<div class="ct"><b>${msg2}</b><span>Step ${CP+1} of 2</span></div><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
+  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),dis=strict?i<=min:i<min,wd=(lead+d-1)%7,first=wd==0||d==1,last=wd==6||d==n;
+   let c=sel?"sel"+(ANI&&i==LASTP?" pop":""):"";
+   if(band&&i>=A&&i<=Z){if(i==A){if(!last)c+=" rs"}else if(i==Z){if(!first)c+=" re"}else c+=" rm"+(first?" rl":"")+(last?" rr":"")}
+   h+=`<button type="button" data-d="${i}" class="${c.trim()}"${band&&i>=A&&i<=Z?` style="--k:${Math.min(24,Math.round((new Date(i+"T00:00")-new Date(A+"T00:00"))/864e5))}"`:""}${dis?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
+  return h+"<i></i>".repeat(Math.max(0,42-lead-n))+"</div>"};   // always six rows, so the box never changes height between months
+ $("cal").classList.remove("pvon");$("cal").classList.toggle("an",ANI);ANI=false;
+ $("cal").innerHTML=`<p class="vh" aria-live="polite">${msg}</p><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}${CK?" &middot; Now pick the last day":""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
 function openCal(ph){pxClose();CP=ph==1&&DT.dep?1:0;CK=null;const ref=CP==1?(DT.ret||DT.dep):DT.dep;CMo=ref?new Date(ref+"T00:00"):new Date();CMo.setDate(1);$("cal").hidden=false;drawCal()}
 function closeCal(){$("cal").hidden=true;CK=null;if(DT.ret&&$("ty").value=="One way"){$("ty").value="Round-trip"}ty()}
 function lockCal(ms){LKT=Date.now()+ms;const c=$("cal");c.classList.add("lk");clearTimeout(lockCal.t);lockCal.t=setTimeout(()=>{c.classList.remove("lk");setTimeout(()=>{const h=c.querySelector("button[data-d]:hover");if(h)pvShow(h)},80)},ms)}
@@ -1481,8 +1496,12 @@ const pvR=d=>{const hi=DT.dep2||DT.dep;
  if(CP==1){const lo=CK=="ret"?DT.ret:hi;return lo&&d>lo?[lo,d]:null}
  if(CK=="dep")return d>DT.dep?[DT.dep,d]:null;
  return DT.ret&&d<DT.ret?[d,DT.ret]:null};
-function pvClear(){$("cal").querySelectorAll(".pv,.pvt").forEach(x=>x.classList.remove("pv","pvt"))}
-function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("lk"))return;const r=pvR(b.dataset.d);if(!r)return;b.classList.add("pvt");$("cal").querySelectorAll("button[data-d]").forEach(x=>{const i=x.dataset.d;if(i>r[0]&&i<r[1])x.classList.add("pv")})}
+function pvClear(){const c=$("cal");c.classList.remove("pvon");c.querySelectorAll(".pm,.ps,.pe,.pl,.pr,.pvt").forEach(x=>x.classList.remove("pm","ps","pe","pl","pr","pvt"))}
+function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("lk"))return;const d=b.dataset.d,r=pvR(d);if(!r)return;
+ const c=$("cal");c.classList.add("pvon");b.classList.add("pvt");
+ c.querySelectorAll(".cdg").forEach(g=>{const L=[...g.querySelectorAll("button[data-d]")];L.forEach((x,k)=>{const i=x.dataset.d;if(i<r[0]||i>r[1])return;
+  const wd=(new Date(i+"T00:00").getDay()+6)%7,first=wd==0||k==0,last=wd==6||k==L.length-1;
+  if(i==r[0]){if(!last)x.classList.add("ps")}else if(i==r[1]){if(!first)x.classList.add("pe")}else x.classList.add("pm",...(first?["pl"]:[]),...(last?["pr"]:[]))})})}
 $("cal").addEventListener("mouseover",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
 $("cal").addEventListener("mouseout",e=>{const t=e.relatedTarget;if(!t||!t.closest||!t.closest("button[data-d]"))pvClear()});
 $("cal").addEventListener("focusin",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
