@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-20h">
+<meta name="build" content="2026-10-21f">
 <title>First &amp; Business Class Travel Services | Fly First Class</title>
 <meta name="description" content="First class tickets, business class fares, multi-city and executive travel, plus how it works and your questions answered.">
 <link rel="canonical" href="https://flyfirstclass.com/services/">
@@ -260,7 +260,7 @@ footer ul{list-style:none;padding:0}
 #bk .bkr .c>.dd>input::placeholder,#bk .mcx .c>.dd>input::placeholder{color:var(--ink);opacity:.55;font-size:1rem;font-weight:500}
 #bk .bkr .c:focus-within,#bk .mcx .c:focus-within{outline:0;background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .c:has(.db[aria-expanded=true]){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
-#bk .bkd:has(#cal:not([hidden])) .c{background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bkd[data-ph="0"]:has(#cal:not([hidden])) .c:nth-child(2),#bk .bkd[data-ph="1"]:has(#cal:not([hidden])) .c:nth-child(3){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .dl{left:-20px;top:calc(100% + 22px);min-width:max(280px,calc(100% + 40px))}
 #bk .swp{z-index:6}
 #bk .bkp .stw{z-index:6}
@@ -300,6 +300,22 @@ footer ul{list-style:none;padding:0}
 #bk #de,#bk .sn{padding:12px 16px}
 }
 @media(prefers-reduced-motion:reduce){#bk .bkr .c,#bk .bkr .fare{transition:none}}
+/* Guided callout: the first box that still needs filling gets a teal highlight and a small card saying what to add (replaces the browser's own "Please fill out this field" bubble). */
+#bk .bkr .c.gh,#bk .mcx .c.gh{background:#eef4f4;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .c.gh label[for],#bk .c.gh>label,#bk .c.gh>.dd>label{color:var(--j)}
+.gc{position:absolute;left:12px;top:calc(100% + 14px);z-index:30;width:330px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px 18px 14px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(20,24,31,.16);display:flex;flex-direction:column;gap:10px;text-align:left;font-weight:400;cursor:default;pointer-events:none}
+.gc::before{content:"";position:absolute;left:var(--gx,28px);top:-7px;width:12px;height:12px;background:var(--card);border-top:1px solid var(--line);border-left:1px solid var(--line);transform:rotate(45deg)}
+.gc .gt{display:flex;gap:12px;align-items:flex-start}
+.gc .gi{flex:none;width:32px;height:32px;border-radius:50%;background:var(--au);display:grid;place-items:center;color:var(--ink)}
+.gc b{display:block;font-size:.9375rem;font-weight:700;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink)}
+.gc p{margin:3px 0 0;font-size:.84rem;line-height:1.45;color:var(--mute)}
+.gc .gf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding-top:10px;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
+.gc .gf b{display:inline;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac)}
+@media(max-width:760px){.gc{position:static;width:auto;max-width:none;margin:12px 0 2px}.gc::before{display:none}#bk .bkr .c.gh,#bk .mcx .c.gh{height:auto;min-height:var(--bkh);justify-content:flex-start;flex:none}}
+/* Contact form: a required box that is empty or wrong turns red and gets a "!" beside the label above it. */
+.f label.bad{color:#b3261e}
+.f label.bad::after{content:"!";display:inline-grid;place-items:center;width:16px;height:16px;margin-left:8px;border-radius:50%;background:#b3261e;color:#fff;font-size:.7rem;font-weight:700;line-height:1;vertical-align:1px}
+.f input.bad{border-color:#b3261e;box-shadow:0 0 0 1px #b3261e}
 /* Photo-stage card: #bk is the white card under the headline tab. Desktop puts every field on one row; tablet keeps the 3-across layout; phone keeps the 2-across layout. */
 #bk{background:var(--card);border-radius:16px 0 16px 16px;align-self:stretch;--bkh:88px}
 #bk .wd{border:0;background:none}
@@ -595,15 +611,36 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .cn button:hover{border-color:var(--j);color:var(--j)}
 .cdg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0;text-align:center}
 .cdg span{font-size:.75rem;color:var(--mute);padding:4px 0}
-.cdg button{aspect-ratio:1;border:0;background:none;color:var(--ink);border-radius:50%;font:500 .95rem Manrope,sans-serif;cursor:pointer}
-.cdg button:hover:not(:disabled){background:var(--soft)}
+.cdg i{aspect-ratio:1}
+.cdg button{--bn:#dfeceb;--bp:#d0e6e4;position:relative;isolation:isolate;aspect-ratio:1;border:0;background:none;color:var(--ink);border-radius:0;font:500 .95rem Manrope,sans-serif;cursor:pointer}
+/* a date's circle is its ::before, the pill band running through the range is its ::after, so the band joins the selected dates and neither animates the other */
+.cdg button::before{content:"";position:absolute;inset:0;border-radius:50%;z-index:-1}
+.cdg button::after{content:"";position:absolute;inset:0;z-index:-2}
+.cdg button:hover:not(:disabled):not(.sel):not(.pvt)::before{background:var(--soft)}
 .cdg button:disabled{opacity:.3;cursor:default}
-.cdg button.in{background:var(--soft);border-radius:0}
-.cdg button.sel{background:var(--j);color:var(--jt);font-weight:600}
+.cdg button.sel{color:var(--jt);font-weight:600}
+.cdg button.sel::before{background:var(--j)}
+.cdg button.sel:disabled{opacity:1}
+.cdg button.pvt:not(.sel)::before{background:var(--bp);box-shadow:inset 0 0 0 2px var(--j)}
+.cdg button.rm::after,.cdg button.rs::after,.cdg button.re::after{background:var(--bn)}
+.cdg button.pm::after,.cdg button.ps::after,.cdg button.pe::after{background:var(--bp)}
+.cdg button.rs::after{background:linear-gradient(90deg,transparent 50%,var(--bn) 50%)}
+.cdg button.re::after{background:linear-gradient(270deg,transparent 50%,var(--bn) 50%)}
+.cdg button.ps::after{background:linear-gradient(90deg,transparent 50%,var(--bp) 50%)}
+.cdg button.pe::after{background:linear-gradient(270deg,transparent 50%,var(--bp) 50%)}
+.cdg button.rl::after,.cdg button.pl::after{border-radius:999px 0 0 999px}
+.cdg button.rr::after,.cdg button.pr::after{border-radius:0 999px 999px 0}
+.cal.pvon .cdg button.rm::after,.cal.pvon .cdg button.rs::after,.cal.pvon .cdg button.re::after{background:none}
+.cal.an .cdg button.sel.pop::before{animation:cpop .34s cubic-bezier(.2,.9,.3,1.3)}
+.cal.an .cdg button.rm::after,.cal.an .cdg button.rs::after,.cal.an .cdg button.re::after{animation:cin .28s ease both;animation-delay:calc(var(--k,0)*12ms)}
+@keyframes cpop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes cin{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.cal.an .cdg button::before,.cal.an .cdg button::after{animation:none!important}}
+.cal .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cf2{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 30px 0 0;border-top:1px solid var(--line)}
 .cf2>div{display:flex;align-items:center;gap:40px}
 .cf2 p{font-size:.9rem;margin:0}
-@media(max-width:800px){.cm{grid-template-columns:1fr}.m2{display:none}.cal{padding:16px}}
+@media(max-width:800px){.cm{grid-template-columns:1fr}.m2{display:none}.cal{padding:16px}.cf2{flex-direction:column;align-items:flex-start;padding-right:0}.cf2>div{gap:16px}}
 .lgs{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
 .alg{height:26px;width:auto;max-width:120px;object-fit:contain;filter:grayscale(1);opacity:.8;transition:filter .2s,opacity .2s}
 .alt{font-size:.85rem;font-weight:600;color:var(--mute)}span.alt{background:none}
@@ -1042,7 +1079,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="t4" id="t4" role="tablist" aria-label="Travel services"></div>
 <div class="wd">
 <div class="tp" id="tp0">
-<form id="bf">
+<form id="bf" novalidate>
 <div id="sb" hidden></div>
 <div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb"><option>First class</option><option>Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See Available Routes</button></div>
 <div class="bkr">
@@ -1098,7 +1135,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="cform"><h2>Send us your details</h2>
 <div class="tc" id="rc" role="region" aria-label="Your trip summary" hidden></div>
 <div class="mpr cpr" id="cpr" hidden></div>
-<form class="f" id="cf">
+<form class="f" id="cf" novalidate>
 <div class="nm3"><div><label for="fn">First name</label><input id="fn" name="fn" autocomplete="given-name" required></div><div><label for="mn">Middle name <span>(optional)</span></label><input id="mn" name="mn" autocomplete="additional-name"></div><div><label for="ln">Last name</label><input id="ln" name="ln" autocomplete="family-name" required></div></div>
 <label for="e">Email</label><input id="e" name="e" type="email" autocomplete="email" required>
 <label for="p">Phone</label><div class="pn"><select id="cs" aria-label="Country calling code"></select><input id="p" name="p" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number (optional)"></div><p class="err" id="pe" role="alert" hidden></p>
@@ -1431,28 +1468,53 @@ const DT={dep:"",dep2:"",ret:"",ret2:""};let CP=0,CK=null,CMo=new Date();CMo.set
 const pad=n=>String(n).padStart(2,"0"),isoD=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),TODAY=isoD(new Date());
 const dfm=(d,y)=>new Date(d+"T00:00").toLocaleDateString("en-GB",y?{day:"numeric",month:"short",year:"numeric"}:{day:"numeric",month:"short"});
 const drl=(a,b,y)=>b&&b!=a?dfm(a,y)+" to "+dfm(b,y):dfm(a,y);
-function sync(){const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
+function sync(){if(window.gcClear)gcClear();if(DT.dep&&DT.ret&&DT.ret<=(DT.dep2||DT.dep)){DT.ret="";DT.ret2=""}   // a return can never be on or before the departure
+ const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
  $("ddl").textContent=f?"Departure window":"Departing on";$("rdl").textContent=f?"Return window":"Returning on";
  $("ddb").textContent=DT.dep?drl(DT.dep,DT.dep2):"Select a date";$("ddb").classList.toggle("e",!DT.dep);
  $("rdb").textContent=one?"No return":DT.ret?drl(DT.ret,DT.ret2):(rt?"Select a return date":"Add a return (optional)");$("rdb").classList.toggle("e",one||!DT.ret)}
-function drawCal(){const f=$("fx").checked,min=CP==1?(DT.dep2||DT.dep||TODAY):TODAY,one=$("ty").value=="One way",rt=$("ty").value=="Round-trip";
+let LKT=0,LASTP="",ANI=false;
+function drawCal(){const f=$("fx").checked,hi=DT.dep2||DT.dep,min=CP==1?(CK=="ret"?DT.ret:hi||TODAY):TODAY,strict=CP==1&&CK!="ret"&&!!hi,one=$("ty").value=="One way",rt=$("ty").value=="Round-trip";
  const msg=CP==0?(f?(CK?"Now pick the last day you could leave":"Select your departure window: the first and last day you could leave"):"Select your departure date"):(f?(CK?"Now pick the last day you could return":rt?"Select your return window":"Select your return window, or skip the return"):(rt?"Select your return date":"Select your return date, or skip the return"));
+ $("dr").dataset.ph=CP;
+ const A=DT.dep,Z=DT.ret2||DT.ret||DT.dep2,band=!!(A&&Z&&Z>A);   // the pill runs from the departure through to the last date chosen
  const month=k=>{const m=new Date(CMo.getFullYear(),CMo.getMonth()+k,1),n=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),lead=(m.getDay()+6)%7,narrow=window.innerWidth<=800;
   let h=`<div class="cn">${k==0?'<button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button>':"<span></span>"}<b>${m.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</b>${(k==1||narrow)?'<button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button>':"<span></span>"}</div><div class="cdg">`+["M","T","W","T","F","S","S"].map(x=>`<span>${x}</span>`).join("")+"<i></i>".repeat(lead);
-  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),inr=(DT.dep2&&i>DT.dep&&i<DT.dep2)||(DT.ret2&&i>DT.ret&&i<DT.ret2);
-   h+=`<button type="button" data-d="${i}" class="${sel?"sel":inr?"in":""}"${i<min?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
-  return h+"</div>"};
- $("cal").innerHTML=`<div class="ct"><b>${msg}</b><span>Step ${CP+1} of 2</span></div><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
+  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),dis=strict?i<=min:i<min,wd=(lead+d-1)%7,first=wd==0||d==1,last=wd==6||d==n;
+   let c=sel?"sel"+(ANI&&i==LASTP?" pop":""):"";
+   if(band&&i>=A&&i<=Z){if(i==A){if(!last)c+=" rs"}else if(i==Z){if(!first)c+=" re"}else c+=" rm"+(first?" rl":"")+(last?" rr":"")}
+   h+=`<button type="button" data-d="${i}" class="${c.trim()}"${band&&i>=A&&i<=Z?` style="--k:${Math.min(24,Math.round((new Date(i+"T00:00")-new Date(A+"T00:00"))/864e5))}"`:""}${dis?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
+  return h+"<i></i>".repeat(Math.max(0,42-lead-n))+"</div>"};   // always six rows, so the box never changes height between months
+ $("cal").classList.remove("pvon");$("cal").classList.toggle("an",ANI);ANI=false;
+ $("cal").innerHTML=`<p class="vh" aria-live="polite">${msg}</p><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}${CK?" &middot; Now pick the last day":""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
 function openCal(ph){pxClose();CP=ph==1&&DT.dep?1:0;CK=null;const ref=CP==1?(DT.ret||DT.dep):DT.dep;CMo=ref?new Date(ref+"T00:00"):new Date();CMo.setDate(1);$("cal").hidden=false;drawCal()}
 function closeCal(){$("cal").hidden=true;CK=null;if(DT.ret&&$("ty").value=="One way"){$("ty").value="Round-trip"}ty()}
-function pickD(d){const f=$("fx").checked;
- if(CP==0){if(f&&CK=="dep"&&d>=DT.dep){DT.dep2=d;CK=null;CP=1}
-  else{DT.dep=d;DT.dep2="";if(DT.ret&&DT.ret<d){DT.ret="";DT.ret2=""}if(f)CK="dep";else CP=1}}
- else{const min=DT.dep2||DT.dep;
-  if(d<min){DT.dep=d;DT.dep2="";DT.ret="";DT.ret2="";CP=f?0:1;CK=f?"dep":null}
-  else if(f&&CK=="ret"&&d>=DT.ret){DT.ret2=d;CK=null;closeCal();return}
-  else{DT.ret=d;DT.ret2="";if(f)CK="ret";else{closeCal();return}}}
- sync();drawCal()}
+function lockCal(ms){LKT=Date.now()+ms;const c=$("cal");c.classList.add("clk");clearTimeout(lockCal.t);lockCal.t=setTimeout(()=>{c.classList.remove("clk");setTimeout(()=>{const h=c.querySelector("button[data-d]:hover");if(h)pvShow(h)},80)},ms)}
+// Hover preview: the dates between the departure and the date under the pointer (or between it and the return) light up before the click.
+const pvR=d=>{const hi=DT.dep2||DT.dep;
+ if(CP==1){const lo=CK=="ret"?DT.ret:hi;return lo&&d>lo?[lo,d]:null}
+ if(CK=="dep")return d>DT.dep?[DT.dep,d]:null;
+ return DT.ret&&d<DT.ret?[d,DT.ret]:null};
+function pvClear(){const c=$("cal");c.classList.remove("pvon");c.querySelectorAll(".pm,.ps,.pe,.pl,.pr,.pvt").forEach(x=>x.classList.remove("pm","ps","pe","pl","pr","pvt"))}
+function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("clk"))return;const d=b.dataset.d,r=pvR(d);if(!r)return;
+ const c=$("cal");c.classList.add("pvon");b.classList.add("pvt");
+ c.querySelectorAll(".cdg").forEach(g=>{const L=[...g.querySelectorAll("button[data-d]")];L.forEach((x,k)=>{const i=x.dataset.d;if(i<r[0]||i>r[1])return;
+  const wd=(new Date(i+"T00:00").getDay()+6)%7,first=wd==0||k==0,last=wd==6||k==L.length-1;
+  if(i==r[0]){if(!last)x.classList.add("ps")}else if(i==r[1]){if(!first)x.classList.add("pe")}else x.classList.add("pm",...(first?["pl"]:[]),...(last?["pr"]:[]))})})}
+$("cal").addEventListener("mouseover",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
+$("cal").addEventListener("mouseout",e=>{const t=e.relatedTarget;if(!t||!t.closest||!t.closest("button[data-d]"))pvClear()});
+$("cal").addEventListener("focusin",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
+// Picking a date: a short pause follows so a double-click or a slip cannot set a second date. The last date picked stays the active one (the next click adjusts it) until the other box is chosen; the other one is only offered next when it is still empty.
+function pickD(d){const f=$("fx").checked,hi=DT.dep2||DT.dep;
+ if(Date.now()<LKT)return;
+ if(CP==0){
+  if(f&&CK=="dep"&&d>=DT.dep){DT.dep2=d;CK=null;if(DT.ret&&DT.ret<=d){DT.ret="";DT.ret2=""}if(!DT.ret)CP=1}
+  else{DT.dep=d;DT.dep2="";if(DT.ret&&DT.ret<=d){DT.ret="";DT.ret2=""}if(f)CK="dep";else if(!DT.ret)CP=1}}
+ else{
+  if(f&&CK=="ret"&&d>=DT.ret){DT.ret2=d;CK=null}
+  else{if(d<=hi)return;DT.ret=d;DT.ret2="";if(f)CK="ret"}
+  if($("ty").value=="One way"){$("ty").value="Round-trip";ty()}}
+ LASTP=d;ANI=true;lockCal(320);sync();drawCal()}
 $("cal").onclick=e=>{const b=e.target.closest("button");if(!b)return;
  if(b.dataset.cm){CMo=new Date(CMo.getFullYear(),CMo.getMonth()+ +b.dataset.cm,1);drawCal()}
  else if(b.dataset.d)pickD(b.dataset.d);
@@ -1504,7 +1566,7 @@ SBB.forEach((b,i)=>b.onclick=()=>{$("ty").value=SB[i];ty()});$("ty").onchange=ty
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
 function book(f,t,cab,via,stops,sp){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),...(sp?{sp}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});goTo("contact")}
-function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
+function rc(){try{phSync()}catch(e){}const E=$("rc");if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
  E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+(BK.stops?it("Stops",stS(BK.stops),"cs"):"")+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="/" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){const sub=lastGet();
@@ -1548,17 +1610,38 @@ $("stp2").onkeydown=e=>{const L=[...$("stp2").querySelectorAll(".sto")],i=L.inde
  else if(e.key=="Escape"){e.preventDefault();spOpen(false);$("stn").focus()}};
 document.addEventListener("click",e=>{if(!$("stp2").hidden&&!$("stw").contains(e.target))spOpen(false)});
 ["fa","fb"].forEach(i=>["input","change"].forEach(v=>$(i).addEventListener(v,spSync)));$("swp").addEventListener("click",spSync);$("ty").addEventListener("change",spSync);
-$("bf").onsubmit=e=>{e.preventDefault();
- const bad=m=>{const E=$("de");E.textContent=m;E.hidden=false;$("dr").scrollIntoView({block:"nearest"})};
+// ---- Request-a-quote checks: every box must be filled; the first one that is not gets the guided callout ----
+const GCI={pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
+function gcClear(){document.querySelectorAll(".gc").forEach(e=>e.remove());document.querySelectorAll(".gh").forEach(e=>e.classList.remove("gh"));document.querySelectorAll("[data-gcd]").forEach(e=>{e.removeAttribute("aria-describedby");e.removeAttribute("data-gcd")})}
+function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.el.closest(".c")||a.el.parentNode,n=L.length,c=document.createElement("div");
+ cell.classList.add("gh");c.className="gc";c.id="gct";c.setAttribute("role","alert");
+ c.innerHTML=`<div class="gt"><span class="gi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GCI[a.i||"pin"]}</svg></span><div><b>${esc(a.t)}</b><p>${esc(a.h)}</p></div></div><div class="gf"><b>${n>1?"1 of "+n+" to finish":"Last one to finish"}</b>${n>1?`<span>Next: ${esc(L[1].n)}</span>`:""}</div>`;
+ cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
+ if(getComputedStyle(c).position=="absolute"){const r=c.getBoundingClientRect();let dx=0;if(r.right>innerWidth-12)dx=innerWidth-12-r.right;if(r.left+dx<12)dx=12-r.left;if(dx){c.style.left=(12+dx)+"px";c.style.setProperty("--gx",(28-dx)+"px")}}
+ try{a.el.focus({preventScroll:true})}catch(e){}
+ c.scrollIntoView({block:"nearest",behavior:"smooth"})}
+let gcAt=0;$("bk").addEventListener("input",()=>{gcClear()});$("bk").addEventListener("change",()=>{if(Date.now()-gcAt>400)gcClear()});
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&!e.target.closest(".gc")&&document.querySelector(".gc"))gcClear()});
+addEventListener("keydown",e=>{if(e.key=="Escape")gcClear()});
+$("bf").onsubmit=e=>{e.preventDefault();$("de").hidden=true;
+ const mc=$("ty").value=="Multi-city",rt=$("ty").value=="Round-trip",L=[];
  const fa0=okPlace($("fa").value),fb0=okPlace($("fb").value);
- if(!fa0||!fb0){if(!fa0)$("fa").value="";if(!fb0)$("fb").value="";bad("Please choose your departure and destination from the list.");(fa0?$("fb"):$("fa")).focus();return}
- $("fa").value=nm(fa0);$("fb").value=nm(fb0);
- let via=[];
- if($("ty").value=="Multi-city"){const xs=MC.get(),cs2=xs.map(i=>okPlace(i.value));
-  if(cs2.some(c=>!c)){xs.forEach((i,k)=>{if(!cs2[k])i.value=""});bad("Please choose each destination from the list, or remove the box.");return}
-  if(!cs2.length){bad("Please add at least one more destination for a multi-city trip.");const r=MC.rows()[0];if(r)r.querySelector("input").focus();return}
-  xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
- if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before requesting your quote.":"Please select a date to leave and a date to return before requesting your quote.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
+ const ask=(el,c,w,n,again)=>{if(c)return;const typed=el.value.trim();L.push({el,i:"pin",n,t:typed?"Choose "+again+" from the list":w[0],h:typed?"Pick it from the suggestions as you type.":w[1]})};
+ ask($("fa"),fa0,["Where are you flying from?","Type a city or airport, then choose it from the list."],"departure","your airport");
+ ask($("fb"),fb0,["Where are you flying to?","Type a city or airport, then choose it from the list."],"destination","your destination");
+ if(fa0&&fb0&&fa0==fb0)L.push({el:$("fb"),i:"pin",n:"destination",t:"Choose a different destination",h:"Your departure and destination are the same."});
+ let xs=[],cs2=[];
+ if(mc){if(!MC.n())MC.put("");xs=MC.get();cs2=xs.map(i=>okPlace(i.value));   // MC.get() skips empty boxes, so an unused extra box is ignored as before
+  if(!xs.length){const r=MC.rows()[0];if(r)L.push({el:r.querySelector("input"),i:"pin",n:"stop 2",t:"Where are you going next?",h:"Add at least one more destination for a multi-city trip."})}
+  xs.forEach((i,k)=>{const nx="stop "+(k+2);
+   if(!cs2[k]){const typed=i.value.trim();L.push({el:i,i:"pin",n:nx,t:typed?"Choose this stop from the list":"Where are you going next?",h:typed?"Pick it from the suggestions as you type, or remove the box.":"Type a city or airport, then choose it from the list. Remove the box if you do not need it."})}
+   else if(cs2[k]==(k?cs2[k-1]:fb0))L.push({el:i,i:"pin",n:nx,t:"Choose a different stop",h:"This stop is the same as the one before it."})})}
+ if(!DT.dep)L.push({el:$("ddb"),i:"cal",n:"departure date",t:"When do you want to leave?",h:"Choose your departure date."});
+ if(rt&&!DT.ret)L.push({el:$("rdb"),i:"cal",n:"return date",t:"When are you coming back?",h:"Choose your return date."});
+ if(L.length){gcShow(L);return}
+ gcClear();
+ $("fa").value=nm(fa0);$("fb").value=nm(fb0);let via=[];
+ if(mc){xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
  const o=cd($("fa").value),d=cd($("fb").value),sp=spStops();book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via,sp,sp?{n:SP.n,via:SP.via,pick:SP.pick}:null)};
 // ---- Listings (routes near the visitor) ----
 let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,LRTW=false,ERRM="",BOTM="",LD="";
@@ -1668,8 +1751,11 @@ function pin(){const v=$("p").value.trim();if(!/^(\+|00)/.test(v))return;const w
  if(!c){const d=w.replace(/\D/g,"");for(const l of[3,2,1]){const k=d.slice(0,l);if(CCM[k]){c=PREF[k]||CCM[k];break}}}
  if(c&&ISO.includes(c))cs.value=c;
  if(LP&&c&&n)$("p").value=n.formatNational()}
-function vp(){const raw=$("p").value.trim();let e="";
- if(raw){const d=raw.replace(/\D/g,"");
+const phReq=()=>!!BK&&!ACTREF;   // a quote request: a trip is attached and it is not a change to an existing request. A plain message or a change keeps the phone optional.
+function phSync(){const r=phReq();$("p").placeholder=r?"Phone number":"Phone number (optional)";$("p").setAttribute("aria-required",String(r))}
+function vp(force){phSync();const raw=$("p").value.trim();let e="";
+ if(!raw){if(phReq()&&(force||!$("pe").hidden))e="Please enter your phone number so your advisor can reach you about your quote."}
+ else{const d=raw.replace(/\D/g,"");
   if(!/^[+()\d\s.\-]+$/.test(raw))e="Use digits only, with optional spaces, dashes or brackets.";
   else if(/^(\d)\1{5,}$/.test(d)||/0123456789|1234567890|9876543210/.test(d))e="That doesn't look like a real phone number.";
   else if(LP){const n=LP.parsePhoneNumberFromString(intl(raw),cs.value);if(!n||!n.isValid())e="Enter a valid phone number for "+CN(cs.value)+"."}
@@ -1685,11 +1771,19 @@ function pf(it){const el=$("p"),raw=el.value;if(/^(\+|00)/.test(raw.trim()))retu
  d=d.slice(0,17);left=Math.min(left,d.length);
  const out=fmt(d);let np=0,seen=0;if(left>0)for(;np<out.length&&seen<left;np++)if(/\d/.test(out[np]))seen++;
  el.value=out;try{el.setSelectionRange(np,np)}catch(e){}pd=d}
-$("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=vp;cs.onchange=()=>{pf();vp()};
+$("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=()=>vp();cs.onchange=()=>{pf();vp()};
 // ---- Contact submit ----
 // The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
-$("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
+// Required boxes on the contact form: every empty or wrong one turns red with a "!" beside its label; the first is focused.
+function cfMark(el,on){el.classList.toggle("bad",on);el.setAttribute("aria-invalid",String(on));const l=document.querySelector(`label[for="${el.id}"]`);if(l)l.classList.toggle("bad",on)}
+function cfCheck(){const bad=[];
+ for(const i of["fn","ln","e"]){const el=$(i),ok=!!el.value.trim()&&(i!="e"||el.checkValidity());cfMark(el,!ok);if(!ok)bad.push(el)}
+ const pOk=vp(true);cfMark($("p"),!pOk);if(!pOk)bad.push($("p"));
+ return bad}
+$("cf").addEventListener("input",e=>{const el=e.target;if(!el.classList||!el.classList.contains("bad"))return;
+ if(el.id=="p"){if($("pe").hidden)cfMark(el,false)}else if(el.value.trim()&&(el.id!="e"||el.checkValidity()))cfMark(el,false)});
+$("cf").onsubmit=async e=>{e.preventDefault();const bad=cfCheck();if(bad.length){bad[0].focus();return}
  if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
@@ -1708,6 +1802,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
    $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:quote@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to quote@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
  }finally{sb.disabled=false;sb.textContent=lab}};
+setTimeout(()=>{try{phSync()}catch(e){}},0);
 // ---- Thank-you pages: shown after Send my request. Nothing is stored for them; opening one directly goes back to the home page ----
 window.TY=null;
 // Same questions as the FAQ on the Services page (keep them in step).
