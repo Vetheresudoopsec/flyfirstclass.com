@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-21c">
+<meta name="build" content="2026-10-21d">
 <title>Terms of Service | Fly First Class International</title>
 <meta name="description" content="The terms that apply when you send a quote request to Fly First Class International: validity, pricing, confidentiality and communication.">
 <link rel="canonical" href="https://flyfirstclass.com/terms/">
@@ -260,7 +260,7 @@ footer ul{list-style:none;padding:0}
 #bk .bkr .c>.dd>input::placeholder,#bk .mcx .c>.dd>input::placeholder{color:var(--ink);opacity:.55;font-size:1rem;font-weight:500}
 #bk .bkr .c:focus-within,#bk .mcx .c:focus-within{outline:0;background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .c:has(.db[aria-expanded=true]){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
-#bk .bkd:has(#cal:not([hidden])) .c{background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .bkd[data-ph="0"]:has(#cal:not([hidden])) .c:nth-child(2),#bk .bkd[data-ph="1"]:has(#cal:not([hidden])) .c:nth-child(3){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .dl{left:-20px;top:calc(100% + 22px);min-width:max(280px,calc(100% + 40px))}
 #bk .swp{z-index:6}
 #bk .bkp .stw{z-index:6}
@@ -312,12 +312,10 @@ footer ul{list-style:none;padding:0}
 .gc .gf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding-top:10px;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
 .gc .gf b{display:inline;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac)}
 @media(max-width:760px){.gc{position:static;width:auto;max-width:none;margin:12px 0 2px}.gc::before{display:none}#bk .bkr .c.gh,#bk .mcx .c.gh{height:auto;min-height:var(--bkh);justify-content:flex-start;flex:none}}
-/* Same callout on the contact form: sits in the flow under the field instead of floating; the field and its label turn teal. */
-.gc{scroll-margin-bottom:28px}
-.gc.gs{position:static;width:auto;max-width:440px;margin:12px 0 0}
-.gc.gs::before{display:none}
-.f label.gh{color:var(--j)}
-.f input.gh{border-color:var(--j);background:#eef4f4;box-shadow:0 0 0 1px var(--j);outline:0}
+/* Contact form: a required box that is empty or wrong turns red and gets a "!" beside the label above it. */
+.f label.bad{color:#b3261e}
+.f label.bad::after{content:"!";display:inline-grid;place-items:center;width:16px;height:16px;margin-left:8px;border-radius:50%;background:#b3261e;color:#fff;font-size:.7rem;font-weight:700;line-height:1;vertical-align:1px}
+.f input.bad{border-color:#b3261e;box-shadow:0 0 0 1px #b3261e}
 /* Photo-stage card: #bk is the white card under the headline tab. Desktop puts every field on one row; tablet keeps the 3-across layout; phone keeps the 2-across layout. */
 #bk{background:var(--card);border-radius:16px 0 16px 16px;align-self:stretch;--bkh:88px}
 #bk .wd{border:0;background:none}
@@ -618,6 +616,15 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .cdg button:disabled{opacity:.3;cursor:default}
 .cdg button.in{background:var(--soft);border-radius:0}
 .cdg button.sel{background:var(--j);color:var(--jt);font-weight:600}
+.cdg button.sel:disabled{opacity:1}
+.cdg button{transition:background .15s,color .15s}
+.cdg button.pv{background:#dcebea;border-radius:0}
+.cdg button.pvt:not(.sel){background:#dcebea;box-shadow:inset 0 0 0 2px var(--j)}
+.cal.an .cdg button.sel.pop{animation:cpop .34s cubic-bezier(.2,.9,.3,1.3)}
+.cal.an .cdg button.in{animation:cin .3s ease both;animation-delay:calc(var(--k,0)*14ms)}
+@keyframes cpop{0%{transform:scale(.7)}60%{transform:scale(1.14)}100%{transform:scale(1)}}
+@keyframes cin{from{background:transparent;transform:scaleX(.5);opacity:.3}to{background:var(--soft);transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.cal.an .cdg button{animation:none!important}.cdg button{transition:none}}
 .cf2{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 30px 0 0;border-top:1px solid var(--line)}
 .cf2>div{display:flex;align-items:center;gap:40px}
 .cf2 p{font-size:.9rem;margin:0}
@@ -1449,28 +1456,46 @@ const DT={dep:"",dep2:"",ret:"",ret2:""};let CP=0,CK=null,CMo=new Date();CMo.set
 const pad=n=>String(n).padStart(2,"0"),isoD=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),TODAY=isoD(new Date());
 const dfm=(d,y)=>new Date(d+"T00:00").toLocaleDateString("en-GB",y?{day:"numeric",month:"short",year:"numeric"}:{day:"numeric",month:"short"});
 const drl=(a,b,y)=>b&&b!=a?dfm(a,y)+" to "+dfm(b,y):dfm(a,y);
-function sync(){if(window.gcClear)gcClear();const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
+function sync(){if(window.gcClear)gcClear();if(DT.dep&&DT.ret&&DT.ret<=(DT.dep2||DT.dep)){DT.ret="";DT.ret2=""}   // a return can never be on or before the departure
+ const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
  $("ddl").textContent=f?"Departure window":"Departing on";$("rdl").textContent=f?"Return window":"Returning on";
  $("ddb").textContent=DT.dep?drl(DT.dep,DT.dep2):"Select a date";$("ddb").classList.toggle("e",!DT.dep);
  $("rdb").textContent=one?"No return":DT.ret?drl(DT.ret,DT.ret2):(rt?"Select a return date":"Add a return (optional)");$("rdb").classList.toggle("e",one||!DT.ret)}
-function drawCal(){const f=$("fx").checked,min=CP==1?(DT.dep2||DT.dep||TODAY):TODAY,one=$("ty").value=="One way",rt=$("ty").value=="Round-trip";
+let LKT=0,LASTP="",ANI=false;
+function drawCal(){const f=$("fx").checked,hi=DT.dep2||DT.dep,min=CP==1?(CK=="ret"?DT.ret:hi||TODAY):TODAY,strict=CP==1&&CK!="ret"&&!!hi,one=$("ty").value=="One way",rt=$("ty").value=="Round-trip";
  const msg=CP==0?(f?(CK?"Now pick the last day you could leave":"Select your departure window: the first and last day you could leave"):"Select your departure date"):(f?(CK?"Now pick the last day you could return":rt?"Select your return window":"Select your return window, or skip the return"):(rt?"Select your return date":"Select your return date, or skip the return"));
+ const nn=f?"window":"date",msg2=(CP==1&&DT.ret&&!CK)?"Return "+nn+" set. Pick another date to change it, or select Departing on to change your departure.":(CP==0&&DT.dep&&DT.ret&&!CK&&!f)?"Departure set. Pick another date to change it, or select Returning on to change your return.":msg;$("dr").dataset.ph=CP;
  const month=k=>{const m=new Date(CMo.getFullYear(),CMo.getMonth()+k,1),n=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),lead=(m.getDay()+6)%7,narrow=window.innerWidth<=800;
   let h=`<div class="cn">${k==0?'<button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button>':"<span></span>"}<b>${m.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</b>${(k==1||narrow)?'<button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button>':"<span></span>"}</div><div class="cdg">`+["M","T","W","T","F","S","S"].map(x=>`<span>${x}</span>`).join("")+"<i></i>".repeat(lead);
-  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),inr=(DT.dep2&&i>DT.dep&&i<DT.dep2)||(DT.ret2&&i>DT.ret&&i<DT.ret2);
-   h+=`<button type="button" data-d="${i}" class="${sel?"sel":inr?"in":""}"${i<min?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
+  for(let d=1;d<=n;d++){const i=m.getFullYear()+"-"+pad(m.getMonth()+1)+"-"+pad(d),sel=[DT.dep,DT.dep2,DT.ret,DT.ret2].includes(i),inr=(DT.dep2&&i>DT.dep&&i<DT.dep2)||(DT.ret2&&i>DT.ret&&i<DT.ret2),dis=strict?i<=min:i<min;
+   h+=`<button type="button" data-d="${i}" class="${sel?"sel"+(ANI&&i==LASTP?" pop":""):inr?"in":""}"${inr?` style="--k:${Math.min(20,Math.abs(Math.round((new Date(i+"T00:00")-new Date((DT.dep2&&i>DT.dep&&i<DT.dep2?DT.dep:DT.ret)+"T00:00"))/864e5)))}"`:""}${dis?" disabled":""} aria-label="${new Date(i+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}">${d}</button>`}
   return h+"</div>"};
- $("cal").innerHTML=`<div class="ct"><b>${msg}</b><span>Step ${CP+1} of 2</span></div><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
+ $("cal").classList.toggle("an",ANI);ANI=false;
+ $("cal").innerHTML=`<div class="ct"><b>${msg2}</b><span>Step ${CP+1} of 2</span></div><div class="cm"><div>${month(0)}</div><div class="m2">${month(1)}</div></div><div class="cf2"><p>${DT.dep?"Depart: "+drl(DT.dep,DT.dep2,1):"Depart: not set"}${one?" &middot; No return":DT.ret?" &middot; Return: "+drl(DT.ret,DT.ret2,1):""}</p><div>${CP==1&&!rt?'<button type="button" class="btn o sm" id="cskip">Skip Return</button> ':""}<button type="button" class="btn sm" id="cdone">Done</button></div></div>`}
 function openCal(ph){pxClose();CP=ph==1&&DT.dep?1:0;CK=null;const ref=CP==1?(DT.ret||DT.dep):DT.dep;CMo=ref?new Date(ref+"T00:00"):new Date();CMo.setDate(1);$("cal").hidden=false;drawCal()}
 function closeCal(){$("cal").hidden=true;CK=null;if(DT.ret&&$("ty").value=="One way"){$("ty").value="Round-trip"}ty()}
-function pickD(d){const f=$("fx").checked;
- if(CP==0){if(f&&CK=="dep"&&d>=DT.dep){DT.dep2=d;CK=null;CP=1}
-  else{DT.dep=d;DT.dep2="";if(DT.ret&&DT.ret<d){DT.ret="";DT.ret2=""}if(f)CK="dep";else CP=1}}
- else{const min=DT.dep2||DT.dep;
-  if(d<min){DT.dep=d;DT.dep2="";DT.ret="";DT.ret2="";CP=f?0:1;CK=f?"dep":null}
-  else if(f&&CK=="ret"&&d>=DT.ret){DT.ret2=d;CK=null;closeCal();return}
-  else{DT.ret=d;DT.ret2="";if(f)CK="ret";else{closeCal();return}}}
- sync();drawCal()}
+function lockCal(ms){LKT=Date.now()+ms;const c=$("cal");c.classList.add("lk");clearTimeout(lockCal.t);lockCal.t=setTimeout(()=>{c.classList.remove("lk");setTimeout(()=>{const h=c.querySelector("button[data-d]:hover");if(h)pvShow(h)},80)},ms)}
+// Hover preview: the dates between the departure and the date under the pointer (or between it and the return) light up before the click.
+const pvR=d=>{const hi=DT.dep2||DT.dep;
+ if(CP==1){const lo=CK=="ret"?DT.ret:hi;return lo&&d>lo?[lo,d]:null}
+ if(CK=="dep")return d>DT.dep?[DT.dep,d]:null;
+ return DT.ret&&d<DT.ret?[d,DT.ret]:null};
+function pvClear(){$("cal").querySelectorAll(".pv,.pvt").forEach(x=>x.classList.remove("pv","pvt"))}
+function pvShow(b){pvClear();if(!b||b.disabled||$("cal").classList.contains("lk"))return;const r=pvR(b.dataset.d);if(!r)return;b.classList.add("pvt");$("cal").querySelectorAll("button[data-d]").forEach(x=>{const i=x.dataset.d;if(i>r[0]&&i<r[1])x.classList.add("pv")})}
+$("cal").addEventListener("mouseover",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
+$("cal").addEventListener("mouseout",e=>{const t=e.relatedTarget;if(!t||!t.closest||!t.closest("button[data-d]"))pvClear()});
+$("cal").addEventListener("focusin",e=>pvShow(e.target.closest&&e.target.closest("button[data-d]")));
+// Picking a date: a short pause follows so a double-click or a slip cannot set a second date. The last date picked stays the active one (the next click adjusts it) until the other box is chosen; the other one is only offered next when it is still empty.
+function pickD(d){const f=$("fx").checked,hi=DT.dep2||DT.dep;
+ if(Date.now()<LKT)return;
+ if(CP==0){
+  if(f&&CK=="dep"&&d>=DT.dep){DT.dep2=d;CK=null;if(DT.ret&&DT.ret<=d){DT.ret="";DT.ret2=""}if(!DT.ret)CP=1}
+  else{DT.dep=d;DT.dep2="";if(DT.ret&&DT.ret<=d){DT.ret="";DT.ret2=""}if(f)CK="dep";else if(!DT.ret)CP=1}}
+ else{
+  if(f&&CK=="ret"&&d>=DT.ret){DT.ret2=d;CK=null}
+  else{if(d<=hi)return;DT.ret=d;DT.ret2="";if(f)CK="ret"}
+  if($("ty").value=="One way"){$("ty").value="Round-trip";ty()}}
+ LASTP=d;ANI=true;lockCal(320);sync();drawCal()}
 $("cal").onclick=e=>{const b=e.target.closest("button");if(!b)return;
  if(b.dataset.cm){CMo=new Date(CMo.getFullYear(),CMo.getMonth()+ +b.dataset.cm,1);drawCal()}
  else if(b.dataset.d)pickD(b.dataset.d);
@@ -1567,12 +1592,12 @@ $("stp2").onkeydown=e=>{const L=[...$("stp2").querySelectorAll(".sto")],i=L.inde
 document.addEventListener("click",e=>{if(!$("stp2").hidden&&!$("stw").contains(e.target))spOpen(false)});
 ["fa","fb"].forEach(i=>["input","change"].forEach(v=>$(i).addEventListener(v,spSync)));$("swp").addEventListener("click",spSync);$("ty").addEventListener("change",spSync);
 // ---- Request-a-quote checks: every box must be filled; the first one that is not gets the guided callout ----
-const GCI={user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-5.8 7-5.8s6.2 2 7 5.8"/>',mail:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7.5l8 6 8-6"/>',tel:'<path d="M6.6 3.5h3l1.4 4-2 1.3a11 11 0 0 0 5.2 5.2l1.3-2 4 1.4v3a2 2 0 0 1-2.2 2A15.500 15.500 0 0 1 4.600 5.700 2 2 0 0 1 6.600 3.500z"/>',pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
+const GCI={pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
 function gcClear(){document.querySelectorAll(".gc").forEach(e=>e.remove());document.querySelectorAll(".gh").forEach(e=>e.classList.remove("gh"));document.querySelectorAll("[data-gcd]").forEach(e=>{e.removeAttribute("aria-describedby");e.removeAttribute("data-gcd")})}
-function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.at?a.at.parentNode:(a.el.closest(".c")||a.el.parentNode),n=L.length,c=document.createElement("div");
- if(a.at){a.el.classList.add("gh");const lb=document.querySelector(`label[for="${a.el.id}"]`);if(lb)lb.classList.add("gh")}else cell.classList.add("gh");c.className="gc"+(a.at?" gs":"");c.id="gct";c.setAttribute("role","alert");
+function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.el.closest(".c")||a.el.parentNode,n=L.length,c=document.createElement("div");
+ cell.classList.add("gh");c.className="gc";c.id="gct";c.setAttribute("role","alert");
  c.innerHTML=`<div class="gt"><span class="gi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GCI[a.i||"pin"]}</svg></span><div><b>${esc(a.t)}</b><p>${esc(a.h)}</p></div></div><div class="gf"><b>${n>1?"1 of "+n+" to finish":"Last one to finish"}</b>${n>1?`<span>Next: ${esc(L[1].n)}</span>`:""}</div>`;
- if(a.at)a.at.after(c);else cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
+ cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
  if(getComputedStyle(c).position=="absolute"){const r=c.getBoundingClientRect();let dx=0;if(r.right>innerWidth-12)dx=innerWidth-12-r.right;if(r.left+dx<12)dx=12-r.left;if(dx){c.style.left=(12+dx)+"px";c.style.setProperty("--gx",(28-dx)+"px")}}
  try{a.el.focus({preventScroll:true})}catch(e){}
  c.scrollIntoView({block:"nearest",behavior:"smooth"})}
@@ -1731,17 +1756,15 @@ $("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=
 // ---- Contact submit ----
 // The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
-$("cf").addEventListener("input",()=>{gcClear()});$("cf").addEventListener("change",()=>{if(Date.now()-gcAt>400)gcClear()});
-// Required boxes on the contact form get the same guided callout as the booking block: the first one still to fix, in form order.
-function cfIssues(){const L=[],v=i=>$(i).value.trim(),nmRow=$("fn").closest(".nm3");
- if(!v("fn"))L.push({el:$("fn"),at:nmRow,i:"user",n:"first name",t:"What is your first name?",h:"So your advisor knows who to ask for."});
- if(!v("ln"))L.push({el:$("ln"),at:nmRow,i:"user",n:"last name",t:"What is your last name?",h:"Add it as it appears on your passport."});
- if(!v("e"))L.push({el:$("e"),at:$("e"),i:"mail",n:"email",t:"What is your email address?",h:"We will send your quote and reference ID here."});
- else if(!$("e").checkValidity())L.push({el:$("e"),at:$("e"),i:"mail",n:"email",t:"Check your email address",h:"It should look like name@example.com."});
- if(!vp(true))L.push({el:$("p"),at:$("p").closest(".pn"),i:"tel",n:"phone number",t:$("p").value.trim()?"Check your phone number":"Add your phone number",h:$("pe").textContent.replace(/^Please enter your phone number so/,"So")||"So your advisor can reach you about your quote."});
- $("pe").hidden=true;   // the callout carries this message
- return L}
-$("cf").onsubmit=async e=>{e.preventDefault();const L=cfIssues();if(L.length){gcShow(L);return}gcClear();
+// Required boxes on the contact form: every empty or wrong one turns red with a "!" beside its label; the first is focused.
+function cfMark(el,on){el.classList.toggle("bad",on);el.setAttribute("aria-invalid",String(on));const l=document.querySelector(`label[for="${el.id}"]`);if(l)l.classList.toggle("bad",on)}
+function cfCheck(){const bad=[];
+ for(const i of["fn","ln","e"]){const el=$(i),ok=!!el.value.trim()&&(i!="e"||el.checkValidity());cfMark(el,!ok);if(!ok)bad.push(el)}
+ const pOk=vp(true);cfMark($("p"),!pOk);if(!pOk)bad.push($("p"));
+ return bad}
+$("cf").addEventListener("input",e=>{const el=e.target;if(!el.classList||!el.classList.contains("bad"))return;
+ if(el.id=="p"){if($("pe").hidden)cfMark(el,false)}else if(el.value.trim()&&(el.id!="e"||el.checkValidity()))cfMark(el,false)});
+$("cf").onsubmit=async e=>{e.preventDefault();const bad=cfCheck();if(bad.length){bad[0].focus();return}
  if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
