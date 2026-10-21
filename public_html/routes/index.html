@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-21a">
+<meta name="build" content="2026-10-21b">
 <title>First &amp; Business Class Routes and Fares | Fly First Class</title>
 <meta name="description" content="Explore first and business class routes, cabins and airlines from your nearest airport, then request a free quote.">
 <link rel="canonical" href="https://flyfirstclass.com/routes/">
@@ -300,6 +300,18 @@ footer ul{list-style:none;padding:0}
 #bk #de,#bk .sn{padding:12px 16px}
 }
 @media(prefers-reduced-motion:reduce){#bk .bkr .c,#bk .bkr .fare{transition:none}}
+/* Guided callout: the first box that still needs filling gets a teal highlight and a small card saying what to add (replaces the browser's own "Please fill out this field" bubble). */
+#bk .bkr .c.gh,#bk .mcx .c.gh{background:#eef4f4;box-shadow:inset 0 -3px 0 var(--j)}
+#bk .c.gh label[for],#bk .c.gh>label,#bk .c.gh>.dd>label{color:var(--j)}
+#bk .gc{position:absolute;left:12px;top:calc(100% + 14px);z-index:30;width:330px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px 18px 14px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(20,24,31,.16);display:flex;flex-direction:column;gap:10px;text-align:left;font-weight:400;cursor:default;pointer-events:none}
+#bk .gc::before{content:"";position:absolute;left:var(--gx,28px);top:-7px;width:12px;height:12px;background:var(--card);border-top:1px solid var(--line);border-left:1px solid var(--line);transform:rotate(45deg)}
+#bk .gc .gt{display:flex;gap:12px;align-items:flex-start}
+#bk .gc .gi{flex:none;width:32px;height:32px;border-radius:50%;background:var(--au);display:grid;place-items:center;color:var(--ink)}
+#bk .gc b{display:block;font-size:.9375rem;font-weight:700;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink)}
+#bk .gc p{margin:3px 0 0;font-size:.84rem;line-height:1.45;color:var(--mute)}
+#bk .gc .gf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding-top:10px;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
+#bk .gc .gf b{display:inline;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac)}
+@media(max-width:760px){#bk .gc{position:static;width:auto;max-width:none;margin:12px 0 2px}#bk .gc::before{display:none}#bk .bkr .c.gh,#bk .mcx .c.gh{height:auto;min-height:var(--bkh);justify-content:flex-start;flex:none}}
 /* Photo-stage card: #bk is the white card under the headline tab. Desktop puts every field on one row; tablet keeps the 3-across layout; phone keeps the 2-across layout. */
 #bk{background:var(--card);border-radius:16px 0 16px 16px;align-self:stretch;--bkh:88px}
 #bk .wd{border:0;background:none}
@@ -1042,7 +1054,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="t4" id="t4" role="tablist" aria-label="Travel services"></div>
 <div class="wd">
 <div class="tp" id="tp0">
-<form id="bf">
+<form id="bf" novalidate>
 <div id="sb" hidden></div>
 <div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb"><option>First class</option><option>Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See Available Routes</button></div>
 <div class="bkr">
@@ -1431,7 +1443,7 @@ const DT={dep:"",dep2:"",ret:"",ret2:""};let CP=0,CK=null,CMo=new Date();CMo.set
 const pad=n=>String(n).padStart(2,"0"),isoD=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),TODAY=isoD(new Date());
 const dfm=(d,y)=>new Date(d+"T00:00").toLocaleDateString("en-GB",y?{day:"numeric",month:"short",year:"numeric"}:{day:"numeric",month:"short"});
 const drl=(a,b,y)=>b&&b!=a?dfm(a,y)+" to "+dfm(b,y):dfm(a,y);
-function sync(){const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
+function sync(){if(window.gcClear)gcClear();const one=$("ty").value=="One way",rt=$("ty").value=="Round-trip",f=$("fx").checked;if(!rt||(DT.dep&&DT.ret))$("de").hidden=true;
  $("ddl").textContent=f?"Departure window":"Departing on";$("rdl").textContent=f?"Return window":"Returning on";
  $("ddb").textContent=DT.dep?drl(DT.dep,DT.dep2):"Select a date";$("ddb").classList.toggle("e",!DT.dep);
  $("rdb").textContent=one?"No return":DT.ret?drl(DT.ret,DT.ret2):(rt?"Select a return date":"Add a return (optional)");$("rdb").classList.toggle("e",one||!DT.ret)}
@@ -1548,20 +1560,38 @@ $("stp2").onkeydown=e=>{const L=[...$("stp2").querySelectorAll(".sto")],i=L.inde
  else if(e.key=="Escape"){e.preventDefault();spOpen(false);$("stn").focus()}};
 document.addEventListener("click",e=>{if(!$("stp2").hidden&&!$("stw").contains(e.target))spOpen(false)});
 ["fa","fb"].forEach(i=>["input","change"].forEach(v=>$(i).addEventListener(v,spSync)));$("swp").addEventListener("click",spSync);$("ty").addEventListener("change",spSync);
-$("bf").onsubmit=e=>{e.preventDefault();
- const bad=m=>{const E=$("de");E.textContent=m;E.hidden=false;$("dr").scrollIntoView({block:"nearest"})};
+// ---- Request-a-quote checks: every box must be filled; the first one that is not gets the guided callout ----
+const GCI={pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
+function gcClear(){document.querySelectorAll("#bk .gc").forEach(e=>e.remove());document.querySelectorAll("#bk .gh").forEach(e=>e.classList.remove("gh"));document.querySelectorAll("#bk [data-gcd]").forEach(e=>{e.removeAttribute("aria-describedby");e.removeAttribute("data-gcd")})}
+function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.el.closest(".c")||a.el.parentNode,n=L.length,c=document.createElement("div");
+ cell.classList.add("gh");c.className="gc";c.id="gct";c.setAttribute("role","alert");
+ c.innerHTML=`<div class="gt"><span class="gi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GCI[a.i||"pin"]}</svg></span><div><b>${esc(a.t)}</b><p>${esc(a.h)}</p></div></div><div class="gf"><b>${n>1?"1 of "+n+" to finish":"Last one to finish"}</b>${n>1?`<span>Next: ${esc(L[1].n)}</span>`:""}</div>`;
+ cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
+ if(getComputedStyle(c).position=="absolute"){const r=c.getBoundingClientRect();let dx=0;if(r.right>innerWidth-12)dx=innerWidth-12-r.right;if(r.left+dx<12)dx=12-r.left;if(dx){c.style.left=(12+dx)+"px";c.style.setProperty("--gx",(28-dx)+"px")}}
+ try{a.el.focus({preventScroll:true})}catch(e){}
+ c.scrollIntoView({block:"nearest",behavior:"smooth"})}
+let gcAt=0;$("bk").addEventListener("input",()=>{gcClear()});$("bk").addEventListener("change",()=>{if(Date.now()-gcAt>400)gcClear()});
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&!e.target.closest(".gc")&&document.querySelector("#bk .gc"))gcClear()});
+addEventListener("keydown",e=>{if(e.key=="Escape")gcClear()});
+$("bf").onsubmit=e=>{e.preventDefault();$("de").hidden=true;
+ const mc=$("ty").value=="Multi-city",rt=$("ty").value=="Round-trip",L=[];
  const fa0=okPlace($("fa").value),fb0=okPlace($("fb").value);
- if(!fa0||!fb0){if(!fa0)$("fa").value="";if(!fb0)$("fb").value="";bad("Please choose your departure and destination from the list.");(fa0?$("fb"):$("fa")).focus();return}
- $("fa").value=nm(fa0);$("fb").value=nm(fb0);
- let via=[];
- if($("ty").value=="Multi-city"){const xs=MC.get(),cs2=xs.map(i=>okPlace(i.value));
-  if(cs2.some(c=>!c)){xs.forEach((i,k)=>{if(!cs2[k])i.value=""});bad("Please choose each destination from the list, or remove the box.");return}
-  if(!cs2.length){bad("Please add at least one more destination for a multi-city trip.");const r=MC.rows()[0];if(r)r.querySelector("input").focus();return}
-  xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
- if(fa0==fb0){$("fb").value="";bad("Your departure and destination are the same. Please choose a different destination.");$("fb").focus();return}
- if(via.some((c,k)=>c==(k?via[k-1]:fb0))){bad("Two stops in a row are the same place. Please change one of the destinations.");return}
- {const rt=$("ty").value=="Round-trip",miss=!DT.dep||(rt&&!DT.ret);
-  if(miss){const E=$("de");E.textContent=!DT.dep?(rt?"Please select a date to leave and a date to return before requesting your quote.":"Please select a date to leave before requesting your quote."):"Please select a date to return before requesting your quote.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}}
+ const ask=(el,c,w,n,again)=>{if(c)return;const typed=el.value.trim();L.push({el,i:"pin",n,t:typed?"Choose "+again+" from the list":w[0],h:typed?"Pick it from the suggestions as you type.":w[1]})};
+ ask($("fa"),fa0,["Where are you flying from?","Type a city or airport, then choose it from the list."],"departure","your airport");
+ ask($("fb"),fb0,["Where are you flying to?","Type a city or airport, then choose it from the list."],"destination","your destination");
+ if(fa0&&fb0&&fa0==fb0)L.push({el:$("fb"),i:"pin",n:"destination",t:"Choose a different destination",h:"Your departure and destination are the same."});
+ let xs=[],cs2=[];
+ if(mc){if(!MC.n())MC.put("");xs=MC.get();cs2=xs.map(i=>okPlace(i.value));   // MC.get() skips empty boxes, so an unused extra box is ignored as before
+  if(!xs.length){const r=MC.rows()[0];if(r)L.push({el:r.querySelector("input"),i:"pin",n:"stop 2",t:"Where are you going next?",h:"Add at least one more destination for a multi-city trip."})}
+  xs.forEach((i,k)=>{const nx="stop "+(k+2);
+   if(!cs2[k]){const typed=i.value.trim();L.push({el:i,i:"pin",n:nx,t:typed?"Choose this stop from the list":"Where are you going next?",h:typed?"Pick it from the suggestions as you type, or remove the box.":"Type a city or airport, then choose it from the list. Remove the box if you do not need it."})}
+   else if(cs2[k]==(k?cs2[k-1]:fb0))L.push({el:i,i:"pin",n:nx,t:"Choose a different stop",h:"This stop is the same as the one before it."})})}
+ if(!DT.dep)L.push({el:$("ddb"),i:"cal",n:"departure date",t:"When do you want to leave?",h:"Choose your departure date."});
+ if(rt&&!DT.ret)L.push({el:$("rdb"),i:"cal",n:"return date",t:"When are you coming back?",h:"Choose your return date."});
+ if(L.length){gcShow(L);return}
+ gcClear();
+ $("fa").value=nm(fa0);$("fb").value=nm(fb0);let via=[];
+ if(mc){xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
  const o=cd($("fa").value),d=cd($("fb").value),sp=spStops();book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via,sp,sp?{n:SP.n,via:SP.via,pick:SP.pick}:null)};
 // ---- Listings (routes near the visitor) ----
 let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,LRTW=false,ERRM="",BOTM="",LD="";
