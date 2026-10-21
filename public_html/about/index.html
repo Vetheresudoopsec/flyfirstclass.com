@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-21b">
+<meta name="build" content="2026-10-21c">
 <title>About Us | Fly First Class International</title>
 <meta name="description" content="20+ years of dedicated service in first and business class travel. Meet the team behind Fly First Class International and its insider fares.">
 <link rel="canonical" href="https://flyfirstclass.com/about/">
@@ -303,15 +303,21 @@ footer ul{list-style:none;padding:0}
 /* Guided callout: the first box that still needs filling gets a teal highlight and a small card saying what to add (replaces the browser's own "Please fill out this field" bubble). */
 #bk .bkr .c.gh,#bk .mcx .c.gh{background:#eef4f4;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .c.gh label[for],#bk .c.gh>label,#bk .c.gh>.dd>label{color:var(--j)}
-#bk .gc{position:absolute;left:12px;top:calc(100% + 14px);z-index:30;width:330px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px 18px 14px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(20,24,31,.16);display:flex;flex-direction:column;gap:10px;text-align:left;font-weight:400;cursor:default;pointer-events:none}
-#bk .gc::before{content:"";position:absolute;left:var(--gx,28px);top:-7px;width:12px;height:12px;background:var(--card);border-top:1px solid var(--line);border-left:1px solid var(--line);transform:rotate(45deg)}
-#bk .gc .gt{display:flex;gap:12px;align-items:flex-start}
-#bk .gc .gi{flex:none;width:32px;height:32px;border-radius:50%;background:var(--au);display:grid;place-items:center;color:var(--ink)}
-#bk .gc b{display:block;font-size:.9375rem;font-weight:700;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink)}
-#bk .gc p{margin:3px 0 0;font-size:.84rem;line-height:1.45;color:var(--mute)}
-#bk .gc .gf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding-top:10px;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
-#bk .gc .gf b{display:inline;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac)}
-@media(max-width:760px){#bk .gc{position:static;width:auto;max-width:none;margin:12px 0 2px}#bk .gc::before{display:none}#bk .bkr .c.gh,#bk .mcx .c.gh{height:auto;min-height:var(--bkh);justify-content:flex-start;flex:none}}
+.gc{position:absolute;left:12px;top:calc(100% + 14px);z-index:30;width:330px;max-width:calc(100vw - 24px);box-sizing:border-box;padding:16px 18px 14px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(20,24,31,.16);display:flex;flex-direction:column;gap:10px;text-align:left;font-weight:400;cursor:default;pointer-events:none}
+.gc::before{content:"";position:absolute;left:var(--gx,28px);top:-7px;width:12px;height:12px;background:var(--card);border-top:1px solid var(--line);border-left:1px solid var(--line);transform:rotate(45deg)}
+.gc .gt{display:flex;gap:12px;align-items:flex-start}
+.gc .gi{flex:none;width:32px;height:32px;border-radius:50%;background:var(--au);display:grid;place-items:center;color:var(--ink)}
+.gc b{display:block;font-size:.9375rem;font-weight:700;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--ink)}
+.gc p{margin:3px 0 0;font-size:.84rem;line-height:1.45;color:var(--mute)}
+.gc .gf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding-top:10px;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
+.gc .gf b{display:inline;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ac)}
+@media(max-width:760px){.gc{position:static;width:auto;max-width:none;margin:12px 0 2px}.gc::before{display:none}#bk .bkr .c.gh,#bk .mcx .c.gh{height:auto;min-height:var(--bkh);justify-content:flex-start;flex:none}}
+/* Same callout on the contact form: sits in the flow under the field instead of floating; the field and its label turn teal. */
+.gc{scroll-margin-bottom:28px}
+.gc.gs{position:static;width:auto;max-width:440px;margin:12px 0 0}
+.gc.gs::before{display:none}
+.f label.gh{color:var(--j)}
+.f input.gh{border-color:var(--j);background:#eef4f4;box-shadow:0 0 0 1px var(--j);outline:0}
 /* Photo-stage card: #bk is the white card under the headline tab. Desktop puts every field on one row; tablet keeps the 3-across layout; phone keeps the 2-across layout. */
 #bk{background:var(--card);border-radius:16px 0 16px 16px;align-self:stretch;--bkh:88px}
 #bk .wd{border:0;background:none}
@@ -1110,7 +1116,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="cform"><h2>Send us your details</h2>
 <div class="tc" id="rc" role="region" aria-label="Your trip summary" hidden></div>
 <div class="mpr cpr" id="cpr" hidden></div>
-<form class="f" id="cf">
+<form class="f" id="cf" novalidate>
 <div class="nm3"><div><label for="fn">First name</label><input id="fn" name="fn" autocomplete="given-name" required></div><div><label for="mn">Middle name <span>(optional)</span></label><input id="mn" name="mn" autocomplete="additional-name"></div><div><label for="ln">Last name</label><input id="ln" name="ln" autocomplete="family-name" required></div></div>
 <label for="e">Email</label><input id="e" name="e" type="email" autocomplete="email" required>
 <label for="p">Phone</label><div class="pn"><select id="cs" aria-label="Country calling code"></select><input id="p" name="p" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number (optional)"></div><p class="err" id="pe" role="alert" hidden></p>
@@ -1561,17 +1567,17 @@ $("stp2").onkeydown=e=>{const L=[...$("stp2").querySelectorAll(".sto")],i=L.inde
 document.addEventListener("click",e=>{if(!$("stp2").hidden&&!$("stw").contains(e.target))spOpen(false)});
 ["fa","fb"].forEach(i=>["input","change"].forEach(v=>$(i).addEventListener(v,spSync)));$("swp").addEventListener("click",spSync);$("ty").addEventListener("change",spSync);
 // ---- Request-a-quote checks: every box must be filled; the first one that is not gets the guided callout ----
-const GCI={pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
-function gcClear(){document.querySelectorAll("#bk .gc").forEach(e=>e.remove());document.querySelectorAll("#bk .gh").forEach(e=>e.classList.remove("gh"));document.querySelectorAll("#bk [data-gcd]").forEach(e=>{e.removeAttribute("aria-describedby");e.removeAttribute("data-gcd")})}
-function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.el.closest(".c")||a.el.parentNode,n=L.length,c=document.createElement("div");
- cell.classList.add("gh");c.className="gc";c.id="gct";c.setAttribute("role","alert");
+const GCI={user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-5.8 7-5.8s6.2 2 7 5.8"/>',mail:'<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7.5l8 6 8-6"/>',tel:'<path d="M6.6 3.5h3l1.4 4-2 1.3a11 11 0 0 0 5.2 5.2l1.3-2 4 1.4v3a2 2 0 0 1-2.2 2A15.500 15.500 0 0 1 4.600 5.700 2 2 0 0 1 6.600 3.500z"/>',pin:'<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>'};
+function gcClear(){document.querySelectorAll(".gc").forEach(e=>e.remove());document.querySelectorAll(".gh").forEach(e=>e.classList.remove("gh"));document.querySelectorAll("[data-gcd]").forEach(e=>{e.removeAttribute("aria-describedby");e.removeAttribute("data-gcd")})}
+function gcShow(L){gcClear();if(!L.length)return;gcAt=Date.now();const a=L[0],cell=a.at?a.at.parentNode:(a.el.closest(".c")||a.el.parentNode),n=L.length,c=document.createElement("div");
+ if(a.at){a.el.classList.add("gh");const lb=document.querySelector(`label[for="${a.el.id}"]`);if(lb)lb.classList.add("gh")}else cell.classList.add("gh");c.className="gc"+(a.at?" gs":"");c.id="gct";c.setAttribute("role","alert");
  c.innerHTML=`<div class="gt"><span class="gi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GCI[a.i||"pin"]}</svg></span><div><b>${esc(a.t)}</b><p>${esc(a.h)}</p></div></div><div class="gf"><b>${n>1?"1 of "+n+" to finish":"Last one to finish"}</b>${n>1?`<span>Next: ${esc(L[1].n)}</span>`:""}</div>`;
- cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
+ if(a.at)a.at.after(c);else cell.appendChild(c);a.el.setAttribute("aria-describedby","gct");a.el.dataset.gcd="1";
  if(getComputedStyle(c).position=="absolute"){const r=c.getBoundingClientRect();let dx=0;if(r.right>innerWidth-12)dx=innerWidth-12-r.right;if(r.left+dx<12)dx=12-r.left;if(dx){c.style.left=(12+dx)+"px";c.style.setProperty("--gx",(28-dx)+"px")}}
  try{a.el.focus({preventScroll:true})}catch(e){}
  c.scrollIntoView({block:"nearest",behavior:"smooth"})}
 let gcAt=0;$("bk").addEventListener("input",()=>{gcClear()});$("bk").addEventListener("change",()=>{if(Date.now()-gcAt>400)gcClear()});
-document.addEventListener("pointerdown",e=>{if(e.target.closest&&!e.target.closest(".gc")&&document.querySelector("#bk .gc"))gcClear()});
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&!e.target.closest(".gc")&&document.querySelector(".gc"))gcClear()});
 addEventListener("keydown",e=>{if(e.key=="Escape")gcClear()});
 $("bf").onsubmit=e=>{e.preventDefault();$("de").hidden=true;
  const mc=$("ty").value=="Multi-city",rt=$("ty").value=="Round-trip",L=[];
@@ -1725,7 +1731,17 @@ $("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=
 // ---- Contact submit ----
 // The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
-$("cf").onsubmit=async e=>{e.preventDefault();if(!vp(true)){$("p").focus();return}
+$("cf").addEventListener("input",()=>{gcClear()});$("cf").addEventListener("change",()=>{if(Date.now()-gcAt>400)gcClear()});
+// Required boxes on the contact form get the same guided callout as the booking block: the first one still to fix, in form order.
+function cfIssues(){const L=[],v=i=>$(i).value.trim(),nmRow=$("fn").closest(".nm3");
+ if(!v("fn"))L.push({el:$("fn"),at:nmRow,i:"user",n:"first name",t:"What is your first name?",h:"So your advisor knows who to ask for."});
+ if(!v("ln"))L.push({el:$("ln"),at:nmRow,i:"user",n:"last name",t:"What is your last name?",h:"Add it as it appears on your passport."});
+ if(!v("e"))L.push({el:$("e"),at:$("e"),i:"mail",n:"email",t:"What is your email address?",h:"We will send your quote and reference ID here."});
+ else if(!$("e").checkValidity())L.push({el:$("e"),at:$("e"),i:"mail",n:"email",t:"Check your email address",h:"It should look like name@example.com."});
+ if(!vp(true))L.push({el:$("p"),at:$("p").closest(".pn"),i:"tel",n:"phone number",t:$("p").value.trim()?"Check your phone number":"Add your phone number",h:$("pe").textContent.replace(/^Please enter your phone number so/,"So")||"So your advisor can reach you about your quote."});
+ $("pe").hidden=true;   // the callout carries this message
+ return L}
+$("cf").onsubmit=async e=>{e.preventDefault();const L=cfIssues();if(L.length){gcShow(L);return}gcClear();
  if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
