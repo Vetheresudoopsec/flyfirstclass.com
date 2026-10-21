@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-20h">
+<meta name="build" content="2026-10-21a">
 <title>First Class Airline Tickets up to 70% Off | Fly First Class</title>
 <meta name="description" content="Insider first and business class fares up to 70% off market airfares, arranged by an advisor with 20+ years of experience. Request a free quote.">
 <link rel="canonical" href="https://flyfirstclass.com/">
@@ -1503,7 +1503,7 @@ SBB.forEach((b,i)=>b.onclick=()=>{$("ty").value=SB[i];ty()});$("ty").onchange=ty
 let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e){}
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
 function book(f,t,cab,via,stops,sp){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),...(sp?{sp}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});goTo("contact")}
-function rc(){const E=$("rc");if(!BK){E.hidden=true;return}
+function rc(){try{phSync()}catch(e){}const E=$("rc");if(!BK){E.hidden=true;return}
  const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
  E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+(BK.stops?it("Stops",stS(BK.stops),"cs"):"")+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="/" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){const sub=lastGet();
@@ -1557,7 +1557,10 @@ $("bf").onsubmit=e=>{e.preventDefault();
   if(cs2.some(c=>!c)){xs.forEach((i,k)=>{if(!cs2[k])i.value=""});bad("Please choose each destination from the list, or remove the box.");return}
   if(!cs2.length){bad("Please add at least one more destination for a multi-city trip.");const r=MC.rows()[0];if(r)r.querySelector("input").focus();return}
   xs.forEach((i,k)=>{i.value=nm(cs2[k])});via=cs2.map(nm)}
- if($("ty").value=="Round-trip"&&(!DT.dep||!DT.ret)){const E=$("de");E.textContent=DT.dep?"Please select a date to return before requesting your quote.":"Please select a date to leave and a date to return before requesting your quote.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}
+ if(fa0==fb0){$("fb").value="";bad("Your departure and destination are the same. Please choose a different destination.");$("fb").focus();return}
+ if(via.some((c,k)=>c==(k?via[k-1]:fb0))){bad("Two stops in a row are the same place. Please change one of the destinations.");return}
+ {const rt=$("ty").value=="Round-trip",miss=!DT.dep||(rt&&!DT.ret);
+  if(miss){const E=$("de");E.textContent=!DT.dep?(rt?"Please select a date to leave and a date to return before requesting your quote.":"Please select a date to leave before requesting your quote."):"Please select a date to return before requesting your quote.";E.hidden=false;openCal(DT.dep?1:0);$("dr").scrollIntoView({block:"nearest"});return}}
  const o=cd($("fa").value),d=cd($("fb").value),sp=spStops();book(o?nm(o):$("fa").value,d?nm(d):$("fb").value,null,via,sp,sp?{n:SP.n,via:SP.via,pick:SP.pick}:null)};
 // ---- Listings (routes near the visitor) ----
 let LO=null,LR=[],LV="all",LS="all",LIVE=false,LG=false,LI=false,seq=0,PEND=0,LRTW=false,ERRM="",BOTM="",LD="";
@@ -1667,8 +1670,11 @@ function pin(){const v=$("p").value.trim();if(!/^(\+|00)/.test(v))return;const w
  if(!c){const d=w.replace(/\D/g,"");for(const l of[3,2,1]){const k=d.slice(0,l);if(CCM[k]){c=PREF[k]||CCM[k];break}}}
  if(c&&ISO.includes(c))cs.value=c;
  if(LP&&c&&n)$("p").value=n.formatNational()}
-function vp(){const raw=$("p").value.trim();let e="";
- if(raw){const d=raw.replace(/\D/g,"");
+const phReq=()=>!!BK&&!ACTREF;   // a quote request: a trip is attached and it is not a change to an existing request. A plain message or a change keeps the phone optional.
+function phSync(){const r=phReq();$("p").placeholder=r?"Phone number":"Phone number (optional)";$("p").setAttribute("aria-required",String(r))}
+function vp(force){phSync();const raw=$("p").value.trim();let e="";
+ if(!raw){if(phReq()&&(force||!$("pe").hidden))e="Please enter your phone number so your advisor can reach you about your quote."}
+ else{const d=raw.replace(/\D/g,"");
   if(!/^[+()\d\s.\-]+$/.test(raw))e="Use digits only, with optional spaces, dashes or brackets.";
   else if(/^(\d)\1{5,}$/.test(d)||/0123456789|1234567890|9876543210/.test(d))e="That doesn't look like a real phone number.";
   else if(LP){const n=LP.parsePhoneNumberFromString(intl(raw),cs.value);if(!n||!n.isValid())e="Enter a valid phone number for "+CN(cs.value)+"."}
@@ -1684,11 +1690,11 @@ function pf(it){const el=$("p"),raw=el.value;if(/^(\+|00)/.test(raw.trim()))retu
  d=d.slice(0,17);left=Math.min(left,d.length);
  const out=fmt(d);let np=0,seen=0;if(left>0)for(;np<out.length&&seen<left;np++)if(/\d/.test(out[np]))seen++;
  el.value=out;try{el.setSelectionRange(np,np)}catch(e){}pd=d}
-$("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=vp;cs.onchange=()=>{pf();vp()};
+$("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=()=>vp();cs.onchange=()=>{pf();vp()};
 // ---- Contact submit ----
 // The contact page is the one place that may check as soon as the visitor starts using the form, so the pass is ready by the time Send is pressed.
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
-$("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
+$("cf").onsubmit=async e=>{e.preventDefault();if(!vp(true)){$("p").focus();return}
  if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
@@ -1707,6 +1713,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();if(!vp()){$("p").focus();return}
    $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:quote@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to quote@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
  }finally{sb.disabled=false;sb.textContent=lab}};
+setTimeout(()=>{try{phSync()}catch(e){}},0);
 // ---- Thank-you pages: shown after Send my request. Nothing is stored for them; opening one directly goes back to the home page ----
 window.TY=null;
 // Same questions as the FAQ on the Services page (keep them in step).
