@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-27c">
+<meta name="build" content="2026-10-27d">
 <title>Terms of Service | Fly First Class International</title>
 <meta name="description" content="The terms that apply when you send a quote request to Fly First Class International: validity, pricing, confidentiality and communication.">
 <link rel="canonical" href="https://flyfirstclass.com/terms/">
@@ -1083,7 +1083,7 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .ap-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;filter:saturate(1.1) contrast(1.06)}
 .ap-h.ph::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(10,14,20,.92) 0%,rgba(10,14,20,.78) 34%,rgba(10,14,20,.42) 54%,rgba(10,14,20,.1) 70%,rgba(10,14,20,.44) 100%)}
 .ap-hw{position:relative;z-index:2}
-.ap-h.ph .ap-hw{display:flex;flex-direction:column;flex:1;padding-top:26px;padding-bottom:56px}
+.ap-h.ph .ap-hw{display:flex;flex-direction:column;flex:1;width:100%;padding-top:26px;padding-bottom:56px}
 .ap-h.ph .ap-bc{margin:0 0 auto;color:#e6ebf1}.ap-h.ph .ap-bc a{color:#e6ebf1}.ap-h.ph .ap-bc a:hover{color:#e6d3a3}
 .ap-bc{font-size:.8125rem;color:#3d4654;margin:0 0 28px}.ap-bc a{color:#3d4654}.ap-bc a:hover{color:var(--j)}
 .ap-hg{display:grid;grid-template-columns:1.15fr 1fr;gap:36px 64px;align-items:center}
@@ -1162,17 +1162,21 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .ap-og ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .ap-og a{color:var(--j);font-size:1rem;line-height:1.35;text-decoration:none}
 .ap-og a:hover,.ap-og a:focus-visible{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-/* Quote box on the airline pages: the real booking block, shown in a window over the page */
-.qm{position:fixed;inset:0;z-index:75;display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:min(7vh,64px) 16px 48px;background:rgba(20,24,31,.42)}
+/* Quote box on the airline pages: the real booking block, shown inside the hero in place of the headline text */
+.qm{position:relative;z-index:2;margin:0}
 .qm[hidden]{display:none}
-body.qm-on{overflow:hidden}
-.qm-p{position:relative;width:100%;max-width:940px;padding:36px 36px 34px;background:var(--card);box-shadow:0 30px 80px rgba(20,24,31,.3)}
+.ap-h.qo.ph{overflow:visible}
+.ap-h.qo .ap-hw{padding-bottom:40px}
+.ap-h.qo .ap-hr,.ap-h.qo .ap-lg{display:none}
+.ap-h.qo .ap-hg{display:block}
+.ap-h.qo .ap-hl{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.qm-p{position:relative;width:100%;max-width:880px;padding:28px 32px 28px;background:var(--card);color:var(--ink);text-shadow:none;border:1px solid var(--line);box-shadow:0 24px 70px rgba(10,14,20,.38)}
 .qm-p:focus{outline:0}
-.qm-x{position:absolute;top:14px;right:14px;display:grid;place-items:center;width:42px;height:42px;padding:0;border:0;border-radius:50%;background:none;color:var(--ink);cursor:pointer}
+.qm-x{position:absolute;top:12px;right:12px;display:grid;place-items:center;width:42px;height:42px;padding:0;border:0;border-radius:50%;background:none;color:var(--ink);cursor:pointer}
 .qm-x:hover,.qm-x:focus-visible{background:var(--soft);color:var(--j)}
-.qm-hd{margin:0 0 24px;padding-right:44px}
-.qm-hd h2{margin:0 0 8px;font-size:clamp(1.6rem,3.2vw,2.1rem);font-weight:300;letter-spacing:-.02em;line-height:1.15}
-.qm-hd p{margin:0;max-width:62ch;font-size:1rem;line-height:1.55;color:var(--mute)}
+.qm-hd{margin:0 0 18px;padding-right:44px}
+.qm-hd h2{margin:0 0 6px;font-size:clamp(1.5rem,3vw,1.9rem);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.qm-hd p{margin:0;max-width:62ch;font-size:.9375rem;line-height:1.5;color:var(--mute)}
 .qm #bk{border-radius:0;border:1px solid var(--line);box-shadow:none}
 .qm #bk .t4,.qm #bk #sr{display:none}
 .qm #bk .bko{padding:6px 20px;border-bottom:0}
@@ -1181,9 +1185,12 @@ body.qm-on{overflow:hidden}
 .qm #bk .bkp>.c:first-child{border-bottom-left-radius:0}
 .qm #bk .bkx{grid-column:1/-1}
 .qm #bk .bkr .fare{grid-column:1/-1;min-height:68px;border-radius:0}
-.qm #bk .cal{position:fixed;left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:min(880px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;z-index:20}
-@media(max-width:700px){.qm{padding:12px 8px 24px}.qm-p{padding:26px 16px 20px}.qm-hd{margin-bottom:18px}.qm #bk .bko{gap:6px 18px}}
-@media(prefers-reduced-motion:no-preference){.qm:not([hidden]) .qm-p{animation:qmin .22s ease-out}@keyframes qmin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
+.qm #bk .bkr .fare .ft::before{left:calc(100% + 10px)}
+.qm #bk .bkr .fare .ft::after{left:calc(100% + 16.3px)}
+.qm #bk .bkr .fare:hover .ft,.qm #bk .bkr .fare:focus-visible .ft{color:inherit;background:none;-webkit-background-clip:border-box;background-clip:border-box}
+.qm #bk .cal{position:fixed;left:50%;top:calc(50% + 36px);right:auto;bottom:auto;transform:translate(-50%,-50%);width:min(880px,calc(100vw - 24px));max-height:calc(100vh - 96px);overflow-y:auto;margin:0;z-index:20}
+@media(max-width:700px){.qm-p{padding:22px 16px 18px}.qm-hd{margin-bottom:14px}.qm #bk .bko{gap:6px 18px}.ap-h.qo .ap-hw{padding-bottom:24px}}
+@media(prefers-reduced-motion:no-preference){.qm:not([hidden]) .qm-p{animation:qmin .22s ease-out}@keyframes qmin{from{opacity:0}to{opacity:1}}}
 @media(max-width:900px){.ap-hg{grid-template-columns:1fr;gap:28px}.ap-ft{grid-template-columns:1fr;gap:30px;padding-top:56px}.ap-gr{grid-template-columns:repeat(2,minmax(0,1fr))}.ap-sg{grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 20px}.ap-sg::before{display:none}.ap-og{grid-template-columns:1fr 1fr;gap:26px 20px}.ap-fq{grid-template-columns:1fr}nav{max-height:calc(100vh - 72px);overflow-y:auto}}
 @media(max-width:560px){.ap-h{padding:28px 0 40px}.ap-h.ph{min-height:760px}.ap-h.ph .ap-hw{padding-bottom:40px}.ap-bg{object-position:50% 30%}.ap-h.ph::before{background:linear-gradient(0deg,rgba(10,14,20,.94) 0%,rgba(10,14,20,.8) 48%,rgba(10,14,20,.2) 74%,rgba(10,14,20,.5) 100%)}.ap-gr{grid-template-columns:1fr}.ap-s{padding-top:56px}.ap-st{margin-top:56px;padding:52px 0}.ap-fq{padding-top:56px}.ap-fx dl div{grid-template-columns:1fr;gap:2px}}
 @media(prefers-reduced-motion:reduce){.ap-fc,.ap-cta,.ap-fc i img{transition:none}.ap-fc:hover{transform:none}.ap-fc:hover i img{transform:none}}
@@ -2301,35 +2308,30 @@ const AIRL=["Singapore Airlines","Emirates","Etihad","Qatar Airways","Cathay Pac
  mn.querySelector(".mp").addEventListener("click",e=>{if(e.target.closest("a"))set(false)});
  addEventListener("resize",()=>set(false));
 })();
-// ---- Quote box on the airline pages: the booking block (route, dates, cabin, travellers) opens in a window over the page, with its own checks, and hands over to the Contact page exactly as it does on Home. ----
-const QM=(()=>{let el,hold,home,prev=null,air="",pop=false,sent=false;
- const POP=".cal:not([hidden]),.pxp:not([hidden]),.dl:not([hidden]),.stpop:not([hidden]),.gc",bk=()=>$("bk");
- const foc=()=>[...el.querySelectorAll('a[href],button:not([disabled]),input:not([type=hidden]):not([disabled]),select:not([disabled]):not(.nat),textarea')].filter(x=>x.offsetParent!==null);
- function make(){el=document.createElement("div");el.className="qm";el.id="qm";el.hidden=true;
-  el.innerHTML='<div class="qm-p" role="dialog" aria-modal="true" aria-labelledby="qm-t" tabindex="-1"><button class="qm-x" type="button" aria-label="Close the quote box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="qm-hd"><h2 id="qm-t">Request a free quote</h2><p id="qm-s"></p></div><div class="qm-h"></div></div>';
-  hold=el.querySelector(".qm-h");document.body.appendChild(el);
-  el.addEventListener("pointerdown",e=>{pop=!!document.querySelector(POP);el.dataset.bd=e.target===el?"1":""},true);
-  el.addEventListener("click",e=>{if(e.target===el&&el.dataset.bd&&!pop)shut()});
-  el.querySelector(".qm-x").onclick=()=>shut();
-  el.addEventListener("keydown",e=>{if(e.key!="Tab")return;const f=foc();if(!f.length)return;const a=document.activeElement,pn=el.firstChild;
-   if(e.shiftKey&&(a===f[0]||a===pn)){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&a===f[f.length-1]){e.preventDefault();f[0].focus()}});
+// ---- Quote box on the airline pages: the booking block (route, dates, cabin, travellers) replaces the hero text in place, on top of the photo, with its own checks, and hands over to the Contact page exactly as it does on Home. ----
+const QM=(()=>{let el,home,prev=null,air="",pop=false,sent=false,bound=false;
+ const POP=".cal:not([hidden]),.pxp:not([hidden]),.dl:not([hidden]),.stpop:not([hidden]),.gc",bk=()=>$("bk"),reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
+ function bind(){if(bound)return;bound=true;
   addEventListener("keydown",e=>{if(e.key=="Escape")pop=!!document.querySelector(POP)},true);
-  document.addEventListener("keydown",e=>{if(e.key=="Escape"&&el&&!el.hidden&&!pop)shut()});
-  $("bf").addEventListener("submit",()=>{sent=!el.hidden},true);
+  document.addEventListener("keydown",e=>{if(e.key=="Escape"&&el&&el.isConnected&&!el.hidden&&!pop)shut()});
+  $("bf").addEventListener("submit",()=>{sent=!!el&&el.isConnected&&!el.hidden},true);
   $("bf").addEventListener("submit",()=>{if(sent&&air&&location.pathname=="/contact/"){const m=$("m");if(m&&!m.value.trim())m.value="I'd like a free quote on "+air+".";air=""}sent=false})}
- function show(o){o=o||{};if(!el)make();air=o.air||"";prev=o.btn||document.activeElement;
-  const b=bk();if(!home){home=document.createComment("bk");b.parentNode.insertBefore(home,b)}
+ function show(o){o=o||{};el=$("qm");if(!el)return;bind();air=o.air||"";prev=o.btn||document.activeElement;
+  const hold=el.querySelector(".qm-h"),h=el.closest(".ap-h"),b=bk();
+  if(!home){home=document.createComment("bk");b.parentNode.insertBefore(home,b)}
   if(b.parentNode!==hold)hold.appendChild(b);
   $("qm-s").textContent=(air?"A quote for "+air+". ":"")+"Choose your route, dates and cabin. You add your contact details on the next step.";
   try{$("t4").children[0].click()}catch(e){}
   if(o.fr){$("fa").value=o.fr;$("fb").value=o.to}
   if(o.cab&&[...$("cb").options].some(x=>x.value==o.cab))$("cb").value=o.cab;
-  el.hidden=false;document.body.classList.add("qm-on");el.scrollTop=0;
+  el.hidden=false;h.classList.add("qo");
+  const y=h.getBoundingClientRect().top-72;if(Math.abs(y)>4)scrollTo({top:Math.max(0,scrollY+y),behavior:reduce()?"auto":"smooth"});
   setTimeout(()=>{try{($("fa").value&&$("fb").value?$("ddb"):$("fa")).focus({preventScroll:true})}catch(e){}},40)}
- function shut(nav){if(!el||el.hidden)return;
+ function shut(nav){const b=bk(),inBox=b&&b.parentNode&&b.parentNode.classList.contains("qm-h");
+  if(!inBox&&(!el||el.hidden))return;
   try{gcClear();if(!$("cal").hidden)closeCal();pxClose()}catch(e){}
-  const b=bk();if(home&&home.parentNode&&b.parentNode===hold)home.parentNode.insertBefore(b,home);
-  el.hidden=true;document.body.classList.remove("qm-on");
+  if(inBox&&home&&home.parentNode)home.parentNode.insertBefore(b,home);
+  if(el){el.hidden=true;const h=el.closest(".ap-h");if(h)h.classList.remove("qo")}
   if(!nav){air="";if(prev&&prev.isConnected)try{prev.focus({preventScroll:true})}catch(e){}}}
  return{show,shut}})();
 window.qmShut=()=>QM.shut(true);
@@ -2376,9 +2378,10 @@ function airPage(s){const a=AIRS.find(x=>x[1]==s);if(!a)return;const n=a[0],x=AI
  const hs=x.i[0]?`<img class="ap-bg" src="${upx(x.i[0],1800)}" srcset="${upx(x.i[0],900)} 900w, ${upx(x.i[0],1400)} 1400w, ${upx(x.i[0],2000)} 2000w" sizes="100vw" alt="${esc(x.a||n+" aircraft")}" fetchpriority="high" onerror="this.closest('.ap-h').classList.remove('ph');this.remove()">`:"";
  const md=x.h&&x.m&&MED[x.m]?MED[x.m]:null;
  const feat=x.h?`<section class="ap-ft${md?"":" nm"}">${md?`<figure class="ap-fi"><img src="${mpx(md,1000)}" srcset="${mpx(md,600)} 600w, ${mpx(md,1000)} 1000w" sizes="(max-width:900px) 100vw, 520px" alt="Illustration: ${esc(md[2])}" loading="lazy" onerror="this.closest('.ap-ft').classList.add('nm');this.closest('figure').remove()"><figcaption>Illustrative photo</figcaption></figure>`:""}<div class="ap-fx"><h2>${esc(x.t)}</h2><p>${esc(x.l)}</p><dl>${x.f.map(r=>`<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join("")}</dl></div></section>`:"";
- R.innerHTML=`<div class="ap-h${x.i[0]?" ph":""}">${hs}<div class="w ap-hw"><nav class="ap-bc" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/routes/">Listings</a> <span aria-hidden="true">/</span> <span>${esc(n)}</span></nav><div class="ap-hg"><div class="ap-hl"><div class="ap-lg${n=="Emirates"?" raw":""}">${alogo(n)}</div><h1>${esc(x.h||n+" in business and first class.")}</h1></div><div class="ap-hr">${price}<div class="ap-ac"><button class="ap-cta" type="button" data-q="1">Request a Free Quote</button><a href="tel:+12122211860">212-221-1860</a><a href="mailto:quote@flyfirstclass.com">quote@flyfirstclass.com</a></div></div></div></div></div><div class="w">${feat}${fares}</div><div class="ap-st"><div class="w"><h2>From request to ticket in four steps</h2><div class="ap-sg">${steps.map((y,i)=>`<div><i>${i+1}</i><b>${y[0]}</b><p>${y[1]}</p></div>`).join("")}</div></div></div><div class="w"><div class="ap-fq"><h2>Questions before you book</h2><div class="ap-fl">${fq}</div></div><div class="ap-ot"><h2>Other partner airlines</h2><div class="ap-og">${oth}</div></div></div>`;
+ R.innerHTML=`<div class="ap-h${x.i[0]?" ph":""}">${hs}<div class="w ap-hw"><nav class="ap-bc" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/routes/">Listings</a> <span aria-hidden="true">/</span> <span>${esc(n)}</span></nav><div class="ap-hg"><div class="ap-hl"><div class="ap-lg${n=="Emirates"?" raw":""}">${alogo(n)}</div><h1>${esc(x.h||n+" in business and first class.")}</h1></div><div class="ap-hr">${price}<div class="ap-ac"><button class="ap-cta" type="button" data-q="1">Request a Free Quote</button><a href="tel:+12122211860">212-221-1860</a><a href="mailto:quote@flyfirstclass.com">quote@flyfirstclass.com</a></div></div></div><div class="qm" id="qm" hidden><div class="qm-p" role="group" aria-labelledby="qm-t" tabindex="-1"><button class="qm-x" type="button" aria-label="Close the quote box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="qm-hd"><h2 id="qm-t">Request a free quote</h2><p id="qm-s"></p></div><div class="qm-h"></div></div></div></div></div><div class="w">${feat}${fares}</div><div class="ap-st"><div class="w"><h2>From request to ticket in four steps</h2><div class="ap-sg">${steps.map((y,i)=>`<div><i>${i+1}</i><b>${y[0]}</b><p>${y[1]}</p></div>`).join("")}</div></div></div><div class="w"><div class="ap-fq"><h2>Questions before you book</h2><div class="ap-fl">${fq}</div></div><div class="ap-ot"><h2>Other partner airlines</h2><div class="ap-og">${oth}</div></div></div>`;
  airDest(R);
  R.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>QM.show({air:n,btn:b}));
+ R.querySelector(".qm-x").onclick=()=>QM.shut();
  R.querySelectorAll(".ap-fc").forEach(b=>b.onclick=()=>{const d=fr[+b.dataset.i];QM.show({air:n,btn:b,fr:d.fr+" ("+d.fa+")",to:d.to+" ("+d.ta+")",cab:cab(d)})});
 }
 // Fare cards whose destination has no bundled picture ask the server for it (the same source as the Featured fares), and keep their colour strip if nothing comes back.
