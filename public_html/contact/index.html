@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-27a">
+<meta name="build" content="2026-10-27b">
 <title>Contact Us | Fly First Class International</title>
 <meta name="description" content="Request a free quote for first class travel. Share your route and dates and an advisor will reply with your best fares.">
 <link rel="canonical" href="https://flyfirstclass.com/contact/">
@@ -1054,11 +1054,7 @@ body[data-pg=manage] header :focus-visible{outline-color:var(--au)}
 @media print{.mg-lines{display:none}}
 
 /* Listings menu: a full-width panel under the header that lists the partner airlines */
-.mn{display:flex;align-items:center;gap:2px}
-.mnb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:28px;padding:0;border:0;background:none;color:var(--ink);opacity:.8;cursor:pointer;border-radius:4px}
-.mnb svg{transition:transform .2s}
-.mn.open .mnb svg{transform:rotate(180deg)}
-.mnb:hover,.mn.open .mnb{opacity:1;color:var(--j)}
+.mn{display:flex;align-items:center}
 .mp{position:absolute;left:0;right:0;top:100%;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 22px 40px rgba(20,24,31,.12);opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .18s ease,transform .22s ease,visibility 0s .22s}
 .mn.open .mp{opacity:1;visibility:visible;transform:none;transition-delay:0s}
 .mp .w{padding-top:34px;padding-bottom:40px}
@@ -1070,7 +1066,6 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .mp ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 @media(max-width:900px){
  .mn{flex-wrap:wrap;width:100%}
- .mnb{width:40px;height:32px;margin-left:auto}
  .mp{position:static;flex:0 0 100%;display:none;box-shadow:none;border:0;opacity:1;visibility:visible;transform:none;transition:none}
  .mn.open .mp{display:block}
  .mp .w{padding:8px 0 4px}
@@ -1080,31 +1075,41 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
  header .mp a{font-size:.92rem}
  .mp ul{gap:9px}
 }
-@media(prefers-reduced-motion:reduce){.mp,.mnb svg{transition:none}}
+@media(prefers-reduced-motion:reduce){.mp{transition:none}}
 
 /* Airline landing pages */
-.ap-h{background:linear-gradient(135deg,#e3e7ec,#bcc7d4);padding:56px 0 64px}
-.ap-bc{font-size:.8125rem;color:#3d4654;margin:0 0 30px}.ap-bc a{color:#3d4654}.ap-bc a:hover{color:var(--j)}
-.ap-hg{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.ap-eb{display:flex;align-items:center;gap:12px;margin:0 0 20px;font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#5b4720}
-.ap-chip{display:inline-flex;align-items:center;padding:6px 12px;background:#fff;letter-spacing:0;text-transform:none;font-size:.82rem;color:var(--ink);min-height:40px}
-.ap-chip .alg{height:28px;max-width:130px;filter:none;opacity:1}
-.ap-h h1{margin:0 0 24px;font-size:clamp(2rem,4.4vw,3.2rem);font-weight:300;letter-spacing:-.02em;line-height:1.1;max-width:16ch}
+.ap-h{background:linear-gradient(135deg,#e3e7ec,#bcc7d4);padding:48px 0 60px}
+.ap-bc{font-size:.8125rem;color:#3d4654;margin:0 0 28px}.ap-bc a{color:#3d4654}.ap-bc a:hover{color:var(--j)}
+.ap-hg{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.ap-hg.nophoto{grid-template-columns:1fr}
+.ap-lg{display:flex;align-items:center;min-height:44px;margin:0 0 22px}
+.ap-lg .alg{height:40px;max-width:200px;filter:none;opacity:1}
+.ap-lg .alt{font-size:1.15rem;font-weight:600;color:var(--ink)}
+.ap-h h1{margin:0 0 26px;font-size:clamp(1.9rem,3.8vw,2.8rem);font-weight:300;letter-spacing:-.02em;line-height:1.12;max-width:19ch}
 .ap-px{display:flex;flex-direction:column;gap:2px}
 .ap-px small{font-size:.8125rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#3d4654}
-.ap-px b{font-size:clamp(3.2rem,8vw,5.6rem);font-weight:300;letter-spacing:-.03em;line-height:1}
-.ap-px b.sm{font-size:clamp(1.6rem,3.4vw,2.2rem);letter-spacing:-.01em;line-height:1.2;max-width:18ch}
+.ap-px b{font-size:clamp(3rem,7vw,5rem);font-weight:300;letter-spacing:-.03em;line-height:1}
+.ap-px b.sm{font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.01em;line-height:1.2;max-width:20ch}
 .ap-px span{margin-top:8px;font-size:1rem;color:#2b3340;max-width:46ch;line-height:1.5}
-.ap-lk{display:inline-block;margin-top:20px;padding:0;border:0;background:none;font:700 1rem Manrope,sans-serif;color:#004d4c;cursor:pointer}
-.ap-lk:hover{text-decoration:underline;text-underline-offset:3px}
-.ap-q{box-sizing:border-box;padding:30px;background:#fff;border-top:3px solid var(--au);box-shadow:0 18px 44px rgba(20,24,31,.16);display:flex;flex-direction:column;gap:14px;max-width:480px;justify-self:end;width:100%}
-.ap-q h2{margin:0;font-size:1.5rem;font-weight:400;letter-spacing:-.01em}
-.ap-q p{margin:0;font-size:.95rem;line-height:1.55;color:var(--mute)}
-.ap-cta{min-height:54px;border:0;border-radius:0;background:var(--au);color:var(--ink);font:700 1rem Manrope,sans-serif;cursor:pointer;transition:filter .15s}
+.ap-ac{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-top:30px}
+.ap-cta{min-height:52px;padding:0 28px;border:0;border-radius:0;background:var(--au);color:var(--ink);font:700 1rem Manrope,sans-serif;cursor:pointer;transition:filter .15s}
 .ap-cta:hover,.ap-cta:focus-visible{filter:brightness(.95)}
-.ap-ct{display:flex;flex-wrap:wrap;gap:6px 22px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem}
-.ap-ct a{color:var(--j);font-weight:600;text-decoration:none}.ap-ct a:hover{text-decoration:underline}
-.ap-s{padding:76px 0 24px}
+.ap-ac a,.ap-lk{color:#004d4c;font-weight:600;font-size:.95rem;text-decoration:none}
+.ap-ac a:hover,.ap-lk:hover{text-decoration:underline;text-underline-offset:3px}
+.ap-lk{padding:0;border:0;background:none;font-family:Manrope,sans-serif;cursor:pointer}
+.ap-ph{position:relative;aspect-ratio:3/2;overflow:hidden;background:#cfd6de;box-shadow:0 18px 44px rgba(20,24,31,.18)}
+.ap-ph img{display:block;width:100%;height:100%;object-fit:cover}
+.ap-ft{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:80px 0 8px}
+.ap-fi{aspect-ratio:3/2;overflow:hidden;background:var(--soft)}
+.ap-fi img{display:block;width:100%;height:100%;object-fit:cover}
+.ap-fx h2{margin:0 0 16px;font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.ap-fx>p{margin:0;font-size:1.0625rem;line-height:1.65;color:var(--mute)}
+.ap-fx dl{margin:26px 0 0;border-top:1px solid var(--line)}
+.ap-fx dl div{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ap-fx dt{font-size:.8125rem;font-weight:600;color:var(--mute);padding-top:2px}
+.ap-fx dd{margin:0;font-size:.98rem;line-height:1.55}
+.ap-nt{margin:16px 0 0;font-size:.8125rem;line-height:1.55;color:var(--mute)}
+.ap-s{padding:80px 0 24px}
 .ap-sh{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 32px;margin-bottom:32px}
 .ap-sh h2,.ap-st h2,.ap-fq h2{margin:0;font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:300;letter-spacing:-.02em;line-height:1.12}
 .ap-sh p{margin:0;max-width:360px;font-size:.875rem;line-height:1.55;color:var(--mute)}
@@ -1123,14 +1128,13 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .ap-nl span{font-size:.95rem;line-height:1.55;color:#d6dae1}
 .ap-nl button{align-self:flex-start;margin-top:6px;padding:0;border:0;background:none;color:var(--au);font:700 .95rem Manrope,sans-serif;cursor:pointer}
 .ap-nl button:hover{text-decoration:underline}
-.ap-st{margin-top:76px;padding:72px 0;background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.ap-st .ey,.ap-fq .ey,.ap-s .ey{margin-bottom:14px}
+.ap-st{margin-top:80px;padding:72px 0;background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .ap-st h2{margin-bottom:40px}
 .ap-sg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:30px}
 .ap-sg i{display:grid;place-items:center;width:46px;height:46px;border:1px solid var(--au);border-radius:50%;background:var(--card);font-style:normal;font-weight:600;color:var(--ac)}
 .ap-sg b{display:block;margin:16px 0 6px;font-size:1.1rem;font-weight:600}
 .ap-sg p{margin:0;font-size:.94rem;line-height:1.6;color:var(--mute)}
-.ap-fq{padding:76px 0 40px;display:grid;grid-template-columns:1fr 2fr;gap:40px 48px}
+.ap-fq{padding:80px 0 40px;display:grid;grid-template-columns:1fr 2fr;gap:40px 48px}
 .ap-fl{border-top:1px solid var(--ink)}
 .ap-fl div{padding:22px 0;border-bottom:1px solid var(--line)}
 .ap-fl b{font-size:1.1rem;font-weight:600}.ap-fl p{margin:8px 0 0;font-size:.94rem;line-height:1.6;color:var(--mute)}
@@ -1139,9 +1143,9 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .ap-ot div{display:flex;flex-wrap:wrap;gap:10px}
 .ap-ot a{padding:8px 14px;border:1px solid var(--line);color:var(--ink);font-size:.875rem;text-decoration:none;transition:border-color .15s,color .15s}
 .ap-ot a:hover{border-color:var(--j);color:var(--j)}
-@media(max-width:900px){.ap-hg{grid-template-columns:1fr;gap:36px}.ap-q{justify-self:stretch;max-width:none}.ap-gr{grid-template-columns:repeat(2,minmax(0,1fr))}.ap-sg{grid-template-columns:repeat(2,minmax(0,1fr))}.ap-fq{grid-template-columns:1fr}}
-@media(max-width:560px){.ap-h{padding:36px 0 44px}.ap-gr{grid-template-columns:1fr}.ap-s{padding-top:56px}.ap-st{margin-top:56px;padding:52px 0}.ap-fq{padding-top:56px}.ap-q{padding:24px 22px}}
-@media(prefers-reduced-motion:reduce){.ap-fc{transition:none}.ap-fc:hover{transform:none}}
+@media(max-width:900px){.ap-hg{grid-template-columns:1fr;gap:34px}.ap-ph{order:-1}.ap-ft{grid-template-columns:1fr;gap:30px;padding-top:56px}.ap-gr{grid-template-columns:repeat(2,minmax(0,1fr))}.ap-sg{grid-template-columns:repeat(2,minmax(0,1fr))}.ap-fq{grid-template-columns:1fr}nav{max-height:calc(100vh - 72px);overflow-y:auto}}
+@media(max-width:560px){.ap-h{padding:28px 0 40px}.ap-gr{grid-template-columns:1fr}.ap-s{padding-top:56px}.ap-st{margin-top:56px;padding:52px 0}.ap-fq{padding-top:56px}.ap-fx dl div{grid-template-columns:1fr;gap:2px}}
+@media(prefers-reduced-motion:reduce){.ap-fc,.ap-cta{transition:none}.ap-fc:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -1155,7 +1159,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <a class="logo" href="/" aria-label="Fly First Class International, over 20 years of service, home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M3 21 27 5 21 25 15 18Z" fill="#c9b27c"/><path class="lm2" d="M15 18 27 5 11 16Z"/></svg><span>Fly First Class<small>International</small></span><span class="yrs" aria-hidden="true">20+</span></a>
 <button class="mb" id="mb" aria-label="Open menu" aria-expanded="false" aria-controls="nav">&#9776;</button>
 <nav id="nav" aria-label="Main">
-<a href="/" data-n="home">Home</a><a href="/about/" data-n="about">About</a><a href="/services/" data-n="services">Services</a><div class="mn" id="mn"><a href="/routes/" data-n="listings">Listings</a><button type="button" class="mnb" id="mnb" aria-label="Show partner airlines" aria-expanded="false" aria-controls="mp"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="mp" id="mp" role="region" aria-label="Listings and partner airlines"><div class="w"><a class="mp-ov" href="/routes/">Listings overview <span aria-hidden="true">&rarr;</span></a><div class="mp-g"><div><h3>Asia Pacific</h3><ul><li><a href="/airlines/singapore-airlines/">Singapore Airlines</a></li><li><a href="/airlines/cathay-pacific/">Cathay Pacific Airways</a></li><li><a href="/airlines/japan-airlines/">Japan Airlines</a></li><li><a href="/airlines/all-nippon-airways/">All Nippon Airways</a></li><li><a href="/airlines/thai-airways/">Thai Airways</a></li></ul></div><div><h3>Middle East</h3><ul><li><a href="/airlines/emirates/">Emirates</a></li><li><a href="/airlines/etihad/">Etihad</a></li><li><a href="/airlines/qatar-airways/">Qatar Airways</a></li></ul></div><div><h3>Europe</h3><ul><li><a href="/airlines/british-airways/">British Airways</a></li><li><a href="/airlines/lufthansa/">Lufthansa Airlines</a></li><li><a href="/airlines/air-france/">Air France</a></li><li><a href="/airlines/swiss/">Swiss</a></li><li><a href="/airlines/klm/">KLM</a></li><li><a href="/airlines/virgin-atlantic/">Virgin Atlantic Airways</a></li><li><a href="/airlines/iberia/">Iberia Airlines</a></li></ul></div><div><h3>Africa and Oceania</h3><ul><li><a href="/airlines/south-african-airways/">South African Airways</a></li><li><a href="/airlines/qantas/">Qantas Airways</a></li><li><a href="/airlines/air-new-zealand/">Air New Zealand</a></li></ul></div></div></div></div></div>
+<a href="/" data-n="home">Home</a><a href="/about/" data-n="about">About</a><a href="/services/" data-n="services">Services</a><div class="mn" id="mn"><a href="/routes/" data-n="listings">Listings</a><div class="mp" id="mp" role="region" aria-label="Listings and partner airlines"><div class="w"><a class="mp-ov" href="/routes/">Listings overview <span aria-hidden="true">&rarr;</span></a><div class="mp-g"><div><h3>Asia Pacific</h3><ul><li><a href="/airlines/singapore-airlines/">Singapore Airlines</a></li><li><a href="/airlines/cathay-pacific/">Cathay Pacific Airways</a></li><li><a href="/airlines/japan-airlines/">Japan Airlines</a></li><li><a href="/airlines/all-nippon-airways/">All Nippon Airways</a></li><li><a href="/airlines/thai-airways/">Thai Airways</a></li></ul></div><div><h3>Middle East</h3><ul><li><a href="/airlines/emirates/">Emirates</a></li><li><a href="/airlines/etihad/">Etihad</a></li><li><a href="/airlines/qatar-airways/">Qatar Airways</a></li></ul></div><div><h3>Europe</h3><ul><li><a href="/airlines/british-airways/">British Airways</a></li><li><a href="/airlines/lufthansa/">Lufthansa Airlines</a></li><li><a href="/airlines/air-france/">Air France</a></li><li><a href="/airlines/swiss/">Swiss</a></li><li><a href="/airlines/klm/">KLM</a></li><li><a href="/airlines/virgin-atlantic/">Virgin Atlantic Airways</a></li><li><a href="/airlines/iberia/">Iberia Airlines</a></li></ul></div><div><h3>Africa and Oceania</h3><ul><li><a href="/airlines/south-african-airways/">South African Airways</a></li><li><a href="/airlines/qantas/">Qantas Airways</a></li><li><a href="/airlines/air-new-zealand/">Air New Zealand</a></li></ul></div></div></div></div></div>
 <a class="btn go" href="/contact/">Contact Us</a>
 </nav>
 
@@ -2240,30 +2244,58 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 const AIRL=["Singapore Airlines","Emirates","Etihad","Qatar Airways","Cathay Pacific Airways","British Airways","Lufthansa Airlines","Air France","Swiss","KLM","Virgin Atlantic Airways","South African Airways","Qantas Airways","Air New Zealand","Iberia Airlines","Japan Airlines","All Nippon Airways","Thai Airways"];
 {const li=AIRL.map(x=>`<li>${alogo(x)}</li>`).join("");$("mq").innerHTML=`<ul aria-label="Partner airlines">${li}</ul><ul aria-hidden="true">${li}</ul>`}
 // ---- Listings menu (full-width panel under the header) ----
-(()=>{const mn=$("mn"),btn=$("mnb"),link=mn.querySelector("a[data-n]");let t=null;
+(()=>{const mn=$("mn"),link=mn.querySelector("a[data-n]");let t=null,mute=0;
  const wide=()=>matchMedia("(min-width:901px)").matches,hov=()=>matchMedia("(hover:hover)").matches&&wide();
- const set=o=>{clearTimeout(t);mn.classList.toggle("open",o);btn.setAttribute("aria-expanded",String(o))};
+ const set=o=>{clearTimeout(t);mn.classList.toggle("open",o);link.setAttribute("aria-expanded",String(o))};
+ link.setAttribute("aria-haspopup","true");link.setAttribute("aria-expanded","false");link.setAttribute("aria-controls","mp");
  window.mnShut=()=>set(false);
- btn.onclick=e=>{e.stopPropagation();set(!mn.classList.contains("open"))};
+ // mouse on a wide screen: hover opens it and the link still goes to Listings. Touch or a narrow screen: tapping Listings opens and closes the list (its first link is "Listings overview")
+ link.addEventListener("click",e=>{if(!hov()){e.preventDefault();set(!mn.classList.contains("open"))}});
  mn.addEventListener("mouseenter",()=>{if(hov())set(true)});
  mn.addEventListener("mouseleave",()=>{if(hov()){clearTimeout(t);t=setTimeout(()=>set(false),180)}});
- document.addEventListener("keydown",e=>{if(e.key=="Escape"&&mn.classList.contains("open")){const inside=mn.contains(document.activeElement);set(false);if(inside)btn.focus()}});
+ mn.addEventListener("focusin",()=>{if(hov()&&Date.now()>mute)set(true)});
+ mn.addEventListener("focusout",e=>{if(hov()&&!mn.contains(e.relatedTarget))set(false)});
+ document.addEventListener("keydown",e=>{if(e.key=="Escape"&&mn.classList.contains("open")){const inside=mn.contains(document.activeElement);set(false);mute=Date.now()+400;if(inside)link.focus({preventScroll:true})}});
  document.addEventListener("click",e=>{if(!mn.contains(e.target))set(false)});
  mn.querySelector(".mp").addEventListener("click",e=>{if(e.target.closest("a"))set(false)});
  addEventListener("resize",()=>set(false));
 })();
-// ---- Airline landing pages (layout B: the lowest fare first). The fares come from the rows of the Featured fares list, so the two always agree. ----
-function airPage(s){const a=AIRS.find(x=>x[1]==s);if(!a)return;const n=a[0],usd=v=>Number(v).toLocaleString("en-US"),R=$("air-root");
- const fr=[...document.querySelectorAll("#fares .fs-r")].map(r=>r.dataset).filter(d=>d.al&&(n==d.al||n.indexOf(d.al)==0||d.al.indexOf(n)==0)).sort((x,y)=>x.px-y.px);
+// ---- Airline landing pages (layout B: the lowest fare first). Fares come from the rows of the Featured fares list, so the two always agree.
+// AIRX: i = [main photo, second photo] (Unsplash photo ids, shown without a credit like the other free-use photos); h/t/l/f/n = the airline's signature product, only where one is
+// real, current and widely sought after (checked against the airline's own announcements and recent reviews). An airline without one keeps the plain text.
+const AIRX={
+"singapore-airlines":{i:["1732976662505-b71d6c7702f3","1577326079127-066da1bdae6a"],h:"Singapore Airlines, from The Private Room to an A380 Suite.",t:"An enclosed suite, and a private room before you fly",l:"On the A380, Singapore Airlines Suites are enclosed private rooms with a separate full-length bed. At Changi, The Private Room serves made-to-order Asian dishes and champagne before departure.",f:[["In the air","A380 Suite: an enclosed private room with a separate full-length bed"],["Dining","Book the Cook lets you pre-order a main course from an extended menu"],["On the ground","The Private Room at Changi: made-to-order Asian dishes and champagne"]],n:"Suites are on the A380 only. Your advisor confirms the aircraft and cabin for your flights before ticketing."},
+"emirates":{i:["1627501691850-db08eb81199a","1567446188601-95f43044f6dc"],h:"Emirates first class, with an onboard Shower Spa.",t:"A private suite, and a shower in the sky",l:"Emirates first class is a private suite, and on the A380 the Shower Spa can be booked with the cabin crew during the flight. Before departure, first class passengers have the Emirates first class lounge.",f:[["In the air","Private first class suite, with the Shower Spa on the A380 by appointment with the cabin crew"],["On the ground","Access to the Emirates first class lounge"]],n:"The Shower Spa is on the A380 only. Your advisor confirms the aircraft for your flights."},
+"etihad":{i:["1786200004364-01487886e344","1788743394948-6e8ff0743da0"],h:"Etihad, with The Residence on the A380.",t:"A three-room cabin with a butler",l:"The Residence is a three-room cabin on the Etihad A380, with a living room, a bedroom and an ensuite shower. A personal butler trained at the Savoy Butler Academy looks after every detail.",f:[["The cabin","A living room, a bedroom and an ensuite shower"],["Service","A personal butler trained at the Savoy Butler Academy"]],n:"The Residence is a separate cabin on selected A380 flights. Ask your advisor whether it can be quoted for your dates."},
+"qatar-airways":{i:["1716747936903-2de320700fed","1688499050334-d48bea10190d"],h:"Qatar Airways Qsuite: business class with a door.",t:"A private business class cabin with a sliding door",l:"Qsuite is the Qatar Airways business class cabin with a sliding door, and a double bed option for two travellers. In Doha, the Al Mourjan lounge has à la carte dining and showers.",f:[["In the air","Qsuite: a sliding door, and a double bed option for two"],["On the ground","Al Mourjan lounge: à la carte dining and showers"]],n:"Qsuite is fitted to selected aircraft. Your advisor confirms the cabin for your flights."},
+"cathay-pacific":{i:["1732975949642-2cbb90a5fe3a","1745985700496-95e28448daf7"],h:"Cathay Pacific, with the Aria Suite and The Pier.",t:"A business class suite, and a lounge with table service",l:"The Aria Suite gives Cathay Pacific business class a sliding privacy door and a fully flat bed, with Cantonese dining from leading Hong Kong restaurants. In Hong Kong, The Pier lounge serves table-service dining.",f:[["In the air","Aria Suite: a sliding privacy door and a fully flat bed"],["Dining","Cantonese dishes from leading Hong Kong restaurants"],["On the ground","The Pier lounge in Hong Kong: table-service dining"]],n:"The Aria Suite is on selected aircraft. Your advisor confirms the cabin for your flights."},
+"british-airways":{i:["1584084807193-bed442df7a75","1615558568469-de10704d9102"],h:"British Airways, starting in The Concorde Room.",t:"A first class lounge with a spa and private cabanas",l:"The Concorde Room at Heathrow Terminal 5 is the British Airways first class lounge, with a full bar, traditional dining, a concierge and a spa. A private cabana with a shower can be reserved before you board.",f:[["Dining","Traditional dining and a full bar"],["Wellbeing","A spa, and private cabanas with showers"],["Service","A concierge in the lounge"]],n:"The Concorde Room is for first class passengers departing from Heathrow Terminal 5."},
+"lufthansa":{i:["1562368305-c68041ff0244","1719965377210-2faefdb77dc9"],h:"Lufthansa, starting in the First Class Terminal.",t:"A private terminal in Frankfurt, then a suite with a door",l:"The First Class Terminal in Frankfurt has its own check-in, à la carte dining and a personal assistant. On board, Allegris First suites have floor-to-ceiling walls and a closing door.",f:[["On the ground","Private check-in, à la carte dining and a personal assistant"],["In the air","Allegris First suite: floor-to-ceiling walls and a closing door"]],n:"The terminal serves first class passengers departing from Frankfurt. Allegris First is on selected aircraft, so your advisor confirms the cabin for your flights."},
+"virgin-atlantic":{i:["1761534852986-44e9ec776e03","1670774587561-0bb7377589d6"],h:"Virgin Atlantic, starting in the Heathrow Clubhouse.",t:"The Upper Class lounge at Heathrow, redesigned in 2026",l:"The Clubhouse at London Heathrow is the Virgin Atlantic lounge built around Upper Class. Its 2026 redesign adds private work studios and a quieter cinema room, and keeps the runway views.",f:[["Work","The Townhouse and The Manor: studios with desks and power points"],["Unwind","A cinema room with acoustic panels and Bluetooth headphone access to the screens"],["Views","A redesigned gallery that keeps its runway views"]],n:"The Clubhouse is open to Upper Class passengers departing from Heathrow."},
+"qantas":{i:["1752901499089-13c47bd38216","1775449067175-7bca27f9934f"],h:"Qantas, starting in the First Lounge in Sydney.",t:"A first class lounge with table service",l:"The Qantas First Lounge at Sydney International serves a table-service menu with champagne, and pre-flight spa treatments can be arranged. Access is for Qantas First passengers and top-tier members.",f:[["Dining","A table-service menu, with champagne"],["Wellbeing","Pre-flight spa treatments, arranged with the lounge team"]],n:"The lounge is for first class passengers departing from Sydney. Spa times can be limited."},
+"japan-airlines":{i:["1752901022771-90a727c45221","1720518989092-1d07b068c1de"],h:"Japan Airlines, in A350-1000 first class suites.",t:"Six first class suites, each with a door",l:"On the A350-1000, Japan Airlines first class has six suites in a 1-1-1 layout, each with a door, a 43-inch screen and a seat that becomes a single or a double bed. Business class has 54 seats in a 1-2-1 layout, each with a sliding door.",f:[["First class","Six suites with a door, a 43-inch screen, and sofa, single bed and double bed settings"],["Business class","54 seats in a 1-2-1 layout, with a sliding door and a 24-inch screen"]],n:"These cabins are on the Japan Airlines A350-1000 only. Your advisor confirms the aircraft for your flights."},
+"all-nippon-airways":{i:["1762648136654-7fb4a5955ec5","1792951928259-cb4a6e9b4fc8"],h:"ANA, with The Suite and The Room.",t:"First class with a door and a 4K screen, business class with a wide seat",l:"On the Boeing 777-300ER, The Suite is the ANA first class suite, with a door and a 43-inch 4K monitor. The Room, its business class seat, is about twice as wide as ANA's earlier business seat, with flexible partitions for sharing the space with a travelling companion.",f:[["First class","The Suite: a door and a 43-inch 4K monitor"],["Business class","The Room: a wide seat, with flexible partitions for travelling companions"]],n:"These cabins are on selected Boeing 777-300ER flights. Your advisor confirms the aircraft for your flights."},
+"thai-airways":{i:["1786549916472-f9552ce1659c","1776483072069-0c92033c7525"],h:"Thai Airways first class, with a spa before you fly.",t:"A complimentary massage in the Royal First Lounge",l:"In Bangkok, Thai Airways first class passengers have the Royal First Lounge at Suvarnabhumi, with à la carte dining anywhere in the lounge. The Royal Orchid Spa gives each first class passenger a complimentary one-hour treatment.",f:[["Spa","A complimentary one-hour full-body oil massage or Royal Thai massage"],["Dining","À la carte dining anywhere in the lounge, with a formal and a private dining room"]],n:"Lounge access is for first class passengers departing from Bangkok."},
+"air-france":{i:["1670995734539-bf175182a6d8","1732975704201-181cdf476b77"]},
+"swiss":{i:["1684014321334-027c93a71baf","1731880573442-f5d20d32207b"]},
+"klm":{i:["1761534952472-44ac94286321","1768519648019-c208ac1ca9ff"]},
+"iberia":{i:["1560007635-d813425fc4d4"]},
+"air-new-zealand":{i:["1762527550217-35d564caa359","1742125126252-2dfb119407c6"]},
+"south-african-airways":{i:[]}};
+const upx=(id,w)=>"https://images.unsplash.com/photo-"+id+"?auto=format&fit=crop&w="+w+"&q=75";
+function airPage(s){const a=AIRS.find(x=>x[1]==s);if(!a)return;const n=a[0],x=AIRX[s]||{i:[]},usd=v=>Number(v).toLocaleString("en-US"),R=$("air-root");
+ const fr=[...document.querySelectorAll("#fares .fs-r")].map(r=>r.dataset).filter(d=>d.al&&(n==d.al||n.indexOf(d.al)==0||d.al.indexOf(n)==0)).sort((p,q)=>p.px-q.px);
  const cab=d=>d.c=="first"?"First class":"Business class";
- const price=fr.length?`<div class="ap-px"><small>Fares from</small><b>USD ${usd(fr[0].px)}</b><span>${esc(fr[0].fr)} to ${esc(fr[0].to)} &middot; ${esc(fr[0].cb)} &middot; round trip, plus taxes and fees</span></div><button class="ap-lk" type="button" data-sc="ap-fares">See all ${esc(n)} fares &darr;</button>`
+ const price=fr.length?`<div class="ap-px"><small>Fares from</small><b>USD ${usd(fr[0].px)}</b><span>${esc(fr[0].fr)} to ${esc(fr[0].to)} &middot; ${esc(fr[0].cb)} &middot; round trip, plus taxes and fees</span></div>`
   :`<div class="ap-px"><small>Fares on request</small><b class="sm">Tell us where you are flying.</b><span>An advisor will quote ${esc(n)} in business or first class for your route and dates.</span></div>`;
  const cards=fr.slice(0,5).map((d,i)=>{const g=(d.g||"").split(",");return`<button class="ap-fc" type="button" data-i="${i}"><i style="background:${g.length==3?`linear-gradient(160deg,${g[0]},${g[1]} 55%,${g[2]})`:"var(--soft)"}"></i><span class="ap-fb"><b>${esc(d.fr)} to ${esc(d.to)}</b><span class="ap-c">${esc(d.cb)}</span><span class="ap-f">From</span><span class="ap-p">USD ${usd(d.px)}</span><span class="ap-g">Request this fare &rarr;</span></span></button>`}).join("");
- const fares=fr.length?`<section class="ap-s" id="ap-fares"><div class="ap-sh"><div><p class="ey">Fares</p><h2>${esc(n)} fares we are quoting now</h2></div><p>Round trip, plus taxes and fees. Fares change with the date and availability; your free quote confirms the exact price.</p></div><div class="ap-gr">${cards}<div class="ap-nl"><b>Not on the list?</b><span>Tell us your route and dates and we will quote ${esc(n)} from wherever you fly.</span><button type="button" data-q="1">Ask an advisor &rarr;</button></div></div></section>`:"";
+ const fares=fr.length?`<section class="ap-s" id="ap-fares"><div class="ap-sh"><h2>${esc(n)} fares we are quoting now</h2><p>Round trip, plus taxes and fees. Fares change with the date and availability; your free quote confirms the exact price.</p></div><div class="ap-gr">${cards}<div class="ap-nl"><b>Not on the list?</b><span>Tell us your route and dates and we will quote ${esc(n)} from wherever you fly.</span><button type="button" data-q="1">Ask an advisor &rarr;</button></div></div></section>`:"";
  const steps=[["Tell us your trip","Share your route, dates and cabin through the form or by phone."],["Receive your fares","Your advisor returns the best available options with the fare rules explained."],["Approve and ticket","Choose your fare and we issue your tickets and confirm your seats."],["Fly with support","Your advisor stays reachable for changes, delays and upgrades."]];
  const fq=[FAQ[0],FAQ[2],FAQ[3]].map(f=>`<div><b>${esc(f[0])}</b><p>${esc(f[1])}</p></div>`).join("");
- const oth=AIRS.filter(x=>x[1]!=s).map(x=>`<a href="/airlines/${x[1]}/">${esc(x[0])}</a>`).join("");
- R.innerHTML=`<div class="ap-h"><div class="w"><nav class="ap-bc" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/routes/">Listings</a> <span aria-hidden="true">/</span> <span>${esc(n)}</span></nav><div class="ap-hg"><div><p class="ap-eb"><span class="ap-chip">${alogo(n)}</span>Partner airline</p><h1>${esc(n)} in business and first class.</h1>${price}</div><div class="ap-q"><h2>Request a free quote</h2><p>Tell us your route and dates. An advisor will reply with available ${esc(n)} fares within 24 hours.</p><button class="ap-cta" type="button" data-q="1">Request a Free Quote</button><div class="ap-ct"><a href="tel:+12122211860">212-221-1860</a><a href="mailto:quote@flyfirstclass.com">quote@flyfirstclass.com</a></div></div></div></div></div><div class="w">${fares}</div><div class="ap-st"><div class="w"><p class="ey">How it works</p><h2>From request to ticket in four steps</h2><div class="ap-sg">${steps.map((x,i)=>`<div><i>${i+1}</i><b>${x[0]}</b><p>${x[1]}</p></div>`).join("")}</div></div></div><div class="w"><div class="ap-fq"><div><p class="ey">Good to know</p><h2>Questions before you book</h2></div><div class="ap-fl">${fq}</div></div><div class="ap-ot"><h3>Other partner airlines</h3><div>${oth}</div></div></div>`;
+ const oth=AIRS.filter(y=>y[1]!=s).map(y=>`<a href="/airlines/${y[1]}/">${esc(y[0])}</a>`).join("");
+ const photo=x.i[0]?`<div class="ap-ph"><img src="${upx(x.i[0],1200)}" srcset="${upx(x.i[0],700)} 700w, ${upx(x.i[0],1200)} 1200w" sizes="(max-width:900px) 100vw, 600px" alt="${esc(n)} aircraft" fetchpriority="high" onerror="var g=this.closest('.ap-hg');g.classList.add('nophoto');this.parentNode.remove()"></div>`:"";
+ const feat=x.h?`<section class="ap-ft">${x.i[1]?`<div class="ap-fi"><img src="${upx(x.i[1],1000)}" srcset="${upx(x.i[1],600)} 600w, ${upx(x.i[1],1000)} 1000w" sizes="(max-width:900px) 100vw, 520px" alt="${esc(n)} aircraft" loading="lazy" onerror="this.closest('.ap-ft').style.gridTemplateColumns='1fr';this.parentNode.remove()"></div>`:""}<div class="ap-fx"><h2>${esc(x.t)}</h2><p>${esc(x.l)}</p><dl>${x.f.map(r=>`<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join("")}</dl><p class="ap-nt">${esc(x.n)}</p></div></section>`:"";
+ R.innerHTML=`<div class="ap-h"><div class="w"><nav class="ap-bc" aria-label="Breadcrumb"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/routes/">Listings</a> <span aria-hidden="true">/</span> <span>${esc(n)}</span></nav><div class="ap-hg${x.i[0]?"":" nophoto"}"><div><div class="ap-lg">${alogo(n)}</div><h1>${esc(x.h||n+" in business and first class.")}</h1>${price}<div class="ap-ac"><button class="ap-cta" type="button" data-q="1">Request a Free Quote</button>${fr.length?`<button class="ap-lk" type="button" data-sc="ap-fares">See all ${esc(n)} fares &darr;</button>`:""}<a href="tel:+12122211860">212-221-1860</a><a href="mailto:quote@flyfirstclass.com">quote@flyfirstclass.com</a></div></div>${photo}</div></div></div><div class="w">${feat}${fares}</div><div class="ap-st"><div class="w"><h2>From request to ticket in four steps</h2><div class="ap-sg">${steps.map((y,i)=>`<div><i>${i+1}</i><b>${y[0]}</b><p>${y[1]}</p></div>`).join("")}</div></div></div><div class="w"><div class="ap-fq"><h2>Questions before you book</h2><div class="ap-fl">${fq}</div></div><div class="ap-ot"><h3>Other partner airlines</h3><div>${oth}</div></div></div>`;
  R.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{goTo("home");setTimeout(()=>{$("bf").scrollIntoView({behavior:"smooth",block:"center"});try{$("fa").focus({preventScroll:true})}catch(e){}},80)});
  R.querySelectorAll(".ap-fc").forEach(b=>b.onclick=()=>{const d=fr[+b.dataset.i];book(d.fr+" ("+d.fa+")",d.to+" ("+d.ta+")",cab(d))});
  const sc=R.querySelector("[data-sc]");if(sc)sc.onclick=()=>$("ap-fares").scrollIntoView({behavior:"smooth",block:"start"})}
