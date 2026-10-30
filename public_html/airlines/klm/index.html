@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TWD4KHGM');</script>
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="2026-10-27e">
+<meta name="build" content="2026-10-30a">
 <title>KLM Business and First Class Fares | Fly First Class</title>
 <meta name="description" content="Business and first class fares on KLM up to 70% off market airfares, arranged by an advisor with 20+ years of experience. Request a free quote.">
 <link rel="canonical" href="https://flyfirstclass.com/airlines/klm/">
@@ -1235,7 +1235,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="tp" id="tp0">
 <form id="bf" novalidate>
 <div id="sb" hidden></div>
-<div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option>One way</option><option>Multi-city</option><option selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb"><option>First class</option><option>Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See Available Routes</button></div>
+<div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option value="One way">One way</option><option value="Multi-city">Multi-city</option><option value="Round-trip" selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb"><option value="First class">First class</option><option value="Business class">Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See Available Routes</button></div>
 <div class="bkr">
 <div class="bkp"><div class="c"><label for="fa">Leaving from</label><input id="fa" placeholder="City or airport" autocomplete="off" required></div><button class="swp" id="swp" type="button" aria-label="Swap departure and destination">&#8644;</button><div class="stw" id="stw" hidden><button type="button" class="stn" id="stn" aria-haspopup="dialog" aria-expanded="false" aria-controls="stp2"><span id="stt">Choose Your Stop</span></button><div class="stpop" id="stp2" role="dialog" aria-label="Choose your stop" tabindex="-1" hidden></div></div><div class="c"><label for="fb" id="fbl">Going to</label><input id="fb" placeholder="Select a destination" autocomplete="off" required></div></div>
 <div class="bkd" id="dr"><div class="cal" id="cal" role="dialog" aria-label="Choose your travel dates" hidden></div><div class="c"><label id="ddl">Departing on</label><button type="button" class="dv e" id="ddb">Select a date</button></div><div class="c"><label id="rdl">Returning on</label><button type="button" class="dv e" id="rdb">Add a return (optional)</button></div></div>
@@ -2138,7 +2138,7 @@ let ED=null;
 const edHTML=r=>{const t=r.trip||{},c=r.contact||{},v=x=>esc(x||"");
  return`<form class="ed" id="edf" novalidate><h4>Modify your request</h4><div class="eg"><div><label for="efa">Leaving from</label><input id="efa" value="${v(t.from)}" autocomplete="off"></div><div><label for="efb">Destination 1</label><input id="efb" value="${v(t.to)}" autocomplete="off"></div>
 <div class="edx" id="edx"><div class="egd" id="edl"></div><div class="mca"><button type="button" class="btn sm" id="eda">Add Another Destination</button><span id="edn"></span></div></div>
-<div><label for="ety">Trip type</label><select id="ety"><option>One way</option><option>Multi-city</option><option>Round-trip</option></select></div><div><label for="ecb">Cabin</label><select id="ecb"><option>First class</option><option>Business class</option></select></div>
+<div><label for="ety">Trip type</label><select id="ety"><option value="One way">One way</option><option value="Multi-city">Multi-city</option><option value="Round-trip">Round-trip</option></select></div><div><label for="ecb">Cabin</label><select id="ecb"><option value="First class">First class</option><option value="Business class">Business class</option></select></div>
 <div><label for="eac">Adults</label><input id="eac" type="number" min="1" max="9" value="${t.adults||1}"></div><div><label for="eck">Children</label><input id="eck" type="number" min="0" max="8" value="${t.children||0}"></div>
 <div><label for="edd">Departing</label><input id="edd" type="date" min="${TODAY}" value="${v(t.dep)}"></div><div><label for="erd">Returning</label><input id="erd" type="date" min="${TODAY}" value="${v(t.ret)}"></div>
 <div class="ec1"><label for="efn">First name</label><input id="efn" value="${v(c.first)}" autocomplete="off"></div><div><label for="emn">Middle name <span>(optional)</span></label><input id="emn" value="${v(c.middle)}" autocomplete="off"></div><div><label for="eln">Last name</label><input id="eln" value="${v(c.last)}" autocomplete="off"></div>

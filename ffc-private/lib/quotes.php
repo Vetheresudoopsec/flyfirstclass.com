@@ -22,10 +22,30 @@ function qStops($s) {                  // stops of the route the visitor chose: 
     return ['n' => $n, 'via' => $via];
 }
 function qStopsText($s) { return $s ? ($s['n'] ? ($s['n'] === 1 ? '1 stop' : $s['n'] . ' stops') : 'Direct') . ($s['n'] && $s['via'] ? ' via ' . implode(' or ', $s['via']) : '') : ''; }
+// Cabin and trip type are choices from a list, never typed. A visitor whose browser translated the page used to send the translated words
+// ("Primeira classe"). The page now sends fixed English values; this turns the common translated forms back into them so an old copy of
+// the page (or any other client) cannot put another language in a quote. Anything it does not recognise is kept as sent.
+function q_cabin($v) {
+    $v = trim((string)$v); if ($v === '') return $v;
+    $l = mb_strtolower($v);
+    if ($l === 'first class' || $l === 'business class') return $l === 'first class' ? 'First class' : 'Business class';
+    if (preg_match('/business|executiv|ejecutiv|affari|affaires|negoci|neg[oó]cio|gesch[aä]ft|商务|商務|ビジネス|비즈니스|бизнес/u', $l)) return 'Business class';
+    if (preg_match('/first|prim(?:a|e|ei|er)|premi[eè]re|erste|一等|头等|頭等|ファースト|퍼스트|первы/u', $l)) return 'First class';
+    return $v;
+}
+function q_ttype($v) {
+    $v = trim((string)$v); if ($v === '') return $v;
+    $l = mb_strtolower($v);
+    foreach (['One way', 'Round-trip', 'Multi-city'] as $k) if ($l === mb_strtolower($k)) return $k;
+    if (preg_match('/m[uú]lti|v[aá]rios|varios|plusieurs|mehrere|pi[uù] tratte|多程|複数|여러|несколько/u', $l)) return 'Multi-city';
+    if (preg_match('/volta|vuelta|retour|ritorno|r[uü]ck|hin.?und|round|return|往返|往復|왕복|туда и обратно/u', $l)) return 'Round-trip';
+    if (preg_match('/one.?way|s[oó]\s?ida|somente ida|solo ida|solo andata|aller simple|einfach|nur hin|单程|單程|片道|편도|в одну/u', $l)) return 'One way';
+    return $v;
+}
 function qTrip($t) {
     $t = is_array($t) ? $t : [];
     $via = []; foreach (array_slice(is_array($t['via'] ?? null) ? $t['via'] : [], 0, 4) as $x) { $x = qs($x); if ($x !== '') $via[] = $x; }
-    $o = ['from' => qs($t['from'] ?? null), 'to' => qs($t['to'] ?? null), 'via' => $via, 'cabin' => qs($t['cabin'] ?? null, 40), 'type' => qs($t['type'] ?? null, 40),
+    $o = ['from' => qs($t['from'] ?? null), 'to' => qs($t['to'] ?? null), 'via' => $via, 'cabin' => q_cabin(qs($t['cabin'] ?? null, 40)), 'type' => q_ttype(qs($t['type'] ?? null, 40)),
         'adults' => qn($t['adults'] ?? 0, 0, 9), 'children' => qn($t['children'] ?? 0, 0, 9), 'dep' => qd($t['dep'] ?? null), 'dep2' => qd($t['dep2'] ?? null), 'ret' => qd($t['ret'] ?? null), 'ret2' => qd($t['ret2'] ?? null), 'flex' => !empty($t['flex'])];
     $st = qStops($t['stops'] ?? null); if ($st) $o['stops'] = $st;
     return $o;
