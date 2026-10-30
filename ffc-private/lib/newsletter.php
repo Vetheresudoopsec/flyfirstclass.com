@@ -67,8 +67,11 @@ function nl_push($r, $cfg) {
     $url = $cfg['base'] . '/3.0/lists/' . rawurlencode($cfg['list']) . '/members/' . nl_hash($r['e']);
     $res = http_one($url, ['Authorization: Basic ' . base64_encode('flyfirstclass:' . $cfg['key']), 'Content-Type: application/json', 'Accept: application/json'], 12, 'PUT', json_encode($body, JSON_UNESCAPED_UNICODE));
     $st = (int)($res['status'] ?? 0);
-    if ($st >= 200 && $st < 300) return ['r' => 'done'];
     $j = json_decode((string)($res['body'] ?? ''), true);
+    if ($st >= 200 && $st < 300) {       // success: also note what Mailchimp says about the contact (a status word and where it came from, never the address)
+        $ms = is_array($j) ? strtolower((string)($j['status'] ?? '')) : ''; $mx = is_array($j) ? (string)($j['source'] ?? '') : '';
+        return ['r' => 'done', 'ms' => preg_match('/^[a-z_]{3,20}$/', $ms) ? $ms : 'other', 'mx' => mb_substr(preg_replace('/[^A-Za-z0-9 ()._-]/', '', $mx), 0, 40)];
+    }
     $title = is_array($j) ? (string)($j['title'] ?? '') : ''; $det = is_array($j) ? (string)($j['detail'] ?? '') : '';
     $msg = mb_substr(trim('Mailchimp ' . $st . ($title !== '' ? ': ' . $title : '') . ($det !== '' ? ' (' . $det . ')' : '')), 0, 240);
     if ($st === 0) return ['r' => 'retry', 'msg' => 'Could not reach Mailchimp: ' . ($res['error'] ?? 'no reply'), 'pause' => true];
@@ -82,7 +85,7 @@ function nl_delay($n) { $d = [300, 1800, 7200, 21600, 43200]; return $n >= 1 && 
 function nl_apply(&$r, $res) {
     $n = now_ms();
     switch ($res['r']) {
-        case 'done': $r = ['st' => 'synced', 'src' => $r['src'], 'at' => $r['at'], 'sent' => $n]; break;                              // address and name are wiped
+        case 'done': $r = ['st' => 'synced', 'src' => $r['src'], 'at' => $r['at'], 'sent' => $n, 'ms' => $res['ms'] ?? '', 'mx' => $res['mx'] ?? '']; break;   // address and name are wiped; Mailchimp's status word stays
         case 'skip': $r = ['st' => 'skipped', 'src' => $r['src'], 'at' => $r['at'], 'sent' => $n, 'err' => $res['msg'], 'eat' => $n]; break;
         case 'fail': $r['st'] = 'failed'; $r['err'] = $res['msg']; $r['eat'] = $n; break;
         case 'config': $r['err'] = $res['msg']; $r['eat'] = $n; $r['next'] = $n + 3600000; break;                                       // a setup problem is not the address's fault: no strike
@@ -100,6 +103,7 @@ function nl_sync_one($h, $cfg = null) {
     $res = nl_push($r, $cfg);
     cupdate(NL_FILE, [], function (&$S) use ($h, $res) { if (isset($S[$h])) nl_apply($S[$h], $res); });
     if ($res['r'] !== 'done') logm('[newsletter] ' . $res['r'] . ': ' . ($res['msg'] ?? ''));
+    elseif (!in_array($res['ms'] ?? '', ['subscribed', 'pending'], true)) logm('[newsletter] Mailchimp accepted a sign-up but the contact is "' . ($res['ms'] ?? '?') . '" there (source: ' . (($res['mx'] ?? '') ?: 'unknown') . '). The website never changes an existing contact.');
     return $res;
 }
 function nl_purge() {
@@ -135,10 +139,20 @@ function nl_status() {
         if ($st === 'queued') $old = $old ? min($old, $r['at']) : $r['at'];
         if (!empty($r['err']) && (!$last || ($r['eat'] ?? 0) > $last['t'])) $last = ['t' => $r['eat'] ?? 0, 'msg' => $r['err']];
     }
+    $ans = []; $from = [];
+    foreach (cload(NL_FILE, []) as $r) {
+        if (($r['st'] ?? '') !== 'synced') continue;
+        $k = ($r['ms'] ?? '') !== '' ? $r['ms'] : 'not recorded (sent before this was added)'; $ans[$k] = ($ans[$k] ?? 0) + 1;
+        if (($r['mx'] ?? '') !== '') $from[$r['mx']] = ($from[$r['mx']] ?? 0) + 1;
+    }
+    arsort($ans); arsort($from);
     return ['mailchimp' => $cfg['ok'] ? 'on' : 'not set up (sign-ups are held until MAILCHIMP_API_KEY and MAILCHIMP_LIST_ID are in .env)',
         'confirmation' => $cfg['double'] ? 'double opt-in (Mailchimp emails each new subscriber a confirmation link)' : 'single opt-in (subscribed straight away)',
-        'waiting' => $c['queued'], 'sentToMailchimp' => $c['synced'], 'refusedByMailchimp' => $c['skipped'], 'gaveUp' => $c['failed'],
-        'oldestWaiting' => $old ? et_text($old) : null, 'lastProblem' => $last ? ['msg' => $last['msg'], 'when' => et_text($last['t'])] : null];
+        'waiting' => $c['queued'], 'sentToMailchimp' => $c['synced'],
+        'mailchimpAnswered' => (object)$ans, 'mailchimpSource' => (object)$from,
+        'refusedByMailchimp' => $c['skipped'], 'gaveUp' => $c['failed'],
+        'oldestWaiting' => $old ? et_text($old) : null, 'lastProblem' => $last ? ['msg' => $last['msg'], 'when' => et_text($last['t'])] : null,
+        'howToRead' => 'sentToMailchimp = Mailchimp accepted the request. mailchimpAnswered = what Mailchimp then said about each contact: subscribed = on the list now; pending = waiting for a confirmation click; unsubscribed, cleaned or archived = the address was already in the audience in that state and the website never changes it. mailchimpSource shows where Mailchimp says the contact came from: a sign-up the website just created shows as an API source, an older contact shows its original source.'];
 }
 // A CSV (Mailchimp's import format) of the addresses Mailchimp does not have yet: use it if you ever need to add them by hand.
 function nl_export() {
