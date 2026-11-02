@@ -13,7 +13,9 @@
 //
 // Where it lives
 //   https://yourdomain.com/api/trips : sign in with the ADMIN_KEY from .env (the page keeps you signed in for 8 hours with a cookie).
-//   The page has no scripts and is never indexed (robots.txt, a noindex header and a no-store header).
+//   The page is never indexed (robots.txt, a noindex header and a no-store header). It has one small script (tr_js) that the security policy allows by its exact
+//   hash, so nothing else can run: it makes the tabs, the views and the Add trip panel switch instantly, and sends the buttons without reloading the page.
+//   Without it every link and button still works, one page load at a time.
 //
 // Privacy
 //   The customer's name and email are kept on the server only until the thank-you email has gone out, then deleted. What stays for 90 days
@@ -370,6 +372,78 @@ function trips_route($method) {
 }
 
 // ---------- The pages ----------
+function tr_js() {       // the page's only script. The security policy allows exactly these bytes (by hash). It never reads or writes anything but this page.
+    return <<<'JS'
+(function () {
+  var d = document, base = '/api/trips', opener = null;
+  var titles = { trips: 'Trustpilot invitations', bookings: 'Booking requests', email: 'Email preview' };
+  d.documentElement.className += ' js';
+  function q(s) { return d.querySelector(s); }
+  function qa(s) { return Array.prototype.slice.call(d.querySelectorAll(s)); }
+  function cur(sel, attr, dflt) { var e = q(sel + '[aria-current]'); return e ? e.getAttribute(attr) : dflt; }
+  function mark(sel, attr, val) { qa(sel).forEach(function (a) { if (a.getAttribute(attr) === val) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); }
+  function path(v, t) { return base + (v !== 'trips' ? '?v=' + v : (t !== 'waiting' ? '?tab=' + t : '')); }
+  function openPanel(from) { var o = q('#add'); if (!o) return; opener = from; o.classList.add('open'); var n = q('#n'); if (n) n.focus(); }
+  function closePanel(quiet) {
+    var o = q('#add'); if (o) o.classList.remove('open');
+    if (location.hash === '#add') history.replaceState(null, '', location.pathname + location.search);
+    if (!quiet && opener && opener.focus) opener.focus();
+  }
+  function show(v, t) {
+    closePanel(true);
+    t = t || cur('.tab', 'data-tab', 'waiting');
+    qa('[data-pane]').forEach(function (p) { p.hidden = p.getAttribute('data-pane') !== v; });
+    qa('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== t; });
+    mark('.nv', 'data-view', v); mark('.tab', 'data-tab', t);
+    qa('.msg[role=status]').forEach(function (m) { m.hidden = true; });
+    d.title = titles[v] || d.title;
+    history.replaceState(null, '', path(v, t));
+    window.scrollTo(0, 0);
+  }
+  function note(text) {
+    var m = d.createElement('div'), mn = q('.main');
+    m.className = 'msg bad'; m.setAttribute('role', 'alert'); m.textContent = text;
+    if (mn) mn.insertBefore(m, mn.firstChild);
+    window.scrollTo(0, 0);
+  }
+  function swap(url, text) {
+    var doc = new DOMParser().parseFromString(text, 'text/html'), nw = doc.querySelector('.app'), old = q('.app');
+    if (!nw || !old) { location.assign(url || base); return; }
+    old.parentNode.replaceChild(d.importNode(nw, true), old);
+    d.title = doc.title; history.replaceState(null, '', url);
+    if (q('#add.open')) { var n = q('#n'); if (n) n.focus(); } else window.scrollTo(0, 0);
+  }
+  function load(u, o, undo) {
+    fetch(u, o).then(function (r) {
+      return r.text().then(function (t) { try { swap(r.url, t); } catch (e) { location.assign(base); } });
+    }, function () { undo(); note('Could not reach the server. Check your connection and try again.'); });
+  }
+  d.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a');
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (a.hasAttribute('data-open')) { e.preventDefault(); openPanel(a); }
+    else if (a.hasAttribute('data-close')) { e.preventDefault(); closePanel(); }
+    else if (a.hasAttribute('data-tab')) { e.preventDefault(); show('trips', a.getAttribute('data-tab')); }
+    else if (a.hasAttribute('data-view')) { e.preventDefault(); show(a.getAttribute('data-view'), null); }
+    else if (a.hasAttribute('data-swap')) { e.preventDefault(); load(a.href, { credentials: 'same-origin' }, function () {}); }
+  });
+  d.addEventListener('keydown', function (e) { if ((e.key === 'Escape' || e.keyCode === 27) && q('#add.open')) closePanel(); });
+  d.addEventListener('submit', function (e) {
+    var f = e.target;
+    if (!f.closest || !f.closest('.app') || f.hasAttribute('data-native') || f.hasAttribute('data-busy')) return;
+    e.preventDefault();
+    var b = e.submitter || f.querySelector('button'), was = b ? b.innerHTML : '';
+    var post = (f.getAttribute('method') || 'get').toLowerCase() === 'post', u = f.getAttribute('action') || base;
+    var data = new URLSearchParams(new FormData(f)), o = { credentials: 'same-origin' };
+    if (post) { o.method = 'POST'; o.body = data; } else u += (u.indexOf('?') < 0 ? '?' : '&') + data.toString();
+    f.setAttribute('data-busy', '1');
+    if (b) { b.disabled = true; b.setAttribute('aria-busy', 'true'); b.textContent = 'Working…'; }
+    load(u, o, function () { f.removeAttribute('data-busy'); if (b) { b.disabled = false; b.removeAttribute('aria-busy'); b.innerHTML = was; } });
+  });
+  if (location.hash === '#add') openPanel(null);
+})();
+JS;
+}
 function tr_ic($n) {       // small line icons, drawn inline (the page has no scripts and loads nothing)
     static $P = [
         'tag' => '<path d="M4 4h7l9 9-7 7-9-9V4z"/><path d="M8.5 8.5v.01"/>',
@@ -392,11 +466,12 @@ function tr_when($ms) {      // "Today, 10:00 AM" / "Tomorrow, 10:00 AM" / "Mon 
 }
 function tr_head($title, $app = false) {
     header('Content-Type: text/html; charset=UTF-8');
-    header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+    $sp = $app ? " script-src 'sha256-" . base64_encode(hash('sha256', tr_js(), true)) . "'; connect-src 'self';" : '';       // the one script, by its hash; fetch to this site only
+    header("Content-Security-Policy: default-src 'none';" . $sp . " style-src 'unsafe-inline'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
     $F = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     $M = 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light"><title>' . m_esc($title) . '</title><style>'
-        . '*{box-sizing:border-box}body{margin:0;background:#f6f5f2;color:#111418;font:14px/1.45 ' . $F . '}button,input,select,textarea{font-family:inherit}'
+        . '*{box-sizing:border-box}[hidden]{display:none!important}.pane{display:flex;flex-direction:column;gap:22px}body{margin:0;background:#f6f5f2;color:#111418;font:14px/1.45 ' . $F . '}button,input,select,textarea{font-family:inherit}'
         . 'h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.015em;line-height:1.2}h2{margin:0;font-size:17px;font-weight:600}p{margin:0}a{color:#2a5db0}a:hover{color:#184f95}'
         . ':focus-visible{outline:2px solid #2a78d6;outline-offset:2px}.m{color:#6b6a65;font-size:13px}.mono{font-family:' . $M . ';font-size:12.5px;letter-spacing:.03em;white-space:nowrap;color:#3b3a37}.fw{font-weight:500}.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
         // forms
@@ -431,7 +506,7 @@ function tr_head($title, $app = false) {
         . '.at{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px 20px}.at+.at{border-top:1px solid #eceae3}.ibx{width:36px;height:36px;border-radius:10px;background:#fbe7e7;color:#b32d2d;display:grid;place-items:center}.atx{flex:1 1 280px;min-width:0}'
         . '.note{padding:12px 20px 16px;border-top:1px solid #eceae3;font-size:12.5px;color:#6b6a65}.emp{padding:28px 20px;color:#6b6a65}.ch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;padding:18px 20px 14px}.ch>div{display:flex;align-items:center;gap:10px}'
         // the add-trip panel: opens with the Add trip button (:target), or straight away when a reference was looked up or the form needs another look
-        . '.ov{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;justify-content:flex-end}.ov:target,.ov.open{display:flex}.scrim{position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(17,20,24,.32)}'
+        . '.ov{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;justify-content:flex-end}.ov.open,html:not(.js) .ov:target{display:flex}.scrim{position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(17,20,24,.32)}'
         . '.dr{position:relative;width:400px;max-width:100%;height:100%;overflow-y:auto;background:#fff;box-shadow:-12px 0 32px rgba(17,20,24,.14);padding:24px;display:flex;flex-direction:column;gap:16px}.dh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.dh h2{font-size:18px}'
         . '.x{flex:none;width:44px;height:44px;margin:-6px -8px 0 0;border-radius:10px;display:grid;place-items:center;color:#3b3a37}.x:hover{background:#f3f2ee}.dr hr{border:0;border-top:1px solid #eceae3;width:100%;margin:0}.dr form{margin:0}.look{display:flex;gap:8px;align-items:flex-end}.look>div{flex:1 1 auto;min-width:0}.dfoot{display:flex;gap:10px;margin-top:14px}.dfoot .pri{flex:1 1 auto}'
         . '@media(min-width:761px){.rail{position:sticky;top:0;align-self:flex-start;height:100vh}}'
@@ -453,11 +528,11 @@ function tr_btn($t, $act, $id, $label, $cls = '', $field = 'id', $tab = '') {   
 }
 function tr_rail($view, $t) {
     $nav = function ($v, $icon, $label) use ($view) {
-        return '<a class="nv" href="' . TR_PAGE . ($v === 'trips' ? '' : '?v=' . $v) . '"' . ($v === $view ? ' aria-current="page"' : '') . '>' . tr_ic($icon) . $label . '</a>';
+        return '<a class="nv" href="' . TR_PAGE . ($v === 'trips' ? '' : '?v=' . $v) . '" data-view="' . $v . '"' . ($v === $view ? ' aria-current="page"' : '') . '>' . tr_ic($icon) . $label . '</a>';
     };
     return '<nav class="rail" aria-label="Admin sections"><div class="brand"><b>Fly First Class</b><span class="m">Private admin</span></div><div class="navs">'
         . $nav('bookings', 'tag', 'Booking requests') . $nav('trips', 'star', 'Trustpilot invitations') . $nav('email', 'mail', 'Email preview') . '</div>'
-        . '<div class="out"><form method="post" action="' . TR_PAGE . '"><input type="hidden" name="act" value="logout"><input type="hidden" name="t" value="' . $t . '"><button type="submit">Sign out</button></form></div></nav>';
+        . '<div class="out"><form method="post" action="' . TR_PAGE . '" data-native><input type="hidden" name="act" value="logout"><input type="hidden" name="t" value="' . $t . '"><button type="submit">Sign out</button></form></div></nav>';
 }
 function tr_timeline($q) {       // a 30-day line with a dot for each day that has invitations waiting
     $et = et_tz(); $start = (new DateTime('today', $et))->getTimestamp() * 1000; $span = 30 * 86400000; $g = []; $later = 0;
@@ -492,9 +567,9 @@ function tr_view_trips($X) {
     $cfg = $X['cfg']; $q = $X['q']; $s = $X['s']; $x = $X['x']; $t = $X['t']; $tab = $X['tab']; $n = $X['n'];
     $used = tr_used(); $cap = $cfg['cap']; $nq = count($q); $nx = count($x); $ns = count($s); $bcc = $cfg['mode'] === 'bcc'; $days = (int)$cfg['days'];
     echo '<header class="ph"><div class="tt"><div class="tr"><h1>Trustpilot invitations</h1>', $bcc ? '<span class="chip ok"><i></i>Automatic invitations on</span>' : '<span class="chip warn"><i></i>Review link only</span>',
-        $nx ? '<a class="chip bad" href="' . TR_PAGE . '?tab=attention"><i></i>' . $nx . ' needs attention</a>' : '', '</div>',
+        $nx ? '<a class="chip bad" href="' . TR_PAGE . '?tab=attention" data-tab="attention"><i></i>' . $nx . ' needs attention</a>' : '', '</div>',
         '<p class="sub">Thank-you emails go out ', $days, ' day', $days === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. ', $bcc ? 'Trustpilot then sends its own invitation.' : 'The email carries a link to review us on Trustpilot.', '</p></div>',
-        '<div class="acts"><a class="btn" href="', TR_PAGE, '?v=email">', tr_ic('mail'), 'Preview email</a><a class="btn pri" href="#add">', tr_ic('plus'), 'Add trip</a></div></header>';
+        '<div class="acts"><a class="btn" href="', TR_PAGE, '?v=email" data-view="email">', tr_ic('mail'), 'Preview email</a><a class="btn pri" href="#add" data-open>', tr_ic('plus'), 'Add trip</a></div></header>';
     if (!$bcc) echo '<div class="msg warn"><b>Trustpilot address not set.</b> Until <b>TRUSTPILOT_BCC</b> is added to the .env file, the thank-you email carries the plain Trustpilot review link instead.</div>';
 
     // this month, and the next 30 days
@@ -507,9 +582,10 @@ function tr_view_trips($X) {
     // the three lists, one at a time
     $tabs = ['waiting' => ['Waiting to send', $nq, 'pw'], 'attention' => ['Needs attention', $nx, 'pa'], 'sent' => ['Sent', $ns, 'ps']];
     echo '<section class="card cardl" aria-label="Invitations"><nav class="tabs" aria-label="Invitation lists">';
-    foreach ($tabs as $k => $d) echo '<a class="tab" href="', TR_PAGE, $k === 'waiting' ? '' : '?tab=' . $k, '"', $k === $tab ? ' aria-current="page"' : '', '>', $d[0], '<span class="pill ', $d[1] ? $d[2] : '', '">', $d[1], '</span></a>';
+    foreach ($tabs as $k => $d) echo '<a class="tab" href="', TR_PAGE, $k === 'waiting' ? '' : '?tab=' . $k, '" data-tab="', $k, '"', $k === $tab ? ' aria-current="page"' : '', '>', $d[0], '<span class="pill ', $d[1] ? $d[2] : '', '">', $d[1], '</span></a>';
     echo '</nav>';
-    if ($tab === 'waiting') {
+    echo '<div data-panel="waiting"', $tab === 'waiting' ? '' : ' hidden', '>';
+    {
         if (!$q) echo '<p class="emp">Nothing waiting. Add a trip once it is booked.</p>';
         else {
             echo '<div class="lh cw"><span>Customer</span><span>Sends</span><span>Reference</span><span></span></div>';
@@ -522,14 +598,18 @@ function tr_view_trips($X) {
                     $busy ? '' : tr_btn($t, 'sendnow', $r['id'], 'Send now', '', 'id', 'waiting') . tr_btn($t, 'remove', $r['id'], 'Remove', 'q', 'id', 'waiting'), '</div></div>';
             }
         }
-    } elseif ($tab === 'attention') {
+    }
+    echo '</div><div data-panel="attention"', $tab === 'attention' ? '' : ' hidden', '>';
+    {
         if (!$x) echo '<p class="emp">Nothing needs attention.</p>';
         else {
             foreach ($x as $r) echo '<div class="at"><span class="ibx">', tr_ic('alert'), '</span><div class="atx"><b>', m_esc($r['n'] ?? ''), '</b> <span class="m">', m_esc($r['e'] ?? ''), '</span><div class="m">Back ', m_esc(m_date($r['r'] ?? '')), '</div><div class="er">', m_esc($r['err'] ?? ''), '</div></div><div class="ac">',
                 tr_btn($t, 'retry', $r['id'], tr_ic('retry') . 'Try again', '', 'id', 'attention') . tr_btn($t, 'remove', $r['id'], 'Remove', 'q', 'id', 'attention'), '</div></div>';
             echo '<p class="note">A failed email is tried again after 1 hour, 6 hours and 1 day before it lands here. Look in Sent mail for the customer before pressing Try again.</p>';
         }
-    } else {
+    }
+    echo '</div><div data-panel="sent"', $tab === 'sent' ? '' : ' hidden', '>';
+    {
         if (!$s) echo '<p class="emp">Nothing sent yet. Names and addresses are deleted as soon as the email has gone; this list keeps initials only, for 90 days.</p>';
         else {
             echo '<div class="lh cs"><span>Customer</span><span>Reference</span><span>Back on</span><span>Sent</span></div>';
@@ -538,14 +618,14 @@ function tr_view_trips($X) {
             echo '<p class="note">Names and addresses are deleted as soon as the email has gone. This list keeps initials only, for 90 days.</p>';
         }
     }
-    echo '</section>';
+    echo '</div></section>';
     tr_drawer($X);
 }
 function tr_drawer($X) {     // the "add a completed trip" panel
     $cfg = $X['cfg']; $f = $X['f']; $t = $X['t']; $days = (int)$cfg['days'];
     $close = TR_PAGE . ($X['tab'] !== 'waiting' ? '?tab=' . $X['tab'] : '');
-    echo '<div class="ov', $X['open'] ? ' open' : '', '" id="add"><a class="scrim" href="', $close, '" aria-label="Close the add trip panel"></a><aside class="dr" role="dialog" aria-modal="true" aria-labelledby="add-t">',
-        '<div class="dh"><div><h2 id="add-t">Add a completed trip</h2><p class="m" style="margin-top:4px">Add each customer once their trip is booked.</p></div><a class="x" href="', $close, '" aria-label="Close">', tr_ic('x'), '</a></div>';
+    echo '<div class="ov', $X['open'] ? ' open' : '', '" id="add"><a class="scrim" href="', $close, '" data-close aria-label="Close the add trip panel"></a><aside class="dr" role="dialog" aria-modal="true" aria-labelledby="add-t">',
+        '<div class="dh"><div><h2 id="add-t">Add a completed trip</h2><p class="m" style="margin-top:4px">Add each customer once their trip is booked.</p></div><a class="x" href="', $close, '" data-close aria-label="Close">', tr_ic('x'), '</a></div>';
     if ($X['open'] && $X['msg'] !== '') echo tr_flash($X['cls'], $X['msg']);
     echo '<form class="look" method="get" action="', TR_PAGE, '"><div><label for="lf">Start from a booking reference ID</label><input id="lf" type="text" name="from" maxlength="30" placeholder="FFC-7K2M9QXA" autocomplete="off"></div><button class="btn" type="submit">Fill in</button></form><hr>',
         '<form method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="add"><input type="hidden" name="t" value="', $t, '">',
@@ -555,7 +635,7 @@ function tr_drawer($X) {     // the "add a completed trip" panel
         '<div><label for="rf">Booking reference (optional)</label><input id="rf" type="text" name="ref" maxlength="30" autocomplete="off" value="', m_esc($f['ref'] ?? ''), '"></div></div>';
     if (!empty($f['ask'])) echo '<div class="chk"><input id="fc" type="checkbox" name="force" value="1"><label for="fc">This is a different trip from the earlier one. Add it anyway.</label></div>';
     echo '<p class="m" style="margin-top:12px">Goes out ', $days, ' day', $days === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. One-way trips: use the arrival date. A reference ID is sent to Trustpilot with the invitation.</p>',
-        '<div class="dfoot"><button class="btn pri" type="submit">', tr_ic('plus'), 'Add trip</button><a class="btn" href="', $close, '">Cancel</a></div></form></aside></div>';
+        '<div class="dfoot"><button class="btn pri" type="submit">', tr_ic('plus'), 'Add trip</button><a class="btn" href="', $close, '" data-close>Cancel</a></div></form></aside></div>';
 }
 function tr_view_bookings($X) {      // $b fills the booking request form after a mistake
     $b = $X['b']; $t = $X['t'];
@@ -585,7 +665,7 @@ function tr_view_bookings($X) {      // $b fills the booking request form after 
             $c = $r['contact'] ?? []; $tp = $r['trip'] ?? [];
             echo '<div class="lr cb"><div><b class="mono">', m_esc($r['ref']), '</b></div><div data-l="Customer">', m_esc(trim(($c['first'] ?? '') . ' ' . ($c['last'] ?? ''))), '<div class="m">', m_esc($c['email'] ?? ''), '</div></div>',
                 '<div data-l="Trip">', m_esc(implode(' to ', array_filter([$tp['from'] ?? '', $tp['to'] ?? ''])) ?: 'No route yet'), '<div class="m">', m_esc(implode(', ', array_filter([$tp['cabin'] ?? '', !empty($tp['dep']) ? m_date($tp['dep']) : '']))), '</div></div>',
-                '<div data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</div><div class="ac"><a class="btn" href="', TR_PAGE, '?from=', rawurlencode($r['ref']), '#add">Use for a completed trip</a>', tr_btn($t, 'bookdel', $r['ref'], 'Delete', 'q', 'ref'), '</div></div>';
+                '<div data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</div><div class="ac"><a class="btn" href="', TR_PAGE, '?from=', rawurlencode($r['ref']), '#add" data-swap>Use for a completed trip</a>', tr_btn($t, 'bookdel', $r['ref'], 'Delete', 'q', 'ref'), '</div></div>';
         }
         echo '</section>';
     }
@@ -610,6 +690,10 @@ function tr_page($cls = '', $msg = '', $f = [], $b = [], $view = '') {
     $titles = ['trips' => 'Trustpilot invitations', 'bookings' => 'Booking requests', 'email' => 'Email preview'];
     echo tr_head($titles[$view], true), '<div class="app">', tr_rail($view, $t), '<main class="main">';
     if ($msg !== '' && !$X['open']) echo tr_flash($cls, $msg);
-    if ($view === 'bookings') tr_view_bookings($X); elseif ($view === 'email') tr_view_email($X); else tr_view_trips($X);
-    echo '</main></div></body></html>'; exit;
+    foreach ($titles as $k => $unused) {      // all three views are in the page so they can switch instantly; only the current one shows
+        echo '<div class="pane" data-pane="', $k, '"', $k === $view ? '' : ' hidden', '>';
+        if ($k === 'bookings') tr_view_bookings($X); elseif ($k === 'email') tr_view_email($X); else tr_view_trips($X);
+        echo '</div>';
+    }
+    echo '</main></div><script>', tr_js(), '</script></body></html>'; exit;
 }
