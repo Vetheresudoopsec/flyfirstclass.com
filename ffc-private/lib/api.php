@@ -1,7 +1,9 @@
 <?php
 // api.php: the endpoints. Same addresses and replies as server.js:
 //   /api/geo   /api/routes   /api/top   /api/photos   /api/places   /api/requests   /api/send   /api/subscribe
+// The private Completed trips page (sign in with ADMIN_KEY): /api/trips
 // Diagnostics (/api/status, /api/duffel-check, /api/mail-check, /api/photo-test, /api/cron, /api/newsletter-export) need ?key=ADMIN_KEY from .env.
+// The same checks are on the admin page (Monitoring, monitor.php), which needs no key in the address.
 if (!defined('FFC_PRIVATE')) { exit; }
 
 function cron_run($budget) {         // used by cron.php and /api/cron
@@ -12,6 +14,11 @@ function cron_run($budget) {         // used by cron.php and /api/cron
         try { $out['newsletter'] = nl_run(); } catch (Throwable $e) { $out['newsletter'] = 'error: ' . $e->getMessage(); logm('cron newsletter: ' . $e->getMessage()); }
         finally { unclaim('newsletter-run'); }
     } else { $out['newsletter'] = 'skipped: another newsletter run is working'; }
+    // Thank-you emails for completed trips (trips.php) go out under their own short claim too.
+    if (claim('trips-run', 'cron', 120)) {
+        try { $out['trips'] = tr_run(); } catch (Throwable $e) { $out['trips'] = 'error: ' . $e->getMessage(); logm('cron trips: ' . $e->getMessage()); }
+        finally { unclaim('trips-run'); }
+    } else { $out['trips'] = 'skipped: another trips run is working'; }
     if (!claim('cron', 'cron', max(300, (int)$budget + 120))) { $out['skipped'] = 'another run is still working'; return $out; }
     try {
         $t0 = microtime(true);
@@ -43,6 +50,7 @@ function status_full() {
         'refreshInProgress' => isset($m['refresh']) ? count($m['refresh']['done'] ?? []) . ' routes done' : null,
         'cronLastRun' => !empty($m['cronLast']) ? et_text($m['cronLast']) : 'never (add the cron job, see the setup guide)',
         'newsletter' => nl_status(),
+        'trips' => trips_status(),
         'pricing' => pricing_status(),
         'recentEmails' => mail_recent(5),
         'recentLog' => log_tail(15)];
@@ -164,6 +172,8 @@ function dispatch() {
         case 'newsletter-export':
             if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
             nl_export();
+        case 'trips':                                  // the private Completed trips page (trips.php): signs in with ADMIN_KEY
+            trips_route($method);
         case 'history':                                // Request History on the Manage Booking page (history.php): a code emailed to the address proves it is theirs
             if ($method !== 'POST') json_out(405, ['error' => 'Method not allowed']);
             if (!hs_on()) json_out(404, ['error' => 'Not found']);

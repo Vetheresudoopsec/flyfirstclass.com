@@ -13,6 +13,7 @@ function mail_cfg() {
 }
 function m_hdr($v) { return trim(preg_replace('/[\r\n]+/', ' ', (string)$v)); }
 function m_word($v) { return preg_match('/^[\x20-\x7e]*$/', $v) ? $v : '=?UTF-8?B?' . base64_encode($v) . '?='; }
+function m_name($n) { $n = trim(str_replace(['"', '\\'], '', m_hdr($n))); return preg_match('/^[\x20-\x7e]*$/', $n) ? '"' . $n . '"' : m_word($n); }
 function m_b64($v) { return rtrim(chunk_split(base64_encode($v), 76, "\r\n")); }
 function m_esc($v) { return htmlspecialchars((string)($v ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
 function m_domain($addr) { $p = strrpos($addr, '@'); return $p === false ? 'flyfirstclass.com' : substr($addr, $p + 1); }
@@ -53,7 +54,7 @@ function smtp_send($c, $from, $to, $msg) {
         }
         if ($c['user']) smtp_cmd($s, 'AUTH PLAIN ' . base64_encode("\0" . $c['user'] . "\0" . $c['pass']), ['235']);
         smtp_cmd($s, 'MAIL FROM:<' . $from . '>', ['250']);
-        smtp_cmd($s, 'RCPT TO:<' . $to . '>', ['250', '251']);
+        foreach ((array)$to as $rcpt) smtp_cmd($s, 'RCPT TO:<' . $rcpt . '>', ['250', '251']);        // $to may list a hidden (Bcc) recipient too
         smtp_cmd($s, 'DATA', ['354']);
         $msg = preg_replace('/\r?\n/', "\r\n", $msg);
         $msg = preg_replace('/\r\n\./', "\r\n..", $msg);
@@ -80,20 +81,22 @@ function send_mail($m) {
 }
 function send_mail_now($m) {
     $cfg = mail_cfg(); $from = $cfg['from']; $to = !empty($m['to']) ? $m['to'] : $cfg['to'];
+    $toHdr = !empty($m['toName']) && !empty($m['to']) ? m_name($m['toName']) . ' <' . m_hdr($to) . '>' : m_hdr($to);      // "Name <address>" when the message names its recipient
+    $bcc = !empty($m['bcc']) ? m_hdr($m['bcc']) : '';                                                                   // a hidden copy (used for the Trustpilot invitation address)
     $bnd = 'ffc_' . bin2hex(random_bytes(12)); $body = m_body($bnd, $m['text'], $m['html']);
     $ct = 'multipart/alternative; boundary="' . $bnd . '"';
     $fromHdr = 'From: ' . (!empty($m['fromName']) ? m_word(m_hdr($m['fromName'])) : 'Fly First Class Website') . ' <' . m_hdr($from) . '>';
     $extraHdr = array_map('m_hdr', (array)($m['headers'] ?? []));
     if ($cfg['smtp']) {
-        $msg = implode("\r\n", array_filter(array_merge([$fromHdr, 'To: ' . m_hdr($to), !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'Subject: ' . m_word(m_hdr($m['subject'])),
+        $msg = implode("\r\n", array_filter(array_merge([$fromHdr, 'To: ' . $toHdr, !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'Subject: ' . m_word(m_hdr($m['subject'])),
             'Date: ' . gmdate('D, d M Y H:i:s') . ' GMT', 'Message-ID: <' . bin2hex(random_bytes(12)) . '@' . m_domain($from) . '>', 'MIME-Version: 1.0'], $extraHdr, ['Content-Type: ' . $ct, '']), function ($x) { return $x !== null; })) . "\r\n" . $body;
-        smtp_send($cfg['smtp'], $from, $to, $msg);
+        smtp_send($cfg['smtp'], $from, $bcc !== '' ? [$to, $bcc] : $to, $msg);
         return 'smtp';
     }
-    $hdr = implode("\r\n", array_filter(array_merge([$fromHdr, !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, 'MIME-Version: 1.0'], $extraHdr, ['Content-Type: ' . $ct]), function ($x) { return $x !== null; }));
+    $hdr = implode("\r\n", array_filter(array_merge([$fromHdr, !empty($m['replyTo']) ? 'Reply-To: ' . m_hdr($m['replyTo']) : null, $bcc !== '' ? 'Bcc: ' . $bcc : null, 'MIME-Version: 1.0'], $extraHdr, ['Content-Type: ' . $ct]), function ($x) { return $x !== null; }));
     $extra = preg_match('/^[^\s@<>"\'`;|&$\\\\]+@[^\s@<>"\'`;|&$\\\\]+$/', $from) ? '-f' . $from : '';
     if (!function_exists('mail')) throw fail('Email is not available on this server (PHP mail() is disabled). Add SMTP_HOST to .env.', 503);
-    if (!@mail($to, m_word(m_hdr($m['subject'])), $body, $hdr, $extra)) throw fail('The server could not hand the email to its mail system. Create the mailbox ' . $from . ' in cPanel, or add SMTP_HOST to .env.', 502);
+    if (!@mail($toHdr, m_word(m_hdr($m['subject'])), $body, $hdr, $extra)) throw fail('The server could not hand the email to its mail system. Create the mailbox ' . $from . ' in cPanel, or add SMTP_HOST to .env.', 502);
     return 'mail()';
 }
 
