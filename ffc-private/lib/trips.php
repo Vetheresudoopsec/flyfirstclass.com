@@ -277,11 +277,12 @@ function tr_book($p) {
     logm('[trips] booking request ' . $ref . ' created' . ($out['mail'] !== '' ? ' (confirmation ' . $out['mail'] . ')' : ''));
     return $out;
 }
-function tr_book_list($limit = 20) {      // the requests created here that are still kept, newest first
+function tr_src($r) { return ($r['src'] ?? '') === 'team' ? 'team' : 'web'; }      // where a request came from: made on this page, or sent through the website
+function tr_book_list($limit = 0) {      // every request that is still kept (sent through the website or made here), newest first; 0 = all of them
     $n = now_ms(); $o = [];
-    foreach (cload('requests.json', []) as $r) if (($r['src'] ?? '') === 'team' && ($r['exp'] ?? 0) > $n) $o[] = $r;
+    foreach (cload('requests.json', []) as $r) if (is_array($r) && !empty($r['ref']) && ($r['exp'] ?? 0) > $n) $o[] = $r;
     usort($o, function ($a, $b) { return ($b['created'] ?? 0) <=> ($a['created'] ?? 0); });
-    return array_slice($o, 0, $limit);
+    return $limit > 0 ? array_slice($o, 0, $limit) : $o;
 }
 function tr_book_delete($ref) {           // only requests created here can be deleted from this page
     if (!preg_match(QREF, $ref)) return false;
@@ -382,7 +383,15 @@ function tr_js() {       // the page's only script. The security policy allows e
   function qa(s) { return Array.prototype.slice.call(d.querySelectorAll(s)); }
   function cur(sel, attr, dflt) { var e = q(sel + '[aria-current]'); return e ? e.getAttribute(attr) : dflt; }
   function mark(sel, attr, val) { qa(sel).forEach(function (a) { if (a.getAttribute(attr) === val) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); }
-  function path(v, t) { return base + (v !== 'trips' ? '?v=' + v : (t !== 'waiting' ? '?tab=' + t : '')); }
+  function path(v, t) {
+    if (v === 'bookings') { var f = cur('.fl', 'data-filter', 'all'); return base + '?v=bookings' + (f !== 'all' ? '&src=' + f : ''); }
+    return base + (v !== 'trips' ? '?v=' + v : (t !== 'waiting' ? '?tab=' + t : ''));
+  }
+  function filt(f) {
+    mark('.fl', 'data-filter', f);
+    qa('[data-src]').forEach(function (r) { r.hidden = f !== 'all' && r.getAttribute('data-src') !== f; });
+    history.replaceState(null, '', path('bookings', null));
+  }
   function openPanel(from) { var o = q('#add'); if (!o) return; opener = from; o.classList.add('open'); var n = q('#n'); if (n) n.focus(); }
   function closePanel(quiet) {
     var o = q('#add'); if (o) o.classList.remove('open');
@@ -425,6 +434,7 @@ function tr_js() {       // the page's only script. The security policy allows e
     else if (a.hasAttribute('data-close')) { e.preventDefault(); closePanel(); }
     else if (a.hasAttribute('data-tab')) { e.preventDefault(); show('trips', a.getAttribute('data-tab')); }
     else if (a.hasAttribute('data-view')) { e.preventDefault(); show(a.getAttribute('data-view'), null); }
+    else if (a.hasAttribute('data-filter')) { e.preventDefault(); filt(a.getAttribute('data-filter')); }
     else if (a.hasAttribute('data-swap')) { e.preventDefault(); load(a.href, { credentials: 'same-origin' }, function () {}); }
   });
   d.addEventListener('keydown', function (e) { if ((e.key === 'Escape' || e.keyCode === 27) && q('#add.open')) closePanel(); });
@@ -502,6 +512,7 @@ function tr_head($title, $app = false) {
         . '.pill{min-width:24px;height:24px;padding:0 8px;border-radius:999px;font-size:12.5px;font-weight:600;display:inline-grid;place-items:center;color:#111418;background:#eceae3}.pw{background:#e6effb}.pa{background:#fbe7e7}.ps{background:#e8f5e8}'
         . '.lh,.lr{display:grid;gap:16px;align-items:center;padding:12px 20px}.lh{padding:8px 20px;background:#faf9f6;font-size:12.5px;font-weight:500;color:#6b6a65}.lr{border-top:1px solid #eceae3}.lr>div{min-width:0}.lr b{font-weight:600}.lr .m{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
         . '.cw{grid-template-columns:minmax(0,1fr) 170px 130px 190px}.cs{grid-template-columns:110px minmax(0,1fr) 150px 170px}.cb{grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) 100px 300px}'
+        . '.cb .m{white-space:normal;overflow-wrap:anywhere}.fs{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 14px}.chip.fl{background:#fff;border-color:#d9d6cc;color:#111418}.chip.fl[aria-current]{background:#e6effb;border-color:#b6cdee}.tg{display:inline-block;margin-top:4px;padding:1px 9px;border-radius:999px;background:#eceae3;font-size:12px;font-weight:600;color:#3b3a37}.tg.w{background:#e6effb}'
         . '.ac{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}.ac form,.at form{margin:0}.er{font-size:13px;color:#a12a2a;margin-top:2px}.ck{display:inline-flex;align-items:center;gap:8px}.ck .ic{color:#0ca30c}'
         . '.at{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px 20px}.at+.at{border-top:1px solid #eceae3}.ibx{width:36px;height:36px;border-radius:10px;background:#fbe7e7;color:#b32d2d;display:grid;place-items:center}.atx{flex:1 1 280px;min-width:0}'
         . '.note{padding:12px 20px 16px;border-top:1px solid #eceae3;font-size:12.5px;color:#6b6a65}.emp{padding:28px 20px;color:#6b6a65}.ch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;padding:18px 20px 14px}.ch>div{display:flex;align-items:center;gap:10px}'
@@ -641,7 +652,34 @@ function tr_view_bookings($X) {      // $b fills the booking request form after 
     $b = $X['b']; $t = $X['t'];
     $bv = function ($k, $d = '') use ($b) { return m_esc($b[$k] ?? $d); };
     $sel = function ($k, $v, $d = false) use ($b) { return ((string)($b[$k] ?? '') === $v || (!isset($b[$k]) && $d)) ? ' selected' : ''; };
-    echo '<header class="ph"><div class="tt"><h1>Booking requests</h1><p class="sub">For quotes done outside the website (phone, email, a Mailchimp reply). Each one gets a reference ID, so the customer can find it on Manage Booking and you can use it when their trip is added.</p></div></header>';
+    echo '<header class="ph"><div class="tt"><h1>Booking requests</h1><p class="sub">Every request we keep, sent through the website or made here for a quote done outside it (phone, email, a Mailchimp reply). Each has a reference ID, so the customer can find it on Manage Booking and you can use it when their trip is added.</p></div></header>';
+    $bl = tr_book_list(); $total = count($bl); $nw = $nt = 0;
+    foreach ($bl as $r) { if (tr_src($r) === 'team') $nt++; else $nw++; }
+    $have = [];      // references that are already on a completed trip
+    foreach (cload(TR_FILE, []) as $tp) if (!empty($tp['ref'])) $have[$tp['ref']] = true;
+    $sf = ($nw && $nt) ? ($X['src'] ?? 'all') : 'all';      // a filter only makes sense when there are both kinds
+    if ($total) {
+        echo '<section class="card cardl" id="list"><div class="ch"><div><h2>All requests (', $total, ')</h2></div><span class="m">Newest first. Kept for six months from the last change.', $total > 100 ? ' Showing the newest 100.' : '', '</span></div>';
+        if ($nw && $nt) {
+            echo '<div class="fs">';
+            foreach (['all' => ['All', $total, TR_PAGE . '?v=bookings'], 'web' => ['Website', $nw, TR_PAGE . '?v=bookings&amp;src=web'], 'team' => ['Created here', $nt, TR_PAGE . '?v=bookings&amp;src=team']] as $k => $c)
+                echo '<a class="chip fl" data-filter="', $k, '" href="', $c[2], '"', $sf === $k ? ' aria-current="page"' : '', '>', $c[0], ' <span class="m">', $c[1], '</span></a>';
+            echo '</div>';
+        }
+        echo '<div class="lh cb"><span>Reference ID</span><span>Customer</span><span>Trip</span><span>Created</span><span></span></div>';
+        foreach (array_slice($bl, 0, 100) as $r) {
+            $c = $r['contact'] ?? []; $tp = $r['trip'] ?? []; $src = tr_src($r); $mine = $src === 'team'; $ref = (string)$r['ref'];
+            echo '<div class="lr cb" data-src="', $src, '"', ($sf !== 'all' && $sf !== $src) ? ' hidden' : '', '><div><b class="mono">', m_esc($ref), '</b><div><span class="tg', $mine ? '' : ' w', '">', $mine ? 'Created here' : 'Website', '</span></div></div>',
+                '<div data-l="Customer">', m_esc(trim(($c['first'] ?? '') . ' ' . ($c['last'] ?? ''))) ?: '<span class="m">No name</span>', '<div class="m">', m_esc($c['email'] ?? ''), '</div></div>',
+                '<div data-l="Trip">', m_esc(implode(' to ', array_filter([$tp['from'] ?? '', $tp['to'] ?? ''])) ?: 'No route yet'), '<div class="m">', m_esc(implode(', ', array_filter([$tp['cabin'] ?? '', !empty($tp['dep']) ? m_date($tp['dep']) : '']))), '</div></div>',
+                '<div data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</div><div class="ac">';
+            if (isset($have[$ref])) echo '<span class="ck">', tr_ic('check'), 'In invitations</span>';
+            else echo '<a class="btn" href="', TR_PAGE, '?from=', rawurlencode($ref), '#add" data-swap>Use for a completed trip</a>';
+            if ($mine) echo tr_btn($t, 'bookdel', $ref, 'Delete', 'q', 'ref');
+            echo '</div></div>';
+        }
+        echo '</section>';
+    }
     echo '<form class="card" id="book" method="post" action="', TR_PAGE, '"><h2>Create a booking request</h2><p class="m" style="margin:-6px 0 14px">It gets a reference ID like one sent through the site (FFC-XXXXXXXX), kept for six months from its last change, and the customer can look it up on Manage Booking.</p>',
         '<input type="hidden" name="act" value="book"><input type="hidden" name="t" value="', $t, '">',
         '<div class="g g3"><div><label for="bf">First name</label><input id="bf" type="text" name="first" maxlength="80" autocomplete="off" required value="', $bv('first'), '"></div>',
@@ -658,17 +696,6 @@ function tr_view_bookings($X) {      // $b fills the booking request form after 
         '<label for="bn">Note (optional)</label><textarea id="bn" name="note" rows="2" maxlength="3000">', $bv('note'), '</textarea>',
         '<div class="chk"><input id="bm" type="checkbox" name="mail" value="1"', !empty($b['mail']) ? ' checked' : '', '><label for="bm">Email them the confirmation with the reference ID (needs both cities)</label></div>',
         '<div class="row"><button class="btn pri" type="submit">', tr_ic('plus'), 'Create request</button></div></form>';
-    $bl = tr_book_list();
-    if ($bl) {
-        echo '<section class="card cardl"><div class="ch"><div><h2>Created here (', count($bl), ')</h2></div><span class="m">Newest first. Kept for six months from the last change.</span></div><div class="lh cb"><span>Reference ID</span><span>Customer</span><span>Trip</span><span>Created</span><span></span></div>';
-        foreach ($bl as $r) {
-            $c = $r['contact'] ?? []; $tp = $r['trip'] ?? [];
-            echo '<div class="lr cb"><div><b class="mono">', m_esc($r['ref']), '</b></div><div data-l="Customer">', m_esc(trim(($c['first'] ?? '') . ' ' . ($c['last'] ?? ''))), '<div class="m">', m_esc($c['email'] ?? ''), '</div></div>',
-                '<div data-l="Trip">', m_esc(implode(' to ', array_filter([$tp['from'] ?? '', $tp['to'] ?? ''])) ?: 'No route yet'), '<div class="m">', m_esc(implode(', ', array_filter([$tp['cabin'] ?? '', !empty($tp['dep']) ? m_date($tp['dep']) : '']))), '</div></div>',
-                '<div data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</div><div class="ac"><a class="btn" href="', TR_PAGE, '?from=', rawurlencode($r['ref']), '#add" data-swap>Use for a completed trip</a>', tr_btn($t, 'bookdel', $r['ref'], 'Delete', 'q', 'ref'), '</div></div>';
-        }
-        echo '</section>';
-    }
 }
 function tr_view_email($X) {
     $cfg = $X['cfg']; $t = $X['t']; $days = (int)$cfg['days']; $cap = $cfg['cap'];
@@ -686,7 +713,7 @@ function tr_page($cls = '', $msg = '', $f = [], $b = [], $view = '') {
     usort($q, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
     usort($s, function ($a, $b) { return ($b['sent'] ?? 0) <=> ($a['sent'] ?? 0); });
     usort($x, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
-    $X = ['cfg' => $cfg, 'q' => $q, 's' => $s, 'x' => $x, 't' => $t, 'n' => $n, 'f' => $f, 'b' => $b, 'tab' => tr_tab($_GET['tab'] ?? ''), 'cls' => $cls, 'msg' => $msg, 'open' => $view === 'trips' && !empty($f['open'])];
+    $X = ['cfg' => $cfg, 'q' => $q, 's' => $s, 'x' => $x, 't' => $t, 'n' => $n, 'f' => $f, 'b' => $b, 'tab' => tr_tab($_GET['tab'] ?? ''), 'src' => in_array($_GET['src'] ?? '', ['web', 'team'], true) ? $_GET['src'] : 'all', 'cls' => $cls, 'msg' => $msg, 'open' => $view === 'trips' && !empty($f['open'])];
     $titles = ['trips' => 'Trustpilot invitations', 'bookings' => 'Booking requests', 'email' => 'Email preview'];
     echo tr_head($titles[$view], true), '<div class="app">', tr_rail($view, $t), '<main class="main">';
     if ($msg !== '' && !$X['open']) echo tr_flash($cls, $msg);
