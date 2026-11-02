@@ -1,5 +1,5 @@
 <?php
-// trips.php: the private "Completed trips" page, and the thank-you email that asks Trustpilot to invite the customer.
+// trips.php: the private "Bookings and trips" page (booking requests, Trustpilot invitations, email preview), and the thank-you email that asks Trustpilot to invite the customer.
 //
 // What it does
 //   You add a customer once their trip is booked: name, email, and the date they get back. A few days after that date the server
@@ -293,7 +293,15 @@ function tr_prefill($ref) {               // fills the "add a completed trip" fo
 }
 
 // ---------- The route ----------
-function tr_go($code = '', $ref = '') { header('Location: ' . TR_PAGE . ($code !== '' ? '?m=' . rawurlencode($code) . ($ref !== '' ? '&r=' . rawurlencode($ref) : '') : ''), true, 303); exit; }
+function tr_go($code = '', $ref = '', $v = '', $tab = '') {      // back to the page: m = the message to show, r = a reference ID, v = which view, tab = which list
+    $q = [];
+    if ($code !== '') $q[] = 'm=' . rawurlencode($code);
+    if ($ref !== '') $q[] = 'r=' . rawurlencode($ref);
+    if ($v !== '' && $v !== 'trips') $q[] = 'v=' . rawurlencode($v);
+    if ($tab !== '' && $tab !== 'waiting') $q[] = 'tab=' . rawurlencode($tab);
+    header('Location: ' . TR_PAGE . ($q ? '?' . implode('&', $q) : ''), true, 303); exit;
+}
+function tr_tab($v) { $v = (string)$v; return in_array($v, ['waiting', 'attention', 'sent'], true) ? $v : 'waiting'; }
 function trips_route($method) {
     if (!tr_on()) json_out(404, ['error' => 'Not found']);
     header('X-Robots-Tag: noindex, nofollow, noarchive'); header('Cache-Control: no-store'); header('Referrer-Policy: no-referrer'); header('X-Frame-Options: DENY'); header('X-Content-Type-Options: nosniff');
@@ -309,30 +317,31 @@ function trips_route($method) {
         if (!tr_authed()) tr_go();
         if (!hash_equals(tr_token(), (string)($_POST['t'] ?? ''))) { http_response_code(403); tr_page_login('This page was open too long. Sign in again.'); }
         $id = preg_replace('/[^a-f0-9]/', '', (string)($_POST['id'] ?? ''));
+        $tab = tr_tab($_POST['tab'] ?? '');
         switch ($act) {
             case 'logout': tr_set_cookie('', time() - 3600); tr_go('out');
             case 'add':
-                if (!limit_hit('trips:add', 60, 3600000)) tr_page('bad', 'Too many trips added in the last hour. Please wait a little.');
+                if (!limit_hit('trips:add', 60, 3600000)) tr_page('bad', 'Too many trips added in the last hour. Please wait a little.', ['open' => true]);
                 $r = tr_add($_POST['name'] ?? '', $_POST['email'] ?? '', $_POST['ret'] ?? '', !empty($_POST['force']), $_POST['ref'] ?? '');
                 if (!empty($r['ok'])) { logm('[trips] ' . $r['id'] . ' added'); tr_go('added'); }
-                http_response_code(400); tr_page($r['code'] === 'recent' ? 'warn' : 'bad', $r['msg'], ['name' => (string)($_POST['name'] ?? ''), 'email' => (string)($_POST['email'] ?? ''), 'ret' => (string)($_POST['ret'] ?? ''), 'ref' => (string)($_POST['ref'] ?? ''), 'ask' => $r['code'] === 'recent']);
+                http_response_code(400); tr_page($r['code'] === 'recent' ? 'warn' : 'bad', $r['msg'], ['name' => (string)($_POST['name'] ?? ''), 'email' => (string)($_POST['email'] ?? ''), 'ret' => (string)($_POST['ret'] ?? ''), 'ref' => (string)($_POST['ref'] ?? ''), 'ask' => $r['code'] === 'recent', 'open' => true]);
             case 'book':
-                if (!limit_hit('trips:book', 60, 3600000)) tr_page('bad', 'Too many booking requests in the last hour. Please wait a little.');
+                if (!limit_hit('trips:book', 60, 3600000)) tr_page('bad', 'Too many booking requests in the last hour. Please wait a little.', [], [], 'bookings');
                 $r = tr_book($_POST);
-                if (empty($r['ok'])) { http_response_code(400); tr_page('bad', $r['msg'], [], $_POST); }
-                tr_go($r['mail'] === 'sent' ? 'bookedm' : ($r['mail'] === '' ? 'booked' : 'bookedf'), $r['ref']);
-            case 'bookdel': tr_go(tr_book_delete(strtoupper(trim((string)($_POST['ref'] ?? '')))) ? 'bookdeleted' : 'gone');
-            case 'remove': tr_go(tr_remove($id) ? 'removed' : 'gone');
-            case 'retry': tr_go(tr_retry($id) ? 'retried' : 'gone');
+                if (empty($r['ok'])) { http_response_code(400); tr_page('bad', $r['msg'], [], $_POST, 'bookings'); }
+                tr_go($r['mail'] === 'sent' ? 'bookedm' : ($r['mail'] === '' ? 'booked' : 'bookedf'), $r['ref'], 'bookings');
+            case 'bookdel': tr_go(tr_book_delete(strtoupper(trim((string)($_POST['ref'] ?? '')))) ? 'bookdeleted' : 'gone', '', 'bookings');
+            case 'remove': tr_go(tr_remove($id) ? 'removed' : 'gone', '', '', $tab);
+            case 'retry': tr_go(tr_retry($id) ? 'retried' : 'gone', '', '', $tab);
             case 'sendnow':
-                if (tr_room($cfg) < 1) tr_go('cap');
-                $res = tr_deliver($id, true, $cfg); tr_go($res === 'sent' ? 'sent' : ($res === 'failed' ? 'failed' : 'gone'));
+                if (tr_room($cfg) < 1) tr_go('cap', '', '', $tab);
+                $res = tr_deliver($id, true, $cfg); tr_go($res === 'sent' ? 'sent' : ($res === 'failed' ? 'failed' : 'gone'), '', '', $tab);
             case 'sample':
                 $to = cm_addr($_POST['to'] ?? '');
-                if ($to === '') { http_response_code(400); tr_page('bad', 'Enter an email address to send the sample to.'); }
-                if (!limit_hit('trips:sample', 6, 3600000)) tr_page('bad', 'That is enough samples for one hour.');
-                try { send_mail(tr_mail('Alex Chen', $to, $cfg, true, 'FFC-7K2M9QXA')); } catch (Throwable $e) { http_response_code(502); tr_page('bad', 'The sample could not be sent: ' . $e->getMessage()); }
-                tr_go('sample');
+                if ($to === '') { http_response_code(400); tr_page('bad', 'Enter an email address to send the sample to.', [], [], 'email'); }
+                if (!limit_hit('trips:sample', 6, 3600000)) tr_page('bad', 'That is enough samples for one hour.', [], [], 'email');
+                try { send_mail(tr_mail('Alex Chen', $to, $cfg, true, 'FFC-7K2M9QXA')); } catch (Throwable $e) { http_response_code(502); tr_page('bad', 'The sample could not be sent: ' . $e->getMessage(), [], [], 'email'); }
+                tr_go('sample', '', 'email');
             default: tr_go();
         }
     }
@@ -348,68 +357,212 @@ function trips_route($method) {
         'booked' => ['ok', 'Booking request created. Reference ID: %s'], 'bookedm' => ['ok', 'Booking request created and the confirmation email sent. Reference ID: %s'],
         'bookedf' => ['warn', 'Booking request created, but the confirmation email could not be sent. Reference ID: %s'], 'bookdeleted' => ['ok', 'Booking request deleted.']];
     $m = $M[(string)($_GET['m'] ?? '')] ?? null; $f = [];
+    $view = in_array($_GET['v'] ?? '', ['bookings', 'email'], true) ? $_GET['v'] : 'trips';
     if ($m) { $rr = strtoupper((string)($_GET['r'] ?? '')); $m[1] = sprintf($m[1], preg_match(QREF, $rr) ? $rr : ''); }
     $from = strtoupper(trim((string)($_GET['from'] ?? '')));
-    if ($from !== '') {             // start a completed trip from a stored request
-        $f = tr_prefill($from);
+    if ($from !== '') {             // start a completed trip from a stored request: the add panel opens, filled in
+        $view = 'trips'; $f = tr_prefill($from);
         if ($f) $m = ['ok', 'Filled in from ' . $from . '. Check the return date, then add the trip.'];
         else { $f = []; $m = ['warn', 'No request found for that reference ID. Requests are kept for six months from their last change.']; }
+        $f['open'] = true;
     }
-    tr_page($m ? $m[0] : '', $m ? $m[1] : '', $f);
+    tr_page($m ? $m[0] : '', $m ? $m[1] : '', $f, [], $view);
 }
 
 // ---------- The pages ----------
-function tr_head($title) {
+function tr_ic($n) {       // small line icons, drawn inline (the page has no scripts and loads nothing)
+    static $P = [
+        'tag' => '<path d="M4 4h7l9 9-7 7-9-9V4z"/><path d="M8.5 8.5v.01"/>',
+        'star' => '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/>',
+        'mail' => '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/>',
+        'plus' => '<path d="M12 5v14M5 12h14"/>',
+        'x' => '<path d="M6 6l12 12M18 6 6 18"/>',
+        'alert' => '<path d="M12 4 3 20h18L12 4z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/>',
+        'check' => '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/>',
+        'retry' => '<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/>',
+    ];
+    return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' . ($P[$n] ?? '') . '</svg>';
+}
+function tr_when($ms) {      // "Today, 10:00 AM" / "Tomorrow, 10:00 AM" / "Mon 9 Nov, 10:00 AM"
+    $d = (new DateTime('@' . intdiv((int)$ms, 1000)))->setTimezone(et_tz());
+    $today = new DateTime('today', et_tz());
+    $diff = (int)$today->diff((clone $d)->setTime(0, 0))->format('%r%a');
+    $day = $diff === 0 ? 'Today' : ($diff === 1 ? 'Tomorrow' : $d->format($d->format('Y') === $today->format('Y') ? 'D j M' : 'D j M Y'));
+    return $day . ', ' . $d->format('g:i A');
+}
+function tr_head($title, $app = false) {
     header('Content-Type: text/html; charset=UTF-8');
     header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
     $F = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    $M = 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light"><title>' . m_esc($title) . '</title><style>'
-        . '*{box-sizing:border-box}body{margin:0;background:#faf8f3;color:#14181f;font:15px/1.5 ' . $F . '}'
-        . '.w{max-width:860px;margin:0 auto;padding:28px 16px 64px}h1{font-weight:300;font-size:28px;line-height:1.2;margin:0 0 4px}.sub{color:#59616f;margin:0 0 14px}'
-        . '.card{background:#fff;border:1px solid #e6dfcf;border-radius:10px;padding:18px 20px;margin:0 0 18px}h2{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#6e5624;margin:0 0 12px}'
-        . 'label{display:block;font-size:13px;color:#59616f;margin:0 0 4px}input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],input[type=password],select,textarea{width:100%;padding:10px 12px;border:1px solid #cfc7b4;border-radius:6px;font:inherit;background:#fff;color:#14181f}textarea{resize:vertical}'
-        . 'input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid #8a6d2f;outline-offset:2px}'
-        . '.g{display:grid;gap:12px;margin:0 0 12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1.2fr 1.4fr 1fr 1fr}@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}'
-        . 'button{font:600 13px/1 ' . $F . ';letter-spacing:.06em;padding:11px 18px;min-height:40px;border:1px solid #14181f;background:#14181f;color:#fff;border-radius:6px;cursor:pointer;white-space:nowrap}button.s{background:#fff;color:#14181f;border-color:#cfc7b4;min-height:34px;padding:8px 12px}button.d{color:#8a2a2a}'
-        . 'a.bl{display:inline-block;font:600 13px/1 ' . $F . ';letter-spacing:.06em;padding:10px 12px;border:1px solid #cfc7b4;border-radius:6px;color:#14181f;background:#fff;text-decoration:none;margin:0 6px 6px 0;white-space:nowrap}'
-        . '.msg{padding:11px 14px;border-radius:8px;margin:0 0 16px;border:1px solid}.ok{background:#eef6ee;border-color:#bcd9bc}.bad{background:#fbeeee;border-color:#e3b4b4}.warn{background:#fbf5e4;border-color:#e6d49a}'
-        . '.t{overflow-x:auto}table{width:100%;border-collapse:collapse}th{text-align:left;font-size:12px;font-weight:600;color:#59616f;padding:0 8px 8px 0;white-space:nowrap}td{padding:10px 8px 10px 0;border-top:1px solid #eee7d6;vertical-align:top}'
-        . '.m{color:#59616f;font-size:13px}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.04em;white-space:nowrap}.a form{display:inline-block;margin:0 6px 6px 0}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.top form{margin:0}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}'
-        . 'details summary{cursor:pointer;font-weight:600}a{color:#6e5624}.chk{display:flex;gap:8px;align-items:flex-start;margin-top:12px}.chk input{margin-top:4px}.chk label{margin:0;color:#14181f;font-size:14px}.nav{margin:0 0 18px;font-size:14px}.nav a{margin-right:14px}'
-        . '.look{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin:0 0 16px;padding:0 0 16px;border-bottom:1px solid #eee7d6}.look>div{flex:1 1 220px}'
-        . '@media(max-width:680px){.rt tr.hd{display:none}.rt,.rt tbody,.rt tr,.rt td{display:block;width:100%}.rt tr{padding:10px 0;border-top:1px solid #eee7d6}.rt tr:first-child{border-top:0}.rt td{border:0;padding:3px 0}.rt td[data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:600;color:#59616f}.rt td.a{padding-top:8px}}'
-        . '</style></head><body><div class="w">';
+        . '*{box-sizing:border-box}body{margin:0;background:#f6f5f2;color:#111418;font:14px/1.45 ' . $F . '}button,input,select,textarea{font-family:inherit}'
+        . 'h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.015em;line-height:1.2}h2{margin:0;font-size:17px;font-weight:600}p{margin:0}a{color:#2a5db0}a:hover{color:#184f95}'
+        . ':focus-visible{outline:2px solid #2a78d6;outline-offset:2px}.m{color:#6b6a65;font-size:13px}.mono{font-family:' . $M . ';font-size:12.5px;letter-spacing:.03em;white-space:nowrap;color:#3b3a37}.fw{font-weight:500}.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
+        // forms
+        . 'label{display:block;font-size:13px;font-weight:500;color:#3b3a37;margin:0 0 6px}input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],input[type=password],select,textarea{width:100%;min-height:44px;padding:0 12px;border:1px solid #cfccc1;border-radius:10px;font:inherit;font-size:14px;background:#fff;color:#111418}textarea{padding:10px 12px;resize:vertical}'
+        . '.g{display:grid;gap:12px;margin:0 0 12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.chk{display:flex;gap:8px;align-items:flex-start;margin:12px 0 0}.chk input{margin-top:3px}.chk label{margin:0;color:#111418;font-size:14px;font-weight:400}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}'
+        . '.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid #cfccc1;border-radius:10px;background:#fff;color:#111418;font:600 14px/1 ' . $F . ';text-decoration:none;cursor:pointer;white-space:nowrap}.btn:hover{background:#faf9f6}a.btn,a.btn:hover{color:#111418}'
+        . '.btn.pri{background:#111418;border-color:#111418;color:#fff}.btn.pri:hover{background:#2a2f38}a.btn.pri,a.btn.pri:hover{color:#fff}.btn.q{border-color:transparent;background:transparent;color:#a12a2a;padding:0 12px}.btn.q:hover{background:#fdf0f0}'
+        . '.msg{padding:12px 16px;border-radius:12px;border:1px solid}.msg.ok{background:#e8f5e8;border-color:#bcd9bc}.msg.bad{background:#fdf0f0;border-color:#f1c8c8}.msg.warn{background:#fbf5e4;border-color:#e6d49a}'
+        . '.card,.panel{background:#fff;border:1px solid #e4e2da;border-radius:16px}.card{padding:20px 22px}.card>h2{margin:0 0 12px}.cardl{padding:0;overflow:hidden}'
+        // login
+        . '.w{max-width:460px;margin:0 auto;padding:56px 16px}.w h1{margin:0 0 4px}.sub{color:#52514e;max-width:620px}'
+        // shell: sidebar and main area
+        . '.app{display:flex;flex-wrap:wrap;align-items:flex-start;min-height:100vh}.rail{flex:0 0 232px;background:#fff;border-right:1px solid #e4e2da;padding:24px 16px;display:flex;flex-direction:column;gap:24px}.brand{padding:0 8px;display:flex;flex-direction:column}.brand b{font-size:15px}'
+        . '.navs{display:flex;flex-direction:column;gap:4px}.nv{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:10px;color:#3b3a37;font-weight:500;text-decoration:none}.nv:hover{background:#f3f2ee;color:#111418}.nv[aria-current=page]{background:#eef3fb;color:#111418;font-weight:600}.nv[aria-current=page] .ic{color:#1c5cab}'
+        . '.out{margin-top:auto;padding:0 8px}.out form{margin:0}.out button{background:none;border:0;padding:0 4px;min-height:44px;font:500 14px/1 ' . $F . ';color:#52514e;cursor:pointer}.out button:hover{color:#111418}'
+        . '.main{flex:999 1 560px;min-width:0;padding:28px 32px 48px;display:flex;flex-direction:column;gap:22px}'
+        . '.ph{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:14px 24px}.ph .tt{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:8px}.tr{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px}.acts{display:flex;flex-wrap:wrap;gap:10px}'
+        . '.chip{display:inline-flex;align-items:center;gap:8px;min-height:28px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid transparent;text-decoration:none;color:#111418}.chip i{width:8px;height:8px;border-radius:50%}a.chip:hover{color:#111418}'
+        . '.chip.ok{background:#e8f5e8}.chip.ok i{background:#0ca30c}.chip.warn{background:#fbf5e4;border-color:#e6d49a}.chip.warn i{background:#fab219}.chip.bad{background:#fdf0f0;border-color:#f1c8c8}.chip.bad i{background:#d03b3b}'
+        // overview: this month, and the next 30 days
+        . '.ovr{display:flex;flex-wrap:wrap;gap:16px}.panel{padding:20px 22px;display:flex;flex-direction:column;gap:14px}.hero{flex:1 1 280px}.sched{flex:2 1 420px;min-width:0;gap:8px}.lbl{font-size:13px;font-weight:500;color:#52514e}.bigrow{display:flex;align-items:baseline;gap:10px}'
+        . '.big{font-size:52px;font-weight:600;line-height:1;letter-spacing:-.03em}.of{font-size:18px;color:#6b6a65}.mtr{height:8px;border-radius:999px;background:#cde2fb;overflow:hidden}.mtr b{display:block;height:100%;border-radius:999px;background:#2a78d6}.mtr.w{background:#fdeec8}.mtr.w b{background:#fab219}.mtr.d{background:#f8d4d4}.mtr.d b{background:#d03b3b}'
+        . '.sh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}.tl{position:relative;height:124px;padding:0 28px}.tlin{position:relative;height:100%}.tlbase{position:absolute;left:0;right:0;top:74px;height:1px;background:#c3c2b7}'
+        . '.dot{position:absolute;top:74.5px;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#2a78d6;box-shadow:0 0 0 2px #fff}.tll{position:absolute;top:18px;transform:translateX(-50%);text-align:center;white-space:nowrap}.tll b{display:block;font-size:13px;font-weight:600}.tll span{font-size:12px;color:#6b6a65}'
+        . '.tk{position:absolute;top:88px;transform:translateX(-50%);font-size:12px;color:#6b6a65;white-space:nowrap}.tle{position:absolute;left:0;right:0;top:30px;text-align:center;font-size:13px;color:#6b6a65}'
+        // tabs and lists
+        . '.tabs{display:flex;flex-wrap:wrap;gap:4px;padding:6px 14px 0;border-bottom:1px solid #eceae3}.tab{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 14px;border-bottom:2px solid transparent;margin-bottom:-1px;color:#52514e;font-weight:600;text-decoration:none}.tab:hover{color:#111418}.tab[aria-current=page]{color:#111418;border-bottom-color:#111418}'
+        . '.pill{min-width:24px;height:24px;padding:0 8px;border-radius:999px;font-size:12.5px;font-weight:600;display:inline-grid;place-items:center;color:#111418;background:#eceae3}.pw{background:#e6effb}.pa{background:#fbe7e7}.ps{background:#e8f5e8}'
+        . '.lh,.lr{display:grid;gap:16px;align-items:center;padding:12px 20px}.lh{padding:8px 20px;background:#faf9f6;font-size:12.5px;font-weight:500;color:#6b6a65}.lr{border-top:1px solid #eceae3}.lr>div{min-width:0}.lr b{font-weight:600}.lr .m{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+        . '.cw{grid-template-columns:minmax(0,1fr) 170px 130px 190px}.cs{grid-template-columns:110px minmax(0,1fr) 150px 170px}.cb{grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) 100px 300px}'
+        . '.ac{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}.ac form,.at form{margin:0}.er{font-size:13px;color:#a12a2a;margin-top:2px}.ck{display:inline-flex;align-items:center;gap:8px}.ck .ic{color:#0ca30c}'
+        . '.at{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px 20px}.at+.at{border-top:1px solid #eceae3}.ibx{width:36px;height:36px;border-radius:10px;background:#fbe7e7;color:#b32d2d;display:grid;place-items:center}.atx{flex:1 1 280px;min-width:0}'
+        . '.note{padding:12px 20px 16px;border-top:1px solid #eceae3;font-size:12.5px;color:#6b6a65}.emp{padding:28px 20px;color:#6b6a65}.ch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;padding:18px 20px 14px}.ch>div{display:flex;align-items:center;gap:10px}'
+        // the add-trip panel: opens with the Add trip button (:target), or straight away when a reference was looked up or the form needs another look
+        . '.ov{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;justify-content:flex-end}.ov:target,.ov.open{display:flex}.scrim{position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(17,20,24,.32)}'
+        . '.dr{position:relative;width:400px;max-width:100%;height:100%;overflow-y:auto;background:#fff;box-shadow:-12px 0 32px rgba(17,20,24,.14);padding:24px;display:flex;flex-direction:column;gap:16px}.dh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.dh h2{font-size:18px}'
+        . '.x{flex:none;width:44px;height:44px;margin:-6px -8px 0 0;border-radius:10px;display:grid;place-items:center;color:#3b3a37}.x:hover{background:#f3f2ee}.dr hr{border:0;border-top:1px solid #eceae3;width:100%;margin:0}.dr form{margin:0}.look{display:flex;gap:8px;align-items:flex-end}.look>div{flex:1 1 auto;min-width:0}.dfoot{display:flex;gap:10px;margin-top:14px}.dfoot .pri{flex:1 1 auto}'
+        . '@media(min-width:761px){.rail{position:sticky;top:0;align-self:flex-start;height:100vh}}'
+        . '@media(max-width:760px){.rail{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;border-right:0;border-bottom:1px solid #e4e2da;padding:12px 16px;gap:4px 12px}.brand .m{display:none}.navs{order:3;flex:1 1 100%;flex-direction:row;flex-wrap:wrap}.nv{padding:0 10px}.out{order:2;margin:0;padding:0}.main{padding:20px 16px 40px}.g2,.g3{grid-template-columns:1fr}.tabs{padding:6px 6px 0}.tab{padding:0 10px;gap:6px;font-size:13px}'
+        . '.lh{display:none}.lr{grid-template-columns:1fr !important;gap:6px;padding:14px 16px}.lr [data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:600;color:#6b6a65}.ac{justify-content:flex-start}}'
+        . '</style></head><body>' . ($app ? '' : '<div class="w">');
 }
 function tr_page_login($err) {
-    echo tr_head('Bookings and trips'), '<h1>Bookings and trips</h1><p class="sub">Private page for Fly First Class International.</p>';
-    if ($err !== '') echo '<div class="msg bad" role="alert">', m_esc($err), '</div>';
+    echo tr_head('Bookings and trips'), '<h1>Bookings and trips</h1><p class="sub" style="margin:0 0 16px">Private page for Fly First Class International.</p>';
+    if ($err !== '') echo '<div class="msg bad" role="alert" style="margin:0 0 16px">', m_esc($err), '</div>';
     if ((string)C('admin') === '') echo '<div class="card"><p>This page needs a private key. Add a line <b>ADMIN_KEY=a-long-random-phrase</b> to the .env file in ffc-private, then come back.</p></div>';
-    else echo '<form class="card" method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="login"><label for="k">Admin key</label><input id="k" type="password" name="key" autocomplete="current-password" required autofocus><div class="row"><button type="submit">Sign in</button></div></form>';
+    else echo '<form class="card" method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="login"><label for="k">Admin key</label><input id="k" type="password" name="key" autocomplete="current-password" required autofocus><div class="row"><button class="btn pri" type="submit">Sign in</button></div></form>';
     echo '</div></body></html>'; exit;
 }
-// $f fills the "add a completed trip" form, $b the "booking request" form (both after a mistake, or from a reference).
-function tr_page($cls = '', $msg = '', $f = [], $b = []) {
-    $cfg = tr_cfg(); $T = cload(TR_FILE, []); $t = tr_token(); $n = now_ms();
-    $q = $s = $x = [];
-    foreach ($T as $r) { $st = $r['st'] ?? ''; if ($st === 'sent') $s[] = $r; elseif ($st === 'failed') $x[] = $r; elseif (in_array($st, ['queued', 'sending'], true)) $q[] = $r; }
-    usort($q, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
-    usort($s, function ($a, $b) { return ($b['sent'] ?? 0) <=> ($a['sent'] ?? 0); });
-    usort($x, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
-    $used = tr_used(); $cap = $cfg['cap'];
-    $btn = function ($act, $id, $label, $extra = '', $field = 'id') use ($t) {
-        return '<form method="post" action="' . TR_PAGE . '"><input type="hidden" name="act" value="' . $act . '"><input type="hidden" name="' . $field . '" value="' . m_esc($id) . '"><input type="hidden" name="t" value="' . $t . '"><button class="s ' . $extra . '" type="submit">' . $label . '</button></form>';
+function tr_flash($cls, $msg) { return '<div class="msg ' . m_esc($cls ?: 'ok') . '" role="status">' . m_esc($msg) . '</div>'; }
+function tr_btn($t, $act, $id, $label, $cls = '', $field = 'id', $tab = '') {      // one small button that posts to the page
+    return '<form method="post" action="' . TR_PAGE . '"><input type="hidden" name="act" value="' . $act . '"><input type="hidden" name="' . $field . '" value="' . m_esc($id) . '"><input type="hidden" name="t" value="' . $t . '">'
+        . ($tab !== '' ? '<input type="hidden" name="tab" value="' . m_esc($tab) . '">' : '') . '<button class="btn ' . $cls . '" type="submit">' . $label . '</button></form>';
+}
+function tr_rail($view, $t) {
+    $nav = function ($v, $icon, $label) use ($view) {
+        return '<a class="nv" href="' . TR_PAGE . ($v === 'trips' ? '' : '?v=' . $v) . '"' . ($v === $view ? ' aria-current="page"' : '') . '>' . tr_ic($icon) . $label . '</a>';
     };
+    return '<nav class="rail" aria-label="Admin sections"><div class="brand"><b>Fly First Class</b><span class="m">Private admin</span></div><div class="navs">'
+        . $nav('bookings', 'tag', 'Booking requests') . $nav('trips', 'star', 'Trustpilot invitations') . $nav('email', 'mail', 'Email preview') . '</div>'
+        . '<div class="out"><form method="post" action="' . TR_PAGE . '"><input type="hidden" name="act" value="logout"><input type="hidden" name="t" value="' . $t . '"><button type="submit">Sign out</button></form></div></nav>';
+}
+function tr_timeline($q) {       // a 30-day line with a dot for each day that has invitations waiting
+    $et = et_tz(); $start = (new DateTime('today', $et))->getTimestamp() * 1000; $span = 30 * 86400000; $g = []; $later = 0;
+    foreach ($q as $r) {
+        $d = max((int)($r['due'] ?? 0), (int)($r['next'] ?? 0));
+        if ($d - $start > $span) { $later++; continue; }
+        $k = $d < $start ? 'now' : (new DateTime('@' . intdiv($d, 1000)))->setTimezone($et)->format('Y-m-d');
+        if (!isset($g[$k])) $g[$k] = ['pct' => max(0, min(100, ($d - $start) / $span * 100)), 'ms' => $d, 'r' => []];
+        $g[$k]['r'][] = $r;
+    }
+    usort($g, function ($a, $b) { return $a['pct'] <=> $b['pct']; });
+    $tick = function ($days) use ($start, $et) { return (new DateTime('@' . intdiv($start + $days * 86400000, 1000)))->setTimezone($et)->format('j M'); };
+    $days = []; foreach ($g as $x) $days[] = (new DateTime('@' . intdiv($x['ms'], 1000)))->setTimezone($et)->format('D j M');
+    $nq = count($q);
+    $h = '<div class="panel sched"><div class="sh"><span class="lbl">Next 30 days</span><span class="m">' . ($nq ? $nq . ' invitation' . ($nq === 1 ? '' : 's') . ' scheduled' . ($later ? ' (' . $later . ' later than 30 days)' : '') : 'Nothing scheduled') . '</span></div>'
+        . '<div class="tl" role="img" aria-label="' . m_esc($g ? 'Invitations scheduled in the next 30 days on: ' . implode(', ', $days) : 'Nothing scheduled in the next 30 days') . '"><div class="tlin"><div class="tlbase"></div>';
+    $last = -100;
+    foreach ($g as $x) {
+        $pct = number_format($x['pct'], 1, '.', ''); $names = [];
+        foreach ($x['r'] as $r) $names[] = trim((string)($r['n'] ?? ''));
+        $tip = m_esc(implode('; ', $names) . ', ' . tr_when($x['ms']));
+        $h .= '<i class="dot" style="left:' . $pct . '%" title="' . $tip . '"></i>';
+        if ($x['pct'] - $last >= 11) {          // a dot too close to the last label keeps its tooltip and skips the label
+            $last = $x['pct'];
+            $h .= '<div class="tll" style="left:' . $pct . '%" title="' . $tip . '"><b>' . (count($x['r']) === 1 ? m_esc(tr_initials($x['r'][0]['n'] ?? '')) : count($x['r']) . ' invites') . '</b><span>' . m_esc((new DateTime('@' . intdiv($x['ms'], 1000)))->setTimezone($et)->format('D j M')) . '</span></div>';
+        }
+    }
+    if (!$g) $h .= '<div class="tle">Nothing scheduled in the next 30 days.</div>';
+    return $h . '<div class="tk" style="left:0">Today</div><div class="tk" style="left:50%">' . $tick(15) . '</div><div class="tk" style="left:100%">' . $tick(30) . '</div></div></div></div>';
+}
+function tr_view_trips($X) {
+    $cfg = $X['cfg']; $q = $X['q']; $s = $X['s']; $x = $X['x']; $t = $X['t']; $tab = $X['tab']; $n = $X['n'];
+    $used = tr_used(); $cap = $cfg['cap']; $nq = count($q); $nx = count($x); $ns = count($s); $bcc = $cfg['mode'] === 'bcc'; $days = (int)$cfg['days'];
+    echo '<header class="ph"><div class="tt"><div class="tr"><h1>Trustpilot invitations</h1>', $bcc ? '<span class="chip ok"><i></i>Automatic invitations on</span>' : '<span class="chip warn"><i></i>Review link only</span>',
+        $nx ? '<a class="chip bad" href="' . TR_PAGE . '?tab=attention"><i></i>' . $nx . ' needs attention</a>' : '', '</div>',
+        '<p class="sub">Thank-you emails go out ', $days, ' day', $days === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. ', $bcc ? 'Trustpilot then sends its own invitation.' : 'The email carries a link to review us on Trustpilot.', '</p></div>',
+        '<div class="acts"><a class="btn" href="', TR_PAGE, '?v=email">', tr_ic('mail'), 'Preview email</a><a class="btn pri" href="#add">', tr_ic('plus'), 'Add trip</a></div></header>';
+    if (!$bcc) echo '<div class="msg warn"><b>Trustpilot address not set.</b> Until <b>TRUSTPILOT_BCC</b> is added to the .env file, the thank-you email carries the plain Trustpilot review link instead.</div>';
+
+    // this month, and the next 30 days
+    $pct = $cap ? min(100, $used / $cap * 100) : 0; $sev = !$cap ? '' : ($used >= $cap ? ' d' : ($used >= 0.8 * $cap ? ' w' : ''));
+    $reset = (new DateTime('first day of next month', et_tz()))->format('j M');
+    echo '<section class="ovr" aria-label="Overview"><div class="panel hero"><span class="lbl">Sent this month</span><div class="bigrow"><span class="big">', $used, '</span>', $cap ? '<span class="of">of ' . $cap . '</span>' : '', '</div>',
+        $cap ? '<div class="mtr' . $sev . '" role="progressbar" aria-label="Invitations sent this month" aria-valuemin="0" aria-valuemax="' . $cap . '" aria-valuenow="' . $used . '"><b style="width:' . number_format($pct, 1, '.', '') . '%"></b></div>' : '',
+        '<span class="m">', $cap ? max(0, $cap - $used) . ' left, resets ' . $reset : 'No monthly limit', '</span></div>', tr_timeline($q), '</section>';
+
+    // the three lists, one at a time
+    $tabs = ['waiting' => ['Waiting to send', $nq, 'pw'], 'attention' => ['Needs attention', $nx, 'pa'], 'sent' => ['Sent', $ns, 'ps']];
+    echo '<section class="card cardl" aria-label="Invitations"><nav class="tabs" aria-label="Invitation lists">';
+    foreach ($tabs as $k => $d) echo '<a class="tab" href="', TR_PAGE, $k === 'waiting' ? '' : '?tab=' . $k, '"', $k === $tab ? ' aria-current="page"' : '', '>', $d[0], '<span class="pill ', $d[1] ? $d[2] : '', '">', $d[1], '</span></a>';
+    echo '</nav>';
+    if ($tab === 'waiting') {
+        if (!$q) echo '<p class="emp">Nothing waiting. Add a trip once it is booked.</p>';
+        else {
+            echo '<div class="lh cw"><span>Customer</span><span>Sends</span><span>Reference</span><span></span></div>';
+            foreach ($q as $r) {
+                $busy = ($r['st'] ?? '') === 'sending'; $at = max((int)($r['due'] ?? 0), (int)($r['next'] ?? 0));
+                echo '<div class="lr cw"><div><b>', m_esc($r['n'] ?? ''), '</b><div class="m">', m_esc($r['e'] ?? ''), '</div>';
+                if (!empty($r['err']) && !$busy) echo '<div class="er">Last try failed: ', m_esc($r['err']), '. Trying again ', m_esc(tr_day($r['next'] ?? $n)), '.</div>';
+                echo '</div><div data-l="Sends"><div class="fw">', $busy ? 'Sending now' : m_esc(tr_when($at)), '</div><div class="m">Back ', m_esc(m_date($r['r'] ?? '')), '</div></div>',
+                    '<div data-l="Reference">', !empty($r['ref']) ? '<span class="mono">' . m_esc($r['ref']) . '</span>' : '<span class="m">None</span>', '</div><div class="ac">',
+                    $busy ? '' : tr_btn($t, 'sendnow', $r['id'], 'Send now', '', 'id', 'waiting') . tr_btn($t, 'remove', $r['id'], 'Remove', 'q', 'id', 'waiting'), '</div></div>';
+            }
+        }
+    } elseif ($tab === 'attention') {
+        if (!$x) echo '<p class="emp">Nothing needs attention.</p>';
+        else {
+            foreach ($x as $r) echo '<div class="at"><span class="ibx">', tr_ic('alert'), '</span><div class="atx"><b>', m_esc($r['n'] ?? ''), '</b> <span class="m">', m_esc($r['e'] ?? ''), '</span><div class="m">Back ', m_esc(m_date($r['r'] ?? '')), '</div><div class="er">', m_esc($r['err'] ?? ''), '</div></div><div class="ac">',
+                tr_btn($t, 'retry', $r['id'], tr_ic('retry') . 'Try again', '', 'id', 'attention') . tr_btn($t, 'remove', $r['id'], 'Remove', 'q', 'id', 'attention'), '</div></div>';
+            echo '<p class="note">A failed email is tried again after 1 hour, 6 hours and 1 day before it lands here. Look in Sent mail for the customer before pressing Try again.</p>';
+        }
+    } else {
+        if (!$s) echo '<p class="emp">Nothing sent yet. Names and addresses are deleted as soon as the email has gone; this list keeps initials only, for 90 days.</p>';
+        else {
+            echo '<div class="lh cs"><span>Customer</span><span>Reference</span><span>Back on</span><span>Sent</span></div>';
+            foreach (array_slice($s, 0, 30) as $r) echo '<div class="lr cs"><div><b>', m_esc($r['i'] ?? '?'), '</b></div><div data-l="Reference">', !empty($r['ref']) ? '<span class="mono">' . m_esc($r['ref']) . '</span>' : '<span class="m">None</span>', '</div><div data-l="Back on">', m_esc(m_date($r['r'] ?? '')),
+                '</div><div data-l="Sent"><span class="ck">', tr_ic('check'), m_esc(tr_day($r['sent'] ?? 0)), '</span>', ($r['via'] ?? '') === 'bcc' ? '' : '<div class="m">Review link in email</div>', '</div></div>';
+            echo '<p class="note">Names and addresses are deleted as soon as the email has gone. This list keeps initials only, for 90 days.</p>';
+        }
+    }
+    echo '</section>';
+    tr_drawer($X);
+}
+function tr_drawer($X) {     // the "add a completed trip" panel
+    $cfg = $X['cfg']; $f = $X['f']; $t = $X['t']; $days = (int)$cfg['days'];
+    $close = TR_PAGE . ($X['tab'] !== 'waiting' ? '?tab=' . $X['tab'] : '');
+    echo '<div class="ov', $X['open'] ? ' open' : '', '" id="add"><a class="scrim" href="', $close, '" aria-label="Close the add trip panel"></a><aside class="dr" role="dialog" aria-modal="true" aria-labelledby="add-t">',
+        '<div class="dh"><div><h2 id="add-t">Add a completed trip</h2><p class="m" style="margin-top:4px">Add each customer once their trip is booked.</p></div><a class="x" href="', $close, '" aria-label="Close">', tr_ic('x'), '</a></div>';
+    if ($X['open'] && $X['msg'] !== '') echo tr_flash($X['cls'], $X['msg']);
+    echo '<form class="look" method="get" action="', TR_PAGE, '"><div><label for="lf">Start from a booking reference ID</label><input id="lf" type="text" name="from" maxlength="30" placeholder="FFC-7K2M9QXA" autocomplete="off"></div><button class="btn" type="submit">Fill in</button></form><hr>',
+        '<form method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="add"><input type="hidden" name="t" value="', $t, '">',
+        '<div class="g"><div><label for="n">Customer name</label><input id="n" type="text" name="name" maxlength="80" autocomplete="off" required value="', m_esc($f['name'] ?? ''), '"></div>',
+        '<div><label for="e">Email</label><input id="e" type="email" name="email" maxlength="254" autocomplete="off" required value="', m_esc($f['email'] ?? ''), '"></div>',
+        '<div><label for="r">Date they get back</label><input id="r" type="date" name="ret" required value="', m_esc($f['ret'] ?? ''), '"></div>',
+        '<div><label for="rf">Booking reference (optional)</label><input id="rf" type="text" name="ref" maxlength="30" autocomplete="off" value="', m_esc($f['ref'] ?? ''), '"></div></div>';
+    if (!empty($f['ask'])) echo '<div class="chk"><input id="fc" type="checkbox" name="force" value="1"><label for="fc">This is a different trip from the earlier one. Add it anyway.</label></div>';
+    echo '<p class="m" style="margin-top:12px">Goes out ', $days, ' day', $days === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. One-way trips: use the arrival date. A reference ID is sent to Trustpilot with the invitation.</p>',
+        '<div class="dfoot"><button class="btn pri" type="submit">', tr_ic('plus'), 'Add trip</button><a class="btn" href="', $close, '">Cancel</a></div></form></aside></div>';
+}
+function tr_view_bookings($X) {      // $b fills the booking request form after a mistake
+    $b = $X['b']; $t = $X['t'];
     $bv = function ($k, $d = '') use ($b) { return m_esc($b[$k] ?? $d); };
     $sel = function ($k, $v, $d = false) use ($b) { return ((string)($b[$k] ?? '') === $v || (!isset($b[$k]) && $d)) ? ' selected' : ''; };
-    echo tr_head('Bookings and trips');
-    echo '<div class="top"><div><h1>Bookings and trips</h1><p class="sub">Create booking requests with a reference ID, and add each customer once their trip is booked so they are thanked and invited to review us.</p></div>',
-        '<form method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="logout"><input type="hidden" name="t" value="', $t, '"><button class="s" type="submit">Sign out</button></form></div>',
-        '<p class="nav"><a href="#book">Booking requests</a><a href="#trip">Completed trips</a></p>';
-    if ($msg !== '') echo '<div class="msg ', m_esc($cls ?: 'ok'), '" role="status">', m_esc($msg), '</div>';
-
-    // ---- Booking requests ----
-    $bl = tr_book_list();
-    echo '<form class="card" id="book" method="post" action="', TR_PAGE, '"><h2>Create a booking request</h2><p class="m" style="margin:-4px 0 14px">For quotes done outside the website (phone, email, a Mailchimp reply). It gets a reference ID like one sent through the site (FFC-XXXXXXXX), kept for six months from its last change, and the customer can look it up on Manage Booking.</p>',
+    echo '<header class="ph"><div class="tt"><h1>Booking requests</h1><p class="sub">For quotes done outside the website (phone, email, a Mailchimp reply). Each one gets a reference ID, so the customer can find it on Manage Booking and you can use it when their trip is added.</p></div></header>';
+    echo '<form class="card" id="book" method="post" action="', TR_PAGE, '"><h2>Create a booking request</h2><p class="m" style="margin:-6px 0 14px">It gets a reference ID like one sent through the site (FFC-XXXXXXXX), kept for six months from its last change, and the customer can look it up on Manage Booking.</p>',
         '<input type="hidden" name="act" value="book"><input type="hidden" name="t" value="', $t, '">',
         '<div class="g g3"><div><label for="bf">First name</label><input id="bf" type="text" name="first" maxlength="80" autocomplete="off" required value="', $bv('first'), '"></div>',
         '<div><label for="bl">Last name</label><input id="bl" type="text" name="last" maxlength="80" autocomplete="off" value="', $bv('last'), '"></div>',
@@ -424,66 +577,39 @@ function tr_page($cls = '', $msg = '', $f = [], $b = []) {
         '<div><label for="br">Returning (optional)</label><input id="br" type="date" name="ret" value="', $bv('ret'), '"></div></div>',
         '<label for="bn">Note (optional)</label><textarea id="bn" name="note" rows="2" maxlength="3000">', $bv('note'), '</textarea>',
         '<div class="chk"><input id="bm" type="checkbox" name="mail" value="1"', !empty($b['mail']) ? ' checked' : '', '><label for="bm">Email them the confirmation with the reference ID (needs both cities)</label></div>',
-        '<div class="row"><button type="submit">Create request</button></div></form>';
+        '<div class="row"><button class="btn pri" type="submit">', tr_ic('plus'), 'Create request</button></div></form>';
+    $bl = tr_book_list();
     if ($bl) {
-        echo '<div class="card"><h2>Created here (', count($bl), ')</h2><div class="t"><table class="rt"><tr class="hd"><th>Reference ID</th><th>Customer</th><th>Trip</th><th>Created</th><th></th></tr>';
+        echo '<section class="card cardl"><div class="ch"><div><h2>Created here (', count($bl), ')</h2></div><span class="m">Newest first. Kept for six months from the last change.</span></div><div class="lh cb"><span>Reference ID</span><span>Customer</span><span>Trip</span><span>Created</span><span></span></div>';
         foreach ($bl as $r) {
             $c = $r['contact'] ?? []; $tp = $r['trip'] ?? [];
-            echo '<tr><td><b class="mono">', m_esc($r['ref']), '</b></td><td data-l="Customer">', m_esc(trim(($c['first'] ?? '') . ' ' . ($c['last'] ?? ''))), '<br><span class="m">', m_esc($c['email'] ?? ''), '</span></td>',
-                '<td data-l="Trip">', m_esc(implode(' to ', array_filter([$tp['from'] ?? '', $tp['to'] ?? ''])) ?: 'No route yet'), '<br><span class="m">', m_esc(implode(', ', array_filter([$tp['cabin'] ?? '', !empty($tp['dep']) ? m_date($tp['dep']) : '']))), '</span></td>',
-                '<td data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</td><td class="a"><a class="bl" href="', TR_PAGE, '?from=', rawurlencode($r['ref']), '#trip">Use for a completed trip</a>', $btn('bookdel', $r['ref'], 'Delete', 'd', 'ref'), '</td></tr>';
+            echo '<div class="lr cb"><div><b class="mono">', m_esc($r['ref']), '</b></div><div data-l="Customer">', m_esc(trim(($c['first'] ?? '') . ' ' . ($c['last'] ?? ''))), '<div class="m">', m_esc($c['email'] ?? ''), '</div></div>',
+                '<div data-l="Trip">', m_esc(implode(' to ', array_filter([$tp['from'] ?? '', $tp['to'] ?? ''])) ?: 'No route yet'), '<div class="m">', m_esc(implode(', ', array_filter([$tp['cabin'] ?? '', !empty($tp['dep']) ? m_date($tp['dep']) : '']))), '</div></div>',
+                '<div data-l="Created">', m_esc(tr_day($r['created'] ?? 0)), '</div><div class="ac"><a class="btn" href="', TR_PAGE, '?from=', rawurlencode($r['ref']), '#add">Use for a completed trip</a>', tr_btn($t, 'bookdel', $r['ref'], 'Delete', 'q', 'ref'), '</div></div>';
         }
-        echo '</table></div></div>';
+        echo '</section>';
     }
-
-    // ---- Completed trips ----
-    echo '<div id="trip"></div>';
-    if ($cfg['mode'] === 'bcc') echo '<div class="msg ok">Invitations are sent by <b>Trustpilot</b>. Each thank-you email copies your Trustpilot address, and Trustpilot then invites the customer. ',
-        $cap ? '<b>' . $used . ' of ' . $cap . '</b> invitations used this month.' : '<b>' . $used . '</b> sent this month.', '</div>';
-    else echo '<div class="msg warn"><b>Trustpilot address not set.</b> Until <b>TRUSTPILOT_BCC</b> is added to the .env file, the thank-you email carries the plain Trustpilot review link instead. ', $cap ? $used . ' of ' . $cap . ' sent this month.' : '', '</div>';
-
-    echo '<div class="card"><h2>Add a completed trip</h2>',
-        '<form class="look" method="get" action="', TR_PAGE, '"><div><label for="lf">Start from a booking reference ID (optional)</label><input id="lf" type="text" name="from" maxlength="30" placeholder="FFC-7K2M9QXA" autocomplete="off"></div><button class="s" type="submit">Fill in</button></form>',
-        '<form method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="add"><input type="hidden" name="t" value="', $t, '"><div class="g g4">',
-        '<div><label for="n">Customer name</label><input id="n" type="text" name="name" maxlength="80" autocomplete="off" required value="', m_esc($f['name'] ?? ''), '"></div>',
-        '<div><label for="e">Email</label><input id="e" type="email" name="email" maxlength="254" autocomplete="off" required value="', m_esc($f['email'] ?? ''), '"></div>',
-        '<div><label for="r">Date they get back</label><input id="r" type="date" name="ret" required value="', m_esc($f['ret'] ?? ''), '"></div>',
-        '<div><label for="rf">Booking reference (optional)</label><input id="rf" type="text" name="ref" maxlength="30" autocomplete="off" value="', m_esc($f['ref'] ?? ''), '"></div></div>';
-    if (!empty($f['ask'])) echo '<div class="chk"><input id="fc" type="checkbox" name="force" value="1"><label for="fc">This is a different trip from the earlier one. Add it anyway.</label></div>';
-    echo '<div class="row"><button type="submit">Add trip</button><span class="m">Goes out ', (int)$cfg['days'], ' day', $cfg['days'] === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. One-way trips: use the arrival date. A reference ID is sent to Trustpilot with the invitation.</span></div></form></div>';
-
-    echo '<div class="card"><h2>Waiting to send (', count($q), ')</h2>';
-    if (!$q) echo '<p class="m" style="margin:0">Nothing waiting.</p>';
-    else {
-        echo '<div class="t"><table class="rt"><tr class="hd"><th>Customer</th><th>Back on</th><th>Sends</th><th></th></tr>';
-        foreach ($q as $r) {
-            $busy = ($r['st'] ?? '') === 'sending';
-            echo '<tr><td><b>', m_esc($r['n'] ?? ''), '</b><br><span class="m">', m_esc($r['e'] ?? ''), !empty($r['ref']) ? ' &middot; ' . m_esc($r['ref']) : '', '</span>';
-            if (!empty($r['err']) && !$busy) echo '<br><span class="m" style="color:#8a2a2a">Last try failed: ', m_esc($r['err']), '. Trying again ', tr_day($r['next'] ?? $n), '.</span>';
-            echo '</td><td data-l="Back on">', m_esc(m_date($r['r'] ?? '')), '</td><td data-l="Sends">', $busy ? 'Sending now' : m_esc(tr_day(max($r['due'] ?? 0, $r['next'] ?? 0))), '</td><td class="a">',
-                $busy ? '' : $btn('sendnow', $r['id'], 'Send now') . $btn('remove', $r['id'], 'Remove', 'd'), '</td></tr>';
-        }
-        echo '</table></div>';
-    }
-    echo '</div>';
-
-    if ($x) {
-        echo '<div class="card" style="border-color:#e3b4b4"><h2>Needs attention (', count($x), ')</h2><div class="t"><table class="rt"><tr class="hd"><th>Customer</th><th>What happened</th><th></th></tr>';
-        foreach ($x as $r) echo '<tr><td><b>', m_esc($r['n'] ?? ''), '</b><br><span class="m">', m_esc($r['e'] ?? ''), '<br>Back ', m_esc(m_date($r['r'] ?? '')), '</span></td><td data-l="What happened">', m_esc($r['err'] ?? ''), '</td><td class="a">', $btn('retry', $r['id'], 'Try again') . $btn('remove', $r['id'], 'Remove', 'd'), '</td></tr>';
-        echo '</table></div></div>';
-    }
-
-    echo '<div class="card"><h2>Sent</h2>';
-    if (!$s) echo '<p class="m" style="margin:0">Nothing sent yet. Names and addresses are deleted as soon as the email has gone; this list keeps initials only, for 90 days.</p>';
-    else {
-        echo '<div class="t"><table class="rt"><tr class="hd"><th>Customer</th><th>Reference</th><th>Back on</th><th>Sent</th><th>How</th></tr>';
-        foreach (array_slice($s, 0, 30) as $r) echo '<tr><td><b>', m_esc($r['i'] ?? '?'), '</b></td><td data-l="Reference" class="mono">', m_esc($r['ref'] ?? '-'), '</td><td data-l="Back on">', m_esc(m_date($r['r'] ?? '')), '</td><td data-l="Sent">', m_esc(tr_day($r['sent'] ?? 0)), '</td><td data-l="How">', ($r['via'] ?? '') === 'bcc' ? 'Trustpilot invitation' : 'Review link in email', '</td></tr>';
-        echo '</table></div><p class="m" style="margin:10px 0 0">Names and addresses are deleted as soon as the email has gone. This list keeps initials only, for 90 days.</p>';
-    }
-    echo '</div>';
-
-    echo '<div class="card"><details><summary>See the email, or send yourself a sample</summary><p class="m">The sample does not copy Trustpilot, so it uses none of your monthly invitations.</p>',
-        '<p><a href="', TR_PAGE, '?preview=1" target="_blank" rel="noopener">Open the email in a new tab</a></p>',
-        '<form method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="sample"><input type="hidden" name="t" value="', $t, '"><label for="to">Send a sample to</label><input id="to" type="email" name="to" maxlength="254" required><div class="row"><button class="s" type="submit">Send sample</button></div></form></details></div>';
-    echo '</div></body></html>'; exit;
+}
+function tr_view_email($X) {
+    $cfg = $X['cfg']; $t = $X['t']; $days = (int)$cfg['days']; $cap = $cfg['cap'];
+    echo '<header class="ph"><div class="tt"><h1>Email preview</h1><p class="sub">The thank-you email each customer gets after their trip. A sample does not copy Trustpilot, so it uses none of your monthly invitations.</p></div></header>',
+        '<section class="card"><h2>What goes out</h2><p>Sent ', $days, ' day', $days === 1 ? '' : 's', ' after the return date, at 10:00 AM Eastern. ', $cfg['mode'] === 'bcc' ? 'Each email copies your Trustpilot address, and Trustpilot then invites the customer.' : 'Each email carries the plain Trustpilot review link, because no Trustpilot address is set.',
+        $cap ? ' Sending pauses at ' . $cap . ' a month.' : ' There is no monthly limit.', '</p><div class="row"><a class="btn" href="', TR_PAGE, '?preview=1" target="_blank" rel="noopener">', tr_ic('mail'), 'Open the email in a new tab</a></div></section>',
+        '<form class="card" method="post" action="', TR_PAGE, '"><h2>Send yourself a sample</h2><input type="hidden" name="act" value="sample"><input type="hidden" name="t" value="', $t, '"><label for="to">Send a sample to</label><input id="to" type="email" name="to" maxlength="254" required><div class="row"><button class="btn pri" type="submit">Send sample</button></div></form>';
+}
+// $f fills the add-a-trip panel (and opens it when it has open => true), $b the booking request form (both after a mistake, or from a reference). $view: trips, bookings or email.
+function tr_page($cls = '', $msg = '', $f = [], $b = [], $view = '') {
+    $view = in_array($view, ['trips', 'bookings', 'email'], true) ? $view : 'trips';
+    $cfg = tr_cfg(); $T = cload(TR_FILE, []); $t = tr_token(); $n = now_ms();
+    $q = $s = $x = [];
+    foreach ($T as $r) { $st = $r['st'] ?? ''; if ($st === 'sent') $s[] = $r; elseif ($st === 'failed') $x[] = $r; elseif (in_array($st, ['queued', 'sending'], true)) $q[] = $r; }
+    usort($q, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
+    usort($s, function ($a, $b) { return ($b['sent'] ?? 0) <=> ($a['sent'] ?? 0); });
+    usort($x, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
+    $X = ['cfg' => $cfg, 'q' => $q, 's' => $s, 'x' => $x, 't' => $t, 'n' => $n, 'f' => $f, 'b' => $b, 'tab' => tr_tab($_GET['tab'] ?? ''), 'cls' => $cls, 'msg' => $msg, 'open' => $view === 'trips' && !empty($f['open'])];
+    $titles = ['trips' => 'Trustpilot invitations', 'bookings' => 'Booking requests', 'email' => 'Email preview'];
+    echo tr_head($titles[$view], true), '<div class="app">', tr_rail($view, $t), '<main class="main">';
+    if ($msg !== '' && !$X['open']) echo tr_flash($cls, $msg);
+    if ($view === 'bookings') tr_view_bookings($X); elseif ($view === 'email') tr_view_email($X); else tr_view_trips($X);
+    echo '</main></div></body></html>'; exit;
 }

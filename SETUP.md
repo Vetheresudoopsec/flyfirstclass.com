@@ -224,7 +224,7 @@ Carousel cards do not show a price (prices appear only in the featured fares sec
 
 ## 16. Bookings, completed trips and Trustpilot invitations
 
-`/api/trips` is a private page with two parts: **Booking requests** (give a customer a reference ID for a quote done outside the site) and **Completed trips** (add each customer once their trip is booked). A few days after they get back, the server emails them a short thank-you and copies Trustpilot's Automatic Feedback Service address (Bcc). Trustpilot then sends the customer its own review invitation. Because the invitation comes from Trustpilot's own invitation system, the review should be marked as invited rather than unprompted. The page needs the scheduled job from step 4.
+`/api/trips` is a private page with a sidebar of three views: **Booking requests** (give a customer a reference ID for a quote done outside the site), **Trustpilot invitations** (the main view: add each customer once their trip is booked, and see what is waiting, what failed and what has been sent) and **Email preview**. The page uses no scripts, so every tab and the *Add trip* panel are plain links. A few days after they get back, the server emails them a short thank-you and copies Trustpilot's Automatic Feedback Service address (Bcc). Trustpilot then sends the customer its own review invitation. Because the invitation comes from Trustpilot's own invitation system, the review should be marked as invited rather than unprompted. The page needs the scheduled job from step 4.
 
 **Set it up (about 3 minutes):**
 
@@ -235,22 +235,23 @@ Carousel cards do not show a price (prices appear only in the featured fares sec
 TRUSTPILOT_BCC=flyfirstclass.com+abcdef1234@invite.trustpilot.com
 ```
 
-3. Open `https://flyfirstclass.com/api/trips` and sign in with your `ADMIN_KEY`. The page keeps you signed in for 8 hours. Open *See the email, or send yourself a sample* to look at the email and send one to your own address (a sample does not copy Trustpilot, so it uses none of your invitations).
+3. Open `https://flyfirstclass.com/api/trips` and sign in with your `ADMIN_KEY`. The page keeps you signed in for 8 hours. Open *Email preview* in the sidebar to look at the email and send one to your own address (a sample does not copy Trustpilot, so it uses none of your invitations).
 4. Check `/api/status?key=YOUR_KEY` > `trips`: `method` should say it copies Trustpilot.
 
 **Booking requests (quotes done by phone, email, Mailchimp and so on)**
 
 - *Create a booking request* takes the customer's first name, email and, if you have them, phone, route, cabin, trip type, travellers, dates and a note. It makes a normal request with a reference ID (`FFC-XXXXXXXX`), the same as one sent through the website. The customer can look it up on Manage Booking, and it is kept for six months from its last change.
 - Tick *Email them the confirmation with the reference ID* to send the usual "Thank you for your request" email (it needs both cities). Leave it unticked to send the ID yourself, for example inside your Mailchimp reply. If the email fails, the request is still created and the page tells you.
-- *Created here* lists the requests made on this page. *Delete* removes one made here (requests that came from the website cannot be deleted from this page).
-- *Use for a completed trip* (or *Start from a booking reference ID* in the next card) fills the completed-trip form with that customer's name, email, return date and reference ID, so you only check it and press *Add trip*.
+- *Created here* (under the form, in *Booking requests*) lists the requests made on this page. *Delete* removes one made here (requests that came from the website cannot be deleted from this page).
+- *Use for a completed trip* (or *Start from a booking reference ID* inside the *Add trip* panel) opens the panel and fills the completed-trip form with that customer's name, email, return date and reference ID, so you only check it and press *Add trip*.
 
 **Using it**
 
-- Add a customer: name, email, and the date they get back (for a one-way trip, the arrival date). The *Booking reference* is optional; when given, it is shown in the email and passed to Trustpilot with the invitation, so you can match a review to a booking. It is not shown to anyone else. It goes out `TRUSTPILOT_DAYS` days later (3 unless you change it) at 10:00 AM Eastern, on the next 15-minute run of the scheduled job. A date that has already passed is sent on the next run.
+- Press *Add trip* (top right of *Trustpilot invitations*) and fill in the panel that slides in: name, email, and the date they get back (for a one-way trip, the arrival date). The *Booking reference* is optional; when given, it is shown in the email and passed to Trustpilot with the invitation, so you can match a review to a booking. It is not shown to anyone else. It goes out `TRUSTPILOT_DAYS` days later (3 unless you change it) at 10:00 AM Eastern, on the next 15-minute run of the scheduled job. A date that has already passed is sent on the next run.
+- The top of the page shows how many invitations went out this month against your limit (the bar turns amber at 80% and red at the limit) and a 30-day line with a dot for each day that has invitations waiting. Hover a dot to see who. The list below has three tabs: *Waiting to send*, *Needs attention* and *Sent*.
 - *Send now* sends one straight away; *Remove* takes a waiting trip off the list. Add every customer in the same way, at the same point in the journey. Trustpilot's rules ask for exactly that: no picking only the happy ones, no incentives for reviews, no staff, family or friends, and one invitation per trip.
 - The same email address added again within 30 days asks you to confirm it is a different trip, and the same address with the same return date is refused.
-- If an email cannot be sent the server tries again after 1 hour, 6 hours and 1 day, then moves it to *Needs attention* with the reason. *Try again* queues it again. A send that was cut off partway is also put there, never resent on its own: look in Sent mail for the customer first.
+- If an email cannot be sent the server tries again after 1 hour, 6 hours and 1 day, then moves it to the *Needs attention* tab (a red "needs attention" label by the page title links straight to it) with the reason. *Try again* queues it again. A send that was cut off partway is also put there, never resent on its own: look in Sent mail for the customer first.
 - **Monthly limit.** Trustpilot's free plan allows 50 invitations a month, so sending pauses at `TRUSTPILOT_MONTHLY_CAP` (50) sent in a calendar month and the rest wait for next month. If your plan allows more, raise it, or use `0` for no limit. Trustpilot's own month may start on a different day from the calendar month, so leave yourself a little room.
 - **If Trustpilot sends its invitation later than you expect**, the delay is added to ours. If the Automatic Invitations page in Trustpilot has a delay setting, set it to the shortest.
 - **Without the Trustpilot address.** If `TRUSTPILOT_BCC` is left out, the email carries the plain Trustpilot review link and a button instead (`TRUSTPILOT_LINK` can change the link). Those reviews are not marked as invited.
