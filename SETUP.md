@@ -58,7 +58,9 @@ The job is safe to run every 15 minutes: it only works when something is due. Th
 
 ## 5. Check that it works
 
-Open these in a browser (use your `ADMIN_KEY` for `YOUR_KEY`):
+**The easiest way: sign in to the admin page** (`/api/trips`, or the *Admin* link under *Management* in the footer of any page) with your `ADMIN_KEY`, then open **Monitoring** in the sidebar. It shows, in plain words and with a colour and a word for each, whether the background job, fares (Duffel), email, the newsletter (Mailchimp), photos (Unsplash) and Trustpilot invitations are working, and has a button for each of the checks below (*Check connection*, *Test a fare search*, *Send test email*, *Run now*, *Test photos*, *Download CSV*). The numbers are read fresh each time you open it or press *Refresh*, and no key ever appears in the address.
+
+The older addresses below still work if you prefer them or have them bookmarked. Open these in a browser (use your `ADMIN_KEY` for `YOUR_KEY`):
 
 | Address | What it tells you |
 | --- | --- |
@@ -224,7 +226,7 @@ Carousel cards do not show a price (prices appear only in the featured fares sec
 
 ## 16. Bookings, completed trips and Trustpilot invitations
 
-`/api/trips` is a private page with a sidebar of three views: **Booking requests** (give a customer a reference ID for a quote done outside the site), **Trustpilot invitations** (the main view: add each customer once their trip is booked, and see what is waiting, what failed and what has been sent) and **Email preview**. Tabs, the sidebar and the *Add trip* panel switch instantly without contacting the server, and saving, removing or sending updates the page in place without a reload. This is done by one small script that the page's security policy allows by its exact fingerprint, so nothing else can run on it. Every tab, view and the panel are also plain links and forms, so the page still works one page load at a time if scripts are off. A few days after they get back, the server emails them a short thank-you and copies Trustpilot's Automatic Feedback Service address (Bcc). Trustpilot then sends the customer its own review invitation. Because the invitation comes from Trustpilot's own invitation system, the review should be marked as invited rather than unprompted. The page needs the scheduled job from step 4.
+`/api/trips` is the private admin page, with a sidebar of four views: **Booking requests** (give a customer a reference ID for a quote done outside the site), **Trustpilot invitations** (the main view: add each customer once their trip is booked, and see what is waiting, what failed and what has been sent), **Email preview** and **Monitoring** (the health of everything the site depends on, with the checks from section 5 as buttons). Every page of the public site has an *Admin* link under *Management* in the footer; it only leads to the sign-in page (the admin key and a limit on wrong tries protect it, and search engines are told to ignore it). Tabs, the sidebar and the *Add trip* panel switch instantly without contacting the server, and saving, removing or sending updates the page in place without a reload. This is done by one small script that the page's security policy allows by its exact fingerprint, so nothing else can run on it. Every tab, view and the panel are also plain links and forms, so the page still works one page load at a time if scripts are off. A few days after they get back, the server emails them a short thank-you and copies Trustpilot's Automatic Feedback Service address (Bcc). Trustpilot then sends the customer its own review invitation. Because the invitation comes from Trustpilot's own invitation system, the review should be marked as invited rather than unprompted. The page needs the scheduled job from step 4.
 
 **Set it up (about 3 minutes):**
 

@@ -360,6 +360,11 @@ function trips_route($method) {
                 if (!limit_hit('trips:sample', 6, 3600000)) tr_page('bad', 'That is enough samples for one hour.', [], [], 'email');
                 try { send_mail(tr_mail('Alex Chen', $to, $cfg, true, 'FFC-7K2M9QXA')); } catch (Throwable $e) { http_response_code(502); tr_page('bad', 'The sample could not be sent: ' . $e->getMessage(), [], [], 'email'); }
                 tr_go('sample', '', 'email');
+            case 'mon_duffel': case 'mon_mail': case 'mon_cron': case 'mon_photo':      // the monitoring tools (monitor.php): the result is drawn at the top of the Monitoring view
+                mon_result(mon_do($act, $_POST)); tr_page('', '', [], [], 'monitoring');
+            case 'mon_export':      // the sign-ups Mailchimp does not have yet, as a download
+                if (!limit_hit('mon:export', 20, 3600000)) tr_page('bad', 'Too many downloads in the last hour. Please wait a little.', [], [], 'monitoring');
+                logm('[admin] waiting newsletter addresses downloaded'); nl_export();
             default: tr_go();
         }
     }
@@ -375,7 +380,7 @@ function trips_route($method) {
         'booked' => ['ok', 'Booking request created. Reference ID: %s'], 'bookedm' => ['ok', 'Booking request created and the confirmation email sent. Reference ID: %s'],
         'bookedf' => ['warn', 'Booking request created, but the confirmation email could not be sent. Reference ID: %s'], 'bookdeleted' => ['ok', 'Booking request deleted.']];
     $m = $M[(string)($_GET['m'] ?? '')] ?? null; $f = [];
-    $view = in_array($_GET['v'] ?? '', ['bookings', 'email'], true) ? $_GET['v'] : 'trips';
+    $view = in_array($_GET['v'] ?? '', ['bookings', 'email', 'monitoring'], true) ? $_GET['v'] : 'trips';
     if ($m) { $rr = strtoupper((string)($_GET['r'] ?? '')); $m[1] = sprintf($m[1], preg_match(QREF, $rr) ? $rr : ''); }
     $from = strtoupper(trim((string)($_GET['from'] ?? '')));
     if ($from !== '') {             // start a completed trip from a stored request: the add panel opens, filled in
@@ -500,6 +505,7 @@ function tr_ic($n) {       // small line icons, drawn inline (the page has no sc
         'mail' => '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/>',
         'plus' => '<path d="M12 5v14M5 12h14"/>',
         'x' => '<path d="M6 6l12 12M18 6 6 18"/>',
+        'pulse' => '<path d="M3 12h4l3-8 4 16 3-8h4"/>',
         'search' => '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
         'alert' => '<path d="M12 4 3 20h18L12 4z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/>',
         'check' => '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16 9.5"/>',
@@ -563,10 +569,11 @@ function tr_head($title, $app = false) {
         . '@media(min-width:761px){.rail{position:sticky;top:0;align-self:flex-start;height:100vh}}'
         . '@media(max-width:760px){.rail{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;border-right:0;border-bottom:1px solid #e4e2da;padding:12px 16px;gap:4px 12px}.brand .m{display:none}.navs{order:3;flex:1 1 100%;flex-direction:row;flex-wrap:wrap}.nv{padding:0 10px}.out{order:2;margin:0;padding:0}.main{padding:20px 16px 40px}.g2,.g3{grid-template-columns:1fr}.tabs{padding:6px 6px 0}.tab,.rtab{padding:0 10px;gap:6px;font-size:13px}'
         . '.lh{display:none}.lr{grid-template-columns:1fr !important;gap:6px;padding:14px 16px}.lr [data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:600;color:#6b6a65}.ac{justify-content:flex-start}}'
+        . mon_css()
         . '</style></head><body>' . ($app ? '' : '<div class="w">');
 }
 function tr_page_login($err) {
-    echo tr_head('Bookings and trips'), '<h1>Bookings and trips</h1><p class="sub" style="margin:0 0 16px">Private page for Fly First Class International.</p>';
+    echo tr_head('Admin sign-in'), '<h1>Admin</h1><p class="sub" style="margin:0 0 16px">Private page for Fly First Class International: bookings, Trustpilot invitations and monitoring.</p>';
     if ($err !== '') echo '<div class="msg bad" role="alert" style="margin:0 0 16px">', m_esc($err), '</div>';
     if ((string)C('admin') === '') echo '<div class="card"><p>This page needs a private key. Add a line <b>ADMIN_KEY=a-long-random-phrase</b> to the .env file in ffc-private, then come back.</p></div>';
     else echo '<form class="card" method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="login"><label for="k">Admin key</label><input id="k" type="password" name="key" autocomplete="current-password" required autofocus><div class="row"><button class="btn pri" type="submit">Sign in</button></div></form>';
@@ -578,11 +585,11 @@ function tr_btn($t, $act, $id, $label, $cls = '', $field = 'id', $tab = '') {   
         . ($tab !== '' ? '<input type="hidden" name="tab" value="' . m_esc($tab) . '">' : '') . '<button class="btn ' . $cls . '" type="submit">' . $label . '</button></form>';
 }
 function tr_rail($view, $t) {
-    $nav = function ($v, $icon, $label) use ($view) {
-        return '<a class="nv" href="' . TR_PAGE . ($v === 'trips' ? '' : '?v=' . $v) . '" data-view="' . $v . '"' . ($v === $view ? ' aria-current="page"' : '') . '>' . tr_ic($icon) . $label . '</a>';
+    $nav = function ($v, $icon, $label) use ($view) {      // Monitoring is read fresh each time it is opened (data-swap); the others are already in the page and switch instantly (data-view)
+        return '<a class="nv" href="' . TR_PAGE . ($v === 'trips' ? '' : '?v=' . $v) . '" ' . ($v === 'monitoring' ? 'data-swap' : 'data-view="' . $v . '"') . ($v === $view ? ' aria-current="page"' : '') . '>' . tr_ic($icon) . $label . '</a>';
     };
     return '<nav class="rail" aria-label="Admin sections"><div class="brand"><b>Fly First Class</b><span class="m">Private admin</span></div><div class="navs">'
-        . $nav('bookings', 'tag', 'Booking requests') . $nav('trips', 'star', 'Trustpilot invitations') . $nav('email', 'mail', 'Email preview') . '</div>'
+        . $nav('bookings', 'tag', 'Booking requests') . $nav('trips', 'star', 'Trustpilot invitations') . $nav('email', 'mail', 'Email preview') . $nav('monitoring', 'pulse', 'Monitoring') . '</div>'
         . '<div class="out"><form method="post" action="' . TR_PAGE . '" data-native><input type="hidden" name="act" value="logout"><input type="hidden" name="t" value="' . $t . '"><button type="submit">Sign out</button></form></div></nav>';
 }
 function tr_timeline($q) {       // a 30-day line with a dot for each day that has invitations waiting
@@ -766,7 +773,7 @@ function tr_bk_rt() {      // which list of requests is showing: "route" (both c
 }
 // $f fills the add-a-trip panel (and opens it when it has open => true), $b the booking request form (both after a mistake, or from a reference). $view: trips, bookings or email.
 function tr_page($cls = '', $msg = '', $f = [], $b = [], $view = '') {
-    $view = in_array($view, ['trips', 'bookings', 'email'], true) ? $view : 'trips';
+    $view = in_array($view, ['trips', 'bookings', 'email', 'monitoring'], true) ? $view : 'trips';
     $cfg = tr_cfg(); $T = cload(TR_FILE, []); $t = tr_token(); $n = now_ms();
     $q = $s = $x = [];
     foreach ($T as $r) { $st = $r['st'] ?? ''; if ($st === 'sent') $s[] = $r; elseif ($st === 'failed') $x[] = $r; elseif (in_array($st, ['queued', 'sending'], true)) $q[] = $r; }
@@ -774,12 +781,13 @@ function tr_page($cls = '', $msg = '', $f = [], $b = [], $view = '') {
     usort($s, function ($a, $b) { return ($b['sent'] ?? 0) <=> ($a['sent'] ?? 0); });
     usort($x, function ($a, $b) { return ($a['due'] ?? 0) <=> ($b['due'] ?? 0); });
     $X = ['cfg' => $cfg, 'q' => $q, 's' => $s, 'x' => $x, 't' => $t, 'n' => $n, 'f' => $f, 'b' => $b, 'tab' => tr_tab($_GET['tab'] ?? ''), 'src' => in_array($_GET['src'] ?? '', ['web', 'team'], true) ? $_GET['src'] : 'all', 'bq' => trim(qs($_GET['q'] ?? '', 80)), 'rt' => tr_bk_rt(), 'cls' => $cls, 'msg' => $msg, 'open' => $view === 'trips' && !empty($f['open'])];
-    $titles = ['trips' => 'Trustpilot invitations', 'bookings' => 'Booking requests', 'email' => 'Email preview'];
+    $titles = ['trips' => 'Trustpilot invitations', 'bookings' => 'Booking requests', 'email' => 'Email preview', 'monitoring' => 'Monitoring'];
     echo tr_head($titles[$view], true), '<div class="app">', tr_rail($view, $t), '<main class="main">';
     if ($msg !== '' && !$X['open']) echo tr_flash($cls, $msg);
-    foreach ($titles as $k => $unused) {      // all three views are in the page so they can switch instantly; only the current one shows
+    foreach ($titles as $k => $unused) {      // the first three views are all in the page so they can switch instantly; only the current one shows. Monitoring is only drawn when it is the one asked for, so its numbers are always fresh.
+        if ($k === 'monitoring' && $view !== 'monitoring') continue;
         echo '<div class="pane" data-pane="', $k, '"', $k === $view ? '' : ' hidden', '>';
-        if ($k === 'bookings') tr_view_bookings($X); elseif ($k === 'email') tr_view_email($X); else tr_view_trips($X);
+        if ($k === 'bookings') tr_view_bookings($X); elseif ($k === 'email') tr_view_email($X); elseif ($k === 'monitoring') mon_view($X); else tr_view_trips($X);
         echo '</div>';
     }
     echo '</main></div><script>', tr_js(), '</script></body></html>'; exit;

@@ -3,6 +3,7 @@
 //   /api/geo   /api/routes   /api/top   /api/photos   /api/places   /api/requests   /api/send   /api/subscribe
 // The private Completed trips page (sign in with ADMIN_KEY): /api/trips
 // Diagnostics (/api/status, /api/duffel-check, /api/mail-check, /api/photo-test, /api/cron, /api/newsletter-export) need ?key=ADMIN_KEY from .env.
+// The same checks are on the admin page (Monitoring, monitor.php), which needs no key in the address.
 if (!defined('FFC_PRIVATE')) { exit; }
 
 function cron_run($budget) {         // used by cron.php and /api/cron
