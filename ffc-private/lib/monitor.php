@@ -44,6 +44,13 @@ function mon_kv($a, $depth = 0, $skip = []) {
 function mon_result($set = null) {      // the result of the tool just used, kept for the page that is about to be drawn
     static $r = null; if ($set !== null) $r = $set; return $r;
 }
+function mon_src($by, $n) {      // today's Duffel searches by who asked, in words
+    $names = ['refresh' => 'daily refresh', 'visitor' => 'visitors', 'prices' => 'price lookups', 'retry' => 'retries'];
+    $o = []; $sum = 0;
+    foreach ($names as $k => $label) { $v = (int)($by[$k] ?? 0); $sum += $v; if ($v > 0) $o[] = $label . ' ' . $v; }
+    if ($n - $sum > 0) $o[] = 'earlier today (before this was counted) ' . ($n - $sum);
+    return implode(', ', $o) ?: 'none yet';
+}
 function mon_mailcfg() {      // how email is sent, in words (never the password)
     $c = mail_cfg(); $sm = $c['smtp'];
     return ['Sent through' => $sm ? 'SMTP (' . ($sm['host'] ?? '') . ':' . ($sm['port'] ?? '') . ')' : "the server's own mail system (PHP mail)", 'Team inbox (MAIL_TO)' => $c['to'], 'Sent from' => $c['from'],
@@ -64,7 +71,10 @@ function mon_cards($S, $mail) {
     // Fares (Duffel)
     $d = $S['duffel']; $tok = (string)$d['token']; $le = cload('stats.json', [])['lastErr'] ?? null;
     $cap = $d['dailyCap']; $n = (int)$d['searchesToday'];
-    $lines = ['Searches today: ' . $n . (is_numeric($cap) ? ' of ' . $cap : '') . '.', 'Requests: ' . (int)$d['requestsOk'] . ' accepted, ' . (int)$d['requestsFailed'] . ' failed, ' . (int)$d['rateLimited'] . ' slowed down.'];
+    $lines = ['Searches today: ' . $n . (is_numeric($cap) ? ' of ' . $cap : '') . '.'];
+    if ($n > 0) $lines[] = 'Where they went: ' . mon_src($d['searchesBySource'] ?? [], $n) . '.';
+    $dr = $d['dailyRefresh'] ?? ['routes' => 0, 'searchesNeeded' => 0, 'mayUsePerDay' => 'no limit']; if ((int)$dr['routes'] > 0) $lines[] = 'The daily refresh covers ' . (int)$dr['routes'] . ' routes (2 searches each, ' . (int)$dr['searchesNeeded'] . ' in all)' . (is_numeric($dr['mayUsePerDay']) ? ' and may use up to ' . (int)$dr['mayUsePerDay'] . ' a day; the rest of the limit is kept for visitors.' : '.');
+    $lines[] = 'Requests: ' . (int)$d['requestsOk'] . ' accepted, ' . (int)$d['requestsFailed'] . ' failed, ' . (int)$d['rateLimited'] . ' slowed down.';
     if ($tok === 'not set') $c[] = ['k' => 'fares', 'title' => 'Fares (Duffel)', 'st' => 'off', 'head' => 'No Duffel token', 'lines' => ['Live fares are off. Add DUFFEL_TOKEN to the .env file.']];
     elseif ($tok === 'rejected') $c[] = ['k' => 'fares', 'title' => 'Fares (Duffel)', 'st' => 'bad', 'head' => 'Duffel refused the token', 'lines' => ['Fix DUFFEL_TOKEN in the .env file, then use Check connection below.']];
     elseif ((int)$d['pausedForSeconds'] > 0) $c[] = ['k' => 'fares', 'title' => 'Fares (Duffel)', 'st' => 'warn', 'head' => 'Paused for ' . (int)$d['pausedForSeconds'] . ' more seconds', 'lines' => array_merge(['Duffel asked us to slow down.'], $lines)];
@@ -167,7 +177,7 @@ function mon_view($X) {
         '<div class="tool"><div class="tx"><b>Newsletter: download the waiting addresses</b><span class="m">A CSV (Mailchimp import format) of the sign-ups Mailchimp does not have yet. It contains email addresses, so keep the file private.</span></div><div class="ac">', mon_form($t, 'mon_export', 'Download CSV', '', '', true), '</div></div></section>';
     // details
     $d = $S['duffel']; $mc = mon_mailcfg();
-    echo '<div class="g g2"><section class="card"><h2>Fares and route data</h2>', mon_kv(['Mode' => $d['mode'], 'Duffel token' => $d['token'], 'Requests accepted' => $d['requestsOk'], 'Requests failed' => $d['requestsFailed'], 'Slowed down by Duffel' => $d['rateLimited'], 'Searches today' => $d['searchesToday'], 'Daily search limit' => $d['dailyCap'],
+    echo '<div class="g g2"><section class="card"><h2>Fares and route data</h2>', mon_kv(['Mode' => $d['mode'], 'Duffel token' => $d['token'], 'Requests accepted' => $d['requestsOk'], 'Requests failed' => $d['requestsFailed'], 'Slowed down by Duffel' => $d['rateLimited'], 'Searches today' => $d['searchesToday'] . ' (' . mon_src($d['searchesBySource'] ?? [], (int)$d['searchesToday']) . ')', 'Daily search limit' => $d['dailyCap'], 'Daily refresh needs' => (int)($d['dailyRefresh']['searchesNeeded'] ?? 0) . ' searches for ' . (int)($d['dailyRefresh']['routes'] ?? 0) . ' routes (may use ' . ($d['dailyRefresh']['mayUsePerDay'] ?? 'no limit') . ' a day)',
         'Requests per minute' => $d['requestsPerMinute'], 'Last Duffel error' => $d['lastError'] ? $d['lastError']['msg'] . ' (' . $d['lastError']['when'] . ')' : null, 'Airports known' => $S['airports'], 'Routes documented' => $S['routesDocumented'], 'Fetching now' => $S['fetching'],
         'Last refresh' => $S['lastRefresh'], 'Next refresh' => $S['nextRefresh'], 'Background job last ran' => $S['cronLastRun'], 'Photos saved' => $S['photosSaved'], 'Unsplash' => $S['unsplash']]), '</section>',
         '<section class="card"><h2>Price sheet and newsletter</h2>', mon_kv(['Price-sheet routes' => $S['pricing']['sheetLanes'], 'Queued for a Duffel lookup' => $S['pricing']['queuedForLookup'], 'Duffel business calibration' => $S['pricing']['duffelCalibration']['business'] ?? null, 'Duffel first calibration' => $S['pricing']['duffelCalibration']['first'] ?? null]),

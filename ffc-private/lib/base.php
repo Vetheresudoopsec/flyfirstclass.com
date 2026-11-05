@@ -3,7 +3,7 @@
 // base.php: settings, small file store with locks, parallel HTTP, logging, JSON replies.
 if (!defined('FFC_PRIVATE')) { exit; }
 
-const BUILD = '2026-11-03h-php';
+const BUILD = '2026-11-05a-php';
 const SCHEMA = 2;                    // bump when the stored data format changes: older cache entries are ignored
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('UTC');
@@ -50,6 +50,7 @@ function C($k) {
             'ukey' => trim(env('UNSPLASH_KEY') ?: env('UNSPLASH_ACCESS_KEY')), 'unsplash_base' => rtrim(env('UNSPLASH_BASE', 'https://api.unsplash.com'), '/'),
             'maxd' => (int)env('MAX_ROUTES', 20) ?: 20, 'ubudget' => (int)env('PHOTO_LOOKUPS', 6) ?: 6,
             'drpm' => max(5, (int)env('DUFFEL_RPM', 40) ?: 40), 'dcap' => (int)env('DUFFEL_DAILY_CAP', 1000),
+            'rshare' => min(100, max(10, (int)env('REFRESH_SHARE', 70) ?: 70)),      // percent of the daily search limit the 12:00 PM refresh may use; the rest stays for visitors and price lookups
             'geoip' => env('GEOIP_BASE', 'https://ipwho.is/'),
             'credits' => env('PHOTO_CREDITS') !== 'off',
             'launch' => (float)env('LAUNCH_BUDGET', 9),          // seconds a web request may spend starting new Duffel searches

@@ -37,11 +37,13 @@ function cron_run($budget) {         // used by cron.php and /api/cron
 
 function status_full() {
     $s = cload('stats.json', []); $m = META(); $t = cload('throttle.json', []); $u = ust(); $IMG = img_all(true); $mode = C('mode');
-    $routes = 0; foreach (array_keys(cload('routes.json', [])) as $k) if (starts($k, $mode . ':')) $routes++;
+    $RCs = cload('routes.json', []); $routes = 0; foreach (array_keys($RCs) as $k) if (starts($k, $mode . ':')) $routes++;
+    $refreshRoutes = count(refresh_keys($RCs, $m['asked'] ?? [])); $today = ($t['d'] ?? '') === day_et();
     $off = doff();
     return ['build' => BUILD, 'mode' => $mode, 'host' => 'php',
         'duffel' => ['mode' => $mode, 'token' => !C('token') ? 'not set' : ($off ? 'rejected' : (($s['token'] ?? '') === 'rejected' ? 'not checked yet' : ($s['token'] ?? 'not checked yet'))), 'requestsOk' => $s['ok'] ?? 0, 'requestsFailed' => $s['fail'] ?? 0, 'rateLimited' => $s['limited'] ?? 0,
-            'pausedForSeconds' => max(0, (int)ceil(($t['pause'] ?? 0) - microtime(true))), 'searchesToday' => (($t['d'] ?? '') === day_et()) ? ($t['n'] ?? 0) : 0, 'dailyCap' => C('dcap') ?: 'off', 'requestsPerMinute' => C('drpm'),
+            'pausedForSeconds' => max(0, (int)ceil(($t['pause'] ?? 0) - microtime(true))), 'searchesToday' => $today ? ($t['n'] ?? 0) : 0, 'searchesBySource' => $today ? ($t['by'] ?? []) : [], 'dailyCap' => C('dcap') ?: 'off', 'requestsPerMinute' => C('drpm'),
+            'dailyRefresh' => ['routes' => $refreshRoutes, 'searchesNeeded' => $refreshRoutes * 2, 'mayUsePerDay' => C('dcap') ? refresh_allowance() : 'no limit'],
             'lastError' => !empty($s['lastErr']) ? ['msg' => $s['lastErr']['msg'], 'when' => et_text($s['lastErr']['t'])] : null],
         'airports' => count(air()), 'routesDocumented' => $routes, 'fetching' => claims_count(),
         'unsplash' => !C('ukey') ? 'no key' : (!empty($u['off']) ? 'key rejected (401)' : (!empty($u['pause']) && now_ms() < $u['pause'] ? 'paused (hourly limit)' : 'on')),
