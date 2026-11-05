@@ -102,7 +102,8 @@ function mon_cards($S, $mail) {
     else $c[] = ['k' => 'photos', 'title' => 'Photos (Unsplash)', 'st' => 'warn', 'head' => 'Paused until the hourly limit resets', 'lines' => $pl];
     // Trustpilot invitations
     $t = $S['trips']; $bcc = strpos((string)$t['method'], 'Bcc') !== false; $tcap = $t['monthlyLimit'];
-    $tl = [(int)$t['waiting'] . ' waiting, ' . (int)$t['sentThisMonth'] . ' sent this month' . (is_numeric($tcap) ? ' of ' . $tcap : '') . '.'];
+    $tl = [(int)$t['waiting'] . ' waiting, ' . (int)$t['sentThisMonth'] . ($bcc ? ' invitations' : ' thank-you emails') . ' this month' . (is_numeric($tcap) && $bcc ? ' of ' . $tcap : '') . '.'];
+    if (!empty($t['matchedToTrustpilot'])) $tl[] = 'The count was matched to Trustpilot (' . $t['matchedToTrustpilot'] . ').';
     if (!empty($t['nextDue'])) $tl[] = 'Next one is due ' . $t['nextDue'] . '.';
     if ((int)$t['needAttention'] > 0) $c[] = ['k' => 'tp', 'title' => 'Trustpilot invitations', 'st' => 'bad', 'head' => (int)$t['needAttention'] . ' need' . ((int)$t['needAttention'] === 1 ? 's' : '') . ' attention', 'lines' => $tl, 'link' => ['See them', TR_PAGE . '?tab=attention']];
     elseif (is_numeric($tcap) && (int)$t['sentThisMonth'] >= (int)$tcap) $c[] = ['k' => 'tp', 'title' => 'Trustpilot invitations', 'st' => 'warn', 'head' => 'Monthly limit reached', 'lines' => $tl, 'link' => ['Open the list', TR_PAGE]];
