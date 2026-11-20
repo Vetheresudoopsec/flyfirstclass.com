@@ -102,7 +102,7 @@ cite{display:block;margin-top:14px;font-style:normal;font-size:.88rem;color:var(
 .steps li{counter-increment:s}
 .steps li::before{content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--j);color:var(--jt);font-weight:700;margin-bottom:14px}
 details{border-top:1px solid var(--line);padding:18px 0}details:last-of-type{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;font-weight:600;font-size:1.05rem}
+summary{font-weight:600;font-size:1.05rem}
 details p{margin-top:10px;max-width:70ch}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
 .chips button{padding:9px 18px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;font:500 .9rem Manrope,sans-serif;cursor:pointer}
@@ -228,13 +228,12 @@ footer ul+h3{margin-top:22px}
 @media(max-width:700px){.r{grid-template-columns:1fr}.c:last-child{border-left:0}.swp{left:auto;right:18px;top:100%}.c{padding:14px 18px}.sub{padding:0 18px}.act{padding:16px 30px 16px 18px}.btn.fare{padding:18px 32px}#de{padding:10px 18px 0}}
 /* Booking block, design A: underline tabs, one options row, one row of cells, gold "Request a free quote" cell, three reasons under the box.
    Every rule is scoped to #bk, so the Manage booking and Check in panels, the contact page and the rest of the site keep their own styles. */
-#bk{--bkh:88px}
-#bk .t4{display:flex;gap:0;padding:0;overflow-x:auto}
+#bk .t4{display:flex;gap:0;overflow-x:auto}
 #bk .t4 button{flex:none;display:block;margin:0 28px 0 0;padding:20px 2px 17px;background:none;color:var(--mute);font:500 .95rem Manrope,sans-serif;text-align:left;white-space:nowrap}
 #bk .t4 button svg{display:none}
 #bk .t4 button:hover,#bk .t4 button:focus-visible{color:var(--j)}
 #bk .t4 button[aria-selected=true]{background:none;color:var(--ink);font-weight:700;box-shadow:inset 0 -3px 0 var(--j)}
-#bk .bko{display:flex;align-items:center;flex-wrap:wrap;gap:0 28px;padding:4px 28px}
+#bk .bko{display:flex;align-items:center;flex-wrap:wrap;gap:0 28px}
 #bk .bko .c{display:block;position:relative;min-height:0;padding:0;border:0;background:none}
 #bk .bko .c:focus-within{outline:0;background:none;box-shadow:none}
 #bk .bko label:not(.pill){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -341,7 +340,6 @@ footer ul+h3{margin-top:22px}
 .ell{margin-top:-80px;padding:0 12px}
 .htab{width:auto;align-self:stretch;padding:22px 20px 8px}
 #bk{border-radius:0 0 16px 16px}
-.hero .fa{top:130px}
 #bk .t4{padding:0 16px}
 }
 /* Featured fares: one fare is shown large (picture, route, price, request button) with the full list beside it, cheapest first.
@@ -419,8 +417,8 @@ img{-webkit-user-drag:none;user-drag:none}
 .tc{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--au);border-radius:12px;padding:24px 28px;margin-bottom:28px;max-width:560px}
 .tt{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--mute)}.tt span:first-child{letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}
 .tc h3{font-size:1.75rem;font-weight:300;line-height:1.2;margin:10px 0 20px}.tc h3 .ar{color:var(--ac)}
-.td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 20px;margin:0}.td .cp{grid-column:1}.td .ce{grid-column:span 2}
-@media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.td .ce,.td .cp{grid-column:1/-1}.tc{padding:20px 18px}}
+.td{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 20px;margin:0}
+@media(max-width:520px){.td{grid-template-columns:repeat(2,minmax(0,1fr))}.tc{padding:20px 18px}}
 .td .cs{grid-column:1/-1}
 .td dt{font-size:.8rem;color:var(--mute)}
 .td dd{margin:0;font-weight:600;overflow-wrap:anywhere}.tc[hidden]{display:none}
@@ -473,13 +471,13 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .tp.x input,.tp.x select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
 .tp.x input:focus-visible,.tp.x select:focus-visible{outline:3px solid var(--j);outline-offset:1px}
 .lk .btn{margin-bottom:4px}
-.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.lkr{margin-top:20px}.cpr{margin:0 0 22px}.cpr .rf{white-space:nowrap}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}.cpr{margin:0 0 22px}.cpr .rf{white-space:nowrap}
 .cpy{position:relative;font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--au);text-decoration-thickness:1px;text-underline-offset:3px;text-transform:none;white-space:nowrap}
 .cpy:hover,.cpy:focus-visible{color:var(--j);text-decoration-color:var(--j)}.cpy:focus-visible{outline:2px solid var(--j);outline-offset:3px;border-radius:2px}
 .cpy::after{content:"";position:absolute;right:0;bottom:calc(100% + 6px);padding:3px 9px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--j);font-size:.72rem;line-height:1.3;letter-spacing:.04em;font-weight:500;white-space:nowrap;text-decoration:none;box-shadow:0 2px 10px #00000014;opacity:0;pointer-events:none;transition:opacity .15s}
 @media (hover:hover){.cpy:hover::after,.cpy:focus-visible::after{content:"Click to copy";opacity:1}}
 .cpy[data-s]::after{opacity:1!important}.cpy[data-s=copied]::after{content:"Copied"!important}.cpy[data-s=fail]::after{content:"Couldn't copy"!important;color:var(--ac)}
-@media (prefers-reduced-motion:reduce){.cpy::after{transition:none}}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}.lkr .tc{margin-bottom:14px;max-width:none}
+@media (prefers-reduced-motion:reduce){.cpy::after{transition:none}}.mpr{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 22px;max-width:620px}.mpr b{display:block;font-size:1rem}.mpr p{margin:6px 0 12px;max-width:none;font-size:.92rem;color:var(--mute)}.mpr:focus{outline:none}.mpb{display:flex;flex-wrap:wrap;gap:8px 28px}
 /* Manage Booking tab of the booking box: one slim bar, as tall as Request a Quote (tabs 55 + top row 53 + bottom row 88) */
 .tp.mg{padding:0}
 .mgo{display:flex;align-items:center;justify-content:space-between;gap:8px 24px;min-height:53px;padding:0 24px;border-bottom:1px solid var(--line)}
@@ -691,7 +689,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .a-hd.sm{min-height:clamp(380px,56vh,500px)}
 .a-s{padding:104px 0}.a-soft{background:var(--soft)}
 
-.a-bandimg{position:relative;height:clamp(230px,36vw,440px);margin-top:70px}.a-bandimg .pcw{position:absolute;inset:0}
+.a-bandimg{position:relative;margin-top:70px}.a-bandimg .pcw{position:absolute;inset:0}
 
 .a-built{display:grid;grid-template-columns:1fr 1fr;min-height:580px}
 .a-built .tx{padding:clamp(40px,7vw,110px);display:flex;flex-direction:column;justify-content:center;background:var(--soft)}
@@ -736,7 +734,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .b-s{padding:100px 0}
 
 .b-mis{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(70px,10vw,130px) 0}
-.b-mis .big{font-size:clamp(1.6rem,3.6vw,2.7rem);font-weight:200;line-height:1.25;color:var(--ink);max-width:24ch;letter-spacing:-.015em;margin:0}
+.b-mis .big{font-weight:200;line-height:1.25;color:var(--ink);letter-spacing:-.015em;margin:0}
 .b-mis .big::before{content:"";display:block;width:64px;height:3px;background:var(--au);margin-bottom:28px}
 
 @media(max-width:900px){
@@ -765,7 +763,7 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 @media(max-width:900px){.a-faq.t{grid-template-columns:1fr;gap:30px}.a-faq.t>div:first-child{position:static}}
 /* ---- the "20+" badge next to the logo (header and footer): bold figure in the page's own typeface after a thin golden line, no ring or logo styling; and the motto in the footer ---- */
 .logo .yrs{flex:0 0 auto;align-self:stretch;display:inline-flex;align-items:center;margin-left:6px;padding-left:16px;border-left:1px solid var(--au);color:var(--ac);font-family:Figtree,Inter,Manrope,system-ui,sans-serif;font-size:2.35rem;font-weight:500;letter-spacing:-.09em;font-kerning:normal;line-height:1}   /* stretches to the full height of the logo and name; the figure is tall and a little thin */
-footer .fd{margin-top:10px}footer .fq{margin-top:10px;max-width:30ch;font-size:.7rem;line-height:1.45;color:var(--mute);opacity:.85}footer .fq p{margin-top:5px;font-size:.7rem}footer .fq [hidden]{display:none}footer .fqh{border:0;background:none;padding:0;margin:0;font:inherit;font-weight:600;color:var(--mute);text-align:left;cursor:pointer}footer .fqh::after{content:"\25BE";display:inline-block;margin-left:5px;transition:transform .2s}footer .fqh[aria-expanded="true"]::after{transform:rotate(180deg)}footer .fqh:hover{color:var(--j)}footer .fq a{font-size:inherit;font-weight:inherit;color:inherit;text-decoration:none}footer .fq a{color:inherit}footer .fq p a#fqbk{color:#1a56db;text-decoration:underline}footer .fq p a#fqbk:hover{color:#0f3fa8}footer .fq{position:relative;border-radius:5px;padding:6px 8px;margin-left:-8px;outline:2px solid transparent}footer .fq.hot{outline-color:#c62828;animation:fqp .7s ease-in-out 3}footer .fq.hot::after{content:"!";position:absolute;right:-9px;top:-9px;width:16px;height:16px;border-radius:50%;background:#c62828;color:#fff;font-size:.7rem;font-weight:700;line-height:16px;text-align:center}footer .fq.hot .fqh{color:#c62828}footer .fq+h3{margin-top:32px}.mw{position:relative}.mw textarea{display:block}.mw .mph{position:absolute;left:0;top:0;right:0;pointer-events:none;color:var(--mute);opacity:.85;overflow:hidden;max-height:100%;box-sizing:border-box}.mw .mph[hidden]{display:none}.mw .mph a{pointer-events:auto;color:#1a56db;text-decoration:underline}.mw .mph a:hover{color:#0f3fa8}@keyframes fqp{0%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.55)}50%{box-shadow:0 0 0 7px rgba(198,40,40,0)}}@media (prefers-reduced-motion:reduce){footer .fq.hot{animation:none}}
+footer .fd{margin-top:10px}footer .fq{margin-top:10px;max-width:30ch;font-size:.7rem;line-height:1.45;color:var(--mute);opacity:.85}footer .fq p{margin-top:5px;font-size:.7rem}footer .fq [hidden]{display:none}footer .fqh{border:0;background:none;padding:0;margin:0;font:inherit;font-weight:600;color:var(--mute);text-align:left;cursor:pointer}footer .fqh::after{content:"\25BE";display:inline-block;margin-left:5px;transition:transform .2s}footer .fqh[aria-expanded="true"]::after{transform:rotate(180deg)}footer .fqh:hover{color:var(--j)}footer .fq a{font-size:inherit;font-weight:inherit;text-decoration:none}footer .fq a{color:inherit}footer .fq p a#fqbk{color:#1a56db;text-decoration:underline}footer .fq p a#fqbk:hover{color:#0f3fa8}footer .fq{position:relative;border-radius:5px;padding:6px 8px;margin-left:-8px;outline:2px solid transparent}footer .fq.hot{outline-color:#c62828;animation:fqp .7s ease-in-out 3}footer .fq.hot::after{content:"!";position:absolute;right:-9px;top:-9px;width:16px;height:16px;border-radius:50%;background:#c62828;color:#fff;font-size:.7rem;font-weight:700;line-height:16px;text-align:center}footer .fq.hot .fqh{color:#c62828}footer .fq+h3{margin-top:32px}.mw{position:relative}.mw textarea{display:block}.mw .mph{position:absolute;left:0;top:0;right:0;pointer-events:none;color:var(--mute);opacity:.85;overflow:hidden;max-height:100%;box-sizing:border-box}.mw .mph[hidden]{display:none}.mw .mph a{pointer-events:auto;color:#1a56db;text-decoration:underline}.mw .mph a:hover{color:#0f3fa8}@keyframes fqp{0%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.55)}50%{box-shadow:0 0 0 7px rgba(198,40,40,0)}}@media (prefers-reduced-motion:reduce){footer .fq.hot{animation:none}}
 footer .mot{margin-top:16px;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);font-weight:600}
 @media(max-width:420px){.logo .yrs{margin-left:2px;padding-left:12px;font-size:1.95rem}}
 @media(max-width:360px){.logo{gap:8px;font-size:1rem}.logo small{font-size:.72rem}.logo svg{width:26px;height:26px}.logo .yrs{margin-left:0;padding-left:9px;font-size:1.55rem}}
@@ -1089,7 +1087,6 @@ header .mp a.mp-ov{font-size:1.25rem;font-weight:500;margin-bottom:30px}
 .ap-bc{font-size:.8125rem;color:#3d4654;margin:0 0 28px}.ap-bc a{color:#3d4654}.ap-bc a:hover{color:var(--j)}
 .ap-hg{display:grid;grid-template-columns:1.15fr 1fr;gap:36px 64px;align-items:center}
 .ap-h.ph .ap-hg{align-items:end}
-.ap-hg.nophoto{grid-template-columns:1fr}
 .ap-lg{display:flex;align-items:center;min-height:44px;margin:0 0 22px}
 .ap-lg .alg{height:40px;max-width:200px;filter:none;opacity:1}
 .ap-lg .alt{font-size:1.15rem;font-weight:600;color:var(--ink)}
@@ -1563,7 +1560,6 @@ async function getRoutes(o,d,cb,cur){let r=null;const OLD={live:true,list:[],pen
  return{live:false,list:sample(o,d),pending:0,error:r&&r.error?"live routes temporarily unavailable":""}}
 const cd=v=>{v=(v||"").trim();const m=v.match(/\(([A-Za-z]{3})\)/)||v.match(/^([A-Za-z]{3})$/);if(m)return m[1].toUpperCase();const n=v.toLowerCase();return Object.keys(N).find(k=>N[k].toLowerCase()==n)};
 const nm=c=>(N[c]||c)+" ("+c+")";
-const al=x=>[...new Set(x.cabins.flatMap(k=>k.a))];
 // "Direct", "1 stop" or "1 stop via Doha (DOH)" (the server adds the stop cities once it has them; routes saved earlier fill in at the next daily refresh)
 const stpP=(n,v)=>(n?(n==1?"1 stop":n+" stops"):"Direct")+(n&&v&&v.length?" via "+v.join(" or "):"");
 const stp=x=>esc(stpP(x.stops,x.via));
@@ -1620,7 +1616,8 @@ function DL(host,add,cnt,cls){const rows=()=>[...host.querySelectorAll(".mcx1")]
  add.onclick=()=>{if(rows().length<4)put("").focus()};
  host.addEventListener("click",e=>{const b=e.target.closest(".mcr");if(b){b.closest(".mcx1").remove();upd()}});
  return{put,rows,upd,n:()=>rows().length,get:()=>rows().map(r=>r.querySelector("input")).filter(i=>i.value.trim()),clear:()=>{rows().forEach(r=>r.remove());upd()}}}
-["ty","cb"].forEach(i=>csel($(i)));$("cb").value="Business class";   // the booking block opens on Business class["fa","fb","la","lb"].forEach(i=>ac($(i)));
+["ty","cb"].forEach(i=>csel($(i)));$("cb").value="Business class";   // the booking block opens on Business class
+["fa","fb","la","lb"].forEach(i=>ac($(i)));
 const MC=DL($("mcl"),$("mca"),$("mcn"));
 // ---- Date calendar (departure and return, with flexible windows) ----
 const DT={dep:"",dep2:"",ret:"",ret2:""};let CP=0,CK=null,CMo=new Date();CMo.setDate(1);
@@ -1726,7 +1723,7 @@ let BK=null;try{BK=JSON.parse(sessionStorage.getItem("ffc-bk")||"null")}catch(e)
 function setBK(b){BK=b;try{sessionStorage.setItem("ffc-bk",JSON.stringify(b))}catch(e){}rc()}
 function book(f,t,cab,via,stops,sp){ACTREF=null;ACTKIND="";setBK({from:f,to:t,via:via||[],...(stops?{stops}:{}),...(sp?{sp}:{}),cabin:cab||$("cb").value,trip:$("ty").value,pax:paxText(PX.a,PX.k),a:PX.a,k:PX.k,dep:DT.dep,dep2:DT.dep2,ret:$("ty").value=="One way"?"":DT.ret,ret2:$("ty").value=="One way"?"":DT.ret2,flex:$("fx").checked,ref:mkRef(),at:new Date().toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"})});goTo("contact")}
 function rc(){try{phSync()}catch(e){}const E=$("rc");if(!BK){E.hidden=true;return}
- const f=d=>d?new Date(d+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"To be confirmed",it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
+ const it=(k,v,c)=>`<div${c?` class="${c}"`:""}><dt>${k}</dt><dd>${esc(v)}</dd></div>`;
  E.hidden=false;E.innerHTML=`<div class="tt"><span>Your trip</span><span>Ref ${cpl(BK.ref)}</span></div><h3>${[BK.from,BK.to,...(BK.via||[])].map(esc).join(' <span class="ar">&rarr;</span> ')}</h3><dl class="td">`+it("Cabin",BK.cabin)+it("Trip type",BK.trip)+(BK.stops?it("Stops",stS(BK.stops),"cs"):"")+it("Passengers",BK.pax)+it(BK.flex&&BK.dep2?"Departure window":"Departing",BK.dep?drl(BK.dep,BK.dep2,1):"To be confirmed")+((BK.trip=="Round-trip"||BK.trip=="Return"||BK.ret)?it(BK.flex&&BK.ret2?"Return window":"Returning",BK.ret?drl(BK.ret,BK.ret2,1):"To be confirmed"):"")+it("Flexible dates",BK.flex?"Yes":"No")+`</dl><div class="tf"><span>Fares are quoted by your advisor.</span><span><a href="/" id="rce">Edit</a> &middot; <button type="button" id="rcx">Clear</button></span></div>`}
 $("rc").onclick=e=>{const t=e.target;if(t.id=="rcx")setBK(null);if(t.id=="rce"&&BK){const sub=lastGet();
   if(ACTREF||(sub&&sub.ref==BK.ref)){e.preventDefault();mgGo(true);return}   // a request that was already sent is changed on the Manage Booking page; only an unsent trip goes back to the booking form
@@ -1857,10 +1854,12 @@ function banner(l){const n=N[LD]||(LR.find(x=>x.iata==LD)||{}).city||LD,pic=PIC[
 const card=x=>{const n=N[x.iata]||x.city||x.iata,fc=x.cabins.some(k=>k.c=="First");return`<article class="lr${LD?" nb":""}">${LD?"":`<div class="im" data-c="${esc(n)}" data-i="${esc(x.iata)}">${PIC[x.iata]?`<img src="https://images.unsplash.com/photo-${PIC[x.iata]}?auto=format&fit=crop&w=700&q=70" alt="${esc(n)} city view" loading="lazy" onerror="this.remove()">`:""}<div class="tags">${x.cabins.map(k=>`<span>${k.c}</span>`).join("")}</div></div>`}<div class="rb"><div><h3>${esc(LO.code)} to ${esc(x.iata)}</h3><p>${esc(LO.city)} to ${esc(n)}</p><p class="sp">${stx(x)}</p></div><div class="rcab">${x.cabins.map(k=>`<div><b>${k.c}</b><span class="lgs">${lgx(k.a)}</span></div>`).join("")}</div><button class="btn sm go" type="button" data-from="${esc(LO.city)} (${esc(LO.code)})" data-to="${esc(n)} (${esc(x.iata)})" data-cab="${fc?"First class":"Business class"}"${stD(x)}>Request This Route</button></div></article>`};
 // Photos for Listings rows whose destination has no bundled picture: fetched from the server (Unsplash, cached there).
 const PHC=new Map();
+// One server call for the photos of these destination codes; what comes back is kept in PHC. Returns the reply ({photos, pending}), or null.
+async function phAsk(need){const r=await gf("/api/photos?codes="+need.join(","),{},0,true);if(!r.ok)return null;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));return j}
 function paint(){document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]").forEach(e=>{const p=PHC.get(e.dataset.i);if(!p||e.querySelector("img"))return;const im=new Image();im.onload=()=>{if(e.querySelector("img"))return;im.alt=e.dataset.c+" city view";e.insertAdjacentElement("afterbegin",im);if(p.credit)e.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};im.src=p.url})}
 async function fillPhotos(n=0){const need=[...new Set([...document.querySelectorAll("#lg .im[data-i],#tcar .dim[data-i]")].map(e=>e.dataset.i))].filter(c=>!PIC[c]&&!PHC.has(c));
  if(!need.length||n>10)return;
- try{const r=await gf("/api/photos?codes="+need.join(","),{},0,true);if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));paint();if(j.pending&&j.pending.length)setTimeout(()=>fillPhotos(n+1),3500)}catch(e){}}
+ try{const j=await phAsk(need);if(!j)return;paint();if(j.pending&&j.pending.length)setTimeout(()=>fillPhotos(n+1),3500)}catch(e){}}
 // Filters that cannot match the search are hidden: with a destination only its own region is offered, and a cabin nobody flies is dropped.
 function chipsFor(){const REG=["europe","apac","americas","me","africa"],dr=LD?(PH[LD]||[])[1]:"";
  [...$("ch").children].forEach(b=>{const f=b.dataset.f;let show=true;
@@ -2392,7 +2391,7 @@ function airPage(s){const a=AIRS.find(x=>x[1]==s);if(!a)return;const n=a[0],x=AI
 // Fare cards whose destination has no bundled picture ask the server for it (the same source as the Featured fares), and keep their colour strip if nothing comes back.
 async function airDest(R,n=0){const need=[...new Set([...R.querySelectorAll(".ap-fc[data-ta]")].filter(b=>!b.querySelector("img")).map(b=>b.dataset.ta))].filter(c=>c&&!PHC.has(c));
  if(!need.length||n>6)return;
- try{const r=await gf("/api/photos?codes="+need.join(","),{},0,true);if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));
+ try{const j=await phAsk(need);if(!j)return;
   R.querySelectorAll(".ap-fc[data-ta]").forEach(b=>{const v=PHC.get(b.dataset.ta),t=b.querySelector(".ap-im");if(!v||!v.url||!t||t.querySelector("img"))return;const im=new Image();im.alt=b.querySelector("b").textContent.split(" to ")[1]+" city view";im.onload=()=>{if(!t.querySelector("img"))t.appendChild(im)};im.src=v.url});
   if(j.pending&&j.pending.length)setTimeout(()=>airDest(R,n+1),3500)}catch(e){}}
 // ---- Top destinations carousel (based on the visitor's nearest airport) ----
@@ -2411,7 +2410,7 @@ function renderTop(l){$("tcar").innerHTML=l.slice(0,11).map(x=>{const n=N[x.iata
   im.onload=()=>{if(cur.dataset.ta!=d.ta||t.querySelector("img"))return;t.insertAdjacentElement("afterbegin",im);t.classList.add("ph");if(p.credit&&p.link)t.insertAdjacentHTML("beforeend",`<a class="cr" href="${esc(p.link)}" target="_blank" rel="noopener">Photo: ${esc(p.credit)} / Unsplash</a>`)};
   im.src=p.url}
  async function ask(n=0){if(asked&&!n)return;asked=true;const need=[...new Set(rows.map(r=>r.dataset.ta))].filter(c=>!PHC.has(c));if(!need.length||n>6)return;
-  try{const r=await gf("/api/photos?codes="+need.join(","),{},0,true);if(!r.ok)return;const j=await r.json();Object.entries(j.photos||{}).forEach(([c,v])=>PHC.set(c,v));photo(cur.dataset);if(j.pending&&j.pending.length)setTimeout(()=>ask(n+1),3500)}catch(e){}}
+  try{const j=await phAsk(need);if(!j)return;photo(cur.dataset);if(j.pending&&j.pending.length)setTimeout(()=>ask(n+1),3500)}catch(e){}}
  function draw(r){cur=r;const v=vis(),i=v.indexOf(r),d=r.dataset,g=(d.g||"").split(",");
   rows.forEach(x=>x.setAttribute("aria-pressed",String(x==r)));
   if(g.length==3)$("fst").style.background=`linear-gradient(180deg,${g[0]} 0%,${g[1]} 55%,${g[2]} 100%)`;

@@ -189,9 +189,8 @@ function places($q) {
 function geo() {
     $ip = geo_ip();
     if (is_private_ip($ip)) $ip = '';                 // local: look up this machine's public IP
-    $r = http_one(C('geoip') . $ip, ['Accept: application/json'], 10);
-    $g = $r['status'] >= 200 && $r['status'] < 300 ? json_decode($r['body'], true) : [];
-    if (!is_array($g) || empty($g['success'])) throw fail('IP lookup failed (' . $r['status'] . ')', 502);
+    $g = geo_lookup($ip, 10, $st);
+    if (!$g) throw fail('IP lookup failed (' . $st . ')', 502);
     $a = nearest((float)$g['latitude'], (float)$g['longitude']);
     return ['city' => $g['city'] ?? null, 'country' => $g['country'] ?? null, 'countryCode' => $g['country_code'] ?? null, 'airport' => $a['k'], 'airportCity' => $a['city']];
 }

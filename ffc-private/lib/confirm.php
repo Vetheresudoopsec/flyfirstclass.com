@@ -23,13 +23,29 @@ const CM_TEL = '+12122211860';
 const CM_ADDRESS = '100 Church St, New York, NY 10007';
 const CM_NAME = 'Fly First Class';
 
-// A plain, conservative address check for the one place we write to a visitor's address: no commas, quotes, brackets or spaces.
-function cm_addr($e) {
-    $e = trim((string)$e);
-    if ($e === '' || strlen($e) > 254 || !preg_match('/^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/', $e)) return '';
-    if ($e[0] === '.' || strpos($e, '..') !== false || strpos($e, '.@') !== false) return '';
-    return $e;
+// ---------- Pieces shared by the visitor emails (this confirmation and the thank-you email in trips.php) ----------
+const CM_FONT = "Manrope,'Helvetica Neue',Helvetica,Arial,sans-serif";
+function em_brand($logo) {                   // the logo, "Fly First Class" and the short gold rule, centred
+    $F = CM_FONT;
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td align="center" style="padding:0">' . $logo . '</td></tr>'
+        . '<tr><td align="center" style="padding:12px 0 0;font:600 11px/1.3 ' . $F . ';letter-spacing:.32em;text-transform:uppercase;color:#6e5624">Fly First Class</td></tr>'
+        . '<tr><td align="center" style="padding:12px 0 0"><div style="width:40px;height:1px;line-height:1px;font-size:1px;background:#c9b27c;margin:0 auto">&nbsp;</div></td></tr></table>';
 }
+function em_questions($top) {                // "Any Questions?" with the phone number, the email address and the street address
+    $F = CM_FONT; $cap = "font:600 10px/1.3 $F;letter-spacing:.16em;text-transform:uppercase;color:#59616f";
+    $row = function ($k, $v, $href) use ($F, $cap) {
+        return '<tr><td width="68" valign="middle" style="width:68px;padding:13px 0;border-bottom:1px solid #e6dfcf;' . $cap . ';color:#6e5624">' . $k . '</td><td valign="middle" style="padding:13px 0;border-bottom:1px solid #e6dfcf;font:500 14px/1.3 ' . $F . ';letter-spacing:.03em"><a href="' . $href . '" style="color:#14181f;text-decoration:none">' . $v . '</a></td></tr>';
+    };
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:' . $top . 'px;text-align:left"><tr><td style="padding:0 0 10px;font:600 10px/1.3 ' . $F . ';letter-spacing:.24em;text-transform:uppercase;color:#6e5624">Any Questions?</td></tr>'
+        . '<tr><td style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #e6dfcf">' . $row('Call', m_esc(CM_PHONE), 'tel:' . CM_TEL) . $row('Email', m_esc(MAIL_INTENDED), 'mailto:' . MAIL_INTENDED) . '</table></td></tr>'
+        . '<tr><td style="padding:10px 0 0;font:400 12px/1.5 ' . $F . ';color:#59616f">' . m_esc(CM_ADDRESS) . '</td></tr></table>';
+}
+function em_footer($top) {                   // the site, Privacy and Terms links
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:' . $top . 'px"><tr><td align="center" style="padding:18px 0 0;border-top:1px solid #ece6d8;font:400 11px/1.6 ' . CM_FONT . ';color:#59616f">'
+        . '<a href="' . CM_SITE . '" style="color:#59616f;text-decoration:none;margin:0 8px">flyfirstclass.com</a><a href="' . CM_SITE . '/privacy-policy/" style="color:#59616f;margin:0 8px">Privacy</a><a href="' . CM_SITE . '/terms/" style="color:#59616f;margin:0 8px">Terms</a></td></tr></table>';
+}
+
+// A plain, conservative address check for the one place we write to a visitor's address: no commas, quotes, brackets or spaces.
 function cm_name($s) {                       // names typed all in lower or upper case are tidied ("alex" > "Alex"); anything mixed is left as typed
     $s = trim((string)$s);
     if ($s !== '' && ($s === mb_strtolower($s) || $s === mb_strtoupper($s))) $s = mb_convert_case($s, MB_CASE_TITLE);
@@ -60,14 +76,14 @@ function confirm_mail($p, $ref) {
     if ($kind !== '' && $kind !== 'new') return null;                       // changes, booking enquiries and check-in requests are not new quote requests
     $t = qTrip($p['trip'] ?? null);
     if ($t['from'] === '' || $t['to'] === '') return null;                  // no route, no confirmation
-    $c = qWho($p['contact'] ?? null); $to = cm_addr($c['email']);
+    $c = qWho($p['contact'] ?? null); $to = valid_email($c['email']);
     if ($to === '') return null;
     return confirm_build($t, $c, $ref, $to);
 }
 
 function confirm_build($t, $c, $ref, $to) {
     $yr = (int)gmdate('Y');
-    $F = "Manrope,'Helvetica Neue',Helvetica,Arial,sans-serif";
+    $F = CM_FONT;
     $first = cm_name($c['first']);
     $pts = []; foreach (array_merge([$t['from'], $t['to']], $t['via']) as $s) if ($s !== '') $pts[] = cm_place($s);
     $multi = count($pts) > 2;
@@ -149,9 +165,6 @@ function confirm_build($t, $c, $ref, $to) {
     $stub = '<tr><td class="tk" style="border-top:1px dashed #e0d6c0;background:#f8f3e7;border-radius:0 0 9px 9px;padding:14px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td valign="middle" style="padding:0;' . $cap . ';color:#6e5624">Reference</td>'
         . '<td align="right" valign="middle" style="padding:0;font:700 15px/1.3 ' . $F . ';letter-spacing:.12em;color:#14181f">' . m_esc($ref) . '</td></tr></table></td></tr>';
 
-    $q = function ($k, $v, $href) use ($F, $cap) {
-        return '<tr><td width="68" valign="middle" style="width:68px;padding:13px 0;border-bottom:1px solid #e6dfcf;' . $cap . ';color:#6e5624">' . $k . '</td><td valign="middle" style="padding:13px 0;border-bottom:1px solid #e6dfcf;font:500 14px/1.3 ' . $F . ';letter-spacing:.03em"><a href="' . $href . '" style="color:#14181f;text-decoration:none">' . $v . '</a></td></tr>';
-    };
     $title = $first !== '' ? 'Thank you for your request, ' . $first . '.' : 'Thank you for your request.';
     $html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only"><title>' . m_esc($subject) . '</title>'
         . '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap">'
@@ -162,21 +175,16 @@ function confirm_build($t, $c, $ref, $to) {
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#efece6"><tr><td class="out" align="center" style="padding:40px 20px">'
         . '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#fcfaf6;border:1px solid #e6dfcf"><tr><td class="pad" align="center" style="padding:40px 44px 30px;font-family:' . $F . ';color:#14181f">'
         // brand
-        . '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td align="center" style="padding:0">' . $logo(26, 'margin:0 auto') . '</td></tr>'
-        . '<tr><td align="center" style="padding:12px 0 0;font:600 11px/1.3 ' . $F . ';letter-spacing:.32em;text-transform:uppercase;color:#6e5624">Fly First Class</td></tr>'
-        . '<tr><td align="center" style="padding:12px 0 0"><div style="width:40px;height:1px;line-height:1px;font-size:1px;background:#c9b27c;margin:0 auto">&nbsp;</div></td></tr></table>'
+        . em_brand($logo(26, 'margin:0 auto'))
         // headline
         . '<h1 style="margin:30px 0 0;font:300 30px/1.2 ' . $F . ';letter-spacing:-.01em;color:#14181f;text-align:center">' . m_esc($title) . '</h1>'
         . '<p style="margin:8px 0 0;font:400 15px/1.6 ' . $F . ';color:#59616f;text-align:center">Your advisor will be with you shortly.</p>'
         // the ticket
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;background:#ffffff;border:1px solid #ece6d8;border-radius:10px;border-collapse:separate;text-align:left">' . $route . $detail . $contact . $stub . '</table>'
         // questions
-        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;text-align:left"><tr><td style="padding:0 0 10px;font:600 10px/1.3 ' . $F . ';letter-spacing:.24em;text-transform:uppercase;color:#6e5624">Any Questions?</td></tr>'
-        . '<tr><td style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #e6dfcf">' . $q('Call', m_esc(CM_PHONE), 'tel:' . CM_TEL) . $q('Email', m_esc(MAIL_INTENDED), 'mailto:' . MAIL_INTENDED) . '</table></td></tr>'
-        . '<tr><td style="padding:10px 0 0;font:400 12px/1.5 ' . $F . ';color:#59616f">' . m_esc(CM_ADDRESS) . '</td></tr></table>'
+        . em_questions(30)
         // footer
-        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px"><tr><td align="center" style="padding:18px 0 0;border-top:1px solid #ece6d8;font:400 11px/1.6 ' . $F . ';color:#59616f">'
-        . '<a href="' . CM_SITE . '" style="color:#59616f;text-decoration:none;margin:0 8px">flyfirstclass.com</a><a href="' . CM_SITE . '/privacy-policy/" style="color:#59616f;margin:0 8px">Privacy</a><a href="' . CM_SITE . '/terms/" style="color:#59616f;margin:0 8px">Terms</a></td></tr></table>'
+        . em_footer(30)
         . '</td></tr></table></td></tr></table></body></html>';
 
     return ['to' => $to, 'fromName' => CM_NAME, 'subject' => $subject, 'replyTo' => MAIL_INTENDED, 'headers' => ['Auto-Submitted: auto-generated'], 'text' => $text, 'html' => $html];
@@ -213,5 +221,5 @@ function confirm_sample($which) {
     ];
     if (!isset($trips[$which])) return null;
     $t = qTrip($trips[$which]); $c = qWho($base['contact']);
-    return confirm_build($t, $c, 'FFC-7K2M9QXA', cm_addr($c['email']));
+    return confirm_build($t, $c, 'FFC-7K2M9QXA', valid_email($c['email']));
 }

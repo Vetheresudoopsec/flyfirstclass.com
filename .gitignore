@@ -6,3 +6,6 @@ cache/
 *.log
 *.tmp
 .DS_Store
+# The test-site password list lives on the server only (the repository is public)
+.htpasswd*
+ffc-private/.htpasswd*

@@ -81,7 +81,9 @@ function dispatch() {
     $q = $_GET;
 
     switch ($route) {
-        case 'geo': json_out(200, geo());
+        case 'geo':                                    // one outside IP lookup per call, so it is limited per visitor
+            if (!limit_hit(client_ip() . ':geo', 120, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
+            json_out(200, geo());
         case 'guard':                                  // the page asks for a pass here just before it calls the server
             if (!guard_on()) json_out(200, ['on' => false]);
             if ($method !== 'POST') json_out(200, ['on' => true, 'site' => guard_site()]);
@@ -109,22 +111,22 @@ function dispatch() {
             if (!admin_ok()) json_out(200, ['build' => BUILD]);
             json_out(200, status_full());
         case 'duffel-check':
-            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            admin_gate();
             json_out(200, check_duffel(($q['search'] ?? '') === '1'));
         case 'photo-test':
-            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            admin_gate();
             json_out(200, photo_test(substr(strtoupper((string)($q['code'] ?? '')), 0, 3)));
         case 'cron':
-            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            admin_gate();
             json_out(200, cron_run(min(110, max(60, (int)($q['budget'] ?? 100)))));   // web version: about 100 seconds per call (the command-line cron uses CRON_BUDGET)
         case 'mail-check':
-            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            admin_gate();
             $pv = (string)($q['preview'] ?? '');
             if ($pv !== '') {            // shows the visitor's confirmation email in the browser; add &send=1&to=you@example.com to send that sample to yourself as well
                 $cm = confirm_sample($pv);
                 if (!$cm) json_out(400, ['error' => 'preview must be confirmation, confirmation-oneway or confirmation-multi']);
                 if (($q['send'] ?? '') === '1') {
-                    $cm['to'] = cm_addr($q['to'] ?? '');
+                    $cm['to'] = valid_email($q['to'] ?? '');
                     if ($cm['to'] === '') json_out(400, ['error' => 'Add &to=you@example.com to send the sample.']);
                     try { $out = ['sent' => true, 'via' => send_mail($cm), 'to' => m_mask($cm['to'])]; } catch (Throwable $e) { $out = ['sent' => false, 'error' => $e->getMessage()]; }
                     $out['recent'] = mail_recent(3);
@@ -151,7 +153,7 @@ function dispatch() {
             $b = body_json(); guard_form($b); $ref = strtoupper(qs($b['ref'] ?? null, 20));
             if (!q_find($ref)) json_out(400, ['error' => 'Unknown reference ID.']);
             $c = qWho($b['contact'] ?? null);
-            if (!preg_match('/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/', $c['email'])) json_out(400, ['error' => 'A valid email address is required.']);
+            if (valid_email($c['email']) === '') json_out(400, ['error' => 'A valid email address is required.']);
             $sk = 'send:' . $ref . ':' . gmdate('Y-m-d'); $L = cload('limits.json', []);
             if (($L[$sk]['n'] ?? 0) >= 10 && now_ms() - $L[$sk]['t'] <= 86400000) json_out(429, ['error' => "This reference ID has reached today's limit. Please call us."]);
             $loc = ($b['consent'] ?? null) === true ? ip_location() : null;
@@ -172,7 +174,7 @@ function dispatch() {
             if ($nh !== '') json_out_then($ncode, $nrep, function () use ($nh) { nl_sync_one($nh); });
             json_out($ncode, $nrep);
         case 'newsletter-export':
-            if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']);
+            admin_gate();
             nl_export();
         case 'trips':                                  // the private Completed trips page (trips.php): signs in with ADMIN_KEY
             trips_route($method);

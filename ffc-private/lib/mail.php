@@ -110,9 +110,8 @@ function m_env($e) {
 function ip_location() {
     $ip = client_ip(); $priv = is_private_ip($ip);
     try {
-        $r = http_one(C('geoip') . ($priv ? '' : $ip), ['Accept: application/json'], 5);
-        $g = $r['status'] >= 200 && $r['status'] < 300 ? json_decode($r['body'], true) : [];
-        if (is_array($g) && !empty($g['success'])) return ['ip' => $priv ? ($g['ip'] ?? '') . " (this server's public address, because you are on the same machine)" : ($g['ip'] ?? $ip), 'place' => implode(', ', array_filter([$g['city'] ?? '', $g['region'] ?? '', $g['country'] ?? '']))];
+        $g = geo_lookup($priv ? '' : $ip, 5);
+        if ($g) return ['ip' => $priv ? ($g['ip'] ?? '') . " (this server's public address, because you are on the same machine)" : ($g['ip'] ?? $ip), 'place' => implode(', ', array_filter([$g['city'] ?? '', $g['region'] ?? '', $g['country'] ?? '']))];
     } catch (Throwable $e) { /* location is optional */ }
     return ['ip' => $priv ? 'local' : $ip, 'place' => 'Not available'];
 }
@@ -150,5 +149,5 @@ function quote_mail($p, $ref, $loc) {
         . ($rerouted ? '<div style="font:12px Arial,sans-serif;color:#59616f;margin-top:8px">Addressed to ' . m_esc(MAIL_INTENDED) . ', rerouted to ' . m_esc($cfg['to']) . ' for now.</div>' : '')
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px">' . implode('', array_map($sec, $rows)) . '</table></td></tr></table></td></tr></table></body></html>';
     $subject = $k[1] . ' ' . $ref . ': ' . $name . ($t['to'] ? ' (' . implode(' to ', array_map(function ($x) { return preg_replace('/\s*\(.*\)$/', '', $x); }, array_filter([$t['from'], $t['to']]))) . ')' : '');
-    return ['subject' => $subject, 'replyTo' => preg_match('/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/', $c['email']) ? $c['email'] : '', 'text' => $text, 'html' => $html];
+    return ['subject' => $subject, 'replyTo' => valid_email($c['email']), 'text' => $text, 'html' => $html];
 }

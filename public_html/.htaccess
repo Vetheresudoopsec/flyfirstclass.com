@@ -4,8 +4,8 @@ ErrorDocument 404 /404.html
 DirectoryIndex index.html index.php
 
 # TEST SITE LOCK (test branch only, never merge into main).
-# Every page on test.* asks for a username and password. The password list is ffc-private/.htpasswd-test
-# (a bcrypt hash, deployed beside public_html by .cpanel.yml). Anyone who cancels the sign-in box sees
+# Every page on test.* asks for a username and password. The password list is ffc-private/.htpasswd-test,
+# which exists on the server only (never in this public repository, see TEST-SITE-LOCK.md). Anyone who cancels the sign-in box sees
 # /locked.html, which says this is the test site and points to flyfirstclass.com.
 # The host check means the live site is never locked, even if this file is copied there by mistake.
 # robots.txt and locked.html stay open so search engines can read "Disallow: /" and the lock page can load.
@@ -26,6 +26,13 @@ RewriteEngine On
 # www.flyfirstclass.com is the same site as flyfirstclass.com: send it to the one address that is indexed
 RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+# Always https: quote forms carry names, emails and phone numbers. Behind Cloudflare the visitor's own connection is checked
+# (X-Forwarded-Proto), so this never loops. Local test servers (localhost) are left alone.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https [NC]
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$ [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # The test site is kept out of search engines; the live site gets the real robots.txt
 RewriteCond %{HTTP_HOST} ^test\. [NC]
@@ -70,6 +77,19 @@ RewriteRule ^api/([A-Za-z-]+)/?$ api.php?route=$1 [QSA,L]
   <FilesMatch "^(favicon\.(svg|ico)|apple-touch-icon\.png)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
+</IfModule>
+
+# Browser security settings. The pages (and other static files) get all of them; replies from api.php only get "nosniff",
+# because the private Bookings and trips page sends its own, stricter set.
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  <FilesMatch "\.(html?|txt|xml|svg)$">
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "geolocation=(), camera=(), microphone=(), payment=(), usb=()"
+    Header set Content-Security-Policy "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  </FilesMatch>
+  Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
 </IfModule>
 
 # Keep the test site out of search results

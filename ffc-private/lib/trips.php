@@ -45,7 +45,7 @@ const TR_BACKOFF = [3600000, 21600000, 86400000];     // wait after the 1st, 2nd
 
 function tr_on() { return !in_array(strtolower(trim(env('TRIPS', 'on'))), ['off', 'no', 'false', '0'], true); }
 function tr_cfg() {
-    $bcc = cm_addr(env('TRUSTPILOT_BCC'));
+    $bcc = valid_email(env('TRUSTPILOT_BCC'));
     $link = trim(env('TRUSTPILOT_LINK', 'https://www.trustpilot.com/evaluate/flyfirstclass.com'));
     if (!preg_match('~^https://[^\s"<>]+$~', $link)) $link = 'https://www.trustpilot.com/evaluate/flyfirstclass.com';
     return ['bcc' => $bcc, 'mode' => $bcc !== '' ? 'bcc' : 'link', 'link' => $link,
@@ -92,7 +92,7 @@ function tr_room($cfg) { return ($cfg['cap'] === 0 || $cfg['mode'] !== 'bcc') ? 
 function tr_ref($v) { $v = strtoupper(trim((string)$v)); return preg_match(TR_REF, $v) ? $v : ''; }
 function tr_add($name, $email, $ret, $force, $ref = '') {
     $name = mb_substr(trim(preg_replace('/\s+/u', ' ', preg_replace('/[\x00-\x1f\x7f<>"\\\\]+/u', ' ', (string)$name))), 0, 80);
-    $e = cm_addr($email); $ret = trim((string)$ret);
+    $e = valid_email($email); $ret = trim((string)$ret);
     $refIn = trim((string)$ref); $ref = tr_ref($refIn);
     if ($refIn !== '' && $ref === '') return ['ok' => false, 'code' => 'ref', 'msg' => 'The booking reference can use letters, numbers and dashes only (3 to 30 characters), for example FFC-7K2M9QXA.'];
     if ($name === '') return ['ok' => false, 'code' => 'name', 'msg' => "Enter the customer's name."];
@@ -205,7 +205,7 @@ function trips_status() {
 // ---------- The email ----------
 // $name and $email may be blank for a preview. Returns a message for send_mail().
 function tr_mail($name, $email, $cfg, $sample = false, $ref = '') {
-    $F = "Manrope,'Helvetica Neue',Helvetica,Arial,sans-serif";
+    $F = CM_FONT;
     $first = cm_name(preg_split('/\s+/u', trim((string)$name))[0] ?? '');
     $bcc = $cfg['mode'] === 'bcc';
     $title = 'Thank you for flying with us' . ($first !== '' ? ', ' . $first : '') . '.';
@@ -218,10 +218,6 @@ function tr_mail($name, $email, $cfg, $sample = false, $ref = '') {
     if (!$bcc) { $tx[] = $cfg['link']; }
     if ($ref !== '') { $tx[] = ''; $tx[] = 'Booking reference: ' . $ref; }
     $tx = array_merge($tx, ['', $p3, '', 'Call: ' . CM_PHONE, 'Email: ' . MAIL_INTENDED, CM_ADDRESS, '', CM_SITE, 'Privacy: ' . CM_SITE . '/privacy-policy/']);
-    $cap = "font:600 10px/1.3 $F;letter-spacing:.16em;text-transform:uppercase;color:#59616f";
-    $row = function ($k, $v, $href) use ($F, $cap) {
-        return '<tr><td width="68" valign="middle" style="width:68px;padding:13px 0;border-bottom:1px solid #e6dfcf;' . $cap . ';color:#6e5624">' . $k . '</td><td valign="middle" style="padding:13px 0;border-bottom:1px solid #e6dfcf;font:500 14px/1.3 ' . $F . ';letter-spacing:.03em"><a href="' . $href . '" style="color:#14181f;text-decoration:none">' . $v . '</a></td></tr>';
-    };
     $btn = $bcc ? '' : '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:22px auto 0"><tr><td style="background:#14181f;border-radius:6px"><a href="' . m_esc($cfg['link']) . '" style="display:inline-block;padding:13px 26px;font:600 12px/1 ' . $F . ';letter-spacing:.14em;text-transform:uppercase;color:#ffffff;text-decoration:none">Share Your Experience</a></td></tr></table>';
     // Trustpilot's Automatic Feedback Service reads who to invite (and an optional reference ID) from this block in the copy it receives. Mail apps do not show it.
     $meta = ($bcc && !$sample) ? '<script type="application/json+trustpilot">' . json_encode(['recipientName' => (string)$name, 'recipientEmail' => (string)$email] + ($ref !== '' ? ['referenceId' => $ref] : []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>' : '';
@@ -230,19 +226,14 @@ function tr_mail($name, $email, $cfg, $sample = false, $ref = '') {
         . '<body style="margin:0;padding:0;background:#efece6">' . $meta . '<div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#efece6">We hope your trip went smoothly.</div>'
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#efece6"><tr><td class="out" align="center" style="padding:40px 20px">'
         . '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#fcfaf6;border:1px solid #e6dfcf"><tr><td class="pad" align="center" style="padding:40px 44px 30px;font-family:' . $F . ';color:#14181f">'
-        . '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td align="center" style="padding:0"><img src="' . CM_SITE . '/email-logo.png" width="26" height="26" alt="" style="display:block;border:0;margin:0 auto"></td></tr>'
-        . '<tr><td align="center" style="padding:12px 0 0;font:600 11px/1.3 ' . $F . ';letter-spacing:.32em;text-transform:uppercase;color:#6e5624">Fly First Class</td></tr>'
-        . '<tr><td align="center" style="padding:12px 0 0"><div style="width:40px;height:1px;line-height:1px;font-size:1px;background:#c9b27c;margin:0 auto">&nbsp;</div></td></tr></table>'
+        . em_brand('<img src="' . CM_SITE . '/email-logo.png" width="26" height="26" alt="" style="display:block;border:0;margin:0 auto">')
         . '<h1 style="margin:30px 0 0;font:300 28px/1.25 ' . $F . ';letter-spacing:-.01em;color:#14181f;text-align:center">' . m_esc($title) . '</h1>'
         . '<p style="margin:18px 0 0;font:400 15px/1.7 ' . $F . ';color:#3b414c;text-align:left">' . m_esc($p1) . '</p>'
         . '<p style="margin:14px 0 0;font:400 15px/1.7 ' . $F . ';color:#3b414c;text-align:left">' . m_esc($p2) . '</p>' . $btn
         . ($ref !== '' ? '<p style="margin:18px 0 0;font:400 13px/1.5 ' . $F . ';color:#59616f;text-align:left">Booking reference <b style="letter-spacing:.06em;color:#14181f">' . m_esc($ref) . '</b></p>' : '')
         . '<p style="margin:22px 0 0;font:400 15px/1.7 ' . $F . ';color:#3b414c;text-align:left">' . m_esc($p3) . '</p>'
-        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;text-align:left"><tr><td style="padding:0 0 10px;font:600 10px/1.3 ' . $F . ';letter-spacing:.24em;text-transform:uppercase;color:#6e5624">Any Questions?</td></tr>'
-        . '<tr><td style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #e6dfcf">' . $row('Call', m_esc(CM_PHONE), 'tel:' . CM_TEL) . $row('Email', m_esc(MAIL_INTENDED), 'mailto:' . MAIL_INTENDED) . '</table></td></tr>'
-        . '<tr><td style="padding:10px 0 0;font:400 12px/1.5 ' . $F . ';color:#59616f">' . m_esc(CM_ADDRESS) . '</td></tr></table>'
-        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px"><tr><td align="center" style="padding:18px 0 0;border-top:1px solid #ece6d8;font:400 11px/1.6 ' . $F . ';color:#59616f">'
-        . '<a href="' . CM_SITE . '" style="color:#59616f;text-decoration:none;margin:0 8px">flyfirstclass.com</a><a href="' . CM_SITE . '/privacy-policy/" style="color:#59616f;margin:0 8px">Privacy</a><a href="' . CM_SITE . '/terms/" style="color:#59616f;margin:0 8px">Terms</a></td></tr></table>'
+        . em_questions(28)
+        . em_footer(28)
         . '</td></tr></table></td></tr></table></body></html>';
     // No "Auto-Submitted" header here: Trustpilot reads this message from the Bcc copy, so it must look like an ordinary email.
     $m = ['to' => $email, 'toName' => $name, 'fromName' => CM_NAME, 'subject' => $subject, 'replyTo' => MAIL_INTENDED, 'text' => implode("\n", $tx), 'html' => $html];
@@ -273,7 +264,7 @@ function tr_date($v) {        // '' when empty, the date when valid, false when 
 }
 function tr_book($p) {
     $g = function ($k, $n = 120) use ($p) { return qs($p[$k] ?? '', $n); };
-    $first = $g('first', 80); $last = $g('last', 80); $e = cm_addr($p['email'] ?? '');
+    $first = $g('first', 80); $last = $g('last', 80); $e = valid_email($p['email'] ?? '');
     if ($first === '') return tr_err("Enter the customer's first name.");
     if ($e === '') return tr_err('That email address does not look right.');
     $dep = tr_date($p['dep'] ?? ''); $ret = tr_date($p['ret'] ?? '');
@@ -348,8 +339,8 @@ function trips_route($method) {
         $act = (string)($_POST['act'] ?? '');
         if ($act === 'login') {
             if ((string)C('admin') === '') tr_page_login('Set ADMIN_KEY in the .env file first, then sign in.');
-            if (!limit_hit(client_ip() . ':trips-login', 10, 3600000)) { http_response_code(429); tr_page_login('Too many tries. Please wait an hour and try again.'); }
-            if (!hash_equals((string)C('admin'), (string)($_POST['key'] ?? ''))) { logm('[trips] sign-in refused'); http_response_code(403); tr_page_login('That is not the right key.'); }
+            if (admin_locked()) { http_response_code(429); tr_page_login('Too many tries. Please wait an hour and try again.'); }      // wrong keys here and on the checking pages share one count (base.php)
+            if (!admin_key_ok($_POST['key'] ?? '')) { logm('[trips] sign-in refused'); http_response_code(403); tr_page_login('That is not the right key.'); }
             $exp = time() + TR_SESSION; tr_set_cookie($exp . '.' . tr_sign($exp), $exp); tr_go();
         }
         if (!tr_authed()) tr_go();
@@ -380,7 +371,7 @@ function trips_route($method) {
                 if (tr_room($cfg) < 1) tr_go('cap', '', '', $tab);
                 $res = tr_deliver($id, true, $cfg); tr_go($res === 'sent' ? 'sent' : ($res === 'failed' ? 'failed' : 'gone'), '', '', $tab);
             case 'sample':
-                $to = cm_addr($_POST['to'] ?? '');
+                $to = valid_email($_POST['to'] ?? '');
                 if ($to === '') { http_response_code(400); tr_page('bad', 'Enter an email address to send the sample to.', [], [], 'email'); }
                 if (!limit_hit('trips:sample', 6, 3600000)) tr_page('bad', 'That is enough samples for one hour.', [], [], 'email');
                 try { send_mail(tr_mail('Alex Chen', $to, $cfg, true, 'FFC-7K2M9QXA')); } catch (Throwable $e) { http_response_code(502); tr_page('bad', 'The sample could not be sent: ' . $e->getMessage(), [], [], 'email'); }

@@ -31,7 +31,7 @@ function hs_on() { return !in_array(strtolower(trim(env('REQUEST_HISTORY', 'on')
 function hs_parse($q) {
     $q = trim((string)$q);
     if ($q === '' || strlen($q) > 254) return null;
-    if (strpos($q, '@') !== false) { $e = cm_addr($q); return $e === '' ? null : ['kind' => 'email', 'val' => strtolower($e)]; }
+    if (strpos($q, '@') !== false) { $e = valid_email($q); return $e === '' ? null : ['kind' => 'email', 'val' => strtolower($e)]; }
     if (!preg_match('/^[+()\d\s.\-]+$/', $q)) return null;
     $d = preg_replace('/\D/', '', $q); $d = preg_replace('/^00/', '', $d);
     return strlen($d) >= 7 && strlen($d) <= 15 ? ['kind' => 'phone', 'val' => $d] : null;
@@ -48,7 +48,7 @@ function hs_live() { $QR = cload('requests.json', []); $n = now_ms(); return arr
 function hs_mailboxes($p) {
     $out = [];
     foreach (hs_live() as $r) {
-        $c = $r['contact'] ?? []; $e = strtolower(cm_addr($c['email'] ?? ''));
+        $c = $r['contact'] ?? []; $e = strtolower(valid_email($c['email'] ?? ''));
         if ($e === '') continue;
         if ($p['kind'] === 'email' ? $e === $p['val'] : hs_same_phone($c['phone'] ?? '', $p['val'])) $out[$e] = 1;
     }
@@ -86,7 +86,7 @@ function hs_token_email($t) {
 
 // ---------- The email with the code ----------
 function hs_mail($code, $to) {
-    $F = "Manrope,'Helvetica Neue',Helvetica,Arial,sans-serif";
+    $F = CM_FONT;
     $subject = $code . ' is your Fly First Class code';
     $text = implode("\n", ['Your code is ' . $code, '', 'Enter it on the Manage Booking page to see the requests linked to this email address. It works once and expires in 15 minutes.', '',
         'If you did not ask for it, you can ignore this email. Nobody can see your requests without the code.', '', 'Questions? Call ' . CM_PHONE . ' or email ' . MAIL_INTENDED . '.', '', CM_SITE]);

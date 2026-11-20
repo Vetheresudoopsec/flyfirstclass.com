@@ -71,6 +71,8 @@ The older addresses below still work if you prefer them or have them bookmarked.
 | `/api/photo-test?key=YOUR_KEY&code=LHR` | Looks up one photo and shows what Unsplash said |
 | `/api/status` (no key) | Only the build number, so strangers learn nothing |
 
+Ten wrong keys in an hour from one address lock that address out for the rest of the hour, on these addresses and on the Bookings and trips sign-in alike (the right key is refused too until the hour is up). It stops anyone guessing the key. If you lock yourself out, wait an hour or try from another network.
+
 If something is wrong, `ffc-private/cache/log.txt` has the details.
 
 ## 6. What is different from the Node version

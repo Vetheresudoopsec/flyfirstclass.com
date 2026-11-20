@@ -44,7 +44,12 @@ function img_all($reload = false) {
     foreach (curated_photos() as $k => $v) $IMG[$k] = $v;
     return $c = $IMG;
 }
-function pub($v) { return ($v && !C('credits')) ? ['url' => $v['url']] : $v; }   // the photographer credit is only sent when PHOTO_CREDITS is not "off"
+function pub($v) {          // the photographer credit is only sent when PHOTO_CREDITS is not "off"; a credit link that is not https:// is never sent
+    if (!$v) return $v;
+    if (!C('credits')) return ['url' => $v['url']];
+    if (isset($v['link']) && !starts((string)$v['link'], 'https://')) $v['link'] = '';
+    return $v;
+}
 function photo_queries($c) {
     $city = city_of($c); $country = country_of($c); $cc = $city . ($country ? ' ' . $country : '');
     $q = [[$cc . ' landmark cityscape', 'high'], [$cc, 'low'], [$city, 'low']]; $out = []; $seen = [];

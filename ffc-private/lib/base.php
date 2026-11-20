@@ -197,19 +197,18 @@ function now_ms() { return (int)round(microtime(true) * 1000); }
 function lc($s) { return mb_strtolower((string)$s); }
 function shuffle_a($a) { $a = array_values($a); for ($i = count($a) - 1; $i > 0; $i--) { $j = random_int(0, $i); $t = $a[$i]; $a[$i] = $a[$j]; $a[$j] = $t; } return $a; }
 function starts($s, $p) { return strncmp($s, $p, strlen($p)) === 0; }
-function json_out($code, $b) {
+function json_head($code, $b) {          // starts a JSON reply and returns its body
     http_response_code($code);
     header('Content-Type: application/json');
     header('Cache-Control: no-store');
-    echo json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
-    exit;
+    return json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
 }
+function json_out($code, $b) { echo json_head($code, $b); exit; }
 // Sends the reply first and only then runs $after (the slower Mailchimp call), so the visitor never waits for it.
 function json_out_then($code, $b, $after) {
     ignore_user_abort(true);
-    $s = json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
-    http_response_code($code);
-    header('Content-Type: application/json'); header('Cache-Control: no-store'); header('Content-Length: ' . strlen($s)); header('Connection: close');
+    $s = json_head($code, $b);
+    header('Content-Length: ' . strlen($s)); header('Connection: close');
     echo $s;
     if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
     elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();        // LiteSpeed (used by many HostGator plans)
@@ -217,41 +216,63 @@ function json_out_then($code, $b, $after) {
     try { $after(); } catch (Throwable $e) { logm('after-reply task: ' . $e->getMessage()); }
     exit;
 }
+function valid_ip($ip) { $ip = trim((string)$ip); return filter_var($ip, FILTER_VALIDATE_IP) !== false ? $ip : ''; }
+function fwd_ip() {         // the visitor's address as a proxy (Cloudflare, a load balancer) reports it, or '' when there is no valid one
+    $ip = valid_ip($_SERVER['HTTP_CF_CONNECTING_IP'] ?? '');
+    return $ip !== '' ? $ip : valid_ip(explode(',', (string)($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''))[0]);
+}
 function client_ip() {      // the connecting address; proxy headers are believed only when TRUST_PROXY=on (for example behind Cloudflare)
-    if (env('TRUST_PROXY') === 'on') {
-        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) return trim($_SERVER['HTTP_CF_CONNECTING_IP']);
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
-    }
-    return $_SERVER['REMOTE_ADDR'] ?? '?';
+    $ip = env('TRUST_PROXY') === 'on' ? fwd_ip() : '';
+    return $ip !== '' ? $ip : ($_SERVER['REMOTE_ADDR'] ?? '?');
 }
 function geo_ip() {         // for the nearest-airport suggestion only (a spoofed header just changes the visitor's own suggestion)
-    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) return trim($_SERVER['HTTP_CF_CONNECTING_IP']);
-    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
-    return $_SERVER['REMOTE_ADDR'] ?? '';
+    $ip = fwd_ip();
+    return $ip !== '' ? $ip : valid_ip($_SERVER['REMOTE_ADDR'] ?? '');
 }
-function is_private_ip($ip) { return (bool)preg_match('/^(::1|127\.|::ffff:127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|fe80|fc|fd)/i', $ip); }
+// Loopback, private, link-local and reserved addresses (and anything that is not an address at all) cannot be looked up.
+function is_private_ip($ip) { return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false; }
+// Where an IP address is (GEOIP_BASE, ipwho.is by default). '' looks up the server's own public address. Returns the reply, or null
+// (with the HTTP status in $status).
+function geo_lookup($ip, $timeout, &$status = null) {
+    $r = http_one(C('geoip') . valid_ip($ip), ['Accept: application/json'], $timeout);
+    $status = $r['status'];
+    $g = $r['status'] >= 200 && $r['status'] < 300 ? json_decode($r['body'], true) : null;
+    return is_array($g) && !empty($g['success']) ? $g : null;
+}
+// One shape for every email address the site accepts (quote forms, newsletter, request history, admin samples). Returns it trimmed, or ''.
+function valid_email($e) {
+    $e = trim((string)$e);
+    if ($e === '' || strlen($e) > 254 || !preg_match('/^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/', $e)) return '';
+    if ($e[0] === '.' || strpos($e, '..') !== false || strpos($e, '.@') !== false) return '';
+    return $e;
+}
+// Wrong admin keys are counted per visitor address: after ADMIN_TRIES (10) wrong keys in an hour every key is refused from that address for
+// the rest of the hour, on the checking pages and on the Bookings and trips sign-in alike, so the key cannot be guessed by trying many.
+const ADMIN_TRIES = 10;
+function admin_locked() { $L = cload('limits.json', []); $e = $L[client_ip() . ':admin-miss'] ?? null; return $e && now_ms() - $e['t'] <= 3600000 && $e['n'] >= ADMIN_TRIES; }
+function admin_key_ok($given) {
+    $k = (string)C('admin'); $given = (string)$given;
+    if ($k === '' || $given === '' || admin_locked()) return false;
+    if (hash_equals($k, $given)) return true;
+    limit_hit(client_ip() . ':admin-miss', 1000000000, 3600000);
+    logm('[admin] wrong key from ' . client_ip());
+    return false;
+}
 function admin_ok() {       // diagnostics: allowed with ?key=ADMIN_KEY, or from the server itself when no key is set
-    $k = (string)C('admin');
-    if ($k !== '') return isset($_GET['key']) && hash_equals($k, (string)$_GET['key']);
+    if ((string)C('admin') !== '') return admin_key_ok($_GET['key'] ?? '');
     return in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true) && empty($_SERVER['HTTP_X_FORWARDED_FOR']);
 }
+function admin_gate() { if (!admin_ok()) json_out(403, ['error' => 'Add ?key=your ADMIN_KEY (set it in the .env file in ffc-private).']); }
 
 // Eastern time helpers for the daily 12:00 PM Eastern refresh (EST in winter, EDT in summer)
 function et_tz() { static $z = null; if (!$z) $z = new DateTimeZone('America/New_York'); return $z; }
 function day_et() { return (new DateTime('now', et_tz()))->format('Y-n-j'); }
 function noon_et($y, $m, $d) { return (new DateTime(sprintf('%04d-%02d-%02d 12:00:00', $y, $m, $d), et_tz()))->getTimestamp() * 1000; }
-function last_noon($now = null) {
-    $now = $now ?: now_ms();
+function noon_near($now, $shift) {     // 12:00 PM Eastern on the day of $now (ms), moved by $shift days
     $p = (new DateTime('@' . intdiv($now, 1000)))->setTimezone(et_tz());
-    $t = noon_et((int)$p->format('Y'), (int)$p->format('n'), (int)$p->format('j'));
-    if ($t > $now) { $q = (clone $p)->modify('-1 day'); $t = noon_et((int)$q->format('Y'), (int)$q->format('n'), (int)$q->format('j')); }
-    return $t;
+    if ($shift) $p->modify(($shift > 0 ? '+' : '') . $shift . ' day');
+    return noon_et((int)$p->format('Y'), (int)$p->format('n'), (int)$p->format('j'));
 }
-function next_noon($now = null) {
-    $now = $now ?: now_ms();
-    $p = (new DateTime('@' . intdiv($now, 1000)))->setTimezone(et_tz());
-    $t = noon_et((int)$p->format('Y'), (int)$p->format('n'), (int)$p->format('j'));
-    if ($t <= $now) { $q = (clone $p)->modify('+1 day'); $t = noon_et((int)$q->format('Y'), (int)$q->format('n'), (int)$q->format('j')); }
-    return $t;
-}
+function last_noon($now = null) { $now = $now ?: now_ms(); $t = noon_near($now, 0); return $t > $now ? noon_near($now, -1) : $t; }
+function next_noon($now = null) { $now = $now ?: now_ms(); $t = noon_near($now, 0); return $t <= $now ? noon_near($now, 1) : $t; }
 function et_text($ms) { return (new DateTime('@' . intdiv($ms, 1000)))->setTimezone(et_tz())->format('M j, Y, g:i A') . ' ET'; }

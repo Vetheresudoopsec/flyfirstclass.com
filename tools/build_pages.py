@@ -20,54 +20,45 @@ E = lambda x: html.escape(x, quote=True)
 import json
 AIRS = json.loads(re.search(r"const AIRS=(\[\[.*?\]\]);", src, re.S).group(1))   # the partner airlines: name, address part, code, region
 
-def make_air(a):
-    n, slug = a[0], a[1]
-    t = "%s Business and First Class Fares | Fly First Class" % n
-    d = "Business and first class fares on %s up to 70%% off market airfares, arranged by an advisor with 20+ years of experience. Request a free quote." % n
-    u = "%s/airlines/%s/" % (SITE, slug)
-    s = src
-    s = sub1(r"<title>.*?</title>", "<title>%s</title>" % E(t), s)
-    s = sub1(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % E(d), s)
-    s = sub1(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="%s">' % u, s)
-    s = sub1(r'<meta property="og:url" content="[^"]*">', '<meta property="og:url" content="%s">' % u, s)
-    s = sub1(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="%s">' % E(t), s)
-    s = sub1(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="%s">' % E(d), s)
-    s = sub1(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="%s">' % E(t), s)
-    s = sub1(r'<meta name="twitter:description" content="[^"]*">', '<meta name="twitter:description" content="%s">' % E(d), s)
-    crumb = ('<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":'
-             '[{"@type":"ListItem","position":1,"name":"Home","item":"%s/"},{"@type":"ListItem","position":2,"name":"Listings","item":"%s/routes/"},'
-             '{"@type":"ListItem","position":3,"name":"%s","item":"%s"}]}</script>\n' % (SITE, SITE, E(n), u))
-    s = s.replace("<style>", crumb + "<style>", 1)
-    s = sub1(r'<section class="pg" id="p-home">', '<section class="pg" id="p-home" hidden>', s)
-    s = sub1(r'<section class="pg" id="p-airline" hidden>', '<section class="pg" id="p-airline">', s)
-    return s
-
 def sub1(pat, rep, s):
     out, n = re.subn(pat, lambda m: rep, s, count=1)
     assert n == 1, pat
     return out
 
-def make(k):
-    t, d = P[k]
+def page(t, d, u, crumbs, show, noindex=False):
+    """index.html with its own title, description, canonical address, sharing tags and breadcrumb, showing section `show`.
+    crumbs: the breadcrumb after Home, as (name, address) pairs."""
     s = src
     s = sub1(r"<title>.*?</title>", "<title>%s</title>" % E(t), s)
     s = sub1(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % E(d), s)
-    u = SITE + PATHS[k]
     s = sub1(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="%s">' % u, s)
     s = sub1(r'<meta property="og:url" content="[^"]*">', '<meta property="og:url" content="%s">' % u, s)
     s = sub1(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="%s">' % E(t), s)
     s = sub1(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="%s">' % E(d), s)
     s = sub1(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="%s">' % E(t), s)
     s = sub1(r'<meta name="twitter:description" content="[^"]*">', '<meta name="twitter:description" content="%s">' % E(d), s)
+    items = ['{"@type":"ListItem","position":1,"name":"Home","item":"%s/"}' % SITE]
+    items += ['{"@type":"ListItem","position":%d,"name":"%s","item":"%s"}' % (i + 2, n, x) for i, (n, x) in enumerate(crumbs)]
     crumb = ('<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":'
-             '[{"@type":"ListItem","position":1,"name":"Home","item":"%s/"},{"@type":"ListItem","position":2,"name":"%s","item":"%s"}]}</script>\n'
-             % (SITE, CRUMB[k], u))
+             '[%s]}</script>\n' % ",".join(items))
     s = s.replace("<style>", crumb + "<style>", 1)
-    if k in NOINDEX:
+    if noindex:
         s = s.replace('<link rel="canonical"', '<meta name="robots" content="noindex,follow">\n<link rel="canonical"', 1)
     s = sub1(r'<section class="pg" id="p-home">', '<section class="pg" id="p-home" hidden>', s)
-    s = sub1(r'<section class="pg" id="p-%s" hidden>' % k, '<section class="pg" id="p-%s">' % k, s)
+    s = sub1(r'<section class="pg" id="p-%s" hidden>' % show, '<section class="pg" id="p-%s">' % show, s)
     return s
+
+def make(k):
+    t, d = P[k]
+    u = SITE + PATHS[k]
+    return page(t, d, u, [(CRUMB[k], u)], k, k in NOINDEX)
+
+def make_air(a):
+    n, slug = a[0], a[1]
+    t = "%s Business and First Class Fares | Fly First Class" % n
+    d = "Business and first class fares on %s up to 70%% off market airfares, arranged by an advisor with 20+ years of experience. Request a free quote." % n
+    u = "%s/airlines/%s/" % (SITE, slug)
+    return page(t, d, u, [("Listings", SITE + "/routes/"), (E(n), u)], "airline")
 
 for k in PATHS:
     if k == "home":
@@ -98,11 +89,6 @@ if not os.path.exists(og):
     pt = lambda x, y: (ox + (x - 1) * sc, oy + (y - 1) * sc)
     dr.polygon([pt(3, 21), pt(27, 5), pt(21, 25), pt(15, 18)], fill="#c9b27c")
     dr.polygon([pt(15, 18), pt(27, 5), pt(11, 16)], fill="#a98f53")
-    def F(sz, w):
-        f = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-Regular.otf", sz)
-        try: f.set_variation_by_name(w)
-        except Exception: pass
-        return f
     dr.text((90, 380), "Fly First Class International", font=ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-Medium.otf", 58), fill="#14181f")
     dr.text((90, 462), "First and business class fares, up to 70% off market airfares", font=ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-Regular.otf", 30), fill="#59616f")
     dr.text((90, 540), "flyfirstclass.com", font=ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-Medium.otf", 26), fill="#8a6d2f")

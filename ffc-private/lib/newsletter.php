@@ -26,10 +26,7 @@ const NL_KEEP_DONE = 90 * 86400000;        // a finished entry (no address) is k
 const NL_KEEP_OPEN = 183 * 86400000;       // an address Mailchimp still has not accepted is held at most this long
 const NL_TRIES = 12;                       // failed attempts before an address is given up on (about a week of retries)
 
-function nl_clean_email($v) {
-    $e = strtolower(trim(is_string($v) ? $v : ''));
-    return (strlen($e) <= 254 && preg_match('/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/', $e)) ? $e : '';
-}
+function nl_clean_email($v) { return strtolower(valid_email(is_string($v) ? $v : '')); }
 function nl_hash($e) { return md5(strtolower($e)); }                      // also Mailchimp's own id for a contact
 function nl_src($v) { $v = strtolower(is_string($v) ? $v : ''); return in_array($v, ['home', 'about', 'services', 'listings', 'contact', 'privacy', 'terms', 'thanks', 'quote'], true) ? $v : 'other'; }
 
