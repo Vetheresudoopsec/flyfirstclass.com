@@ -238,11 +238,11 @@ footer ul+h3{margin-top:22px}
 #bk .t4 button[aria-selected=true]{background:none;color:var(--ink);font-weight:700;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bko{display:flex;align-items:center;flex-wrap:wrap;gap:0 28px;padding:4px 28px}
 #bk .bko .c{display:block;position:relative;min-height:0;padding:0;border:0;background:none}
-#bk .bko .c:focus-within{background:none;box-shadow:none}
+#bk .bko .c:focus-within{outline:0;background:none;box-shadow:none}
 #bk .bko label:not(.pill){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 #bk .bko .db{width:auto;min-height:44px;gap:10px;padding:0;font:600 .95rem Manrope,sans-serif}
 #bk .bko .db:hover,#bk .bko .db[aria-expanded=true],#bk .bko .db:focus-visible{color:var(--j)}
-#bk .bko .db:focus-visible{outline:2px solid var(--j);outline-offset:4px;border-radius:2px}
+#bk .bko .db:focus,#bk .bko .db:focus-visible,.dd .db:focus,.dd .db:focus-visible{outline:none}
 #bk .bko .dl{left:0;top:calc(100% + 6px);min-width:220px}
 #bk .bko .pill{margin-left:auto;gap:10px;min-height:44px;padding:0;border-radius:0;background:none;font:600 .95rem Manrope,sans-serif}
 #bk .bko #sr{min-height:44px;padding:0;font:600 .95rem Manrope,sans-serif;white-space:nowrap}
@@ -260,6 +260,7 @@ footer ul+h3{margin-top:22px}
 #bk .bkr .c>.dv{white-space:normal;overflow-wrap:anywhere}
 #bk .bkr .c>.dv.e{opacity:.55}
 #bk .bkr .c>.dd>input::placeholder,#bk .mcx .c>.dd>input::placeholder{color:var(--ink);opacity:.55;font-size:1rem;font-weight:500}
+#bk #fa,#bk #fb,#bk #la,#bk #lb{font:500 1rem/1.3 Manrope,sans-serif}#bk #fa::placeholder,#bk #fb::placeholder,#bk #la::placeholder,#bk #lb::placeholder{font-size:1rem;font-weight:500}#bk .mcl input{font:500 1rem/1.3 Manrope,sans-serif}#bk .mcl input::placeholder{font-size:1rem;font-weight:500}
 #bk .bkr .c:focus-within,#bk .mcx .c:focus-within{outline:0;background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkr .c:has(.db[aria-expanded=true]){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
 #bk .bkd[data-ph="0"]:has(#cal:not([hidden])) .c:nth-child(2),#bk .bkd[data-ph="1"]:has(#cal:not([hidden])) .c:nth-child(3){background:#f1f7f6;box-shadow:inset 0 -3px 0 var(--j)}
