@@ -1299,7 +1299,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="hp" aria-hidden="true"><label for="hpw">Website</label><input id="hpw" name="website" tabindex="-1" autocomplete="off"></div>
 <label for="m">Message <span>(optional)</span></label><textarea id="m" name="m" rows="5" placeholder="Need help or have a question? Ask us anything here. If you would like a quote, please choose your route on the booking page."></textarea>
 <label class="ck"><input type="checkbox" id="nl" name="nl"><span>Subscribe me to the newsletter for route and fare updates.</span></label>
-<button class="btn" type="submit">Send My Request</button>
+<button class="btn" type="submit">Send</button>
 <p class="agree">By sending your request you agree to our <a href="/terms/">Terms of Service</a> and <a href="/privacy-policy/">Privacy Policy</a>.</p>
 <div class="pw"><p class="pl">We accept</p><div class="pay" id="pay1"></div></div>
 <p id="ok" role="status" hidden></p>
@@ -1849,7 +1849,7 @@ const AM={"Emirates":["Save up to 70% and explore Dubai with access to the Emira
 const set=a=>{const m=AM[a]||AM[EK],im=$("jim");$("jal").textContent=a;$("jtx").textContent=m[0];if(im){im.src="https://images.unsplash.com/photo-"+m[1]+"?auto=format&fit=crop&w=2000&q=75";im.alt=a+" aircraft in flight";im.style.objectPosition=m[2]||""}$("jb").dataset.m="I'd like a free quote on "+a+". Route and dates: "};
 $("jb").addEventListener("click",()=>{const m=$("m");if(m&&!m.value.trim())m.value=$("jb").dataset.m});
 // Message box hint follows the trip: one wording when a route is chosen (the trip summary box is showing), another when it is not.
-{const m=$("m"),rc=$("rc");if(m&&rc){const PH_T="Anything else we should know? Tell us about flexible dates, a preferred airline, seat or cabin preferences, or any special assistance you need.",PH_N="Need help or have a question? Ask us anything here. If you would like a quote, please choose your route on the booking page.";const upd=()=>{m.placeholder=(!rc.hidden&&rc.textContent.trim())?PH_T:PH_N};upd();new MutationObserver(upd).observe(rc,{attributes:true,attributeFilter:["hidden"],childList:true,subtree:true,characterData:true})}}
+{const m=$("m"),rc=$("rc");if(m&&rc){const PH_T="Anything else we should know? Tell us about flexible dates, a preferred airline, seat or cabin preferences, or any special assistance you need.",PH_N="Need help or have a question? Ask us anything here. If you would like a quote, please choose your route on the booking page.";const sbt=document.querySelector("#cf button[type=submit]"),upd=()=>{const t=!rc.hidden&&rc.textContent.trim();m.placeholder=t?PH_T:PH_N;if(sbt&&!sbt.disabled)sbt.textContent=t?"Send My Request":"Send"};window.ffcHint=upd;upd();new MutationObserver(upd).observe(rc,{attributes:true,attributeFilter:["hidden"],childList:true,subtree:true,characterData:true})}}
 const tm=setTimeout(()=>set(byTz(tzn())),4000);
 geoOnce().then(g=>{clearTimeout(tm);set(g&&g.cc==="AE"&&/abu dhabi/i.test(g.place)?"Etihad Airways":g&&g.cc&&CC[g.cc]||byTz(tzn()))},()=>{clearTimeout(tm);set(byTz(tzn()))})}
 // One wide banner (destination name + photo) above the rows when a specific destination is searched; the rows then drop their own pictures.
@@ -1963,7 +1963,7 @@ $("cf").onsubmit=async e=>{e.preventDefault();const bad=cfCheck();if(bad.length)
   else{const b=BK?["TRIP REQUEST "+BK.ref,"Route: "+[BK.from,BK.to,...(BK.via||[])].join(" > "),...(BK.stops?["Stops: "+stS(BK.stops)]:[]),"Cabin: "+BK.cabin,"Trip type: "+BK.trip,"Passengers: "+BK.pax,""]:["REQUEST "+ref,""];
    $("ok").innerHTML="Your request is saved as <b>"+cpl(ref)+"</b>, but we couldn't send the email from here ("+esc(String(res.error).replace(/[.\s]+$/,""))+"). Please <a href=\"mailto:quote@flyfirstclass.com?subject="+encodeURIComponent("Quote request "+ref+" from "+fu)+"&body="+encodeURIComponent([...b,"Name: "+fu,"Email: "+d.get("e"),"Phone: "+(ph||"Not provided"),"","Notes: "+(d.get("m")||"")].join("\n"))+"\">email it to quote@flyfirstclass.com</a> and quote that ID."}
   $("ok").hidden=false;ACTREF=null;ACTKIND="";window.__cprNo=1;$("cpr").hidden=true
- }finally{sb.disabled=false;sb.textContent=lab}};
+ }finally{sb.disabled=false;sb.textContent=lab;if(window.ffcHint)window.ffcHint()}};
 setTimeout(()=>{try{phSync()}catch(e){}},0);
 // ---- Thank-you pages: shown after Send my request. Nothing is stored for them; opening one directly goes back to the home page ----
 window.TY=null;
