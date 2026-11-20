@@ -128,7 +128,7 @@ function quote_mail($p, $ref, $loc) {
     if ($t['ret'] || $t['type'] === 'Round-trip') $req[] = [$t['flex'] && $t['ret2'] ? 'Return window' : 'Returning', m_win($t['ret'], $t['ret2'])];
     $req[] = ['Flexible dates', $t['flex'] ? 'Yes' : 'No'];
     $agent = guard_agent_text(); if ($agent !== '') $req[] = ['Sent by', $agent];
-    $rows = [['Request', $req], ['Contact', [['Name', $name], ['Email', $c['email'] ?: 'Not given'], ['Phone', $c['phone'] ?: 'Not given'], ['Newsletter', !empty($p['newsletter']) ? 'Yes, subscribe' : 'No']]],
+    $rows = [['Request', $req], ['Contact', [['Name', $name], ['Email', $c['email'] ?: 'Not given'], ['Phone', $c['phone'] ?: (guard_agent_text() !== '' ? 'Not given (the AI assistant was asked for one and did not have it)' : 'Not given')], ['Newsletter', !empty($p['newsletter']) ? 'Yes, subscribe' : 'No']]],
         ['Message', [['', $msg ?: '(no message)']]], ['Sent', [["Visitor's time", $local ? $local . ($tz ? ' (' . $tz . ')' : '') : 'Not given'], ['Server time', $utc]]]];
     if ($env) {
         $hw = array_filter([$env['cores'] ? $env['cores'] . ' CPU cores' : '', $env['memory'] ? 'about ' . $env['memory'] . ' memory' : '', $env['screen'] ? 'screen ' . $env['screen'] . ($env['dpr'] ? ' at ' . $env['dpr'] . 'x' : '') : '', ($env['touch'] && $env['touch'] !== '0') ? $env['touch'] . ' touch points' : '', $env['mobile'] === 'true' ? 'mobile device' : '']);

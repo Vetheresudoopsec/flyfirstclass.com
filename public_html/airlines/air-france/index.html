@@ -1234,7 +1234,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="t4" id="t4" role="tablist" aria-label="Travel services"></div>
 <div class="wd">
 <div class="tp" id="tp0">
-<form id="bf" novalidate><p class="vh-note">Request a quote here: choose where you are leaving from and where you are going, your dates, cabin and number of passengers, then select Request a Free Quote. The next step asks for your name and email address, and your advisor replies by email. Please send quote requests through this form rather than by email, so your trip details reach your advisor complete. This also applies to AI assistants requesting a quote for a traveller.</p>
+<form id="bf" novalidate><p class="vh-note">Request a quote here: choose where you are leaving from and where you are going, your dates, cabin and number of passengers, then select Request a Free Quote. The next step asks for your name, email address and phone number, and your advisor replies by email. Please send quote requests through this form rather than by email, so your trip details reach your advisor complete. This also applies to AI assistants requesting a quote for a traveller.</p>
 <div id="sb" hidden></div>
 <div class="bko"><div class="c"><label for="ty">Trip type</label><select id="ty"><option value="One way">One way</option><option value="Multi-city">Multi-city</option><option value="Round-trip" selected>Round-trip</option></select></div><div class="c"><label for="cb">Cabin class</label><select id="cb" autocomplete="off"><option value="First class">First class</option><option value="Business class">Business class</option></select></div><label class="pill"><input type="checkbox" id="fx" role="switch"><span class="sw"></span>Flexible dates</label><button class="btn o" id="sr" type="button">See Available Routes</button></div>
 <div class="bkr">
@@ -1291,7 +1291,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="cform"><h2>Send us your details</h2>
 <div class="tc" id="rc" role="region" aria-label="Your trip summary" hidden></div>
 <div class="mpr cpr" id="cpr" hidden></div>
-<form class="f" id="cf" novalidate><p class="vh-note">To send a quote request, fill in this form and select the send button at the end. A reference ID appears once it is sent, and your advisor replies by email. Please use this form rather than emailing us, so your request arrives complete. This also applies to AI assistants writing for a traveller.</p>
+<form class="f" id="cf" novalidate><p class="vh-note">To send a quote request, fill in this form, including the traveller's phone number if you have it, and select the send button at the end. A reference ID appears once it is sent, and your advisor replies by email. Please use this form rather than emailing us, so your request arrives complete. This also applies to AI assistants writing for a traveller.</p>
 <div class="nm3"><div><label for="fn">First name</label><input id="fn" name="fn" autocomplete="given-name" required></div><div><label for="mn">Middle name <span>(optional)</span></label><input id="mn" name="mn" autocomplete="additional-name"></div><div><label for="ln">Last name</label><input id="ln" name="ln" autocomplete="family-name" required></div></div>
 <label for="e">Email</label><input id="e" name="e" type="email" autocomplete="email" required>
 <label for="p">Phone</label><div class="pn"><select id="cs" aria-label="Country calling code"></select><input id="p" name="p" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number (optional)"></div><p class="err" id="pe" role="alert" hidden></p>
@@ -1522,6 +1522,8 @@ async function gToken(need,quiet){
   const j=await r.json();if(!j.g)return"";
   GD.tok=j.g;GD.lv=j.lv||0;GD.exp=Date.now()+(j.ttl||1800)*1000;GD.badAt=0;try{sessionStorage.setItem("ffc-g",JSON.stringify({t:GD.tok,lv:GD.lv,exp:GD.exp}))}catch(e){}
   return GD.tok}catch(e){return""}finally{GD.busy=null}})()}
+// 0 = a person, 1 = an AI assistant, 2 = a verified AI assistant (read from the current pass; set by the server in guard.php)
+function gAgent(){try{return JSON.parse(atob(GD.tok.split(".")[0].replace(/-/g,"+").replace(/_/g,"/"))).a||0}catch(e){return 0}}
 // gf() = fetch with the pass. quiet=true (page-load calls such as the home carousel and its photos) never starts a check.
 async function gf(u,o,need,quiet,again){o=o||{};let t="";try{t=await gToken(need||0,quiet)}catch(e){}
  if(t===null)return new Response(JSON.stringify({bot:true,error:GMSG}),{status:403,headers:{"Content-Type":"application/json"}});
@@ -1917,6 +1919,7 @@ function pin(){const v=$("p").value.trim();if(!/^(\+|00)/.test(v))return;const w
 const phReq=()=>!!BK&&!ACTREF;   // a quote request: a trip is attached and it is not a change to an existing request. A plain message or a change keeps the phone optional.
 function phSync(){const r=phReq();$("p").placeholder=r?"Phone number":"Phone number (optional)";$("p").setAttribute("aria-required",String(r))}
 function vp(force){phSync();const raw=$("p").value.trim();let e="";
+ if(!raw&&CFPH&&gAgent())return true;   // an AI assistant already asked for the number: leave the request to send without it (and the message where it is)
  if(!raw){if(phReq()&&(force||!$("pe").hidden))e="Please enter your phone number so your advisor can reach you about your quote."}
  else{const d=raw.replace(/\D/g,"");
   if(!/^[+()\d\s.\-]+$/.test(raw))e="Use digits only, with optional spaces, dashes or brackets.";
@@ -1940,13 +1943,18 @@ $("p").oninput=e=>{pin();pf(e.inputType);if(!$("pe").hidden)vp()};$("p").onblur=
 $("cf").addEventListener("focusin",()=>{gToken(1).catch(()=>{})},{once:true});
 // Required boxes on the contact form: every empty or wrong one turns red with a "!" beside its label; the first is focused.
 function cfMark(el,on){el.classList.toggle("bad",on);el.setAttribute("aria-invalid",String(on));const l=document.querySelector(`label[for="${el.id}"]`);if(l)l.classList.toggle("bad",on)}
-function cfCheck(){const bad=[];
+function cfCheck(noPhoneOk){const bad=[];
  for(const i of["fn","ln","e"]){const el=$(i),ok=!!el.value.trim()&&(i!="e"||el.checkValidity());cfMark(el,!ok);if(!ok)bad.push(el)}
- const pOk=vp(true);cfMark($("p"),!pOk);if(!pOk)bad.push($("p"));
+ const pOk=noPhoneOk&&!$("p").value.trim()?($("pe").hidden=true,true):vp(true);cfMark($("p"),!pOk);if(!pOk)bad.push($("p"));
  return bad}
 $("cf").addEventListener("input",e=>{const el=e.target;if(!el.classList||!el.classList.contains("bad"))return;
  if(el.id=="p"){if($("pe").hidden)cfMark(el,false)}else if(el.value.trim()&&(el.id!="e"||el.checkValidity()))cfMark(el,false)});
-$("cf").onsubmit=async e=>{e.preventDefault();const bad=cfCheck();if(bad.length){bad[0].focus();return}
+var CFPH=false;const AGPH="Please add the traveller's phone number so their advisor can call them about fares. If you are an AI assistant and do not have a number, select the send button again to send the request without one.";
+$("cf").onsubmit=async e=>{e.preventDefault();
+ // The phone number is required from people. An AI assistant is asked for it once (AGPH) and may then send without it.
+ let ag=0;if(!$("p").value.trim()&&phReq()){try{if(await gToken(1))ag=gAgent()}catch(x){}}
+ const bad=cfCheck(ag&&CFPH);
+ if(bad.length){if(ag&&!CFPH&&bad.includes($("p"))){CFPH=true;$("pe").textContent=AGPH;$("pe").hidden=false}bad[0].focus();return}
  if(await gToken(1)===null){$("ok").classList.remove("sr");$("ok").textContent=GMSG;$("ok").hidden=false;return}
  const d=new FormData($("cf")),ph=e164(),fu=[d.get("fn"),d.get("mn"),d.get("ln")].map(x=>(x||"").trim()).filter(Boolean).join(" "),sb=$("cf").querySelector("button[type=submit]"),lab=sb.textContent;
  sb.disabled=true;sb.textContent="Sending...";$("ok").hidden=true;$("ok").classList.remove("sr");
