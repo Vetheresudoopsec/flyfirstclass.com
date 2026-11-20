@@ -127,6 +127,7 @@ function quote_mail($p, $ref, $loc) {
     $req = array_merge([['Reference ID', $ref], ['Route', $route]], !empty($t['stops']) ? [['Stops', qStopsText($t['stops'])]] : [], [['Cabin', $t['cabin'] ?: 'Not given'], ['Trip type', $t['type'] ?: 'Not given'], ['Passengers', $pax], [$t['flex'] && $t['dep2'] ? 'Departure window' : 'Departing', m_win($t['dep'], $t['dep2'])]]);
     if ($t['ret'] || $t['type'] === 'Round-trip') $req[] = [$t['flex'] && $t['ret2'] ? 'Return window' : 'Returning', m_win($t['ret'], $t['ret2'])];
     $req[] = ['Flexible dates', $t['flex'] ? 'Yes' : 'No'];
+    $agent = guard_agent_text(); if ($agent !== '') $req[] = ['Sent by', $agent];
     $rows = [['Request', $req], ['Contact', [['Name', $name], ['Email', $c['email'] ?: 'Not given'], ['Phone', $c['phone'] ?: 'Not given'], ['Newsletter', !empty($p['newsletter']) ? 'Yes, subscribe' : 'No']]],
         ['Message', [['', $msg ?: '(no message)']]], ['Sent', [["Visitor's time", $local ? $local . ($tz ? ' (' . $tz . ')' : '') : 'Not given'], ['Server time', $utc]]]];
     if ($env) {
@@ -149,5 +150,6 @@ function quote_mail($p, $ref, $loc) {
         . ($rerouted ? '<div style="font:12px Arial,sans-serif;color:#59616f;margin-top:8px">Addressed to ' . m_esc(MAIL_INTENDED) . ', rerouted to ' . m_esc($cfg['to']) . ' for now.</div>' : '')
         . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px">' . implode('', array_map($sec, $rows)) . '</table></td></tr></table></td></tr></table></body></html>';
     $subject = $k[1] . ' ' . $ref . ': ' . $name . ($t['to'] ? ' (' . implode(' to ', array_map(function ($x) { return preg_replace('/\s*\(.*\)$/', '', $x); }, array_filter([$t['from'], $t['to']]))) . ')' : '');
+    if ($agent !== '') $subject .= ' [AI assistant]';
     return ['subject' => $subject, 'replyTo' => valid_email($c['email']), 'text' => $text, 'html' => $html];
 }

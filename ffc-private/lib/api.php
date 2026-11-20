@@ -150,7 +150,7 @@ function dispatch() {
             guard_gate(1);
             $ip = client_ip();
             if (!limit_hit($ip . ':mail', 10, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
-            $b = body_json(); guard_form($b); $ref = strtoupper(qs($b['ref'] ?? null, 20));
+            $b = body_json(); guard_form($b); guard_agent_cap('send'); $ref = strtoupper(qs($b['ref'] ?? null, 20));
             if (!q_find($ref)) json_out(400, ['error' => 'Unknown reference ID.']);
             $c = qWho($b['contact'] ?? null);
             if (valid_email($c['email']) === '') json_out(400, ['error' => 'A valid email address is required.']);
@@ -198,7 +198,7 @@ function dispatch() {
             $ip = client_ip(); $ref = strtoupper($ref);
             if ($ref === '' && $method === 'POST') {
                 if (!limit_hit($ip . ':new', 30, 3600000)) json_out(429, ['error' => 'Too many requests. Please try again later.']);
-                $nb = body_json(); guard_form($nb);
+                $nb = body_json(); guard_form($nb); guard_agent_cap('new');
                 $made = q_create($nb);
                 $nh = !empty($nb['newsletter']) ? nl_from_quote($made['contact']) : '';       // the "subscribe me" tick-box on the quote form
                 if ($nh !== '') json_out_then(200, $made, function () use ($nh) { nl_sync_one($nh); });
