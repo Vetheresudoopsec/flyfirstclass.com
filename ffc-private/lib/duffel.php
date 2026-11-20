@@ -37,20 +37,26 @@ function doff() {            // set when Duffel rejected the token (401); cleare
 }
 // Reserves start times for Duffel searches (DUFFEL_RPM a minute across all requests). All or nothing: when the queue is already too far
 // ahead nothing is reserved, so a busy moment cannot use up slots that no search will ever fill.
-// Returns a list of start times, null = too far ahead, 'cap' = daily cap reached.
-function duffel_slots($launchBy, $n = 1) {
-    return cupdate('throttle.json', [], function (&$t) use ($launchBy, $n) {
+// $src says who is searching ('visitor', 'refresh' = the 12:00 PM refresh, 'prices' = price lookups, 'retry'); today's searches are counted per source so the
+// admin page can show where the daily allowance went. The refresh may only use REFRESH_SHARE percent of the daily limit, so visitors always keep some.
+// Returns a list of start times, null = too far ahead, 'cap' = daily limit reached, 'share' = the refresh has used its part of the daily limit.
+function duffel_slots($launchBy, $n = 1, $src = 'visitor') {
+    return cupdate('throttle.json', [], function (&$t) use ($launchBy, $n, $src) {
         $now = microtime(true); $d = day_et();
-        if (($t['d'] ?? '') !== $d) { $t['d'] = $d; $t['n'] = 0; }
-        if (C('dcap') && $t['n'] + $n > C('dcap')) return 'cap';
+        if (($t['d'] ?? '') !== $d) { $t['d'] = $d; $t['n'] = 0; $t['by'] = []; }
+        if (C('dcap')) {
+            if ($t['n'] + $n > C('dcap')) return 'cap';
+            if ($src === 'refresh' && $t['n'] + $n > refresh_allowance()) return 'share';
+        }
         $gap = 60 / C('drpm'); $at = max($now, (float)($t['next'] ?? 0), (float)($t['pause'] ?? 0));
         if ($at + ($n - 1) * $gap > $launchBy) return null;
         $out = []; for ($i = 0; $i < $n; $i++) $out[] = $at + $i * $gap;
-        $t['next'] = $at + $n * $gap; $t['n'] += $n;
+        $t['next'] = $at + $n * $gap; $t['n'] += $n; $t['by'][$src] = ($t['by'][$src] ?? 0) + $n;
         return $out;
     });
 }
-function duffel_slot($launchBy) { $r = duffel_slots($launchBy, 1); return is_array($r) ? $r[0] : $r; }
+function duffel_slot($launchBy, $src = 'visitor') { $r = duffel_slots($launchBy, 1, $src); return is_array($r) ? $r[0] : $r; }
+function refresh_allowance() { return C('dcap') ? (int)floor(C('dcap') * C('rshare') / 100) : 0; }      // searches a day the refresh may use (0 = no limit)
 function duffel_pause($ms) { cupdate('throttle.json', [], function (&$t) use ($ms) { $t['pause'] = max((float)($t['pause'] ?? 0), microtime(true) + $ms / 1000); }); }
 function reset_ms($h) {      // how long Duffel says to wait after a 429
     $v = $h['retry-after'] ?? ($h['ratelimit-reset'] ?? null);
@@ -117,8 +123,9 @@ function merge_raw($old, $raw) {
 }
 
 // Runs a set of route tasks at once: each needs two searches (First and Business), started on their reserved slots and sent in
-// parallel. A task is { type: fetch | hubs | more | refresh, o, c, key, date, tries? }. Returns key => 'ok' | 'err' | 'skip'.
+// parallel. A task is { type: fetch | hubs | more | refresh, src?: visitor | refresh | prices, o, c, key, date, tries? }. Returns key => 'ok' | 'err' | 'skip' | 'hold'.
 // 'skip' means it was not started (throttle, rate-limit pause or time budget): nothing is stored and it is tried again later.
+// 'hold' (the 12:00 PM refresh only) means its part of the daily search limit is used: nothing is stored or marked as failed, and it carries on once the count resets at midnight Eastern.
 function run_tasks(array $tasks, $launchBy) {
     $res = [];
     if (!$tasks) return $res;
@@ -128,8 +135,10 @@ function run_tasks(array $tasks, $launchBy) {
     if ($off) { foreach ($tasks as $t) { err_set($t['key'], $off); $res[$t['key']] = 'err'; } return $res; }
     $jobs = []; $full = false;
     foreach ($tasks as $ti => $t) {
-        $slots = $full ? null : duffel_slots($launchBy, 2);                    // both searches or neither
-        if ($slots === 'cap') { err_set($t['key'], 'Daily Duffel search limit reached (' . C('dcap') . '). Raise DUFFEL_DAILY_CAP in .env to continue.'); $res[$t['key']] = 'err'; continue; }
+        $src = $t['src'] ?? 'visitor';
+        $slots = $full ? null : duffel_slots($launchBy, 2, $src);              // both searches or neither
+        if ($src === 'refresh' && ($slots === 'cap' || $slots === 'share')) { $res[$t['key']] = 'hold'; continue; }
+        if ($slots === 'cap' || $slots === 'share') { err_set($t['key'], 'Daily Duffel search limit reached (' . C('dcap') . '). Raise DUFFEL_DAILY_CAP in .env to continue.'); $res[$t['key']] = 'err'; continue; }
         if (!is_array($slots)) { $full = true; $res[$t['key']] = 'skip'; continue; }
         foreach (['first', 'business'] as $i => $cl) {
             $jobs[$ti . ':' . $cl] = ['url' => C('duffel_base') . '/air/offer_requests?return_offers=true&supplier_timeout=12000', 'method' => 'POST', 'headers' => duffel_headers(), 'timeout' => 25, 'at' => $slots[$i],
@@ -142,7 +151,7 @@ function run_tasks(array $tasks, $launchBy) {
     foreach ($out as $id => $r) if (($r['status'] === 0 && empty($r['timeout'])) || $r['status'] >= 500) $retry[] = $id;
     if ($retry) {
         sleep(2); $j2 = [];
-        foreach ($retry as $id) { $s = duffel_slot($launchBy + 12); if ($s === null || $s === 'cap') continue; $j = $jobs[$id]; $j['at'] = $s; $j2[$id] = $j; }
+        foreach ($retry as $id) { $s = duffel_slot($launchBy + 12, 'retry'); if (!is_float($s)) continue; $j = $jobs[$id]; $j['at'] = $s; $j2[$id] = $j; }
         if ($j2) foreach (http_multi($j2) as $id => $r) $out[$id] = $r;
     }
     $stats = ['ok' => 0, 'fail' => 0, 'limited' => 0]; $save = []; $limited = false;
@@ -355,6 +364,17 @@ function check_duffel($search) {
 // ---------- Daily refresh at 12:00 PM Eastern (run from cron; resumable) ----------
 // Re-requests every documented route once. Old data keeps being served until each new result replaces it. A run works for up to
 // $budget seconds and saves its progress, so the next cron run carries on until every route is done.
+// The routes the daily refresh covers: documented in this mode, India only if someone asked for it by name. Oldest data first.
+function refresh_keys(array $RC, array $asked) {
+    $keys = [];
+    foreach (array_keys($RC) as $k) {
+        if (!starts($k, C('mode') . ':')) continue;
+        $c = explode('-', substr($k, strlen(C('mode')) + 1))[1] ?? '';
+        if (!is_in($c) || !empty($asked[$k])) $keys[] = $k;
+    }
+    usort($keys, function ($a, $b) use ($RC) { return (int)($RC[$a]['t'] ?? 0) <=> (int)($RC[$b]['t'] ?? 0); });
+    return $keys;
+}
 function refresh_step($budget) {
     $t0 = microtime(true); $stop = $t0 + $budget;
     if (!C('token')) return 'no Duffel token';
@@ -374,14 +394,10 @@ function refresh_step($budget) {
         if (!isset(cload('dests.json', [])[$o]) && $old) cupdate('dests.json', [], function (&$mm) use ($o, $old) { $mm[$o] = $old; });
         $st['dd'][] = $o;
     }
-    // 2. routes already documented in this mode (India only if someone asked for it by name)
-    $RC = cload('routes.json', []); $asked = $m['asked'] ?? [];
-    $keys = [];
-    foreach (array_keys($RC) as $k) {
-        if (!starts($k, C('mode') . ':')) continue;
-        $c = explode('-', substr($k, strlen(C('mode')) + 1))[1] ?? '';
-        if (!is_in($c) || !empty($asked[$k])) $keys[] = $k;
-    }
+    // 2. routes already documented in this mode (India only if someone asked for it by name), the longest-unchanged first, so when the
+    // day's allowance runs out the routes left over are the ones refreshed most recently, and every route gets its turn.
+    $RC = cload('routes.json', []);
+    $keys = refresh_keys($RC, $m['asked'] ?? []);
     $todo = array_values(array_diff($keys, $st['done']));
     $date = travel_date();
     while ($todo && microtime(true) < $stop - 45) {
@@ -389,12 +405,15 @@ function refresh_step($budget) {
         foreach ($batch as $k) {
             if (!claim($k, 'refresh')) { $st['done'][] = $k; continue; }          // a visitor is fetching it right now: that is fresh data already
             $mine[] = $k; [$o, $c] = explode('-', substr($k, strlen(C('mode')) + 1));
-            $tasks[] = ['type' => 'refresh', 'o' => $o, 'c' => $c, 'key' => $k, 'date' => $date];
+            $tasks[] = ['type' => 'refresh', 'src' => 'refresh', 'o' => $o, 'c' => $c, 'key' => $k, 'date' => $date];
         }
         try { $res = run_tasks($tasks, microtime(true) + 25); } finally { foreach ($mine as $k) unclaim($k); }
-        $skipped = 0;
-        foreach ($res as $k => $r) { if ($r === 'skip') { $todo[] = $k; $skipped++; } else { $st['done'][] = $k; $r === 'ok' ? $st['ok']++ : $st['bad']++; } }
+        $skipped = 0; $held = 0;
+        foreach ($res as $k => $r) { if ($r === 'skip') { $todo[] = $k; $skipped++; } elseif ($r === 'hold') { $held++; } else { $st['done'][] = $k; $r === 'ok' ? $st['ok']++ : $st['bad']++; } }
         $saveSt();
+        if ($held) {                                                                // the refresh's part of today's search limit is used: nothing is marked failed, it carries on after midnight Eastern
+            return 'paused: the refresh has used its part of the daily search limit (' . refresh_allowance() . '); ' . (count($keys) - count($st['done'])) . ' of ' . count($keys) . ' routes still to do, carries on after midnight Eastern';
+        }
         if ($skipped && $skipped === count($tasks)) {                               // rate limit or throttle: wait a little, then carry on
             $t = cload('throttle.json', []); $wait = max(2, min(30, (float)($t['pause'] ?? 0) - microtime(true)));
             if (microtime(true) + $wait > $stop - 45) break;

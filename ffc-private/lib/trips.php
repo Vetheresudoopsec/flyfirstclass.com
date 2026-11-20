@@ -32,6 +32,7 @@
 if (!defined('FFC_PRIVATE')) { exit; }
 
 const TR_FILE = 'trips.json';
+const TR_ADJ = 'tradj.json';               // the owner's "match Trustpilot" correction for the current month
 const TR_KEEP_SENT = 90 * 86400000;        // a sent entry (no address) is kept this long
 const TR_KEEP_OPEN = 45 * 86400000;        // a trip still unsent this long after its send date is dropped, address and all
 const TR_TRIES = 4;                        // failed attempts before a trip is marked "needs attention"
@@ -59,12 +60,31 @@ function tr_initials($name) {
     return $o !== '' ? $o : '?';
 }
 function tr_month_start() { return (new DateTime('first day of this month 00:00:00', et_tz()))->getTimestamp() * 1000; }
-function tr_used() {         // invitations sent (or being sent) this calendar month
+function tr_month_key() { return (new DateTime('now', et_tz()))->format('Y-m'); }
+// Invitations this month that went to Trustpilot: thank-you emails sent with the Bcc (plus one being sent now). An email that carried only the plain review link
+// uses none of Trustpilot's invitations, so it is not counted here.
+function tr_count_bcc() {
+    $n = 0; $m = tr_month_start(); $bcc = tr_cfg()['mode'] === 'bcc';
+    foreach (cload(TR_FILE, []) as $r) { $st = $r['st'] ?? ''; if ($st === 'sent' && ($r['sent'] ?? 0) >= $m && ($r['via'] ?? '') === 'bcc') $n++; elseif ($st === 'sending' && $bcc) $n++; }
+    return $n;
+}
+function tr_emails_month() {      // every thank-you email sent this month, whichever way
     $n = 0; $m = tr_month_start();
     foreach (cload(TR_FILE, []) as $r) if ((($r['st'] ?? '') === 'sent' && ($r['sent'] ?? 0) >= $m) || ($r['st'] ?? '') === 'sending') $n++;
     return $n;
 }
-function tr_room($cfg) { return $cfg['cap'] === 0 ? PHP_INT_MAX : $cfg['cap'] - tr_used(); }
+// The owner can set the count to what Trustpilot's own dashboard says (invitations sent from elsewhere, or addresses Trustpilot skipped, make the two differ).
+// What is kept is the difference, for the current month only, so later sends still add to it.
+function tr_adjust() { $a = cload(TR_ADJ, []); return (($a['m'] ?? '') === tr_month_key()) ? (int)($a['adj'] ?? 0) : 0; }
+function tr_adjust_info() { $a = cload(TR_ADJ, []); return (($a['m'] ?? '') === tr_month_key() && isset($a['to'])) ? $a : null; }
+function tr_match($n) {
+    $n = max(0, min(100000, (int)$n)); $ours = tr_count_bcc();
+    cupdate(TR_ADJ, [], function (&$a) use ($n, $ours) { $a = ['m' => tr_month_key(), 'adj' => $n - $ours, 'to' => $n, 'set' => now_ms()]; });
+    return $n;
+}
+function tr_match_clear() { cupdate(TR_ADJ, [], function (&$a) { $a = []; }); }
+function tr_used() { return max(0, tr_count_bcc() + tr_adjust()); }          // invitations used this month, as Trustpilot would count them
+function tr_room($cfg) { return ($cfg['cap'] === 0 || $cfg['mode'] !== 'bcc') ? PHP_INT_MAX : $cfg['cap'] - tr_used(); }      // the limit only matters while emails copy Trustpilot
 
 // ---------- Storage ----------
 // Adds a trip. Returns ['ok' => true, 'id' => ...] or ['ok' => false, 'code' => ..., 'msg' => ...]. code 'recent' means the same address was invited lately:
@@ -178,7 +198,7 @@ function trips_status() {
         if ($st === 'queued' && (!$next || ($r['due'] ?? 0) < $next)) $next = $r['due'] ?? 0;
     }
     return ['page' => tr_on() ? 'on (/api/trips)' : 'off', 'method' => $cfg['mode'] === 'bcc' ? 'thank-you email with a Bcc to Trustpilot (Trustpilot sends the invitation)' : 'thank-you email with the plain Trustpilot review link (TRUSTPILOT_BCC is not set)',
-        'sendsAfterReturnDays' => $cfg['days'], 'waiting' => $c['queued'], 'needAttention' => $c['failed'], 'sentRecently' => $c['sent'], 'sentThisMonth' => tr_used(), 'monthlyLimit' => $cfg['cap'] ?: 'none',
+        'sendsAfterReturnDays' => $cfg['days'], 'waiting' => $c['queued'], 'needAttention' => $c['failed'], 'sentRecently' => $c['sent'], 'sentThisMonth' => $cfg['mode'] === 'bcc' ? tr_used() : tr_emails_month(), 'emailsThisMonth' => tr_emails_month(), 'matchedToTrustpilot' => tr_adjust_info() ? ('set to ' . (int)tr_adjust_info()['to'] . ' on ' . et_text(tr_adjust_info()['set'])) : null, 'monthlyLimit' => ($cfg['mode'] === 'bcc' && $cfg['cap']) ? $cfg['cap'] : 'none',
         'nextDue' => $next ? et_text($next) : null];
 }
 
@@ -348,6 +368,11 @@ function trips_route($method) {
                 $r = tr_book($_POST);
                 if (empty($r['ok'])) { http_response_code(400); tr_page('bad', $r['msg'], [], $_POST, 'bookings'); }
                 tr_go($r['mail'] === 'sent' ? 'bookedm' : ($r['mail'] === '' ? 'booked' : 'bookedf'), $r['ref'], 'bookings');
+            case 'trmatch':
+                if (!limit_hit('trips:match', 30, 3600000)) tr_page('bad', 'Too many changes in the last hour. Please wait a little.');
+                if (!preg_match('/^\d{1,6}$/', trim((string)($_POST['n'] ?? '')))) { http_response_code(400); tr_page('bad', 'Enter the number of invitations Trustpilot shows for this month, for example 12.'); }
+                logm('[trips] count matched to Trustpilot: ' . tr_match($_POST['n']) . ' this month'); tr_go('matched');
+            case 'trclear': tr_match_clear(); logm('[trips] count back to our own'); tr_go('unmatched');
             case 'bookdel': tr_go(tr_book_delete(strtoupper(trim((string)($_POST['ref'] ?? '')))) ? 'bookdeleted' : 'gone', '', 'bookings');
             case 'remove': tr_go(tr_remove($id) ? 'removed' : 'gone', '', '', $tab);
             case 'retry': tr_go(tr_retry($id) ? 'retried' : 'gone', '', '', $tab);
@@ -378,7 +403,7 @@ function trips_route($method) {
         'cap' => ['warn', 'This month\'s invitation limit has been reached, so nothing more is sent until next month.'], 'gone' => ['warn', 'That one is no longer there (it may already have been sent or removed).'],
         'sample' => ['ok', 'Sample sent. It does not copy Trustpilot.'], 'out' => ['ok', 'Signed out.'],
         'booked' => ['ok', 'Booking request created. Reference ID: %s'], 'bookedm' => ['ok', 'Booking request created and the confirmation email sent. Reference ID: %s'],
-        'bookedf' => ['warn', 'Booking request created, but the confirmation email could not be sent. Reference ID: %s'], 'bookdeleted' => ['ok', 'Booking request deleted.']];
+        'bookedf' => ['warn', 'Booking request created, but the confirmation email could not be sent. Reference ID: %s'], 'bookdeleted' => ['ok', 'Booking request deleted.'], 'matched' => ['ok', 'The meter now matches Trustpilot for this month. New invitations add to it from here.'], 'unmatched' => ['ok', 'Back to counting the invitations sent from here.']];
     $m = $M[(string)($_GET['m'] ?? '')] ?? null; $f = [];
     $view = in_array($_GET['v'] ?? '', ['bookings', 'email', 'monitoring'], true) ? $_GET['v'] : 'trips';
     if ($m) { $rr = strtoupper((string)($_GET['r'] ?? '')); $m[1] = sprintf($m[1], preg_match(QREF, $rr) ? $rr : ''); }
@@ -538,7 +563,7 @@ function tr_head($title, $app = false) {
         . '.msg{padding:12px 16px;border-radius:12px;border:1px solid}.msg.ok{background:#e8f5e8;border-color:#bcd9bc}.msg.bad{background:#fdf0f0;border-color:#f1c8c8}.msg.warn{background:#fbf5e4;border-color:#e6d49a}'
         . '.card,.panel{background:#fff;border:1px solid #e4e2da;border-radius:16px}.card{padding:20px 22px}.card>h2{margin:0 0 12px}.cardl{padding:0;overflow:hidden}'
         // login
-        . '.w{max-width:460px;margin:0 auto;padding:56px 16px}.w h1{margin:0 0 4px}.sub{color:#52514e;max-width:620px}'
+        . '.lw{max-width:460px;margin:0 auto;padding:56px 16px}.lw h1{margin:0 0 4px}.sub{color:#52514e;max-width:620px}'
         // shell: sidebar and main area
         . '.app{display:flex;flex-wrap:wrap;align-items:flex-start;min-height:100vh}.rail{flex:0 0 232px;background:#fff;border-right:1px solid #e4e2da;padding:24px 16px;display:flex;flex-direction:column;gap:24px}.brand{padding:0 8px;display:flex;flex-direction:column}.brand b{font-size:15px}'
         . '.navs{display:flex;flex-direction:column;gap:4px}.nv{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:10px;color:#3b3a37;font-weight:500;text-decoration:none}.nv:hover{background:#f3f2ee;color:#111418}.nv[aria-current=page]{background:#eef3fb;color:#111418;font-weight:600}.nv[aria-current=page] .ic{color:#1c5cab}'
@@ -549,7 +574,7 @@ function tr_head($title, $app = false) {
         . '.chip.ok{background:#e8f5e8}.chip.ok i{background:#0ca30c}.chip.warn{background:#fbf5e4;border-color:#e6d49a}.chip.warn i{background:#fab219}.chip.bad{background:#fdf0f0;border-color:#f1c8c8}.chip.bad i{background:#d03b3b}'
         // overview: this month, and the next 30 days
         . '.ovr{display:flex;flex-wrap:wrap;gap:16px}.panel{padding:20px 22px;display:flex;flex-direction:column;gap:14px}.hero{flex:1 1 280px}.sched{flex:2 1 420px;min-width:0;gap:8px}.lbl{font-size:13px;font-weight:500;color:#52514e}.bigrow{display:flex;align-items:baseline;gap:10px}'
-        . '.big{font-size:52px;font-weight:600;line-height:1;letter-spacing:-.03em}.of{font-size:18px;color:#6b6a65}.mtr{height:8px;border-radius:999px;background:#cde2fb;overflow:hidden}.mtr b{display:block;height:100%;border-radius:999px;background:#2a78d6}.mtr.w{background:#fdeec8}.mtr.w b{background:#fab219}.mtr.d{background:#f8d4d4}.mtr.d b{background:#d03b3b}'
+        . '.big{font-size:52px;font-weight:600;line-height:1;letter-spacing:-.03em}.of{font-size:18px;color:#6b6a65}.mtr{height:8px;border-radius:999px;background:#cde2fb;overflow:hidden}.mt{font-size:13px}.mt summary{cursor:pointer;color:#3b3a37;text-decoration:underline;text-underline-offset:3px;width:max-content}.mt .m{margin:8px 0 0}.mf{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.mf input[type=number]{width:120px}.mtr b{display:block;height:100%;border-radius:999px;background:#2a78d6}.mtr.w{background:#fdeec8}.mtr.w b{background:#fab219}.mtr.d{background:#f8d4d4}.mtr.d b{background:#d03b3b}'
         . '.sh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}.tl{position:relative;height:124px;padding:0 28px}.tlin{position:relative;height:100%}.tlbase{position:absolute;left:0;right:0;top:74px;height:1px;background:#c3c2b7}'
         . '.dot{position:absolute;top:74.5px;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#2a78d6;box-shadow:0 0 0 2px #fff}.tll{position:absolute;top:18px;transform:translateX(-50%);text-align:center;white-space:nowrap}.tll b{display:block;font-size:13px;font-weight:600}.tll span{font-size:12px;color:#6b6a65}'
         . '.tk{position:absolute;top:88px;transform:translateX(-50%);font-size:12px;color:#6b6a65;white-space:nowrap}.tle{position:absolute;left:0;right:0;top:30px;text-align:center;font-size:13px;color:#6b6a65}'
@@ -570,7 +595,7 @@ function tr_head($title, $app = false) {
         . '@media(max-width:760px){.rail{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;border-right:0;border-bottom:1px solid #e4e2da;padding:12px 16px;gap:4px 12px}.brand .m{display:none}.navs{order:3;flex:1 1 100%;flex-direction:row;flex-wrap:wrap}.nv{padding:0 10px}.out{order:2;margin:0;padding:0}.main{padding:20px 16px 40px}.g2,.g3{grid-template-columns:1fr}.tabs{padding:6px 6px 0}.tab,.rtab{padding:0 10px;gap:6px;font-size:13px}'
         . '.lh{display:none}.lr{grid-template-columns:1fr !important;gap:6px;padding:14px 16px}.lr [data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:600;color:#6b6a65}.ac{justify-content:flex-start}}'
         . mon_css()
-        . '</style></head><body>' . ($app ? '' : '<div class="w">');
+        . '</style></head><body>' . ($app ? '' : '<div class="lw">');
 }
 function tr_page_login($err) {
     echo tr_head('Admin sign-in'), '<h1>Admin</h1><p class="sub" style="margin:0 0 16px">Private page for Fly First Class International: bookings, Trustpilot invitations and monitoring.</p>';
@@ -630,12 +655,22 @@ function tr_view_trips($X) {
         '<div class="acts"><a class="btn" href="', TR_PAGE, '?v=email" data-view="email">', tr_ic('mail'), 'Preview email</a><a class="btn pri" href="#add" data-open>', tr_ic('plus'), 'Add trip</a></div></header>';
     if (!$bcc) echo '<div class="msg warn"><b>Trustpilot address not set.</b> Until <b>TRUSTPILOT_BCC</b> is added to the .env file, the thank-you email carries the plain Trustpilot review link instead.</div>';
 
-    // this month, and the next 30 days
-    $pct = $cap ? min(100, $used / $cap * 100) : 0; $sev = !$cap ? '' : ($used >= $cap ? ' d' : ($used >= 0.8 * $cap ? ' w' : ''));
+    // this month, and the next 30 days. The count is the invitations that went to Trustpilot (an email with only the review link uses none).
+    $emails = tr_emails_month(); $adj = $bcc ? tr_adjust_info() : null;
+    $shown = $bcc ? $used : $emails; $capv = $bcc ? $cap : 0;
+    $pct = $capv ? min(100, $shown / $capv * 100) : 0; $sev = !$capv ? '' : ($shown >= $capv ? ' d' : ($shown >= 0.8 * $capv ? ' w' : ''));
     $reset = (new DateTime('first day of next month', et_tz()))->format('j M');
-    echo '<section class="ovr" aria-label="Overview"><div class="panel hero"><span class="lbl">Sent this month</span><div class="bigrow"><span class="big">', $used, '</span>', $cap ? '<span class="of">of ' . $cap . '</span>' : '', '</div>',
-        $cap ? '<div class="mtr' . $sev . '" role="progressbar" aria-label="Invitations sent this month" aria-valuemin="0" aria-valuemax="' . $cap . '" aria-valuenow="' . $used . '"><b style="width:' . number_format($pct, 1, '.', '') . '%"></b></div>' : '',
-        '<span class="m">', $cap ? max(0, $cap - $used) . ' left, resets ' . $reset : 'No monthly limit', '</span></div>', tr_timeline($q), '</section>';
+    echo '<section class="ovr" aria-label="Overview"><div class="panel hero"><span class="lbl">', $bcc ? 'Invitations this month' : 'Thank-you emails this month', '</span><div class="bigrow"><span class="big">', $shown, '</span>', $capv ? '<span class="of">of ' . $capv . '</span>' : '', '</div>',
+        $capv ? '<div class="mtr' . $sev . '" role="progressbar" aria-label="Invitations sent this month" aria-valuemin="0" aria-valuemax="' . $capv . '" aria-valuenow="' . $shown . '"><b style="width:' . number_format($pct, 1, '.', '') . '%"></b></div>' : '',
+        '<span class="m">', $bcc ? ($capv ? max(0, $capv - $shown) . ' left, resets ' . $reset : 'No monthly limit') : 'Only the review link is sent, so none of Trustpilot\'s invitations are used', '</span>';
+    if ($bcc && $emails !== $shown) echo '<span class="m">', $emails, ' thank-you email', $emails === 1 ? '' : 's', ' sent this month in all.</span>';
+    if ($adj) echo '<span class="m">Matched to Trustpilot: it showed ', (int)$adj['to'], ' on ', m_esc(tr_day($adj['set'] ?? 0)), '.</span>';
+    if ($bcc) {
+        echo '<details class="mt"', $adj ? ' open' : '', '><summary>Not the same as Trustpilot?</summary><p class="m">Trustpilot\'s own dashboard has the final count. It can skip an address it has invited before, and it also counts invitations sent from anywhere else. Enter the number it shows for this month and this meter follows it from here (it starts again each month).</p>',
+            '<form class="mf" method="post" action="', TR_PAGE, '"><input type="hidden" name="act" value="trmatch"><input type="hidden" name="t" value="', $t, '"><label class="sr" for="tm">Invitations Trustpilot shows this month</label><input id="tm" type="number" name="n" min="0" max="100000" inputmode="numeric" value="', $used, '" required><button class="btn" type="submit">Match</button>',
+            $adj ? '</form><form class="mf" method="post" action="' . TR_PAGE . '"><input type="hidden" name="act" value="trclear"><input type="hidden" name="t" value="' . $t . '"><button class="btn" type="submit">Go back to our own count</button>' : '', '</form></details>';
+    }
+    echo '</div>', tr_timeline($q), '</section>';
 
     // the three lists, one at a time
     $tabs = ['waiting' => ['Waiting to send', $nq, 'pw'], 'attention' => ['Needs attention', $nx, 'pa'], 'sent' => ['Sent', $ns, 'ps']];

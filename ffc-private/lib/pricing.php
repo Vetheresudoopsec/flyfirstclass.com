@@ -205,12 +205,12 @@ function warm_step($budget) {
     foreach ($keys as $k) {
         if (!claim($k, 'refresh')) continue;
         [$o, $c] = explode('-', substr($k, strlen(C('mode')) + 1)); $mine[] = $k;
-        $tasks[] = ['type' => 'refresh', 'o' => $o, 'c' => $c, 'key' => $k, 'date' => $date];
+        $tasks[] = ['type' => 'refresh', 'src' => 'prices', 'o' => $o, 'c' => $c, 'key' => $k, 'date' => $date];
     }
     if (!$tasks) return 'busy';
     try { $res = run_tasks($tasks, microtime(true) + max(10, min(40, $budget))); } finally { foreach ($mine as $k) unclaim($k); }
     $done = [];
-    foreach ($res as $k => $r) if ($r !== 'skip') $done[] = $k;
+    foreach ($res as $k => $r) if ($r !== 'skip' && $r !== 'hold') $done[] = $k;
     cupdate('meta.json', ['lastRefresh' => 0], function (&$mm) use ($done, $today) { foreach ($done as $k) { $w = $mm['warm'][$k] ?? null; $mm['warm'][$k] = ['d' => $today, 'n' => ($w && ($w['d'] ?? '') === $today ? $w['n'] : 0) + 1]; } });
     if ($done) cupdate('warm.json', [], function (&$x) use ($done) { $pre = C('mode') . ':'; $x = array_values(array_filter($x, function ($p) use ($done, $pre) { return !in_array($pre . $p, $done, true); })); });
     $ok = count(array_filter($res, function ($r) { return $r === 'ok'; }));
