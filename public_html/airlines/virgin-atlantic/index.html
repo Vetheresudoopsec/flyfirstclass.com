@@ -1296,7 +1296,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <label for="e">Email</label><input id="e" name="e" type="email" autocomplete="email" required>
 <label for="p">Phone</label><div class="pn"><select id="cs" aria-label="Country calling code"></select><input id="p" name="p" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Phone number (optional)"></div><p class="err" id="pe" role="alert" hidden></p>
 <div class="hp" aria-hidden="true"><label for="hpw">Website</label><input id="hpw" name="website" tabindex="-1" autocomplete="off"></div>
-<label for="m">Message <span>(optional)</span></label><textarea id="m" name="m" rows="5" placeholder="Anything else we should know? If you have not picked a trip, tell us your route and dates."></textarea>
+<label for="m">Message <span>(optional)</span></label><textarea id="m" name="m" rows="5" placeholder="Need help or have a question? Ask us anything here. If you would like a quote, please choose your route on the booking page."></textarea>
 <label class="ck"><input type="checkbox" id="nl" name="nl"><span>Subscribe me to the newsletter for route and fare updates.</span></label>
 <button class="btn" type="submit">Send My Request</button>
 <p class="agree">By sending your request you agree to our <a href="/terms/">Terms of Service</a> and <a href="/privacy-policy/">Privacy Policy</a>.</p>
@@ -1847,6 +1847,8 @@ const AM={"Emirates":["Save up to 70% and explore Dubai with access to the Emira
 "Etihad Airways":["Save up to 70% and explore The Residence, a three-room cabin on the A380 with a living room, a bedroom and an ensuite shower, where a personal butler trained at the Savoy Butler Academy attends to every detail.","1786200004364-01487886e344"]};
 const set=a=>{const m=AM[a]||AM[EK],im=$("jim");$("jal").textContent=a;$("jtx").textContent=m[0];if(im){im.src="https://images.unsplash.com/photo-"+m[1]+"?auto=format&fit=crop&w=2000&q=75";im.alt=a+" aircraft in flight";im.style.objectPosition=m[2]||""}$("jb").dataset.m="I'd like a free quote on "+a+". Route and dates: "};
 $("jb").addEventListener("click",()=>{const m=$("m");if(m&&!m.value.trim())m.value=$("jb").dataset.m});
+// Message box hint follows the trip: one wording when a route is chosen (the trip summary box is showing), another when it is not.
+{const m=$("m"),rc=$("rc");if(m&&rc){const PH_T="Anything else we should know? Tell us about flexible dates, a preferred airline, seat or cabin preferences, or any special assistance you need.",PH_N="Need help or have a question? Ask us anything here. If you would like a quote, please choose your route on the booking page.";const upd=()=>{m.placeholder=(!rc.hidden&&rc.textContent.trim())?PH_T:PH_N};upd();new MutationObserver(upd).observe(rc,{attributes:true,attributeFilter:["hidden"],childList:true,subtree:true,characterData:true})}}
 const tm=setTimeout(()=>set(byTz(tzn())),4000);
 geoOnce().then(g=>{clearTimeout(tm);set(g&&g.cc==="AE"&&/abu dhabi/i.test(g.place)?"Etihad Airways":g&&g.cc&&CC[g.cc]||byTz(tzn()))},()=>{clearTimeout(tm);set(byTz(tzn()))})}
 // One wide banner (destination name + photo) above the rows when a specific destination is searched; the rows then drop their own pictures.
